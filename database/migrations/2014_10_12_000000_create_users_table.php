@@ -15,6 +15,10 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('email')->unique();
+            $table->string('no_tlp')->unique();
+            $table->text('profil_picture')->unique();
+            $table->integer('no_rekening')->unique();
+            $table->foreignId('category_id');
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();
