@@ -11,7 +11,7 @@
             <li><a href="about.html">Eventconnect.id</a></li>
             <!-- <li><a href="portfolio.html">Portfolio</a></li> -->
             <li><a href="blog.html">Blog</a></li>
-            <li><a href="services.html">biaya</a></li>
+
             <li class="drop-down"><a href="">Layanan</a>
                 <ul>
                     <li><a href="#">Layanan</a></li>
@@ -30,8 +30,24 @@
                     <li><a href="#">lomba</a></li>
                 </ul>
             </li>
-            <li style="position: relative;top: -7px; padding: 0; margin: 0; overflow: hidden;"><a href="login" class=" link-login-register"><button class="btn btn-success w-100 px-3 mr-4 py-1" >Login</button></a></li>
-            <li style="position: relative;top: -7px; padding: 0; margin: 0; overflow: hidden;"><a href="register" class="link-login-register"><button class="btn btn-primary w-100 px-3 py-1">Daftar</button></a></li>
+
+            <li><a href="services.html">biaya</a></li>
+
+            @if (Auth::check())
+                <li style="position: relative;top: -7px; padding: 0; margin: 0; overflow: hidden;"><a href="/dashboard"
+                        class=" link-login-register"><button class="btn btn-success w-100 px-1 mr-4 py-1"><i
+                                class="fas fa-user mr-1"></i> {{ auth()->user()->name }}</button></a>
+                </li>
+            @else
+                <li style="position: relative;top: -7px; padding: 0; margin: 0; overflow: hidden;"><a href="/login"
+                        class=" link-login-register"><button
+                            class="btn btn-success w-100 px-3 mr-4 py-1">Login</button></a>
+                </li>
+                <li style="position: relative;top: -7px; padding: 0; margin: 0; overflow: hidden;"><a href="/register"
+                        class="link-login-register"><button class="btn btn-primary w-100 px-3 py-1">Daftar</button></a>
+                </li>
+            @endif
+
         </ul>
     </nav><!-- .nav-menu -->
 </div>

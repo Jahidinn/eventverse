@@ -39,4 +39,10 @@
         </div>
 
     </section>
+
+    @if (Session::has('popup'))
+        <script type="text/javascript">
+            alertify.alert("Sukses!", "{{ session()->get('popup') }}");
+        </script>
+    @endif
 @endsection

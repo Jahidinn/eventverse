@@ -1,13 +1,13 @@
 <div class="footer-newsletter">
     <div class="container">
         <div class="row">
-                <div class="col-lg-6">
+            <div class="col-lg-6">
                 <h4>Subscribe</h4>
                 <p>Mau update berita terbaru dari kami? jangan lupa subscribe ya</p>
             </div>
             <div class="col-lg-6">
                 <form action="" method="post">
-                    <input type="email" name="email"><input type="submit" value="Subscribe">
+                    <input type="email" name="email"><input type="submit" id="email" value="Subscribe">
                 </form>
             </div>
         </div>
@@ -54,7 +54,8 @@
 
             <div class="col-lg-3 col-md-6 footer-info">
                 <h3>Tentang mediaprestasi.com</h3>
-                <p>Mediaprestasi.com merupaan platform pengembangan pemuda Indonesia melalui untuk mempersiapkan generasi penerus bangsa yang kompeten dibidang akademik dan non-akademik</p>
+                <p>Mediaprestasi.com merupaan platform pengembangan pemuda Indonesia melalui untuk mempersiapkan
+                    generasi penerus bangsa yang kompeten dibidang akademik dan non-akademik</p>
                 <div class="social-links mt-3">
                     <a href="#" class="twitter"><i class="bx bxl-twitter"></i></a>
                     <a href="#" class="facebook"><i class="bx bxl-facebook"></i></a>

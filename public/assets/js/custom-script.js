@@ -50,3 +50,5 @@ $(".event-terbaru").slick({
         },
     ],
 });
+
+  

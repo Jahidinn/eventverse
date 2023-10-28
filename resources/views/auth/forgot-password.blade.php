@@ -1,20 +1,13 @@
 @extends('auth.main')
 
 @section('content')
-    <div class="container pb-3">
-        <div class="col-md-12 text-center mt-3 pt-5">
-            <h3>Eventconnect.id</h3>
+    <div class="container pb-1">
+        <div class="col-md-12 text-center mt-3 pt-2">
+            <small><strong>Eventconnect.id</strong></small>
         </div>
         <div class="row m-1 style-form">
             <div class="col-lg-3 col-md-2"></div>
             <div class="col-lg-6 col-md-8 login-box px-4">
-
-                @if (session()->has('success'))
-                    <div class="alert alert-success alert-dismissible fade show mt-2" role="alert">
-                        <strong>{{ session('success') }}</strong>
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                    </div>
-                @endif
 
                 @if (session()->has('loginError'))
                     <div class="alert alert-danger alert-dismissible fade show mt-2" role="alert">
@@ -23,21 +16,14 @@
                     </div>
                 @endif
 
-                @if (session()->has('logoutSuccess'))
-                    <div class="alert alert-success alert-dismissible fade show mt-2" role="alert">
-                        <strong>{{ session('logoutSuccess') }}</strong>
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                    </div>
-                @endif
-
-                <div class="col-lg-12 login-title">
-                    LOGIN
+                <div class="col-lg-12 reset-password-title">
+                    LUPA PASSWORD
                 </div>
 
                 <div class="col-lg-12 login-form">
                     <div class="col-lg-12 login-form">
 
-                        <form action="/login" method="post">
+                        <form action="/auth/forgot-password" method="post">
                             @csrf
 
                             <div class="form-group">
@@ -51,20 +37,12 @@
                                 @enderror
                             </div>
 
-                            <div class="form-group">
-                                <label class="form-control-label" for="password">Password</label>
-                                <input type="password" class="form-control mb-2 @error('password') is-invalid @enderror"
-                                    name="password" required id="password">
-                                <small>lupa password? <a href="/auth/forgot-password"><strong>Reset
-                                            password</strong></a></small>
-                            </div>
-
                             <div class="col-lg-12 loginbttm">
                                 <div class="col-lg-6 login-btm login-text">
                                     <!-- Error Message -->
                                 </div>
-                                <div class="col-lg-12 login-btm login-button">
-                                    <button type="submit" class="btn btn-outline-primary">LOGIN</button>
+                                <div class="col-lg-12 login-btm login-button mt-2">
+                                    <button type="submit" class="btn btn-outline-primary">Reset password</button>
                                 </div>
                             </div>
                         </form>
@@ -74,9 +52,10 @@
                 <div class="col-lg-3 col-md-2"></div>
             </div>
             <div class="col-md-12 text-center mt-3">
-                <small> Belum punya akun? <a href="/register"><strong>DAFTAR SEKARANG</strong></a></small>
+                <small> Kembali <a href="/login"><strong>LOGIN</strong></a></small>
             </div>
         </div>
+
 
         {{-- notifikasi sukses reset --}}
         @if (Session::has('status'))

@@ -239,3 +239,44 @@ button.slick-disabled {
 }
 
 /* the parent */
+
+
+
+.tabs{
+	margin: 0px;
+	padding: 0px;
+	list-style: none;
+}
+.tabs button:active, .tabs button:focus{
+	outline: none !important;
+   box-shadow: none;
+}
+.tabs button{
+	background: none;
+	color: #222;
+	display: inline-block;
+	border: 3px #1e4356;
+	border-bottom-style: solid;
+	cursor: pointer;
+	background: none;
+}
+
+.tabs button.current{
+	border: 3px #1e4356;
+	border-bottom-style: solid;
+	background: #1e4356;
+	color: #ffffff;
+}
+
+.tab-content{
+	display: none;
+	padding: 15px;
+}
+
+.tab-content.current{
+	display: inherit;
+	text-align: left;
+}
+.ticket-card{
+	background-color: #EFF8FD;;
+}
