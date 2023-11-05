@@ -242,6 +242,30 @@ a:hover {
 	display: none !important;
   }
 
+.select2.select2-container {
+	width: 100% !important;
+}
+
+.select2.select2-container .select2-selection{
+	border-radius: 0 ;
+	padding-top: 1px;
+	height: 35px;
+}
+.select2-selection__arrow {
+	margin-top: 3px;
+}
+.select2-selection__clear{
+	display: none;
+}
+
+.jenis-event.select2-results__options {
+	height: 50px !important;
+ }
+.select2-results__options {
+	min-height: 350px !important;
+ }
+ 
+
 @media only screen and (max-width: 750px) {
     .formevent-box {
 		padding-left: 8px;
@@ -264,6 +288,11 @@ a:hover {
 .input-form-group input[type="text"], .input-form-group input[type="number"] {
     padding-left: 2.375rem;
 }
+
+.url .input-form-group input[type="text"] {
+    padding-left: 8rem;
+    /* padding-left: 2.375rem; */
+}
 .form-registration-set input{
 	padding-left: 1rem !important;	
 }
@@ -278,6 +307,9 @@ a:hover {
     text-align: center;
     pointer-events: none;
     color: #aaa;
+}
+.input-form-group .url {
+    width: 8rem !important;
 }
 
 /* datepicker styling */

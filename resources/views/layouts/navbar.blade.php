@@ -8,8 +8,8 @@
     <nav class="nav-menu float-right d-none d-lg-block">
         <ul>
             <li class="active"><a href="index.html">Home</a></li>
-            <li><a href="about.html">Eventconnect.id</a></li>
             <!-- <li><a href="portfolio.html">Portfolio</a></li> -->
+            <li><a href="/event/create">Buat event</a></li>
             <li><a href="blog.html">Blog</a></li>
 
             <li class="drop-down"><a href="">Layanan</a>

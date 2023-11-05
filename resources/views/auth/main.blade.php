@@ -4,6 +4,8 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
     <link rel="stylesheet" href="{{ asset('assets/dashboard/plugins/fontawesome-free/css/all.min.css') }}">
@@ -19,6 +21,8 @@
     <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/alertify.min.css" />
     <!-- Default theme -->
     <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/themes/default.min.css" />
+
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 
     <title>eventconnect.id | your success partner</title>
     <!-- Favicons -->
@@ -40,8 +44,15 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/js/bootstrap-datepicker.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
     <script>
         $(document).ready(function() {
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
 
             $('.tabs button').click(function() {
                 var tab_id = $(this).attr('data-tab');
@@ -51,7 +62,88 @@
 
                 $(this).addClass('current');
                 $("#" + tab_id).addClass('current');
-            })
+            });
+
+            //select 2
+            //$('.js-example-basic-single').select2();
+            $(document).on('select2:open', () => {
+                document.querySelector('.select2-search__field').focus();
+                $('.select2-search__field').attr("placeholder", "Cari ... ");
+            });
+
+            $("#kategoriEvent").select2({
+                dropdownParent: $("#kategoriEventModal"),
+                allowClear: true
+            });
+            $("#temaEvent").select2({
+                dropdownParent: $("#kategoriEventModal"),
+                allowClear: true
+            });
+
+            $("#jenis-event").select2({
+                dropdownParent: $("#lokasiEventModal"),
+                allowClear: true
+            });
+            $("#provinces").select2({
+                dropdownParent: $("#lokasiEventModal"),
+                allowClear: true
+            });
+            $("#cities").select2({
+                dropdownParent: $("#lokasiEventModal"),
+                allowClear: true
+            });
+
+            //lokasi event
+            $('body').on('change', '#jenis-event', function(e) {
+                e.preventDefault();
+                var jenisEvent = $('#jenis-event').val();
+
+                if (jenisEvent == 'Online') {
+                    //reset input offline dan hilangkan kolom input alamat
+                    $('#provinces').val('').trigger('change');
+                    $('#cities').val('').trigger('change');
+                    $('#detailAlamat').val('');
+                    $('#lokasi-event-container').attr('hidden', true);
+                } else {
+                    $('#lokasi-event-container').attr('hidden', false);
+                }
+            });
+
+            $('body').on('change', '#provinces', function(e) {
+                e.preventDefault();
+                var province_code = $('#provinces').val();
+
+                if (province_code == '') {
+                    $('#cities').empty();
+                    $("#cities").append('<option value="">Pilih Kota</option>');
+                    $('#cities').attr('disabled', true);
+                } else {
+                    $.ajax({
+                        url: '/get-cities/' + province_code,
+                        type: 'GET',
+                        cache: false,
+                        dataType: 'JSON',
+                        success: function(response) {
+                            var city = $('#cities');
+                            city.removeAttr('disabled');
+
+                            city.empty();
+                            $("#cities").append('<option value="">Pilih Kota</option>');
+                            $.each(response.result, function(key, value) {
+
+                                $("#cities").append('<option value="' + value.name +
+                                    '">' +
+                                    value.name +
+                                    '</option>');
+                            });
+
+                        }
+
+                    });
+                }
+
+            });
+
 
         });
 
@@ -62,9 +154,19 @@
         $('trix-editor').css("min-height", "250px");
 
         $(".kategori-event").click(function() {
-            $("#exampleModal").modal("show");
+            $("#kategoriEventModal").modal("show");
         });
+
+        $(".lokasi-event").click(function() {
+            $("#lokasiEventModal").modal("show");
+        });
+        $(".tanggal-event").click(function() {
+            $("#tanggalEventModal").modal("show");
+        });
+
+        //preview image
         const fileUpload = (event) => {
+
             const files = event.target.files;
             const filesLength = files.length;
             if (filesLength > 0) {
@@ -74,6 +176,37 @@
                 imagePreviewElement.style.display = "block";
             }
         };
+
+        //cek validasi file
+
+        var inputElement = document.getElementById("tb-file-upload")
+
+        inputElement.addEventListener('change', function() {
+            var fileLimit = 600; // could be whatever you want 
+            var files = inputElement.files; //this is an array
+            var fileSize = files[0].size;
+            var fileSizeInKB = (fileSize / 1024); // this would be in kilobytes defaults to bytes
+
+            if (fileSizeInKB < fileLimit) {
+                $('#image-warning').hide();
+                Swal.fire(
+                    'Ok!',
+                    'Berhasil menambahkan gambar!',
+                    'success'
+                )
+                // add file to db here
+            } else {
+                $('#image-warning').removeAttr('hidden');
+                $('#image-warning').show();
+                Swal.fire(
+                    'Error',
+                    'Ukuran file lebih dari 500KB! upload ulang ya!',
+                    'error'
+                )
+                // do not pass go, do not add to db. Pass error to user    
+
+            }
+        });
 
         var rupiah = document.getElementById("ticketPrice");
 
@@ -102,6 +235,62 @@
             rupiah = split[1] != undefined ? rupiah + "," + split[1] : rupiah;
             return prefix == undefined ? rupiah : rupiah ? "Rp. " + rupiah : "";
         }
+
+        //url form
+        $('#url-event').on('keyup', function() {
+            var url = $('#url-event').val();
+            url = url.replace(/\s+/g, '-');
+            $('#url-event').val(url);
+        });
+
+        //mengisi form kategori, lokasi, & tanggal
+
+        //kategori
+        $('body').on('click', '#simpan-kategori', function(e) {
+            e.preventDefault();
+            var kategoriEvent = $('#kategoriEvent').val();
+            var temaEvent = $('#temaEvent').val();
+            $('.kategori-event').val(kategoriEvent + ' (' + temaEvent + ')');
+            $('#kategoriEventModal').modal('hide');
+        });
+
+        //lokasi
+        $('body').on('click', '#simpan-lokasi', function(e) {
+            e.preventDefault();
+            var jenisEvent = $('#jenis-event').val();
+            if (jenisEvent == 'Online') {
+                var province = null;
+                var city = null;
+                var detailAlamat = null;
+                var alamat = jenisEvent
+                $('#lokasiEventModal').modal('hide');
+                $('.lokasi-event').val(alamat);
+            } else {
+                var province = $('#provinces').val();
+                var city = $('#cities').val();
+                var detailAlamat = $('#detailAlamat').val();
+
+                if (province == '' || city == '' || detailAlamat == '') {
+                    Swal.fire('Lengkapi alamat guys!');
+                } else {
+                    var alamat = jenisEvent + ' (' + detailAlamat + ', ' + city + ', ' + province + ')';
+                    $('#lokasiEventModal').modal('hide');
+                    $('.lokasi-event').val(alamat);
+                }
+            }
+
+
+        });
+
+        //tanggal
+        $('body').on('click', '#simpan-tanggal', function(e) {
+            e.preventDefault();
+            var startDate = $('#startDate').val();
+            var endDate = $('#endDate').val();
+            $('.tanggal-event').val('(' + startDate + ') - (' + endDate + ')');
+            $('#tanggalEventModal').modal('hide');
+        });
+
 
         $(document).ready(function() {
 
@@ -156,31 +345,31 @@
                         //menambah tiket
 
                         $(wrapper).append(
-                            '<div class="card border-0 m-0 p-0 mt-3 bg-none"><button class="btn btn-danger remove_field position-absolute top-50 end-0 translate-middle-y" style="z-index: 2;"><h3><i class="fas fa-trash-alt mt-2"></i></h3></button><div class="card shadow ticket-card"><div class="card-body"><div class="alert alert-success w-100 py-2"><strong>' +
+                            '<div class="card border-0 m-0 p-0 mt-3 bg-none"><button class="btn btn-danger remove_field position-absolute top-50 end-0 translate-middle-y" style="z-index: 2;"><h3><i class="fas fa-trash-alt mt-2"></i></h3></button><div class="card ticket-card"><div class="card-body"><div class="alert alert-success w-100 py-2"><strong>' +
                             ticketName +
                             '</strong></div><input type="hidden" value="' +
-                            ticketName + '" name="ticket-name[' +
+                            ticketName + '" name="ticketName[' +
                             x +
                             ']"><hr class="dashed"><p class="card-text mr-5">' + ticketDescription +
                             '</p><input type="hidden" value="' + ticketDescription +
-                            '"  name="ticket-description[' +
+                            '"  name="ticketDescription[' +
                             x +
                             ']" id=""><p class="card-text pt-0"><small class="text-muted icon-class"><i class="fas fa-hourglass-end pr-4"></i>Berakhir : <strong>' +
                             ticketDate +
                             '</strong><span class="alert alert-secondary rounded-0 py-1 ms-2"><strong>Kuota : ' +
                             ticketQuota + '</strong><input type="hidden" value="' + ticketQuota +
-                            '" name="ticket-quota[' + ticketQuota +
+                            '" name="ticketQuota[' + x +
                             ']"></span></small></p><input type="hidden" value="' +
                             ticketDate +
-                            '" name="ticket-deadline[' +
+                            '" name="ticketDeadline[' +
                             x +
                             ']"><hr class="dashed"><div class="d-inline"><span class="alert alert-primary py-2 rounded-0"><strong>' +
                             ticketPrice + '</strong><input type="hidden" value="' + price +
-                            '" name="ticket-price[' +
+                            '" name="ticketPrice[' +
                             x +
                             ']"></span><input type="hidden" value="' + ticketButton +
-                            '" name="ticket-button[' + x +
-                            ']"><div class="float-end"><button class="btn btn-success px-3">' +
+                            '" name="ticketButton[' + x +
+                            ']"><div class="float-end"><button type="button" class="btn btn-success px-3">' +
                             ticketButtonText + '</button></div></div></div></div></div>'
                         ); // add input boxes.
                     }
@@ -203,8 +392,7 @@
                         footer: '<a href="">pelajari lebih lanjut?</a>'
                     });
                 }
-                console.log(ticketStock);
-                console.log(x);
+
             });
 
             $(wrapper).on("click", ".remove_field", function(e) {
@@ -249,7 +437,7 @@
                     formNumber++; //text box increment
                     //menambah tiket
                     $(form_wrapper).append(
-                        '<div class="input-group mb-3 icon-class"><input type="text" class="form-control" placeholder="Isikan nama form ..." name="formName[' +
+                        '<div class="input-group mb-3 icon-class"><input type="text" class="form-control" required placeholder="Isikan nama form ..." name="formName[' +
                         formNumber +
                         ']"> <button data-id="' + formNumber +
                         '" class="btn btn-outline-danger" style="width:85px;" type="button" id="delete-form"><i class="fas fa-trash-alt"></i>Del</button></div>'
@@ -274,15 +462,38 @@
                 if (myForm <= 10) {
                     $("#add-form").removeClass("disabled");
                 }
-                console.log(myForm);
             });
 
         });
         $(function() {
-            $("#datepicker").datepicker({
+            $("#eventStartDate,#eventEndDate,#datepicker").datepicker({
                 autoclose: true,
                 todayHighlight: true
             }).datepicker('update', new Date());
+        });
+
+        $(document).ready(function(e) {
+
+            $('#form-event').submit(function(e) {
+                e.preventDefault();
+                var formData = new FormData(this);
+
+                $.ajax({
+                    type: 'POST',
+                    url: "{{ url('/event') }}",
+                    data: formData,
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    success: function(response) {
+                        if (response.error) {
+                            Swal.fire('Ooopss', response.error, 'error');
+                        } else {
+                            Swal.fire(response.success, '', 'success');
+                        }
+                    }
+                });
+            });
         });
     </script>
 </body>
