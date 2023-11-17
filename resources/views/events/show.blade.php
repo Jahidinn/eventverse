@@ -2,24 +2,55 @@
 @extends('layouts.main')
 
 @section('content')
-    <div class="container pt-4 pb-3 px-0">
+    <div class="container pt-4 pb-3 px-0 ">
         <!-- Stack the columns on mobile by making one full-width and the other half-width -->
-        <div class="row">
-            <div class="col-md-8">
+        <div class="row m-0 p-0">
+            <div class="col-md-8 m-0 p-1">
 
                 <div class="card shadow mb-3 mx-1">
-                    <img src="https://cdn.pixabay.com/photo/2014/08/11/11/50/moon-415501_1280.jpg" class="card-img-top"
-                        alt="...">
+                    <img src="{{ asset('storage/event-images/' . $detailEvent->image) }}" class="card-img-top" alt="...">
                     <div class="card-body">
-                        <h5 class="card-title my-3">CONTOH JUDUL EVENT PERTAMA</h5>
-                        <p class="card-text">This is a wider card with supporting text below as a natural lead-in to
-                            additional content. This content is a little bit longer.</p>
-                        <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+                        <h5 class="card-title mt-3 mb-0">{{ $detailEvent->title }}</h5>
+                        <a href="">
+                            <small>
+                                <strong> <i
+                                        class="fas fa-user-circle mr-1 text-secondary"></i>{{ $detailEvent->penyelenggara->name }}</strong>
+                            </small>
+                        </a>
+                        <hr>
+
+                        <div class="row">
+                            <div class="col-md-4 row mt-1">
+                                <div class="col-auto pr-0"><i class="fas fa-map-marker-alt mr-2"></i></div>
+                                <div class="col p-0 pr-1">
+                                    <small>{{ $detailEvent->location_jenis == 'Online' ? 'Online' : $detailEvent->location_detail . ', ' . $detailEvent->location_city . ',  ' . $detailEvent->province->name }}</small>
+                                </div>
+                            </div>
+                            <div class="col-md-4 row mt-1">
+                                <div class="col-auto pr-0">
+                                    <i class="fas fa-calendar-alt mr-2"></i>
+                                </div>
+                                <div class="col p-0 pr-1">
+                                    <small>
+                                        {{ $detailEvent->start_date == $detailEvent->end_date ? date('d-m-Y', strtotime($detailEvent->start_date)) : date('d-m-Y', strtotime($detailEvent->start_date)) . ' - ' . date('d-m-Y', strtotime($detailEvent->end_date)) }}
+                                    </small>
+                                </div>
+                            </div>
+                            <div class="col-md-4 row mt-1">
+                                <div class="col-auto pr-0"> <i class="fas fa-list mr-2"></i></div>
+                                <div class="col p-0 pr-1"><small>{{ $detailEvent->category }}</small></div>
+                            </div>
+                        </div>
+
+                        <hr>
+
+                        <p class="card-text"><small class="text-muted">Posted
+                                {{ $detailEvent->created_at->diffForHumans() }}</small></p>
                     </div>
                 </div>
 
                 <div class="card mb-3 mx-1 shadow">
-                    <div class="card-body">
+                    <div class="card-body p-3">
                         <div class="col-md-12 row tabs mb-4">
                             <div class="col px-0">
                                 <button class="tab-link current w-100 m-0 py-2" data-tab="tab-1">Deskripsi event</button>
@@ -32,82 +63,69 @@
                         <div id="tab-1" class="tab-content current p-0">
                             <div>
                                 <h5 class="card-title">Deskripsi</h5>
-                                <p class="card-text">This is a wider card with supporting text below as a natural lead-in to
-                                    additional content. This content is a little bit longer.</p>
+                                <p class="card-text">
+                                <article>
+                                    {!! $detailEvent->description !!}
+                                </article>
+                                </p>
                             </div>
                             <div class="mt-4">
                                 <h5 class="card-title">Syarat & ketentuan</h5>
-                                <p class="card-text">This is a wider card with supporting text below as a natural lead-in to
-                                    additional content. This content is a little bit longer.</p>
-                                <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+                                <p class="card-text">
+                                <article>
+                                    {!! $detailEvent->terms !!}
+                                </article>
+                                </p>
+                                <p class="card-text"><small class="text-muted"></small></p>
                             </div>
                         </div>
                         <div id="tab-2" class="tab-content p-0">
                             <h5 class="card-title">Ticket</h5>
 
-                            <div class="card shadow-sm ticket-card mt-3" id="ticket-example">
-                                <div class="card-body">
-                                    <div class="alert alert-success w-100 py-2">
-                                        <strong>CONTOH TIKET</strong>
-                                    </div>
-                                    <hr class="dashed">
-                                    <p class="card-text">Contoh deskripsi tiket</p>
-                                    <p class="card-text pt-0">
-                                        <small class="text-muted icon-class">
-                                            <i class="fas fa-hourglass-end pr-1"></i>
-                                            Berakhir : <strong>12-20-2023</strong>
-                                            <span class="alert alert-secondary rounded-0 py-1 ms-2 ml-2">
-                                                <strong>Kuota : 100</strong>
-                                                <input type="hidden" name="ticket-quota[]">
-                                            </span>
+                            @foreach ($ticketData as $ticket)
+                                <div class="card shadow-sm ticket-card mt-3" id="ticket-example">
+                                    <div class="card-body p-3">
+                                        <small>
+                                            <div class="alert alert-info w-100 py-1 pl-2">
+                                                <strong>{{ $ticket->ticket_name }}</strong>
+                                            </div>
                                         </small>
-                                    </p>
-                                    <hr class="dashed">
-                                    <div class="d-inline">
-                                        <span class="alert alert-primary py-2 rounded-0 mt-2">
-                                            <strong>Rp 100.000</strong>
-                                        </span>
-                                        <div class="float-right">
-                                            <button class="btn btn-success px-3">BELI TIKET</button>
+                                        <hr class="dashed">
+                                        <p class="card-text pt-0">
+                                            <small class="text-muted icon-class">
+                                                <span class="text-white">
+                                                    <i class="fas fa-hourglass-end pr-1"></i>
+                                                    Berakhir : <strong>{{ $ticket->ticket_deadline }}</strong>
+                                                </span>
+                                                <span class="alert alert-info py-0 px-2 ms-1 ml-1">
+                                                    <strong>Kuota : {{ $ticket->ticket_quota }}</strong>
+                                                </span>
+                                            </small>
+                                        </p>
+                                        <hr class="dashed">
+                                        <div class="row">
+                                            <div class="col">
+                                                <span class="badge badge-secondary py-2 rounded-0 ">
+                                                    <strong><i class="fas fa-tag"></i> Rp
+                                                        {{ number_format($ticket->ticket_price, 0, ',', '.') }}</strong>
+                                                </span>
+                                            </div>
+                                            <div class="col text-right">
+                                                <button
+                                                    class="btn btn-success btn-sm">{{ $ticket->ticket_button }}</button>
+                                            </div>
                                         </div>
-                                    </div>
-                                </div>
-                            </div>
 
-                            <div class="card shadow-sm ticket-card mt-3" id="ticket-example">
-                                <div class="card-body">
-                                    <div class="alert alert-success w-100 py-2">
-                                        <strong>CONTOH TIKET ke-2</strong>
-                                    </div>
-                                    <hr class="dashed">
-                                    <p class="card-text">Contoh deskripsi tiket</p>
-                                    <p class="card-text pt-0">
-                                        <small class="text-muted icon-class">
-                                            <i class="fas fa-hourglass-end pr-1"></i>
-                                            Berakhir : <strong>12-20-2023</strong>
-                                            <span class="alert alert-secondary rounded-0 py-1 ms-2 ml-2">
-                                                <strong>Kuota : 100</strong>
-                                                <input type="hidden" name="ticket-quota[]">
-                                            </span>
-                                        </small>
-                                    </p>
-                                    <hr class="dashed">
-                                    <div class="d-inline">
-                                        <span class="alert alert-primary py-2 rounded-0 mt-2">
-                                            <strong>Rp 100.000</strong>
-                                        </span>
-                                        <div class="float-right">
-                                            <button class="btn btn-success px-3">DAFTAR SEKARANG</button>
-                                        </div>
                                     </div>
                                 </div>
-                            </div>
+                            @endforeach
 
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="col-12 col-md-4">
+
+            <div class="col-12 col-md-4 m-0 p-1 ">
 
                 <div class="card mx-1 shadow">
                     <div class="card-body">
@@ -126,7 +144,6 @@
                         <button type="button" class="btn btn-dark">Gratuites</button>
                     </div>
                 </div>
-
                 <br />
                 <div class="card mx-1">
                     <div class="card-body">

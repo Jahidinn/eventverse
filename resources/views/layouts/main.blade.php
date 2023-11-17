@@ -59,7 +59,7 @@
 
 
     <!-- ======= Footer ======= -->
-    <footer id="footer" data-aos="fade-up">
+    <footer id="footer">
         @include('layouts.footer')
     </footer>
 

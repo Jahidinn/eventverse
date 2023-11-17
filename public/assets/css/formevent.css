@@ -229,12 +229,12 @@ a:hover {
 }
 
 .ticket-card{
-	background-color: #EFF8FD;;
+	background-color: #405763;
 }
 
 .dashed{
 	border: 0 none;
-	border-top: 2px dashed #322f32;
+	border-top: 2px dashed #e4e4e4;
 	background: none;
 	height:0;
   }

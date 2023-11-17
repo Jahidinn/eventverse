@@ -22,8 +22,11 @@ use App\Http\Controllers\DashboardController;
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/home', [HomeController::class, 'index'])->name('home');
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard')->middleware('auth');
+Route::get('/dashboard/myevent', [DashboardController::class, 'myEvent'])->middleware('auth');
+Route::get('/dashboard/manajemen-event', [DashboardController::class, 'manajemenEvent'])->middleware('auth');
 
 Route::get('/get-cities/{code}', [EventController::class, 'getCities']);
+Route::get('/check-url', [EventController::class, 'cekUrl']);
 Route::resource('/event', EventController::class)->middleware('auth');
 
 Route::get('/login', [AuthController::class, 'login'])->name('login')->middleware('guest');

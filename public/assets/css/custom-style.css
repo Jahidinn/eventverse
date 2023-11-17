@@ -278,5 +278,12 @@ button.slick-disabled {
 	text-align: left;
 }
 .ticket-card{
-	background-color: #EFF8FD;;
+	background-color: #405763;
 }
+
+.dashed{
+	border: 0 none;
+	border-top: 1.7px dashed #a5a5a5;
+	background: none;
+	height:0;
+  }

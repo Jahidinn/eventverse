@@ -202,7 +202,8 @@
                     'Error',
                     'Ukuran file lebih dari 500KB! upload ulang ya!',
                     'error'
-                )
+                );
+                document.querySelector("#tb-image").src = '';
                 // do not pass go, do not add to db. Pass error to user    
 
             }
@@ -271,15 +272,13 @@
                 var detailAlamat = $('#detailAlamat').val();
 
                 if (province == '' || city == '' || detailAlamat == '') {
-                    Swal.fire('Lengkapi alamat guys!');
+                    Swal.fire('', 'Lengkapi alamat dulu guys!');
                 } else {
                     var alamat = jenisEvent + ' (' + detailAlamat + ', ' + city + ', ' + province + ')';
                     $('#lokasiEventModal').modal('hide');
                     $('.lokasi-event').val(alamat);
                 }
             }
-
-
         });
 
         //tanggal
@@ -306,6 +305,7 @@
                 var ticketDescription = $("#ticketDescription").val();
                 var ticketQuota = $("#ticketQuota").val();
                 var ticketDate = $("#ticketDate").val();
+                var ticketEndDate = $("#ticketEndDate").val();
                 var ticketButton = $("#ticketButton").val();
                 var ticketButtonText = $("#ticketButton").children("option:selected").text();
 
@@ -323,7 +323,7 @@
                     $("#ticketQuota").removeClass('border border-danger');
                     $("#ticketDescription").removeClass('border border-danger');
                     $("#ticketDate").removeClass('border border-danger');
-                } else if (ticketDescription == '') {
+                } else if (ticketDescription != '') {
                     $("#ticketDescription").addClass('border border-danger');
                     $("#ticketName").removeClass('border border-danger');
                     $("#ticketQuota").removeClass('border border-danger');
@@ -333,8 +333,9 @@
                     $("#ticketName").removeClass('border border-danger');
                     $("#ticketDescription").removeClass('border border-danger');
                     $("#ticketDate").removeClass('border border-danger');
-                } else if (ticketDate == '') {
+                } else if (ticketDate == '' || ticketEndDate == '') {
                     $("#ticketDate").addClass('border border-danger');
+                    $("#ticketEndDate").addClass('border border-danger');
                     $("#ticketQuota").removeClass('border border-danger');
                     $("#ticketName").removeClass('border border-danger');
                     $("#ticketDescription").removeClass('border border-danger');
@@ -345,32 +346,35 @@
                         //menambah tiket
 
                         $(wrapper).append(
-                            '<div class="card border-0 m-0 p-0 mt-3 bg-none"><button class="btn btn-danger remove_field position-absolute top-50 end-0 translate-middle-y" style="z-index: 2;"><h3><i class="fas fa-trash-alt mt-2"></i></h3></button><div class="card ticket-card"><div class="card-body"><div class="alert alert-success w-100 py-2"><strong>' +
+                            '<div class="card border-0 m-0 p-0 mt-3 bg-none"><button class="btn btn-danger remove_field px-0" style="z-index: 3;"><i class="fas fa-trash-alt"></i></button><div class="card ticket-card mt-1"><div class="card-body"><small><div class="alert alert-info w-100 py-2"><strong>' +
                             ticketName +
-                            '</strong></div><input type="hidden" value="' +
+                            '</strong></div></small><input type="hidden" value="' +
                             ticketName + '" name="ticketName[' +
                             x +
-                            ']"><hr class="dashed"><p class="card-text mr-5">' + ticketDescription +
-                            '</p><input type="hidden" value="' + ticketDescription +
+                            ']"><hr class="dashed"><input type="hidden" value="' + ticketDescription +
                             '"  name="ticketDescription[' +
                             x +
-                            ']" id=""><p class="card-text pt-0"><small class="text-muted icon-class"><i class="fas fa-hourglass-end pr-4"></i>Berakhir : <strong>' +
-                            ticketDate +
-                            '</strong><span class="alert alert-secondary rounded-0 py-1 ms-2"><strong>Kuota : ' +
+                            ']" id=""><p class="card-text pt-0"><small class="text-white icon-class"><i class="fas fa-hourglass-end pr-4"></i>Berakhir : <strong>' +
+                            ticketEndDate +
+                            '</strong><span class="alert alert-info py-1 px-2 ms-2"><strong>Kuota : ' +
                             ticketQuota + '</strong><input type="hidden" value="' + ticketQuota +
                             '" name="ticketQuota[' + x +
                             ']"></span></small></p><input type="hidden" value="' +
                             ticketDate +
+                            '" name="ticketDate[' +
+                            x +
+                            ']"><input type="hidden" value="' +
+                            ticketEndDate +
                             '" name="ticketDeadline[' +
                             x +
-                            ']"><hr class="dashed"><div class="d-inline"><span class="alert alert-primary py-2 rounded-0"><strong>' +
+                            ']"><hr class="dashed"><div class="row"><div class="col"><span class="badge bg-secondary py-2 rounded-0"><strong><i class="fas fa-tag"></i> ' +
                             ticketPrice + '</strong><input type="hidden" value="' + price +
                             '" name="ticketPrice[' +
                             x +
                             ']"></span><input type="hidden" value="' + ticketButton +
                             '" name="ticketButton[' + x +
-                            ']"><div class="float-end"><button type="button" class="btn btn-success px-3">' +
-                            ticketButtonText + '</button></div></div></div></div></div>'
+                            ']"></div><div class="col text-end"><button type="button" class="btn btn-sm btn-success px-3"><strong>' +
+                            ticketButtonText + '</strong></button></div></div></div></div></div>'
                         ); // add input boxes.
                     }
                     $("#ticketModal").modal('hide');
@@ -494,6 +498,49 @@
                     }
                 });
             });
+
+            $('#delete-event').on('click', function(e) {
+                e.preventDefault();
+                Swal.fire({
+                    title: "Do you want to save the changes?",
+                    showDenyButton: true,
+                    showCancelButton: true,
+                    confirmButtonText: "Save",
+                    denyButtonText: `Don't save`
+                }).then((result) => {
+                    /* Read more about isConfirmed, isDenied below */
+                    if (result.isConfirmed) {
+                        Swal.fire("Saved!", "", "success");
+                    } else if (result.isDenied) {
+                        Swal.fire("Changes are not saved", "", "info");
+                    }
+                });
+            });
+
+            //cek ketersediaan URL
+            $('#url-event').on('keyup', function(e) {
+                e.preventDefault();
+                var url = $('#url-event').val();
+
+                $.ajax({
+                    type: 'GET',
+                    url: "{{ url('/check-url') }}",
+                    data: {
+                        url: url
+                    },
+                    success: function(response) {
+                        if (response.result == 0) {
+                            $('#url-notif-danger').attr('hidden', true);
+                            $('#url-notif-success').removeAttr('hidden');
+                        } else {
+                            $('#url-notif-danger').removeAttr('hidden');
+                            $('#url-notif-success').attr('hidden', true);
+                        }
+                    }
+                });
+
+            });
+
         });
     </script>
 </body>

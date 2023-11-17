@@ -4,6 +4,8 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
     <title>Dashboard | Eventconnect.id</title>
 
     <!-- Google Font: Source Sans Pro -->
@@ -74,6 +76,45 @@
     <!-- Bootstrap 4 -->
     <script src="{{ asset('assets/dashboard/plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
     <script src="{{ asset('assets/dashboard/dist/js/adminlte.min.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        $(document).ready(function(e) {
+
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+
+            //delete event dari dashboard
+            $('.delete-event').on('click', function(e) {
+                e.preventDefault();
+                Swal.fire({
+                    title: "Yakin hapus event?",
+                    showCancelButton: true,
+                    confirmButtonText: "<i class='fas fa-trash-alt'></i> Delete",
+                    confirmButtonColor: "#d33",
+                }).then((result) => {
+                    /* Read more about isConfirmed, isDenied below */
+                    if (result.isConfirmed) {
+                        var id = $(this).data("id");
+                        $.ajax({
+                            url: '/event/' + id,
+                            type: 'DELETE',
+                            success: function(response) {
+                                Swal.fire(response.success, '', 'success').then(
+                                    function() {
+                                        window.location =
+                                            "/dashboard/manajemen-event";
+                                    })
+                            }
+                        });
+
+                    }
+                });
+            });
+        });
+    </script>
 
 </body>
 

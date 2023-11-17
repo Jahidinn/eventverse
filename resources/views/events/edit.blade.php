@@ -11,7 +11,7 @@
                 <div class="col-lg-3 col-md-2"></div>
 
                 <div class="col-lg-12 formevent-title mb-2 text-white py-1 mt-4 shadow-sm">
-                    BUAT EVENT
+                    <i class="fas fa-pencil-alt"></i> EDIT EVENT
                 </div>
 
                 <div class="col-lg-12 col-md-12 formevent-box">
@@ -19,11 +19,10 @@
                         <div class="card-body">
 
                             <div class="tb-container mt-0">
-                                <img id="tb-image" />
-                                <label for="tb-file-upload" class="shadow"><i class="fas fa-image"></i> Poster atau
-                                    banner</label>
+                                <img id="tb-image" src="{{ asset('storage/event-images/' . $detailEvent->image) }}" />
+                                <label for="tb-file-upload" class="shadow"><i class="fas fa-image"></i> Edit gambar</label>
                                 <input type="file" name="bannerEvent" id="tb-file-upload" accept="image/*"
-                                    onchange="fileUpload(event);">
+                                    onchange="fileUpload(event);" />
                             </div>
                             <small class="text-danger" id="image-warning" hidden>Max ukuran banner 500KB</small>
 
@@ -33,20 +32,15 @@
                                     <div class="col-md-6">
                                         <div class="form-group event-title">
                                             <input type="text" class="form-control" name="titleEvent" required
-                                                placeholder="Nama Event">
+                                                placeholder="Nama Event" value="{{ $detailEvent->title }}">
                                         </div>
                                     </div>
                                     <div class="col-md-6 url">
                                         <div class="form-group input-form-group event-title">
                                             <span class="form-control-feedback url">eventconnect.id/</span>
-                                            <input type="text" class="form-control mb-0" name="linkEvent" required
-                                                placeholder="contoh-LINK-2023" id="url-event">
-                                            <small class="text-success" id="url-notif-success" hidden><i
-                                                    class="fas fa-check"></i>
-                                                Link tersedia!</small>
-                                            <small class="text-danger" id="url-notif-danger" hidden><i
-                                                    class="fas fa-times-circle"></i> Link sudah
-                                                dipakai!</small>
+                                            <input type="text" class="form-control" name="linkEvent" required
+                                                placeholder="contoh-LINK-2023" id="url-event"
+                                                value="{{ $detailEvent->slug }}">
                                         </div>
                                     </div>
                                 </div>
@@ -66,15 +60,18 @@
                                     </div>
                                     <div class="col-md-3">
                                         <div class="form-group input-form-group">
-                                            <label class="form-control-label" for="kategori-event">KATEGORI EVENT</label>
+                                            <label class="form-control-label" for="kategori-event">KATEGORI EVENT <i
+                                                    class="fas fa-pencil-alt"></i></label>
                                             <span class="fas fa-list form-control-feedback"></span>
                                             <input type="text" class="form-control kategori-event" inputmode="none"
-                                                id="kategori-event" required>
+                                                id="kategori-event" required
+                                                value="{{ $detailEvent->category }}, {{ $detailEvent->theme }} ">
                                         </div>
                                     </div>
                                     <div class="col-md-3">
                                         <div class="form-group input-form-group">
-                                            <label class="form-control-label" for="lokasiEvent">LOKASI</label>
+                                            <label class="form-control-label" for="lokasiEvent">LOKASI <i
+                                                    class="fas fa-pencil-alt"></i></label>
                                             <span class="fas fa-map-marker-alt form-control-feedback"></span>
                                             <input type="text" class="form-control lokasi-event" inputmode="none"
                                                 id="lokasiEvent" required>
@@ -82,7 +79,8 @@
                                     </div>
                                     <div class="col-md-3">
                                         <div class="form-group input-form-group">
-                                            <label class="form-control-label" for="tanggalEvent">TANGGAL EVENT</label>
+                                            <label class="form-control-label" for="tanggalEvent">TANGGAL EVENT <i
+                                                    class="fas fa-pencil-alt"></i></label>
                                             <span class="far fa-calendar-alt form-control-feedback"></span>
                                             <input type="text" class="form-control tanggal-event" inputmode="none"
                                                 id="tanggalEvent" required>

@@ -15,9 +15,10 @@ return new class extends Migration
 			$table->id();
 			$table->foreignId('event_id');
 			$table->string('ticket_name');
-			$table->text('ticket_description');
+			$table->text('ticket_description')->nullable();
 			$table->integer('ticket_quota');
 			$table->integer('ticket_price');
+			$table->date('ticket_start');
 			$table->date('ticket_deadline');
 			$table->string('ticket_button');
 			$table->timestamp('created_at')->useCurrent();

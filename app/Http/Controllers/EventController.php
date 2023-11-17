@@ -4,10 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\Event;
 use App\Models\Cities;
-use App\Models\CustomForm;
 use App\Models\Ticket;
 use App\Models\Provinces;
+use App\Models\CustomForm;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
 class EventController extends Controller
@@ -36,11 +37,23 @@ class EventController extends Controller
 		return response()->json(['result' => $cities]);
 	}
 
+	public function cekUrl(Request $request)
+	{
+		$url = Event::where('slug', $request->url)->get();
+
+		if (count($url) == 0) {
+			return response()->json(['result' => 0]);
+		} else {
+			return response()->json(['result' => 1]);
+		}
+	}
+
 	/**
 	 * Store a newly created resource in storage.
 	 */
 	public function store(Request $request)
 	{
+
 		$validasi = Validator::make($request->all(), [
 			'bannerEvent' => 'required|max:616'
 		]);
@@ -86,6 +99,7 @@ class EventController extends Controller
 						"ticket_name" => $ticketName,
 						"ticket_description" => $request->ticketDescription[$key],
 						"ticket_quota" => $request->ticketQuota[$key],
+						"ticket_start" => $request->ticketDate[$key],
 						"ticket_deadline" => $request->ticketDeadline[$key],
 						"ticket_price" => $request->ticketPrice[$key],
 						"ticket_button" => $request->ticketButton[$key],
@@ -114,13 +128,12 @@ class EventController extends Controller
 		}
 	}
 
-	/**
-	 * Display the specified resource.
-	 */
-	// public function show(Event $event)
-	public function show()
+	public function show(Event $event)
 	{
-		return view('events.show');
+		return view('events.show', [
+			'detailEvent' => $event,
+			'ticketData' => Ticket::where('event_id', $event->id)->get()
+		]);
 	}
 
 	/**
@@ -128,7 +141,11 @@ class EventController extends Controller
 	 */
 	public function edit(Event $event)
 	{
-		//
+		return view('events.edit', [
+			'detailEvent' => $event,
+			'ticketData' => Ticket::where('event_id', $event->id)->get(),
+			'data_provinces' => Provinces::all(),
+		]);
 	}
 
 	/**
@@ -142,8 +159,19 @@ class EventController extends Controller
 	/**
 	 * Remove the specified resource from storage.
 	 */
-	public function destroy(Event $event)
+	public function destroy($id)
 	{
-		//
+		$event = Event::where('id', $id)->first();
+
+		if ($event->image) {
+			Storage::delete('public/event-images/' . $event->image);
+		}
+
+		// Hapus tabel di database
+		Event::where('id', $id)->delete();
+		Ticket::where('event_id', $id)->delete();
+		CustomForm::where('event_id', $id)->delete();
+
+		return response()->json(['success' => 'Event berhasil DIHAPUS!']);
 	}
 }

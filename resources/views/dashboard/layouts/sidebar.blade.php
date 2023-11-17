@@ -28,27 +28,31 @@
                with font-awesome or any other icon font library -->
                 <li class="nav-header">DASHBOARD</li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link">
+                    <a href="/dashboard" class="nav-link {{ Request::is('dashboard') ? 'active' : '' }}">
                         <i class="nav-icon fas fa-home"></i>
                         <p>Home</p>
                     </a>
                 </li>
 
                 <li class="nav-item">
-                    <a href="../widgets.html" class="nav-link">
-                        <i class="nav-icon fas fa-calendar"></i>
-                        <p>Event</p>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="../widgets.html" class="nav-link">
-                        <i class="nav-icon fas fa-ticket-alt"></i>
+                    <a href="/dashboard/myevent"
+                        class="nav-link {{ Request::is('dashboard/myevent*') ? 'active' : '' }}">
+                        <i class="nav-icon fas fa-address-card"></i>
                         <p>
-                            Tiket
+                            My event
                             {{-- <span class="right badge badge-danger">New</span> --}}
                         </p>
                     </a>
                 </li>
+
+                <li class="nav-item">
+                    <a href="/dashboard/manajemen-event"
+                        class="nav-link {{ Request::is('dashboard/manajemen-event*') ? 'active' : '' }}">
+                        <i class="nav-icon fas fa-calendar"></i>
+                        <p>Manajemen event</p>
+                    </a>
+                </li>
+
 
                 <li class="nav-header">EVENT STATISTIK</li>
                 <li class="nav-item">
