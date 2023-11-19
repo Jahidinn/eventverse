@@ -1988,6 +1988,9 @@ pre code {
   .table-responsive-lg > .table-bordered {
     border: 0;
   }
+  .sidebar-collapse .main-sidebar, .sidebar-collapse .main-sidebar::before {
+	display: none;
+  }
 }
 
 @media (max-width: 1199.98px) {
@@ -11759,7 +11762,7 @@ body.sidebar-collapse:not(.sidebar-mini-xs):not(.sidebar-mini-md):not(.sidebar-m
 }
 
 .main-sidebar, .main-sidebar::before {
-  transition: margin-left 0.3s ease-in-out, width 0.3s ease-in-out;
+  transition: margin-left 0.2s ease-in-out, width 0.2s ease-in-out;
   width: 250px;
 }
 
@@ -11898,8 +11901,8 @@ body:not(.layout-fixed) .main-sidebar .sidebar {
 .hold-transition .control-sidebar *,
 .hold-transition .main-footer {
   transition: none !important;
-  -webkit-animation-duration: 0s !important;
-  animation-duration: 0s !important;
+  -webkit-animation-duration: 1s !important;
+  animation-duration: 1s !important;
 }
 
 .dark-mode {

@@ -16,8 +16,8 @@ return new class extends Migration
 			$table->foreignId('user_id');
 			$table->string('title');
 			$table->string('slug');
-			$table->string('category');
-			$table->string('theme');
+			$table->foreignId('category');
+			$table->foreignId('theme');
 			$table->string('location_jenis');
 			$table->string('location_province')->nullable();
 			$table->string('location_city')->nullable();

@@ -12,7 +12,7 @@
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
     <link rel="stylesheet" href="{{ asset('assets/dashboard/plugins/fontawesome-free/css/all.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets/dashboard/dist/css/adminlte.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/dashboard/dist/css/adminlte.css') }}">
 
     <!-- JavaScript -->
     <script src="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script>
@@ -114,6 +114,17 @@
                 });
             });
         });
+
+        $('#edit-button').on('click', function(e) {
+            e.preventDefault();
+            $('#editModal').modal('show');
+            var slug = $(this).data("slug");
+
+            $('#edit-detail-event').attr('href', '/event/' + slug + '/edit');
+
+        })
+
+        //href = "" >
     </script>
 
 </body>

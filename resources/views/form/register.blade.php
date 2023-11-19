@@ -1,4 +1,4 @@
-@extends('auth.main')
+@extends('form.main')
 
 @section('content')
     <div class="container pb-3">

@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Event;
+use App\Models\Theme;
 use App\Models\Cities;
 use App\Models\Ticket;
+use App\Models\Category;
 use App\Models\Provinces;
 use App\Models\CustomForm;
 use Illuminate\Http\Request;
@@ -28,6 +30,8 @@ class EventController extends Controller
 	{
 		return view('events.create', [
 			'data_provinces' => Provinces::all(),
+			'category' => Category::all(),
+			'theme' => Theme::all(),
 		]);
 	}
 
@@ -39,6 +43,10 @@ class EventController extends Controller
 
 	public function cekUrl(Request $request)
 	{
+		if ($request->url == '') {
+			return response()->json(['result' => 'N']);
+		}
+
 		$url = Event::where('slug', $request->url)->get();
 
 		if (count($url) == 0) {
@@ -145,7 +153,44 @@ class EventController extends Controller
 			'detailEvent' => $event,
 			'ticketData' => Ticket::where('event_id', $event->id)->get(),
 			'data_provinces' => Provinces::all(),
+			'category' => Category::all(),
+			'theme' => Theme::all(),
 		]);
+	}
+
+	public function editImage(Request $request)
+	{
+		//Validasi Gambar/poster
+		$validasi = Validator::make($request->all(), [
+			'bannerEventEdit' => 'required|max:616'
+		]);
+
+		//Response jika validasi gagal
+		if ($validasi->fails()) {
+			return response()->json(['error' => 'Banner/poster kosong atau ukuran terlalu besar']);
+		}
+
+		//Jika lolos validasi atau validasi berhasil
+		else {
+			$event = Event::where('id', $request->idEvent)->first();
+
+			//Hapus file
+			if ($event->image) {
+				Storage::delete('public/event-images/' . $event->image);
+			}
+
+			$imageName = preg_replace('/\s+/', '-', time() . '-' . $request->file('bannerEventEdit')->getClientOriginalName());
+			$data = [
+				'image' => $imageName,
+			];
+
+			//Simpan gambar dan update data gambar pada database
+			$request->file('bannerEventEdit')->storeAs('public/event-images', $imageName);
+			Event::where('id', $request->idEvent)->update($data);
+
+			//response suksess
+			return response()->json(['success' => 'Banner berhasil diubah!']);
+		}
 	}
 
 	/**

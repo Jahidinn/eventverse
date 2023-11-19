@@ -27,6 +27,7 @@ Route::get('/dashboard/manajemen-event', [DashboardController::class, 'manajemen
 
 Route::get('/get-cities/{code}', [EventController::class, 'getCities']);
 Route::get('/check-url', [EventController::class, 'cekUrl']);
+Route::post('/event-edit-image', [EventController::class, 'editImage']);
 Route::resource('/event', EventController::class)->middleware('auth');
 
 Route::get('/login', [AuthController::class, 'login'])->name('login')->middleware('guest');

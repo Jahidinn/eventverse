@@ -1,5 +1,5 @@
 {{-- Template header mengamil dari auth --}}
-@extends('auth.main')
+@extends('form.main')
 
 @section('content')
     {{-- Form input --}}
@@ -41,12 +41,15 @@
                                             <span class="form-control-feedback url">eventconnect.id/</span>
                                             <input type="text" class="form-control mb-0" name="linkEvent" required
                                                 placeholder="contoh-LINK-2023" id="url-event">
+
+                                            {{-- Peringatan link url / slug --}}
                                             <small class="text-success" id="url-notif-success" hidden><i
                                                     class="fas fa-check"></i>
                                                 Link tersedia!</small>
                                             <small class="text-danger" id="url-notif-danger" hidden><i
                                                     class="fas fa-times-circle"></i> Link sudah
                                                 dipakai!</small>
+                                            {{-- Peringatan link url / slug --}}
                                         </div>
                                     </div>
                                 </div>
@@ -57,7 +60,8 @@
                                             <label class="form-control-label" for="userName">PENYELENGGARA</label>
                                             <span class="fas fa-users form-control-feedback"></span>
                                             <input type="text" readonly class="form-control"
-                                                value="{{ auth()->user()->name }}" id="userName" name="username_id">
+                                                value="{{ auth()->user()->name }}" id="userName" name="username_id"
+                                                autocomplete="off">
                                             <input type="hidden" name="userId" value="{{ auth()->user()->id }}">
                                             <div class="form-text text-danger mt-0 pt-0">
                                                 Form otomatis
@@ -251,6 +255,7 @@
                             <button type="button" class="btn-close" data-bs-dismiss="modal"
                                 aria-label="Close"></button>
                         </div>
+
                         <div class="modal-body">
                             <form action="">
                                 <div class="mb-2">
@@ -259,17 +264,10 @@
                                         <select class="form-select js-example-basic-single mt-1" id="kategoriEvent"
                                             name="kategoriEvent" aria-label="Default select example"
                                             style="z-index: 100000000">
-                                            <option value="Lomba" selected>Lomba</option>
-                                            <option value="Beasiswa">Beasiswa</option>
-                                            <option value="Konser">Konser</option>
-                                            <option value="Olimpiade">Olimpiade</option>
-                                            <option value="Seminar">Seminar</option>
-                                            <option value="Pameran">Pameran</option>
-                                            <option value="Bazar">Bazar</option>
-                                            <option value="Training">Training</option>
-                                            <option value="Turnamen">Turnamen</option>
-                                            <option value="Trip">Trip</option>
-                                            <option value="Lainya">Lainya</option>
+                                            @foreach ($category as $category)
+                                                <option value="{{ $category->id }}">{{ $category->category }}
+                                                </option>
+                                            @endforeach
                                         </select>
                                     </div>
                                 </div>
@@ -278,34 +276,22 @@
                                         <label for="temaEvent" class="form-control-label">TEMA</label>
                                         <select class="form-select js-example-basic-single-2 mt-1" id="temaEvent"
                                             name="temaEvent" aria-label="Default select example">
-                                            <option value="Sains & teknologi" selected>Sains & teknologi</option>
-                                            <option value="Ekonomi, bisnis, & investasi">Ekonomi, bisnis, & investasi
-                                            </option>
-                                            <option value="Pendidikan & beasiswa">Pendidikan & beasiswa</option>
-                                            <option value="Seni budaya">Seni budaya</option>
-                                            <option value="Game / e-sports">Game / e-sports</option>
-                                            <option value="Musik">Musik</option>
-                                            <option value="Keuangan / finansial">Keuangan / finansial</option>
-                                            <option value="Desain, foto, & video">Desain, foto, & video</option>
-                                            <option value="Karir & pengembangan diri">Karir & pengembangan diri</option>
-                                            <option value="Sosial, hukum & politik">Sosial, hukum & politik</option>
-                                            <option value="Kesehatan">Kesehatan</option>
-                                            <option value="Otomotif">Otomotif</option>
-                                            <option value="Keagamaan">Keagamaan</option>
-                                            <option value="Lingkungan hidup">Lingkungan hidup</option>
-                                            <option value="Makanan / minuman">Makanan / minuman</option>
-                                            <option value="Lainya">Lainya</option>
+                                            @foreach ($theme as $theme)
+                                                <option value="{{ $theme->id }}">{{ $theme->theme }}</option>
+                                            @endforeach
                                         </select>
                                     </div>
                                 </div>
                             </form>
                         </div>
+
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
                             <button type="button" class="btn btn-primary" id="simpan-kategori"><i
                                     class="fas fa-check-square"></i>
                                 Simpan</button>
                         </div>
+
                     </div>
                 </div>
             </div>
@@ -452,8 +438,8 @@
                                     <div class="form-group input-form-group">
                                         <label for="ticketDescription" class="form-control-label">DESKRIPSI TIKET</label>
                                         <span class="fas fa-file-alt form-control-feedback pt-1"></span>
-                                        <input type="hidden" class="form-control mt-1" id="ticketDescription"
-                                            placeholder="Deskripsi">
+                                        <input type="text" class="form-control mt-1" id="ticketDescription"
+                                            placeholder="Deskripsi" name="ticketDescription">
                                     </div>
                                 </div>
                                 <div class="mb-2">
@@ -519,4 +505,8 @@
 
     </form>
     {{-- End form --}}
+
+    @push('create-scripts')
+        @include('events.js.create-js')
+    @endpush
 @endsection

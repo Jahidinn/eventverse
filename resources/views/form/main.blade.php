@@ -141,10 +141,7 @@
 
                     });
                 }
-
             });
-
-
         });
 
 
@@ -164,50 +161,6 @@
             $("#tanggalEventModal").modal("show");
         });
 
-        //preview image
-        const fileUpload = (event) => {
-
-            const files = event.target.files;
-            const filesLength = files.length;
-            if (filesLength > 0) {
-                const imageSrc = URL.createObjectURL(files[0]);
-                const imagePreviewElement = document.querySelector("#tb-image");
-                imagePreviewElement.src = imageSrc;
-                imagePreviewElement.style.display = "block";
-            }
-        };
-
-        //cek validasi file
-
-        var inputElement = document.getElementById("tb-file-upload")
-
-        inputElement.addEventListener('change', function() {
-            var fileLimit = 600; // could be whatever you want 
-            var files = inputElement.files; //this is an array
-            var fileSize = files[0].size;
-            var fileSizeInKB = (fileSize / 1024); // this would be in kilobytes defaults to bytes
-
-            if (fileSizeInKB < fileLimit) {
-                $('#image-warning').hide();
-                Swal.fire(
-                    'Ok!',
-                    'Berhasil menambahkan gambar!',
-                    'success'
-                )
-                // add file to db here
-            } else {
-                $('#image-warning').removeAttr('hidden');
-                $('#image-warning').show();
-                Swal.fire(
-                    'Error',
-                    'Ukuran file lebih dari 500KB! upload ulang ya!',
-                    'error'
-                );
-                document.querySelector("#tb-image").src = '';
-                // do not pass go, do not add to db. Pass error to user    
-
-            }
-        });
 
         var rupiah = document.getElementById("ticketPrice");
 
@@ -351,13 +304,15 @@
                             '</strong></div></small><input type="hidden" value="' +
                             ticketName + '" name="ticketName[' +
                             x +
-                            ']"><hr class="dashed"><input type="hidden" value="' + ticketDescription +
+                            ']"><hr class="dashed"><input type="hidden" value="' +
+                            ticketDescription +
                             '"  name="ticketDescription[' +
                             x +
                             ']" id=""><p class="card-text pt-0"><small class="text-white icon-class"><i class="fas fa-hourglass-end pr-4"></i>Berakhir : <strong>' +
                             ticketEndDate +
                             '</strong><span class="alert alert-info py-1 px-2 ms-2"><strong>Kuota : ' +
-                            ticketQuota + '</strong><input type="hidden" value="' + ticketQuota +
+                            ticketQuota + '</strong><input type="hidden" value="' +
+                            ticketQuota +
                             '" name="ticketQuota[' + x +
                             ']"></span></small></p><input type="hidden" value="' +
                             ticketDate +
@@ -374,7 +329,8 @@
                             ']"></span><input type="hidden" value="' + ticketButton +
                             '" name="ticketButton[' + x +
                             ']"></div><div class="col text-end"><button type="button" class="btn btn-sm btn-success px-3"><strong>' +
-                            ticketButtonText + '</strong></button></div></div></div></div></div>'
+                            ticketButtonText +
+                            '</strong></button></div></div></div></div></div>'
                         ); // add input boxes.
                     }
                     $("#ticketModal").modal('hide');
@@ -501,6 +457,7 @@
 
             $('#delete-event').on('click', function(e) {
                 e.preventDefault();
+
                 Swal.fire({
                     title: "Do you want to save the changes?",
                     showDenyButton: true,
@@ -532,6 +489,9 @@
                         if (response.result == 0) {
                             $('#url-notif-danger').attr('hidden', true);
                             $('#url-notif-success').removeAttr('hidden');
+                        } else if (response.result == 'N') { //jika null
+                            $('#url-notif-danger').attr('hidden', true);
+                            $('#url-notif-success').attr('hidden', true);
                         } else {
                             $('#url-notif-danger').removeAttr('hidden');
                             $('#url-notif-success').attr('hidden', true);
@@ -543,6 +503,13 @@
 
         });
     </script>
+
+    {{-- create event script --}}
+    @stack('create-scripts')
+
+    {{-- Edit event script --}}
+    @stack('edit-scripts')
+
 </body>
 
 </html>
