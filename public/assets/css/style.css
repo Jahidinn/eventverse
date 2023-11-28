@@ -60,11 +60,11 @@ h1, h2, h3, h4, h5, h6, .font-primary {
 # Header
 --------------------------------------------------------------*/
 #header {
-  height: 80px;
+  height: 70px;
   transition: all 0.5s;
   z-index: 997;
   transition: all 0.5s;
-  padding: 20px 0;
+  padding: 15px 0;
   background: #1e4356;
 }
 
@@ -282,10 +282,15 @@ h1, h2, h3, h4, h5, h6, .font-primary {
   line-height: 1;
   cursor: pointer;
   text-align: right;
+  padding: 9px 0;
 }
 
 .mobile-nav-toggle i {
   color: #fff;
+}
+
+.mobile-nav-toggle-scrolled{
+	padding: 0px 0;
 }
 
 .mobile-nav-overly {
@@ -475,10 +480,10 @@ section {
 }
 
 .section-title h2 {
-  font-size: 28px;
-  font-weight: 400;
+  font-size: 17px;
+  font-weight: 600;
   margin-bottom: 20px;
-  padding-bottom: 20px;
+  padding-bottom: 10px;
   position: relative;
 }
 

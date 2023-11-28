@@ -11,13 +11,12 @@ use App\Models\Provinces;
 use App\Models\CustomForm;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Facades\Validator;
 
 class EventController extends Controller
 {
-	/**
-	 * Display a listing of the resource.
-	 */
+
 	public function index()
 	{
 		//
@@ -47,9 +46,9 @@ class EventController extends Controller
 			return response()->json(['result' => 'N']);
 		}
 
-		$url = Event::where('slug', $request->url)->get();
+		$url = Event::where('slug', $request->url)->first();
 
-		if (count($url) == 0) {
+		if (!$url) {
 			return response()->json(['result' => 0]);
 		} else {
 			return response()->json(['result' => 1]);
@@ -149,12 +148,17 @@ class EventController extends Controller
 	 */
 	public function edit(Event $event)
 	{
+		$jenisLokasi = [
+			['lokasi' => 'Online'],
+			['lokasi' => 'Offline'],
+		];
 		return view('events.edit', [
 			'detailEvent' => $event,
 			'ticketData' => Ticket::where('event_id', $event->id)->get(),
 			'data_provinces' => Provinces::all(),
 			'category' => Category::all(),
 			'theme' => Theme::all(),
+			'jenisLokasi' => $jenisLokasi,
 		]);
 	}
 
@@ -172,7 +176,7 @@ class EventController extends Controller
 
 		//Jika lolos validasi atau validasi berhasil
 		else {
-			$event = Event::where('id', $request->idEvent)->first();
+			$event = Event::where('id', $request->eventId)->first();
 
 			//Hapus file
 			if ($event->image) {
@@ -186,7 +190,7 @@ class EventController extends Controller
 
 			//Simpan gambar dan update data gambar pada database
 			$request->file('bannerEventEdit')->storeAs('public/event-images', $imageName);
-			Event::where('id', $request->idEvent)->update($data);
+			Event::where('id', $request->eventId)->update($data);
 
 			//response suksess
 			return response()->json(['success' => 'Banner berhasil diubah!']);
@@ -196,9 +200,27 @@ class EventController extends Controller
 	/**
 	 * Update the specified resource in storage.
 	 */
-	public function update(Request $request, Event $event)
+	public function update(Request $request)
 	{
-		//
+		$data = [
+			'user_id' => $request->userId,
+			'title' => $request->titleEvent,
+			'slug' => $request->linkEvent,
+			'category' => $request->kategoriEvent,
+			'description' => $request->descriptionEvent,
+			'terms' => $request->terms,
+			'theme' => $request->temaEvent,
+			'location_jenis' => $request->jenisEvent,
+			'location_province' => $request->provinces,
+			'location_city' => $request->cities,
+			'location_detail' => $request->detailAlamat,
+			'start_date' => $request->startDate,
+			'end_date' => $request->endDate,
+
+		];
+
+		Event::where('id', $request->eventId)->update($data);
+		return redirect('/event/' . $request->linkEvent)->with(['success' => 'Event berhasil di edit!']);
 	}
 
 	/**
@@ -218,5 +240,91 @@ class EventController extends Controller
 		CustomForm::where('event_id', $id)->delete();
 
 		return response()->json(['success' => 'Event berhasil DIHAPUS!']);
+	}
+
+	//Edit ticket dan formulir
+
+	public function getTicket(Request $request)
+	{
+		$ticket = Ticket::where('event_id', $request->event_id)->get();
+		return DataTables::of($ticket)
+			->addColumn('action', function ($ticket) {
+				return view('dashboard.components.column-action')->with(['data' => $ticket, 'button' => 'ticket']);
+			})
+			->make(true);
+	}
+
+	public function getFormulir(Request $request)
+	{
+		$form = CustomForm::where('event_id', $request->event_id)->get();
+		return DataTables::of($form)
+			->addColumn('action', function ($form) {
+				return view('dashboard.components.column-action')->with(['data' => $form, 'button' => 'formulir']);
+			})
+			->make(true);
+	}
+
+	public function addTicket(Request $request)
+	{
+		$data = [
+			'event_id' => $request->event_id,
+			'ticket_name' => $request->ticket_name,
+			'ticket_price' => preg_replace("/[^0-9]/", '', $request->ticket_price),
+			'ticket_quota' => $request->ticket_quota,
+			'ticket_start' => $request->ticket_start,
+			'ticket_deadline' => $request->ticket_deadline,
+			'ticket_button' => $request->ticket_button,
+		];
+
+		Ticket::insert($data);
+		return response()->json(['success' => 'Berhasil menambah tiket pendaftaran!']);
+	}
+
+	public function addFormulir(Request $request)
+	{
+		$data = [
+			'event_id' => $request->event_id,
+			'form_name' => $request->form_name,
+		];
+
+		CustomForm::insert($data);
+		return response()->json(['success' => 'Berhasil menambah form pendaftaran!']);
+	}
+
+	public function editTicket(Request $request)
+	{
+		$data = [
+			'ticket_name' => $request->ticket_name,
+			'ticket_price' => preg_replace("/[^0-9]/", '', $request->ticket_price),
+			'ticket_quota' => $request->ticket_quota,
+			'ticket_start' => $request->ticket_start,
+			'ticket_deadline' => $request->ticket_deadline,
+			'ticket_button' => $request->ticket_button,
+		];
+
+		Ticket::where('id', $request->id_ticket)->update($data);
+		return response()->json(['success' => 'Berhasil EDIT tiket pendaftaran!']);
+	}
+
+	public function editFormulir(Request $request)
+	{
+		$data = [
+			'form_name' => $request->form_name,
+		];
+
+		CustomForm::where('id', $request->id_form)->update($data);
+		return response()->json(['success' => 'Berhasil EDIT Formulir!']);
+	}
+
+	public function deleteTicket(Request $request)
+	{
+		Ticket::where('id', $request->id)->delete();
+		return response()->json(['success' => 'Tiket pendaftaran berhasil DIHAPUS!']);
+	}
+
+	public function deleteFormulir(Request $request)
+	{
+		CustomForm::where('id', $request->id)->delete();
+		return response()->json(['success' => 'Form pendaftaran berhasil DIHAPUS!']);
 	}
 }

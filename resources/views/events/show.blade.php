@@ -2,13 +2,25 @@
 @extends('layouts.main')
 
 @section('content')
+    {{-- Alert ketika sukses edit --}}
+    @if (session()->has('success'))
+        <script>
+            alertify.alert("Sukses!", "<i class='fas fa-check-square text-success'></i> {{ session('success') }}");
+        </script>
+    @endif
+
+
     <div class="container pt-4 pb-3 px-0 ">
         <!-- Stack the columns on mobile by making one full-width and the other half-width -->
         <div class="row m-0 p-0">
             <div class="col-md-8 m-0 p-1">
 
                 <div class="card shadow mb-3 mx-1">
-                    <img src="{{ asset('storage/event-images/' . $detailEvent->image) }}" class="card-img-top" alt="...">
+                    <div class="view-image-event position-relative">
+                        <img src="{{ asset('storage/event-images/' . $detailEvent->image) }}" class="card-img-top"
+                            alt="...">
+                        <button class="btn btn-info rounded-0 position-absolute">FULL <i class="fas fa-expand"></i></button>
+                    </div>
                     <div class="card-body">
                         <h5 class="card-title mt-3 mb-0">{{ $detailEvent->title }}</h5>
                         <a href="">
@@ -38,7 +50,7 @@
                             </div>
                             <div class="col-md-4 row mt-1">
                                 <div class="col-auto pr-0"> <i class="fas fa-list mr-2"></i></div>
-                                <div class="col p-0 pr-1"><small>{{ $detailEvent->category }}</small></div>
+                                <div class="col p-0 pr-1"><small>{{ $detailEvent->categories->category }}</small></div>
                             </div>
                         </div>
 

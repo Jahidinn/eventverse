@@ -27,8 +27,25 @@ Route::get('/dashboard/manajemen-event', [DashboardController::class, 'manajemen
 
 Route::get('/get-cities/{code}', [EventController::class, 'getCities']);
 Route::get('/check-url', [EventController::class, 'cekUrl']);
+
+//detail event
+Route::get('/{event}', [EventController::class, 'show']);
+Route::get('/event/{event}', [EventController::class, 'show']);
+
+Route::get('/get-ticket', [EventController::class, 'getTicket']);
+Route::get('/get-formulir', [EventController::class, 'getFormulir']);
+
+Route::post('/add-ticket', [EventController::class, 'addTicket']);
+Route::post('/add-formulir', [EventController::class, 'addFormulir']);
+
+Route::post('/edit-ticket', [EventController::class, 'editTicket']);
+Route::post('/edit-formulir', [EventController::class, 'editFormulir']);
+
+Route::post('/delete-ticket', [EventController::class, 'deleteTicket']);
+Route::post('/delete-formulir', [EventController::class, 'deleteFormulir']);
+
 Route::post('/event-edit-image', [EventController::class, 'editImage']);
-Route::resource('/event', EventController::class)->middleware('auth');
+Route::resource('/event', EventController::class, ['except' => ['show']])->middleware('auth');
 
 Route::get('/login', [AuthController::class, 'login'])->name('login')->middleware('guest');
 Route::post('/login', [AuthController::class, 'autenticate']);

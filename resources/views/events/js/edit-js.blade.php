@@ -27,10 +27,10 @@
 
             form = new FormData();
             var featured_image = inputElement2.files[0];
-            var idEvent = $('#id-event').val();
+            var eventId = $('#id-event').val();
 
             form.append('bannerEventEdit', featured_image);
-            form.append('idEvent', idEvent);
+            form.append('eventId', eventId);
 
             //Ajax proses edit banner / poster
             $.ajax({
@@ -62,5 +62,49 @@
             document.querySelector("#tb-image-edit").src = '';
             // do not pass go, do not add to db. Pass error to user  
         }
+    });
+
+    $(document).ready(function(e) {
+
+        var jenisLokasi = '{{ $detailEvent->location_jenis }}';
+        var province = '{{ $detailEvent->location_province }}';
+
+        //hidden pilih lokasi ketika eventnya online
+        if (jenisLokasi == 'Online') {
+            $('#lokasi-event-container').attr('hidden', true);
+        } else {
+            $.ajax({
+                url: '/get-cities/' + province,
+                type: 'GET',
+                cache: false,
+                dataType: 'JSON',
+                success: function(response) {
+                    var city = $('#cities');
+                    city.removeAttr('disabled');
+
+                    $.each(response.result, function(key, value) {
+
+                        $("#cities").append('<option value="' + value.name +
+                            '">' +
+                            value.name +
+                            '</option>');
+                    });
+
+                }
+
+            });
+        }
+
+        $(function() {
+            $("#editEventStartDate").datepicker({
+                autoclose: true,
+                todayHighlight: true
+            }).datepicker('update', new Date('{{ $detailEvent->start_date }}'));
+
+            $("#editEventEndDate").datepicker({
+                autoclose: true,
+                todayHighlight: true
+            }).datepicker('update', new Date('{{ $detailEvent->end_date }}'));
+        });
     });
 </script>

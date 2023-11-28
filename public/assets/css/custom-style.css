@@ -171,15 +171,14 @@ button.slick-disabled {
 }
 
 .form-search input {
-    width: 70%;
+    width: 65%;
     box-sizing: border-box;
     border-bottom-left-radius: 2px;
     border-top-left-radius: 2px;
     background-color: #ffffff;
     box-shadow: 2px 4px 6px 0 rgba(0, 0, 0, 0.08);
-    padding: 14px 15px 14px 10px;
+    padding: 14px 15px 14.5px 10px;
     border: 1px solid #b6c3cd;
-    border-right: 0;
     color: #4e565c;
     outline: none;
 }
@@ -187,7 +186,7 @@ button.slick-disabled {
 .form-search button {
     border-bottom-right-radius: 2px;
     border-top-right-radius: 2px;
-    background-color: #6caee0;
+    background-color: #1e4356;
     box-shadow: 1px 2px 4px 0 rgba(0, 0, 0, 0.08);
     color: #ffffff;
     padding: 15px 35px;
@@ -217,21 +216,45 @@ button.slick-disabled {
 }
 .profile-card-5 .card-img-block {
     width: 91%;
+	height:200px;
+
     margin: 0 auto;
     position: relative;
     top: -20px;
+	overflow: hidden;
 }
 .profile-card-5 .card-img-block img {
+	width:100%;
+	height:100%;
+	object-fit:cover;
     border-radius: 5px;
+	object-position: top;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.63);
 }
 .profile-card-5 h5 {
     color: #4e5e30;
     font-weight: 450;
+	font-size: 16px;
 }
+.profile-card-5 small {
+    font-size: 12px;
+	color: #303030;
+}
+
+.profile-card-5 .location {
+    color: #7d7d7d;
+}
+
 .profile-card-5 p {
-    font-size: 15px;
+    font-size: 13px;
     font-weight: 500;
+	color: #3f3f3f;
+}
+
+.profile-card-5 .event-user {
+    font-size: 14px;
+    font-weight: 500;
+	color: #404040;
 }
 .profile-card-5 .btn-primary {
     background-color: #4e5e30;
@@ -287,3 +310,13 @@ button.slick-disabled {
 	background: none;
 	height:0;
   }
+.view-image-event{
+	max-height: 50vh;
+	overflow:hidden
+}
+.view-image-event button{
+	z-index: 9;
+	position:absolute;
+	bottom: 20px;
+	right:20px;
+}

@@ -27,6 +27,9 @@ return new class extends Migration
 			$table->text('description')->nullable();
 			$table->text('terms')->nullable();
 			$table->string('image');
+			$table->integer('visitor')->default(0);
+			$table->integer('selected_event')->default(0);
+			$table->integer('promotion')->default(0);
 			$table->timestamp('created_at')->useCurrent();
 			$table->timestamp('updated_at')->useCurrent();
 		});

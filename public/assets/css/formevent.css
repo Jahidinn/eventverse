@@ -199,6 +199,7 @@ a:hover {
 	width:100%;
 	height:100%;
 	object-fit:cover;
+	object-position: top;
 }
 .tb-container input {
   display: none;
@@ -238,6 +239,7 @@ a:hover {
 	background: none;
 	height:0;
   }
+
 .trix-button-group--file-tools{
 	display: none !important;
   }

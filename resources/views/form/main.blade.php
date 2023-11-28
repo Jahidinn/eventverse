@@ -202,8 +202,8 @@
         //kategori
         $('body').on('click', '#simpan-kategori', function(e) {
             e.preventDefault();
-            var kategoriEvent = $('#kategoriEvent').val();
-            var temaEvent = $('#temaEvent').val();
+            var kategoriEvent = $('#kategoriEvent option:selected').text();
+            var temaEvent = $('#temaEvent option:selected').text();
             $('.kategori-event').val(kategoriEvent + ' (' + temaEvent + ')');
             $('#kategoriEventModal').modal('hide');
         });
@@ -263,9 +263,9 @@
                 var ticketButtonText = $("#ticketButton").children("option:selected").text();
 
                 var ticketPrice = $("#ticketPrice").val();
-                if (ticketPrice == '') {
+                if (ticketPrice.replace(/[^0-9]/g, '') == 0 || ticketPrice == '') {
                     ticketPrice = "GRATIS!";
-                    price = '';
+                    price = 0;
                 } else {
                     var price = ticketPrice.replace(/[^0-9]/g, '');
                 }
@@ -423,8 +423,8 @@
                     $("#add-form").removeClass("disabled");
                 }
             });
-
         });
+
         $(function() {
             $("#eventStartDate,#eventEndDate,#datepicker").datepicker({
                 autoclose: true,

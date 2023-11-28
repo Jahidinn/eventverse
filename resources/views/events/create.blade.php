@@ -3,7 +3,7 @@
 
 @section('content')
     {{-- Form input --}}
-    <form action="javascript:void(0)" method="post" enctype="multipart/form-data" id="form-event">
+    <form action="javascript:void(0)" method="post" id="form-event">
         @csrf
 
         <div class="container pb-3 px-0">
@@ -265,8 +265,7 @@
                                             name="kategoriEvent" aria-label="Default select example"
                                             style="z-index: 100000000">
                                             @foreach ($category as $category)
-                                                <option value="{{ $category->id }}">{{ $category->category }}
-                                                </option>
+                                                <option value="{{ $category->id }}">{{ $category->category }}</option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -449,7 +448,7 @@
                                         <input type="text" class="form-control mt-1" id="ticketPrice"
                                             placeholder="100.000" required>
                                         <div class="form-text text-danger mt-1 pt-0">
-                                            *Kosongkan jika gratis.
+                                            *isi 0 jika gratis.
                                         </div>
                                     </div>
                                 </div>
@@ -481,7 +480,7 @@
                                 </div>
                                 <div class="mb-2">
                                     <div class="form-group input-form-group">
-                                        <label for="ticketButton" class="form-control-label">TICKET BUTTON TEXT</label>
+                                        <label for="ticketButton" class="form-control-label">LABEL</label>
                                         <select class="form-select mt-1" id="ticketButton" name="ticketButton"
                                             aria-label="Default select example">
                                             <option value="BELI TIKET" selected>BELI TIKET</option>

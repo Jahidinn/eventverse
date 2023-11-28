@@ -3,9 +3,9 @@
 
 @section('content')
     {{-- Form input --}}
-    <form action="javascript:void(0)" method="post" enctype="multipart/form-data" id="form-event-edit">
-        @method('put')
+    <form action="/event/{{ $detailEvent->slug }}" method="post" id="form-event-edit">
         @csrf
+        @method('put')
 
         <div class="container pb-3 px-0">
             <div class="row m-1">
@@ -19,14 +19,14 @@
                     <div class="card mb-4">
                         <div class="card-body">
 
-                            <input type="hidden" id="id-event" value="{{ $detailEvent->id }}">
+                            <input type="hidden" name="eventId" id="id-event" value="{{ $detailEvent->id }}">
 
                             {{-- Banner image --}}
                             <div class="tb-container mt-0">
                                 <img id="tb-image-edit" src="{{ asset('storage/event-images/' . $detailEvent->image) }}" />
                                 <label for="tb-file-upload-edit" class="shadow"><i class="fas fa-image"></i> Edit
                                     gambar</label>
-                                <input type="file" id="tb-file-upload-edit" accept="image/*"
+                                <input type="file" name="bannerEventEdit" id="tb-file-upload-edit" accept="image/*"
                                     onchange="editFileUpload(event);" />
                             </div>
                             <small class="text-danger" id="image-warning" hidden>Max ukuran banner 500KB</small>
@@ -81,7 +81,7 @@
                                             <span class="fas fa-list form-control-feedback"></span>
                                             <input type="text" class="form-control kategori-event" inputmode="none"
                                                 id="kategori-event" required
-                                                value="{{ $detailEvent->category }}, {{ $detailEvent->theme }} ">
+                                                value="{{ $detailEvent->categories->category }} ({{ $detailEvent->themes->theme }})">
                                         </div>
                                     </div>
                                     <div class="col-md-3">
@@ -90,7 +90,8 @@
                                                     class="fas fa-pencil-alt"></i></label>
                                             <span class="fas fa-map-marker-alt form-control-feedback"></span>
                                             <input type="text" class="form-control lokasi-event" inputmode="none"
-                                                id="lokasiEvent" required>
+                                                id="lokasiEvent" required
+                                                value="{{ $detailEvent->location_jenis == 'Offline' ? $detailEvent->location_jenis . ' (' . $detailEvent->location_detail . ', ' . $detailEvent->location_city . ', ' . $detailEvent->province->name . ')' : $detailEvent->location_jenis }}">
                                         </div>
                                     </div>
                                     <div class="col-md-3">
@@ -99,7 +100,8 @@
                                                     class="fas fa-pencil-alt"></i></label>
                                             <span class="far fa-calendar-alt form-control-feedback"></span>
                                             <input type="text" class="form-control tanggal-event" inputmode="none"
-                                                id="tanggalEvent" required>
+                                                id="tanggalEvent" required
+                                                value="({{ $detailEvent->start_date->format('Y-m-d') }}) - ({{ $detailEvent->end_date->format('Y-m-d') }})">
                                         </div>
                                     </div>
 
@@ -120,8 +122,8 @@
                                 <div class="card">
                                     <div class="card-body">
                                         <div class="form-group p-0">
-                                            <input id="description-event" type="hidden" name="descriptionEvent"
-                                                required>
+                                            <input id="description-event" type="hidden" name="descriptionEvent" required
+                                                value="{!! $detailEvent->description !!}">
                                             <trix-editor input="description-event"></trix-editor>
                                             {{-- @error('body')
 											<div class="invalid-veedback text-danger">{{ $message }}</div>
@@ -135,7 +137,8 @@
                                 <div class="card">
                                     <div class="card-body">
                                         <div class="form-group p-0">
-                                            <input id="terms" type="hidden" name="terms" required>
+                                            <input id="terms" type="hidden" name="terms" required
+                                                value="{!! $detailEvent->terms !!}">
                                             <trix-editor input="terms" required></trix-editor>
                                             {{-- @error('body')
 											<div class="invalid-veedback text-danger">{{ $message }}</div>
@@ -178,8 +181,13 @@
                                             style="z-index: 100000000" value="Beasiswa">
 
                                             @foreach ($category as $category)
-                                                <option value="{{ $category->id }}">{{ $category->category }}
-                                                </option>
+                                                @if ($detailEvent->category == $category->id)
+                                                    <option value="{{ $category->id }}" selected>
+                                                        {{ $category->category }}</option>
+                                                @else
+                                                    <option value="{{ $category->id }}">{{ $category->category }}
+                                                    </option>
+                                                @endif
                                             @endforeach
 
                                         </select>
@@ -192,7 +200,12 @@
                                             name="temaEvent" aria-label="Default select example">
 
                                             @foreach ($theme as $theme)
-                                                <option value="{{ $theme->id }}">{{ $theme->theme }}</option>
+                                                @if ($detailEvent->theme == $theme->id)
+                                                    <option value="{{ $theme->id }}" selected>{{ $theme->theme }}
+                                                    </option>
+                                                @else
+                                                    <option value="{{ $theme->id }}">{{ $theme->theme }}</option>
+                                                @endif
                                             @endforeach
 
                                         </select>
@@ -223,19 +236,25 @@
                                 aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
-
                             <div class="mb-2">
 
                                 <div class="form-group input-form-group jenis-event">
                                     <label for="provinces" class="form-control-label">EVENT</label>
                                     <select class="form-select mt-1" id="jenis-event" name="jenisEvent"
                                         aria-label="Default select example" style="z-index: 100000000">
-                                        <option value="Offline">Offline</option>
-                                        <option value="Online">Online</option>
+
+                                        @foreach ($jenisLokasi as $lokasi)
+                                            @if ($detailEvent->location_jenis == $lokasi['lokasi'])
+                                                <option value="{{ $lokasi['lokasi'] }}" selected>{{ $lokasi['lokasi'] }}
+                                                </option>
+                                            @else
+                                                <option value="{{ $lokasi['lokasi'] }}">{{ $lokasi['lokasi'] }}</option>
+                                            @endif
+                                        @endforeach
                                     </select>
                                 </div>
-
                             </div>
+
                             <div id="lokasi-event-container">
                                 <div class="mb-2">
                                     <div class="form-group input-form-group">
@@ -244,9 +263,15 @@
                                             aria-label="Default select example" style="z-index: 100000000">
                                             <option value="" selected>Pilih Provinsi</option>
                                             @foreach ($data_provinces as $provinces)
-                                                <option value="{{ $provinces->code }}">{{ $provinces->name }}</option>
+                                                @if ($detailEvent->province && $detailEvent->province->code == $provinces->code)
+                                                    <option value="{{ $provinces->code }}" selected>
+                                                        {{ $provinces->name }}
+                                                    </option>
+                                                @else
+                                                    <option value="{{ $provinces->code }}">{{ $provinces->name }}
+                                                    </option>
+                                                @endif
                                             @endforeach
-
                                         </select>
                                     </div>
 
@@ -256,13 +281,14 @@
                                         <label for="cities" class="form-control-label">KOTA</label>
                                         <select class="form-select mt-1" id="cities" name="cities"
                                             aria-label="Default select example" disabled>
-                                            <option value="" selected>Pilih Kota</option>
+                                            <option value="{{ $detailEvent->location_city }}" selected>
+                                                {{ $detailEvent->location_city }}</option>
                                         </select>
                                     </div>
                                 </div>
                                 <div class="mb-2">
                                     <label for="detailAlamat" class="form-control-label">DETAIL LOKASI EVENT</label>
-                                    <textarea class="form-control" id="detailAlamat" name="detailAlamat" rows="3"></textarea>
+                                    <textarea class="form-control" id="detailAlamat" name="detailAlamat" rows="3">{{ $detailEvent->location_detail }}</textarea>
                                 </div>
                             </div>
                         </div>
@@ -293,10 +319,10 @@
                                 <small class="text-danger">* Tanggal inti acara</small>
                                 <div class="form-group input-form-group">
                                     <label for="startDate" class="form-control-label">TANGGAL MULAI</label>
-                                    <div id="eventStartDate" class="input-group date mt-1 mb-3"
+                                    <div id="editEventStartDate" class="input-group date mt-1 mb-3"
                                         data-date-format="yyyy-mm-dd">
                                         <input class="form-control ps-2" id="startDate" name="startDate" type="text"
-                                            required>
+                                            required value="{{ $detailEvent->start_date }}">
                                         <span class="input-group-addon"></span>
                                     </div>
                                 </div>
@@ -304,7 +330,7 @@
                             <div class="mb-2">
                                 <div class="form-group input-form-group">
                                     <label for="endDate" class="form-control-label">TANGGAL SELESAI</label>
-                                    <div id="eventEndDate" class="input-group date mt-1 mb-3"
+                                    <div id="editEventEndDate" class="input-group date mt-1 mb-3"
                                         data-date-format="yyyy-mm-dd">
                                         <input class="form-control ps-2" id="endDate" name="endDate" type="text"
                                             required>
