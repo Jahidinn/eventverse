@@ -20,9 +20,10 @@
     <section class="why-us  pt-4 pb-4 px-2">
         <div class="container px-0" data-aos="fade-up" date-aos-delay="200">
             <div class="d-flex flex-column justify-content-center py-5">
-                <form class="form-search" method="get" action="#">
-                    <input type="search" name="search" placeholder="Cari event kesukaan kamu ...">
-                    <button type="submit">Cari</button>
+                <form class="form-search" method="get" action="/search">
+                    @csrf
+                    <input type="search" name="key" placeholder="Cari event kesukaan kamu ...">
+                    <button class="button" type="submit">Cari</button>
                 </form>
             </div>
         </div>

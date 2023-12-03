@@ -84,6 +84,7 @@ class EventController extends Controller
 				'location_province' => $request->provinces,
 				'location_city' => $request->cities,
 				'location_detail' => $request->detailAlamat,
+				'price_category' => $request->priceCategory,
 				'start_date' => $request->startDate,
 				'end_date' => $request->endDate,
 				'image' => $imageName,
@@ -214,6 +215,7 @@ class EventController extends Controller
 			'location_province' => $request->provinces,
 			'location_city' => $request->cities,
 			'location_detail' => $request->detailAlamat,
+			'price_category' => $request->priceCategory,
 			'start_date' => $request->startDate,
 			'end_date' => $request->endDate,
 

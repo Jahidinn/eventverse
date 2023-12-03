@@ -173,17 +173,35 @@
                         </div>
                         <div class="modal-body">
                             <form action="">
+                                <div class="row px-2">
+                                    <div class="col form-check">
+                                        <input class="form-check-input" type="radio" name="priceCategory"
+                                            id="berbayar" value="1"
+                                            {{ $detailEvent->price_category == 1 ? 'checked' : '' }}>
+                                        <label class="form-check-label" for="berbayar">
+                                            Berbayar
+                                        </label>
+                                    </div>
+                                    <div class="col form-check">
+                                        <input class="form-check-input" type="radio" name="priceCategory"
+                                            id="free" value="0"
+                                            {{ $detailEvent->price_category == 0 ? 'checked' : '' }}>
+                                        <label class="form-check-label" for="free">
+                                            Gratis
+                                        </label>
+                                    </div>
+                                </div>
+                                <hr>
                                 <div class="mb-2">
                                     <div class="form-group input-form-group">
                                         <label for="kategoriEvent" class="form-control-label">KATEGORI EVENT</label>
                                         <select class="form-select js-example-basic-single mt-1" id="kategoriEvent"
                                             name="kategoriEvent" aria-label="Default select example"
                                             style="z-index: 100000000" value="Beasiswa">
-
                                             @foreach ($category as $category)
                                                 @if ($detailEvent->category == $category->id)
                                                     <option value="{{ $category->id }}" selected>
-                                                        {{ $category->category }}</option>
+                                                        {{ $category->category }} </option>
                                                 @else
                                                     <option value="{{ $category->id }}">{{ $category->category }}
                                                     </option>

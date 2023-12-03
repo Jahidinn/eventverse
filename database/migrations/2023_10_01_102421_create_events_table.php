@@ -22,6 +22,7 @@ return new class extends Migration
 			$table->string('location_province')->nullable();
 			$table->string('location_city')->nullable();
 			$table->string('location_detail')->nullable();
+			$table->integer('price_category')->nullable();
 			$table->date('start_date');
 			$table->date('end_date');
 			$table->text('description')->nullable();

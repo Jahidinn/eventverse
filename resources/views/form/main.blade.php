@@ -204,7 +204,7 @@
             e.preventDefault();
             var kategoriEvent = $('#kategoriEvent option:selected').text();
             var temaEvent = $('#temaEvent option:selected').text();
-            $('.kategori-event').val(kategoriEvent + ' (' + temaEvent + ')');
+            $('.kategori-event').val(kategoriEvent.trim() + ' (' + temaEvent.trim() + ')');
             $('#kategoriEventModal').modal('hide');
         });
 

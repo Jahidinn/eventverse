@@ -258,6 +258,23 @@
 
                         <div class="modal-body">
                             <form action="">
+                                <div class="row px-2">
+                                    <div class="col form-check">
+                                        <input class="form-check-input" type="radio" name="priceCategory"
+                                            id="berbayar" value="1" checked>
+                                        <label class="form-check-label" for="berbayar">
+                                            Berbayar
+                                        </label>
+                                    </div>
+                                    <div class="col form-check">
+                                        <input class="form-check-input" type="radio" name="priceCategory"
+                                            id="free" value="0">
+                                        <label class="form-check-label" for="free">
+                                            Gratis
+                                        </label>
+                                    </div>
+                                </div>
+                                <hr>
                                 <div class="mb-2">
                                     <div class="form-group input-form-group">
                                         <label for="kategoriEvent" class="form-control-label">KATEGORI EVENT</label>

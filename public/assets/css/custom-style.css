@@ -29,28 +29,6 @@
     max-height: 100%;
 }
 
-@media only screen and (min-width: 950px) {
-    .nav-menu .link-login-register {
-        padding-right: 0px;
-    }
-}
-@media only screen and (max-width: 800px) {
-    .banner {
-        padding-top: 10px;
-        padding-bottom: 0px;
-    }
-    .banner .wrapper .banner-carousel {
-        width: 95%;
-    }
-    .banner .wrapper .banner-carousel .box-image {
-        border-radius: 10px;
-        max-height: 160px;
-    }
-    .event-terbaru-section .event-terbaru {
-        max-width: 98%;
-    }
-}
-
 .slick-slide {
     margin: 0 2px;
 }
@@ -164,7 +142,6 @@ button.slick-disabled {
 .form-search {
     margin: 0 auto;
     text-align: center;
-
     font: bold 14px sans-serif;
     width: 100%;
     position: relative;
@@ -180,10 +157,11 @@ button.slick-disabled {
     padding: 14px 15px 14.5px 10px;
     border: 1px solid #b6c3cd;
     color: #4e565c;
+	letter-spacing: 0.8px;
     outline: none;
 }
 
-.form-search button {
+.form-search .button {
     border-bottom-right-radius: 2px;
     border-top-right-radius: 2px;
     background-color: #1e4356;
@@ -194,6 +172,18 @@ button.slick-disabled {
     cursor: pointer;
     border: none;
     outline: none;
+}
+.filter {
+	background-color: #26546b;
+	border-color: #1e4356;
+}
+.filter:hover {
+	background-color: #1e4356;
+	border-color: #1e4356;
+}
+.filter:focus {
+	background-color: #1e4356 !important;
+	border-color: #1e4356;
 }
 
 .form-search i {
@@ -272,7 +262,7 @@ button.slick-disabled {
 }
 .tabs button:active, .tabs button:focus{
 	outline: none !important;
-   box-shadow: none;
+   	box-shadow: none;
 }
 .tabs button{
 	background: none;
@@ -319,4 +309,89 @@ button.slick-disabled {
 	position:absolute;
 	bottom: 20px;
 	right:20px;
+}
+
+.search-result-box {
+	padding: 0 70px;
+}
+
+#filter-date, #sort-filter{
+	border-color: #9d9d9d;
+}
+#filter-date:active, #filter-date:focus, #sort-filter:active, #sort-filter:focus{
+	outline: none !important;
+   	box-shadow: none;
+}
+
+
+.form-control-label {
+    font-size: 10.5px;
+    color: #6c6c6c;
+    font-weight: bold;
+    letter-spacing: 0.8px;
+}
+
+.select2-container--open {
+    z-index: 9999999
+}
+
+.select2.select2-container {
+	width: 100% !important;
+}
+
+.select2.select2-container .select2-selection{
+	border-radius: 0 ;
+	padding-top: 1px;
+	height: 35px;
+}
+.select2-selection__arrow {
+	margin-top: 3px;
+}
+.select2-selection__clear{
+	display: none;
+}
+
+.jenis-event.select2-results__options {
+	height: 50px !important;
+ }
+.select2-results__options {
+	min-height: 300px !important;
+ }
+
+
+@media only screen and (min-width: 950px) {
+    .nav-menu .link-login-register {
+        padding-right: 0px;
+    }
+}
+
+@media only screen and (max-width: 1040px) {
+    .search-result-box {
+		padding: 0 10px;
+	}
+	
+}
+@media only screen and (max-width: 800px) {
+    .banner {
+        padding-top: 10px;
+        padding-bottom: 0px;
+    }
+    .banner .wrapper .banner-carousel {
+        width: 95%;
+    }
+    .banner .wrapper .banner-carousel .box-image {
+        border-radius: 10px;
+        max-height: 160px;
+    }
+    .event-terbaru-section .event-terbaru {
+        max-width: 98%;
+    }
+	.search-result-box {
+		padding: 0 10px;
+	}
+	.search-result-box .card-event-search {
+		padding: 0 10px;
+	}
+
+	
 }

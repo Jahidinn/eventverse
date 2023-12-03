@@ -40,6 +40,9 @@
     <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/alertify.min.css" />
     <!-- Default theme -->
     <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/themes/default.min.css" />
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/css/datepicker.css" rel="stylesheet"
+        type="text/css" />
 
     <!-- Template Main CSS File -->
     <link href="{{ asset('assets/css/style.css') }}" rel="stylesheet">
@@ -87,6 +90,8 @@
     <!-- <script type="text/javascript" src="//code.jquery.com/jquery-1.11.0.min.js"></script> -->
     <script type="text/javascript" src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
     <script type="text/javascript" src="{{ asset('assets/vendor/slick/slick.min.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/js/bootstrap-datepicker.js"></script>
 
     <!-- Template Main JS File -->
     <script src="{{ asset('assets/js/main.js') }}"></script>
@@ -104,7 +109,73 @@
                 $(this).addClass('current');
                 $("#" + tab_id).addClass('current');
             })
+            gridSearch();
 
+            $(window).resize(function() {
+                gridSearch();
+
+            });
+
+            function gridSearch() {
+                var sreenSize = $(window).width();
+                if (sreenSize < 1170 && sreenSize > 750) {
+                    $(".card-event-search").removeClass('col-md-3');
+                    $(".card-event-search").addClass('col-md-4');
+                    $(".card-event-search").removeClass('col-6');
+                } else if (sreenSize < 750 && sreenSize > 500) {
+                    $(".card-event-search").removeClass('col-md-3');
+                    $(".card-event-search").removeClass('col-md-4');
+                    $(".card-event-search").addClass('col-6');
+                } else {
+                    $(".card-event-search").removeClass('col-6');
+                    $(".card-event-search").removeClass('col-md-4');
+                    $(".card-event-search").addClass('col-md-3');
+                }
+            }
+            $(".filter-city, .filter-category, #filter-jenis-lokasi, #sort-filter").select2({
+                allowClear: true
+            });
+
+            $(function() {
+                $("#datepicker").datepicker({
+                    autoclose: true,
+                    todayHighlight: true,
+                }).datepicker('update', "{{ request('date') }}");
+            });
+
+            $('body').on('click', '#datepicker', function(e) {
+                $("#datepicker").datepicker('show');
+            });
+
+            $('body').on('change', '#filter-category', function(e) {
+                var kategori = $('#filter-category option:selected').text().trim();
+                if (kategori == 'Semua kategori') {
+                    var kat = '';
+                } else {
+                    var kat = kategori;
+                }
+                $('#cat-name').val(kat)
+            });
+
+            //lokasi event
+            $('body').on('change', '#filter-jenis-lokasi', function(e) {
+                e.preventDefault();
+                var jenisEvent = $('#filter-jenis-lokasi').val();
+
+                if (jenisEvent == 'Online') {
+                    //reset input offline dan hilangkan kolom input alamat
+                    $('#filter-city').val('').trigger('change');
+                    $('#filter-city').attr('disabled', true);
+                    $('.container-city').attr('hidden', true);
+                } else {
+                    $('#filter-city').attr('disabled', false);
+                    $('.container-city').attr('hidden', false);
+                }
+            });
+
+            $('#sort-filter').on('change', function() {
+                this.form.submit();
+            });
         });
     </script>
 </body>
