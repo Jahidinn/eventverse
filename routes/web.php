@@ -6,7 +6,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\DashboardController;
-
+use App\Http\Controllers\TransactionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -59,6 +59,12 @@ Route::post('/event-edit-image', [EventController::class, 'editImage']);
 
 //detail event
 Route::resource('/event', EventController::class, ['except' => ['show']])->middleware('auth');
+
+//Checkout
+Route::get('/event/checkout', [TransactionController::class, 'checkoutPreview']);
+Route::get('/event/invoice/{id}', [TransactionController::class, 'invoice']);
+Route::post('/event/checkout-proccess', [TransactionController::class, 'transaction']);
+Route::post('/event/transaction-delete', [TransactionController::class, 'deleteTransaction']);
 
 Route::get('/{event}', [EventController::class, 'show']);
 Route::get('/event/{event}', [EventController::class, 'show']);

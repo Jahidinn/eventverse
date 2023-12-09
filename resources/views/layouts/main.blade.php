@@ -8,6 +8,9 @@
     <title>eventconnect.id | your success partner</title>
     <meta content="" name="descriptison">
     <meta content="" name="keywords">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <script type="text/javascript" src="https://app.sandbox.midtrans.com/snap/snap.js"
+        data-client-key="{{ config('midtrans.client_key') }}"></script>
 
     <!-- Favicons -->
     <link href="{{ asset('assets/img/favicon.png') }}" rel="icon">
@@ -92,12 +95,16 @@
     <script type="text/javascript" src="{{ asset('assets/vendor/slick/slick.min.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/js/bootstrap-datepicker.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <!-- Template Main JS File -->
     <script src="{{ asset('assets/js/main.js') }}"></script>
     <script src="{{ asset('assets/js/custom-script.js') }}"></script>
 
     <script>
+        // For example trigger on button clicked, or any time you need
+
+
         $(document).ready(function() {
 
             $('.tabs button').click(function() {
@@ -176,8 +183,43 @@
             $('#sort-filter').on('change', function() {
                 this.form.submit();
             });
+
+            $('body').on('click', '.ticket-button', function(e) {
+                e.preventDefault();
+                var userAuthLogin = {{ auth()->check() ? 'true' : 'false' }};
+                var ticket_id = $(this).data('id');
+                var event_id = $(this).data('event_id');
+                var label_button = $(this).data('label_button');
+
+                if (!userAuthLogin) {
+                    Swal.fire({
+                        title: "",
+                        html: "Kamu belum login nih! <strong>login</strong> dulu? atau " +
+                            label_button + " <strong>tanpa login?</strong>",
+                        showDenyButton: true,
+                        showCancelButton: true,
+                        confirmButtonText: "Login",
+                        denyButtonText: `Tanpa login`,
+                        denyButtonColor: "#0dcaf0",
+                    }).then((result) => {
+                        /* Read more about isConfirmed, isDenied below */
+                        if (result.isConfirmed) {
+                            window.location.href = '/login';
+                        } else if (result.isDenied) {
+                            window.location.href = '/event/checkout?event=' + event_id +
+                                '&ticket=' + ticket_id;
+                        }
+                    });
+                } else {
+                    window.location.href = '/event/checkout?event=' + event_id +
+                        '&ticket=' + ticket_id;
+                }
+            });
         });
     </script>
+
+    @stack('transaction-scripts')
+    @stack('transaction-invoice')
 </body>
 
 </html>

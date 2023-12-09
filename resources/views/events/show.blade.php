@@ -123,8 +123,9 @@
                                                 </span>
                                             </div>
                                             <div class="col text-right">
-                                                <button
-                                                    class="btn btn-success btn-sm">{{ $ticket->ticket_button }}</button>
+                                                <button class="btn btn-success btn-sm ticket-button"
+                                                    data-id="{{ $ticket->id }}" data-event_id="{{ $detailEvent->id }}"
+                                                    data-label_button="{{ $ticket->ticket_button }}">{{ $ticket->ticket_button }}</button>
                                             </div>
                                         </div>
 

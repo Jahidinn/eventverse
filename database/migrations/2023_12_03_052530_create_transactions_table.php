@@ -11,9 +11,17 @@ return new class extends Migration
 	 */
 	public function up(): void
 	{
-		Schema::create('categories', function (Blueprint $table) {
+		Schema::create('transactions', function (Blueprint $table) {
 			$table->id();
-			$table->string('category');
+			$table->foreignId('ticket_id');
+			$table->foreignId('event_id');
+			$table->string('name');
+			$table->string('phone');
+			$table->string('email');
+			$table->integer('quantity');
+			$table->bigInteger('total_price');
+			$table->enum('status', ['Paid', 'Unpaid', 'Pending']);
+			$table->string('transaction_id')->nullable();
 			$table->timestamp('created_at')->useCurrent();
 			$table->timestamp('updated_at')->useCurrent();
 		});
@@ -24,6 +32,6 @@ return new class extends Migration
 	 */
 	public function down(): void
 	{
-		Schema::dropIfExists('categories');
+		Schema::dropIfExists('transactions');
 	}
 };
