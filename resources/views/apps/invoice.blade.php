@@ -22,10 +22,17 @@
                             @if ($transaction->status == 'Paid')
                                 <small class="text-success"><i class="fas fa-check"></i> Selamat pendaftaran / pembelian
                                     tiket event kamu berhasil.</small>
+                            @elseif ($transaction->status == 'Pending')
+                                <small class="text-warning"><i class="fas fa-exclamation-circle"></i> Pending (menunggu
+                                    pembayaran)</small>
                             @else
                                 <small class="text-danger"><i class="fas fa-exclamation-circle"></i> Wah! Sepertinya proses
                                     pembayaran kamu gagal/pending.</small>
                             @endif
+                            <br>
+                            <button type="button" class="btn btn-info btn-sm mt-2" onClick="window.location.reload();"><i
+                                    class="fas fa-redo-alt"></i> Refresh
+                                invoice</button>
                         </div>
                         <hr class="mx-2 mt-2">
                         <div class="col-md-12 row mb-2">
@@ -37,13 +44,17 @@
                             <div class="col-6">{{ $transaction->created_at->format('d M Y') }}</div>
                         </div>
                         <div class="col-md-12 row mb-2">
-                            <div class="col-6 text-secondary"><i>Order ID</i></div>
+                            <div class="col-6 text-secondary"><i>ID
+                                    {{ $ticket->ticket_button == 'BELI TIKET' ? 'Tiket' : 'Pendaftaran' }}</i></div>
                             <div class="col-6"><strong>#{{ $transaction->transaction_id }}</strong></div>
                         </div>
                         <div class="col-md-12 row mb-2">
                             <div class="col-6 text-secondary">Status pembayaran</div>
                             @if ($transaction->status == 'Paid')
-                                <div class="col-6 text-success">Berhasil</div>
+                                <div class="col-6 text-success">Sukses!</div>
+                            @elseif ($transaction->status == 'Pending')
+                                <div class="col-6 text-warning"><small><i class="fas fa-dot-circle"></i></small>
+                                    pending</div>
                             @else
                                 <div class="col-6 text-danger"><small><i class="fas fa-dot-circle"></i></small>
                                     Gagal/pending</div>
@@ -77,7 +88,7 @@
                             </div>
                         </div>
                         <div class="col-md-12 text-center">
-                            <small>Order ID</small>
+                            <small>{{ $ticket->ticket_button == 'BELI TIKET' ? 'Ticket ID' : 'Registration ID' }}</small>
                             <br>
                             <img src="{{ asset('storage/event-images/qrcode.png') }}" alt="..." style="width: 200px;">
                             <br>

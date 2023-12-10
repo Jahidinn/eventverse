@@ -8,6 +8,7 @@ use App\Models\Event;
 use App\Models\Ticket;
 use App\Models\CustomForm;
 use App\Models\Transaction;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -58,6 +59,7 @@ class TransactionController extends Controller
 				'email' => $request->email,
 				'quantity' => $request->totalPrice / $request->quantity,
 				'total_price' => $request->totalPrice + $baiayaAdmin,
+				'transaction_id' => $this->generateUniqueCode(),
 				'status' => 'Unpaid',
 			];
 
@@ -67,7 +69,7 @@ class TransactionController extends Controller
 			// Set your Merchant Server Key
 			Config::$serverKey = config('midtrans.server_key');
 			// Set to Development/Sandbox Environment (default). Set to true for Production Environment (accept real transaction).
-			Config::$isProduction = false;
+			Config::$isProduction = config('midtrans.is_production');
 			// Set sanitization on (default)
 			Config::$isSanitized = true;
 			// Set 3DS transaction for credit card to true
@@ -75,11 +77,12 @@ class TransactionController extends Controller
 
 			$params = array(
 				'transaction_details' => array(
-					'order_id' => $transaction->id,
+					'order_id' => $transaction->transaction_id,
 					'gross_amount' => $transaction->total_price,
 				),
 				'customer_details' => array(
-					'name' => $request->fullName,
+					'first_name' => $request->fullName,
+					'last_name' => '',
 					'email' => $request->email,
 					'phone' => $request->nomorHp,
 				),
@@ -94,15 +97,28 @@ class TransactionController extends Controller
 		}
 	}
 
+	public function generateUniqueCode()
+	{
+		do {
+			$randomStr = 'EC-' . Str::random(10);
+			$uniqueCode = strtoupper($randomStr);
+		} while (Transaction::where("transaction_id", "=", $uniqueCode)->first());
+
+		return $uniqueCode;
+	}
+
+
 	public function callback(Request $request)
 	{
 		$serverKey = config('midtrans.server_key');
 		$hashed = hash("sha512", $request->order_id . $request->status_code . $request->gross_amount . $serverKey);
 		if ($hashed == $request->signature_key) {
-			if ($request->transaction_status == 'capture') {
-				$transaction = Transaction::find($request->order_id);
-				$transaction_id = 'EC-' . $transaction->id . '-' . $transaction->event_id . '-' . $transaction->ticket_id;
-				$transaction->update(['status' => 'Paid', 'transaction_id' => $transaction_id]);
+			if ($request->transaction_status == 'capture' or $request->transaction_status == 'settlement') {
+				$transaction = Transaction::where('transaction_id', $request->order_id)->first();
+				$transaction->update(['status' => 'Paid']);
+			} elseif ($request->transaction_status == 'pending') {
+				$transaction = Transaction::where('transaction_id', $request->order_id)->first();
+				$transaction->update(['status' => 'Pending']);
 			}
 		}
 	}
