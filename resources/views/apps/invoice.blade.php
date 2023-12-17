@@ -4,7 +4,7 @@
     <section class="pt-2" id="invoice_page" hidden>
         <div class="container mx-auto text-center mb-3 px-2">
             <div class="alert alert-primary" role="alert">
-                <strong>#Invoice</strong>
+                <strong>#Online Invoice</strong>
             </div>
         </div>
 
@@ -20,8 +20,9 @@
                         <div class="mt-3 ml-2">
                             <h5 class="card-title mb-1">Halo, {{ $transaction->name }}!</h5>
                             @if ($transaction->status == 'Paid')
-                                <small class="text-success"><i class="fas fa-check"></i> Selamat pendaftaran / pembelian
-                                    tiket event kamu berhasil.</small>
+                                <small class="text-success"><i class="fas fa-check"></i> Selamat
+                                    {{ $ticket->ticket_button == 'BELI TIKET' ? 'Pembelian tiket' : 'Pendaftaran' }} event
+                                    kamu berhasil.</small>
                             @elseif ($transaction->status == 'Pending')
                                 <small class="text-warning"><i class="fas fa-exclamation-circle"></i> Pending (menunggu
                                     pembayaran)</small>
@@ -33,6 +34,10 @@
                             <button type="button" class="btn btn-info btn-sm mt-2" onClick="window.location.reload();"><i
                                     class="fas fa-redo-alt"></i> Refresh
                                 invoice</button>
+                            <button type="button" class="btn btn-success btn-sm mt-2"
+                                data-id_transaksi="{{ $transaction->id }}" id="download-invoice"><i
+                                    class="fas fa-download"></i> Download
+                                pdf</button>
                         </div>
                         <hr class="mx-2 mt-2">
                         <div class="col-md-12 row mb-2">
@@ -89,9 +94,12 @@
                         </div>
                         <div class="col-md-12 text-center">
                             <small>{{ $ticket->ticket_button == 'BELI TIKET' ? 'Ticket ID' : 'Registration ID' }}</small>
-                            <br>
-                            <img src="{{ asset('storage/event-images/qrcode.png') }}" alt="..." style="width: 200px;">
-                            <br>
+
+                            {{-- <img src="{{ asset('storage/event-images/qrcode.png') }}" alt="..." style="width: 200px;"> --}}
+                            <div class="visible-print text-center my-2">
+                                {!! $qrcode !!}
+                            </div>
+
                             <strong>{{ $transaction->transaction_id }}</strong>
                         </div>
                         <div class="col-md-12">
@@ -102,10 +110,8 @@
                             <div class="alert alert-warning mt-2 mx-2" role="alert">
                                 <small class="text-danger">Halaman invoice ini hanya bisa <strong>diakses 1x</strong>, untuk
                                     melihat ulang invoice klik URL yang kita kirimkan melalui email. Jika tidak menerima
-                                    email
-                                    periksa folder
-                                    <strong>spam</strong> di email atau request ulangb melalui halaman <a
-                                        href="/event/participant-search" class="btn btn-sm btn-secondary">pencarian
+                                    email periksa folder <strong>spam</strong> di email atau request ulangb melalui halaman
+                                    <a href="/event/participant-search" class="btn btn-sm btn-secondary">pencarian
                                         peserta</a>
                                 </small>
                             </div>

@@ -6,48 +6,71 @@
             }
         });
 
+
+        var loggedIn = {{ auth()->check() ? 'true' : 'false' }};
+        if (loggedIn) {
+            $('.checkbox').on('change', function() {
+                if ($('.checkbox').is(":checked")) {
+                    $('#fullName').attr('readonly', false);
+                    $('#email').attr('readonly', false);
+                } else {
+                    $('#fullName').attr('readonly', true);
+                    $('#email').attr('readonly', true);
+                }
+            });
+        }
+
         $('#checkout-event').submit(function(e) {
             e.preventDefault();
             var formData = new FormData(this);
-            $('#checkout-button').html('Processing ...');
-            $('#checkout-button').attr('disabled', true);
 
-            $.ajax({
-                type: 'POST',
-                url: '/event/checkout-proccess',
-                data: formData,
-                cache: false,
-                contentType: false,
-                processData: false,
-                success: function(response) {
-                    if (response.error) {
-                        Swal.fire('Ooopss', response.error, 'error');
-                    } else {
+            //Cek koneksi dulu
+            if (navigator.onLine) {
+                $('#checkout-button').html('Processing ...');
+                $('#checkout-button').attr('disabled', true);
 
-                        $('#checkoutModal').modal('show');
-                        //Swal.fire(response.token, '', 'success');
-                        $('#checkout-button').html('Bayar sekarang!');
-                        $('#checkout-button').attr('disabled', false);
-                        //Menampilkan data konfirmasi checkout
-                        $('#transaction').val(response.token);
-                        $('#id_event').val(response.transaction.id);
-                        $('#email_transaction').val(response.transaction.email);
-                        $('#confirm_nama').html(response.transaction.name);
-                        $('#confirm_email').html(response.transaction.email);
-                        $('#confirm_nomerhp').html(response.transaction.phone);
-                        $('#confirm_nomerhp').html(response.transaction.phone);
-                        $('#confirm_event_title').html(response.event.title);
-                        $('#confirm_penyelenggara').html(response.event.penyelenggara.name);
-                        $('#confirm_ticket').html(response.ticket.ticket_name);
-                        $('#confirm_jumlah_tiket').html(response.transaction.quantity);
-                        let price = response.transaction.total_price - 500;
-                        $('#confirm_price').html(price.toString().replace(
-                            /\B(?=(\d{3})+(?!\d))/g, "."));
-                        $('#confirm_total_price').html(response.transaction.total_price
-                            .toString().replace(/\B(?=(\d{3})+(?!\d))/g, "."));
+                $.ajax({
+                    type: 'POST',
+                    url: '/event/checkout-proccess',
+                    data: formData,
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    success: function(response) {
+                        if (response.error) {
+                            Swal.fire('Ooopss', response.error, 'error');
+                        } else {
+
+                            $('#checkoutModal').modal('show');
+                            //Swal.fire(response.token, '', 'success');
+                            $('#checkout-button').html('Bayar sekarang!');
+                            $('#checkout-button').attr('disabled', false);
+                            //Menampilkan data konfirmasi checkout
+                            $('#transaction').val(response.token);
+                            $('#id_event').val(response.transaction.id);
+                            $('#email_transaction').val(response.transaction.email);
+                            $('#confirm_nama').html(response.transaction.name);
+                            $('#confirm_email').html(response.transaction.email);
+                            $('#confirm_nomerhp').html(response.transaction.phone);
+                            $('#confirm_nomerhp').html(response.transaction.phone);
+                            $('#confirm_event_title').html(response.event.title);
+                            $('#confirm_penyelenggara').html(response.event.penyelenggara
+                                .name);
+                            $('#confirm_ticket').html(response.ticket.ticket_name);
+                            $('#confirm_jumlah_tiket').html(response.transaction.quantity);
+                            let price = response.transaction.total_price - 500;
+                            $('#confirm_price').html(price.toString().replace(
+                                /\B(?=(\d{3})+(?!\d))/g, "."));
+                            $('#confirm_total_price').html(response.transaction.total_price
+                                .toString().replace(/\B(?=(\d{3})+(?!\d))/g, "."));
+                        }
                     }
-                }
-            })
+                })
+            }
+            //Jika Offline
+            else {
+                Swal.fire('', 'Cek koneksi internet kamu!', 'warning');
+            }
         })
 
         var payButton = document.getElementById('pay-button');

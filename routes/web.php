@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\PDFController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\EventController;
@@ -65,6 +66,8 @@ Route::get('/event/checkout', [TransactionController::class, 'checkoutPreview'])
 Route::get('/event/invoice/{id}', [TransactionController::class, 'invoice']);
 Route::post('/event/checkout-proccess', [TransactionController::class, 'transaction']);
 Route::post('/event/transaction-delete', [TransactionController::class, 'deleteTransaction']);
+Route::get('/event/send-email/{subjek}', [TransactionController::class, 'sendEmail']);
+Route::get('/generate-pdf', [PDFController::class, 'generatePDF']);
 
 Route::get('/{event}', [EventController::class, 'show']);
 Route::get('/event/{event}', [EventController::class, 'show']);

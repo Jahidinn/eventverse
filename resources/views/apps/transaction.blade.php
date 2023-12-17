@@ -18,19 +18,39 @@
                             Form pendaftaran / pemesanan
                         </div>
                         <div class="card-body">
+                            @if (auth()->check())
+                                <div>
+                                    <label>
+                                        <input class="checkbox checkbox-success" type="checkbox" name="checkbox"
+                                            value="1">
+                                        <strong>Pesan buat orang lain</strong>
+                                    </label>
+                                </div>
+                            @endif
+
+                            {{-- Dipakai jika pesan ticket dengan login --}}
+                            <input type="hidden" name="is_login" id="is_login" value="{{ auth()->check() ? 1 : 0 }}">
+                            <input type="hidden" name="user_login_id" id="user_login_id"
+                                value="{{ auth()->check() ? auth()->user()->id : '0' }}">
+                            {{-- Dipakai jika pesan ticket dengan login --}}
+
                             <div class="form-group">
                                 <label for="fullName" class="custom-form-label">
                                     <small><strong>Nama lengkap</strong> <span class="text-danger">*</span></small>
                                 </label>
                                 <input class="form-control rounded-0" name="fullName" id="fullName" type="text"
-                                    placeholder="isi nama" required autocomplete="on">
+                                    placeholder="isi nama" required autocomplete="on"
+                                    {{ auth()->check() ? 'readonly' : '' }}
+                                    value="{{ auth()->check() ? auth()->user()->name : '' }}">
                             </div>
                             <div class="form-group">
                                 <label for="email" class="custom-form-label">
                                     <small><strong>Email</strong> <span class="text-danger">*</span></small>
                                 </label>
                                 <input class="form-control rounded-0" name="email" type="email"
-                                    placeholder="example@email.com" id="email" required autocomplete="on">
+                                    placeholder="example@email.com" id="email" required autocomplete="on"
+                                    {{ auth()->check() ? 'readonly' : '' }}
+                                    value="{{ auth()->check() ? auth()->user()->email : '' }}">
                             </div>
                             <div class="form-group">
                                 <label for="nomorHp" class="custom-form-label">

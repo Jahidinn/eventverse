@@ -10,7 +10,10 @@ use App\Models\CustomForm;
 use App\Models\Transaction;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\TransactionEmail;
 use Illuminate\Support\Facades\Validator;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 class TransactionController extends Controller
 {
@@ -57,6 +60,8 @@ class TransactionController extends Controller
 				'name' => $request->fullName,
 				'phone' => $request->nomorHp,
 				'email' => $request->email,
+				'is_login' => $request->is_login,
+				'user_login_id' => $request->user_login_id,
 				'quantity' => $request->totalPrice / $request->quantity,
 				'total_price' => $request->totalPrice + $baiayaAdmin,
 				'transaction_id' => $this->generateUniqueCode(),
@@ -116,10 +121,15 @@ class TransactionController extends Controller
 			if ($request->transaction_status == 'capture' or $request->transaction_status == 'settlement') {
 				$transaction = Transaction::where('transaction_id', $request->order_id)->first();
 				$transaction->update(['status' => 'Paid']);
+				$subjek = 'Sukses';
 			} elseif ($request->transaction_status == 'pending') {
 				$transaction = Transaction::where('transaction_id', $request->order_id)->first();
 				$transaction->update(['status' => 'Pending']);
+				$subjek = 'Pending/Gagal';
 			}
+
+			$this->sendEmail($subjek);
+			return response()->json(['success' => 'Sukses kirim email'], 200);
 		}
 	}
 
@@ -139,6 +149,7 @@ class TransactionController extends Controller
 			'transaction' => $transaction,
 			'event' => $event,
 			'ticket' => $ticket,
+			'qrcode' => QrCode::size(200)->generate($transaction->transaction_id),
 		]);
 	}
 
@@ -152,5 +163,18 @@ class TransactionController extends Controller
 		//proses delete
 		Transaction::where('id', $request->id)->delete();
 		return response()->json('Sukses hapus');
+	}
+
+	public function sendEmail($subjek)
+	{
+		$mailData = [
+			'subjek' => $subjek,
+			'title' => 'Mail from ItSolutionStuff.com',
+			'body' => 'This is for testing email using smtp.'
+		];
+
+		Mail::to('your_email@gmail.com')->send(new TransactionEmail($mailData));
+
+		return response()->json('Sukses kirim email');
 	}
 }

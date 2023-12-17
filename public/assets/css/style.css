@@ -64,7 +64,7 @@ h1, h2, h3, h4, h5, h6, .font-primary {
   transition: all 0.5s;
   z-index: 997;
   transition: all 0.5s;
-  padding: 15px 0;
+  padding: 10px 0;
   background: #1e4356;
 }
 
@@ -73,9 +73,9 @@ h1, h2, h3, h4, h5, h6, .font-primary {
 }
 
 #header.header-scrolled {
-  background: rgba(30, 67, 86, 0.8);
+  background: rgba(30, 67, 86, 0.9);
   height: 60px;
-  padding: 10px 0;
+  padding: 5px 0;
 }
 
 #header .logo h1 {
@@ -96,7 +96,7 @@ h1, h2, h3, h4, h5, h6, .font-primary {
 #header .logo img {
   padding: 0;
   margin: 0;
-  max-height: 40px;
+  max-height: 50px;
 }
 
 #main {
