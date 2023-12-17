@@ -66,7 +66,8 @@ Route::get('/event/checkout', [TransactionController::class, 'checkoutPreview'])
 Route::get('/event/invoice/{id}', [TransactionController::class, 'invoice']);
 Route::post('/event/checkout-proccess', [TransactionController::class, 'transaction']);
 Route::post('/event/transaction-delete', [TransactionController::class, 'deleteTransaction']);
-Route::get('/event/send-email/{subjek}', [TransactionController::class, 'sendEmail']);
+Route::get('/event/send-email/{transaction_code}', [TransactionController::class, 'sendEmail']);
+Route::get('/event/redirect-invoice/{id}', [TransactionController::class, 'redirectInvoice']);
 Route::get('/generate-pdf', [PDFController::class, 'generatePDF']);
 
 Route::get('/{event}', [EventController::class, 'show']);

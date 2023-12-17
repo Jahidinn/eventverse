@@ -272,7 +272,8 @@
                 <td style="padding-bottom: 25px;"></td>
                 <td style="padding-bottom: 25px;">Biaya admin</td>
                 <td style="padding-bottom: 25px;" class="right"></td>
-                <td style="padding-bottom: 25px;" class="bold">Rp 500</td>
+                <td style="padding-bottom: 25px;" class="bold">Rp
+                    {{ number_format(config('app.biaya_admin'), 0, ',', '.') }}</td>
             </tr>
             <tr>
                 <td></td>

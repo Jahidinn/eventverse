@@ -174,7 +174,8 @@
                                     <div class="col-6"><small>Biaya admin</small></div>
                                     <div class="col-6">
                                         <small>
-                                            <strong>Rp <span>500</span></strong>
+                                            <strong>Rp
+                                                <span>{{ number_format(config('app.biaya_admin'), 0, ',', '.') }}</span></strong>
                                         </small>
                                     </div>
                                 </div>

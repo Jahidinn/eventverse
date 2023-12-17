@@ -28,8 +28,14 @@ class TransactionEmail extends Mailable
 	 */
 	public function envelope(): Envelope
 	{
+		if ($this->mailData['subjek'] == 'Paid') {
+			$status = 'Sukses';
+		} else {
+			$status = 'Gagal/pending';
+		}
+
 		return new Envelope(
-			subject: 'Transaksi Eventconnect.id (' . $this->mailData['subjek'] . ')',
+			subject: 'Transaksi eventconnect.id (' . $status . ')',
 		);
 	}
 
@@ -43,6 +49,9 @@ class TransactionEmail extends Mailable
 			with: [
 				'mailData' => $this->mailData,
 				'qrcode' => base64_encode(QrCode::format('svg')->backgroundColor(0, 0, 0, 0)->color(20, 52, 68)->size(150)->errorCorrection('H')->generate('abcdef')),
+				'transaction' => $this->mailData['transaction'],
+				'event' => $this->mailData['event'],
+				'ticket' => $this->mailData['ticket'],
 			],
 		);
 	}

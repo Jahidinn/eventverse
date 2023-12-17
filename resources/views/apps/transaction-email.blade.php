@@ -81,7 +81,7 @@
 
         .footer {
             clear: both;
-            padding-top: 24px;
+            padding-top: 15px;
             text-align: center;
             width: 100%;
         }
@@ -322,26 +322,38 @@
                 <div class="content">
 
                     <!-- START CENTERED WHITE CONTAINER -->
-                    <span class="preheader">This is preheader text. Some clients will show this text as a
-                        preview.</span>
+                    <span class="preheader">Eventconnect.id transaction</span>
                     <table role="presentation" border="0" cellpadding="0" cellspacing="0" class="main">
 
                         <!-- START MAIN CONTENT AREA -->
                         <tr>
                             <td class="wrapper">
-                                <h3>Halo, Jahidin!</h3>
+                                <h3>Halo, {{ $transaction['name'] }}!</h3>
                                 <div style="font-size: 13px;">
                                     <p style="font-size: 13px;">Terimakasih sudah melakukan pendaftaran/pembelian tiket
                                         event di
-                                        <b>eventconnect.id</b>, berikut kami kirimkan detail transaksi dan link
-                                        invoicenya
-                                        ya!
+                                        <a style="text-decoration: none"
+                                            href="http://eventconnect.id"><b>eventconnect.id</b></a>, berikut kami
+                                        kirimkan detail transaksi dan link invoicenya ya!
                                     </p>
-                                    <span>Detail transaksi : <b>sgsg</b></span><br>
-                                    <span>Biaya : <b>sgsg</b></span> <span style="color: #00762d">(Sukses!)</span><br>
-                                    <span>Kode transaksi : <b>#EC-HHSSJKSISJ</b></span>
+                                    <span>Detail transaksi : <b>{{ $ticket->ticket_name }}
+                                            ({{ $event->title }})</b></span><br>
+
+                                    <span>Quantity : <b>{{ $transaction->quantity }}</b></span><br>
+
+                                    <span>Total biaya :
+                                        <b>Rp {{ number_format($transaction['total_price'], 0, ',', '.') }}</b></span>
+                                    @if ($transaction->status == 'Paid')
+                                        <span style="color: #00762d">(Sukses!)</span>
+                                    @else
+                                        <span style="color: rgb(167, 17, 17)">(Pending/gagal!)</span>
+                                    @endif
+
+                                    <br>
+
+                                    <span>Kode transaksi : <b>#{{ $transaction['transaction_id'] }}</b></span>
                                 </div>
-                                <div style="text-align: left; margin-top:15px"> {!! QrCode::size(130)->generate('https://techvblogs.com/blog/generate-qr-code-laravel-8') !!}</div>
+                                <div style="text-align: left; margin-top:15px"> {!! QrCode::size(130)->generate($transaction['transaction_id']) !!}</div>
 
                                 {{-- <div style="text-align: center">
                                     <img style="text-align: center;" src="data:image/png;base64,{{ $qrcode }}">
@@ -356,8 +368,10 @@
                                                     cellspacing="0">
                                                     <tbody>
                                                         <tr>
-                                                            <td> <a href="http://htmlemail.io" target="_blank">Lihat
-                                                                    Invoice</a> </td>
+                                                            <td>
+                                                                <a href="{{ config('app.url') . '/event/redirect-invoice/' . $transaction['id'] }}"
+                                                                    target="_blank">Lihat invoice</a>
+                                                            </td>
                                                         </tr>
                                                     </tbody>
                                                 </table>
@@ -382,8 +396,12 @@
                         <table role="presentation" border="0" cellpadding="0" cellspacing="0">
                             <tr>
                                 <td class="content-block">
+                                    <div style="text-align: center">
+                                        <img style="text-align: center; height:50px; margin-bottom: 10px;"
+                                            src="{{ $message->embed(public_path() . '/assets/img/logo-email.png') }}">
+                                    </div>
                                     <span class="apple-link">PT Event Media Nusantara</span>
-                                    <br><a href="http://htmlemail.io/blog"
+                                    <br><a href="http://eventconnect.id"
                                         style="text-decoration:none">www.eventconnect.id</a> | info@eventconnect.id
                                 </td>
                             </tr>

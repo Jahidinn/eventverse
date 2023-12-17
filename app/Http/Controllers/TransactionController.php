@@ -53,7 +53,8 @@ class TransactionController extends Controller
 		if ($validasi->fails()) {
 			return response()->json(['error' => 'Banner/poster kosong atau ukuran terlalu besar']);
 		} else {
-			$baiayaAdmin = 500;
+			$biayaAdmin = config('app.biaya_admin');
+
 			$data = [
 				'ticket_id' => $request->idTicket,
 				'event_id' => $request->idEvent,
@@ -63,7 +64,7 @@ class TransactionController extends Controller
 				'is_login' => $request->is_login,
 				'user_login_id' => $request->user_login_id,
 				'quantity' => $request->totalPrice / $request->quantity,
-				'total_price' => $request->totalPrice + $baiayaAdmin,
+				'total_price' => $request->totalPrice + $biayaAdmin,
 				'transaction_id' => $this->generateUniqueCode(),
 				'status' => 'Unpaid',
 			];
@@ -121,17 +122,21 @@ class TransactionController extends Controller
 			if ($request->transaction_status == 'capture' or $request->transaction_status == 'settlement') {
 				$transaction = Transaction::where('transaction_id', $request->order_id)->first();
 				$transaction->update(['status' => 'Paid']);
-				$subjek = 'Sukses';
 			} elseif ($request->transaction_status == 'pending') {
 				$transaction = Transaction::where('transaction_id', $request->order_id)->first();
 				$transaction->update(['status' => 'Pending']);
-				$subjek = 'Pending/Gagal';
 			}
-
-			$this->sendEmail($subjek);
+			$transaction_code = $request->order_id;
+			$this->sendEmail($transaction_code);
 			return response()->json(['success' => 'Sukses kirim email'], 200);
 		}
 	}
+
+	public function redirectInvoice($id)
+	{
+		return redirect('/event/invoice/' . $id);
+	}
+
 
 	public function invoice($id)
 	{
@@ -165,15 +170,20 @@ class TransactionController extends Controller
 		return response()->json('Sukses hapus');
 	}
 
-	public function sendEmail($subjek)
+	public function sendEmail($transaction_code)
 	{
+		$transaction = Transaction::where('transaction_id', $transaction_code)->first();
+		$event = Event::with('penyelenggara')->find($transaction->event_id);
+		$ticket = Ticket::find($transaction->ticket_id);
+
 		$mailData = [
-			'subjek' => $subjek,
-			'title' => 'Mail from ItSolutionStuff.com',
-			'body' => 'This is for testing email using smtp.'
+			'subjek' => $transaction->status,
+			'transaction' => $transaction,
+			'event' => $event,
+			'ticket' => $ticket,
 		];
 
-		Mail::to('your_email@gmail.com')->send(new TransactionEmail($mailData));
+		Mail::to($transaction->email)->send(new TransactionEmail($mailData));
 
 		return response()->json('Sukses kirim email');
 	}

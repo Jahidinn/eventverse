@@ -28,6 +28,7 @@
             if (navigator.onLine) {
                 $('#checkout-button').html('Processing ...');
                 $('#checkout-button').attr('disabled', true);
+                var biayaAdmin = "{{ config('app.biaya_admin') }}"
 
                 $.ajax({
                     type: 'POST',
@@ -58,7 +59,7 @@
                                 .name);
                             $('#confirm_ticket').html(response.ticket.ticket_name);
                             $('#confirm_jumlah_tiket').html(response.transaction.quantity);
-                            let price = response.transaction.total_price - 500;
+                            let price = response.transaction.total_price - biayaAdmin;
                             $('#confirm_price').html(price.toString().replace(
                                 /\B(?=(\d{3})+(?!\d))/g, "."));
                             $('#confirm_total_price').html(response.transaction.total_price

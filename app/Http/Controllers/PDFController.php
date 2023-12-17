@@ -48,6 +48,6 @@ class PDFController extends Controller
 		];
 
 		$pdf = PDF::loadView('apps.pdf-invoice', $data);
-		return $pdf->download('Invoice.pdf');
+		return $pdf->download('Invoice-EC' . $transaksi->id + 1 . '.pdf');
 	}
 }
