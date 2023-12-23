@@ -5,3 +5,48 @@
     letter-spacing: 1.5px;
 	margin-bottom: 4px;
 }
+.myevent-container-img {
+	width: 80px;
+	height:80px;
+	background-color:rgb(185, 121, 121);
+	margin: 0 auto;
+	position: relative;
+	overflow: hidden;
+}
+.bg-dashboard{
+	background-color: #1e4356 !important;
+}
+.myevent-container-img img {
+	width:100%;
+	height:100%;
+	object-fit:cover;
+	border-radius: 5px;
+	object-position: center;
+}
+
+.border-rounded{
+	border-radius: 40px !important;
+}
+.manajemen-event-box .edit-button{
+	font-family: Raleway-SemiBold;
+	font-size: 13px;
+	color: rgba(108, 88, 179, 0.75);
+	letter-spacing: 1px;
+	line-height: 15px;
+	border: 2px solid rgba(108, 89, 179, 0.75);
+	border-radius: 40px;
+	background: transparent;
+	transition: all 0.3s ease 0s;
+}
+.manajemen-event-box .edit-button:hover{
+	color: #FFF;
+	background: rgba(108, 88, 179, 0.75);
+	border: 2px solid rgba(108, 89, 179, 0.75);
+}
+
+@media only screen and (max-width: 800px) {
+	.title-manage-event{
+		font-size: 13px;
+	}
+   
+}

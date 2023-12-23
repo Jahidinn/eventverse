@@ -39,6 +39,7 @@ Route::get('/search', [HomeController::class, 'searchEvent']);
 
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard')->middleware('auth');
 Route::get('/dashboard/myevent', [DashboardController::class, 'myEvent'])->middleware('auth');
+Route::get('/dashboard/get-myevent', [DashboardController::class, 'getMyEvent'])->middleware('auth');
 Route::get('/dashboard/manajemen-event', [DashboardController::class, 'manajemenEvent'])->middleware('auth');
 
 Route::get('/get-cities/{code}', [EventController::class, 'getCities']);
@@ -65,6 +66,7 @@ Route::resource('/event', EventController::class, ['except' => ['show']])->middl
 Route::get('/event/checkout', [TransactionController::class, 'checkoutPreview']);
 Route::get('/event/invoice/{id}', [TransactionController::class, 'invoice']);
 Route::post('/event/checkout-proccess', [TransactionController::class, 'transaction']);
+Route::post('/event/continue-transaction', [TransactionController::class, 'continueTransaction']);
 Route::post('/event/transaction-delete', [TransactionController::class, 'deleteTransaction']);
 Route::get('/event/send-email/{transaction_code}', [TransactionController::class, 'sendEmail']);
 Route::get('/event/redirect-invoice/{id}', [TransactionController::class, 'redirectInvoice']);

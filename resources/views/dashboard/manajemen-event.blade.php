@@ -2,13 +2,9 @@
 
 @section('content')
     <!-- Content Header (Page header) -->
-    <section class="content-header">
-        <div class="container-fluid">
-            <div class="row mb-2">
-                <div class="col-sm-6">
-                    <h1>Manajemen event</h1>
-                </div>
-            </div>
+    <section class="content-header pb-0">
+        <div class="alert alert-dark bg-dashboard text-white" role="alert">
+            <strong>MANAGEMENT EVENT</strong> (Penyelenggara)
         </div>
     </section>
 
@@ -18,64 +14,73 @@
         <!-- Default box -->
         <div class="card">
             <div class="card-header">
-                <h3 class="card-title manajemen-event-title">Data event yang kamu buat!</h3>
-
-                <div class="card-tools">
-                    <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
-                        <i class="fas fa-minus"></i>
-                    </button>
-                    <button type="button" class="btn btn-tool" data-card-widget="remove" title="Remove">
-                        <i class="fas fa-times"></i>
-                    </button>
-                </div>
+                <h3 class="card-title manajemen-event-title">Buat event sesukamu! <i class="fas fa-paper-plane"></i></h3>
             </div>
 
-            <div class="card-body">
-                <div class="table-responsive manajemen-event-box">
-                    <table class="table">
-                        <thead class="thead-dark">
-                            <tr>
-                                <th scope="col">No</th>
-                                <th scope="col">Event</th>
-                                <th scope="col">Tgl Post</th>
-                                <th scope="col">#</th>
-                                <th scope="col">Ticket</th>
-                                <th scope="col">Formulir</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($listEvent as $event)
-                                <tr>
-                                    <th scope="row">1</th>
-                                    <td>{{ $event->title }}</td>
-                                    <td>{{ $event->created_at->format('d-m-Y') }}</td>
-                                    <td>
-                                        <a class="btn btn-sm btn-info" href="/event/{{ $event->slug }}">
-                                            <i class="fas fa-list-alt mr-1"></i>View
-                                        </a>
-                                        <a class="btn btn-sm btn-success" href="/event/{{ $event->slug }}/edit">
-                                            <i class="fas fa-edit mr-1"></i>Edit
-                                        </a>
-                                        <button class="btn btn-sm btn-danger delete-event" data-id="{{ $event->id }}"><i
-                                                class="fas fa-trash-alt"></i></button>
-                                    </td>
-                                    <th scope="row">
-                                        <a class="btn btn-sm btn-success edit-ticket-button" data-id="{{ $event->id }}"
-                                            data-event="{{ $event->title }}">
-                                            <i class="fas fa-edit mr-1"></i>Edit
-                                        </a>
-                                    </th>
-                                    <th scope="row">
-                                        <a class="btn btn-sm btn-success edit-formulir-button" data-id="{{ $event->id }}"
-                                            data-event="{{ $event->title }}">
-                                            <i class="fas fa-edit mr-1"></i>Edit
-                                        </a>
-                                    </th>
+            <div class="card-body px-2 pt-3">
+                <div class="table-responsive py-0 manajemen-event-box">
+                    <div class="mb-2">
+                        <a href="/event/create" class="btn btn-success"><i class="fas fa-plus-circle"></i> Buat event</a>
+                    </div>
+                    <form action="" method="GET">
+                        <div class="p-0 form-inline mb-4">
+                            <input class="form-control col shadow-none mr-1" name="key" type="text"
+                                placeholder="Cari event saya ..." value="{{ request('key') }}">
+                        </div>
+                    </form>
 
-                                </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
+                    @foreach ($listEvent as $event)
+                        <div class="card pb-2">
+                            <div class="col-md-12 row card-body px-3 pb-2">
+                                <div class="col-9">
+                                    @php
+                                        $title = $event->title;
+                                        if (strlen($title) > 41) {
+                                            $title = substr($title, 0, 41) . '...';
+                                        }
+                                    @endphp
+
+                                    <a href="/event/{{ $event->slug }}"
+                                        class="text-info title-manage-event"><b>{{ $title }}</b></a><br>
+                                    <small class="text-secondary">Crated at :
+                                        <span>{{ $event->created_at->format('d-m-Y') }}</span></small><br>
+                                    <div class="mt-2">
+                                        <a href="/event/{{ $event->slug }}/edit" type="button"
+                                            class="btn btn-info btn-sm"><i class="fas fa-list"></i>
+                                            Edit event</a>
+                                        <button type="button" class="btn btn-danger btn-sm delete-event"
+                                            data-id="{{ $event->id }}"><i class="fas fa-trash-alt"></i></button>
+                                    </div>
+                                </div>
+
+                                <div class="col-3">
+                                    <div class="myevent-container-img">
+                                        <img class="card-img-top" src="{{ asset('storage/event-images/' . $event->image) }}"
+                                            alt="Card image cap">
+                                    </div>
+                                </div>
+                            </div>
+                            <hr class="mx-2 my-2">
+                            {{-- Button edit tiket & form --}}
+                            <div class="col-md-12 pb-2 card-body pt-1 pb-2 px-3">
+                                <button type="button" class="btn edit-button btn-sm px-3 edit-ticket-button"
+                                    data-id="{{ $event->id }}" data-event="{{ $event->title }}">
+                                    <i class="fas fa-edit"></i> Edit Tiket
+                                </button>
+                                <button type="button" class="btn btn-warning btn-sm px-3 edit-button edit-formulir-button"
+                                    data-id="{{ $event->id }}" data-event="{{ $event->title }}">
+                                    <i class="fas fa-edit"></i> Edit Formulir
+                                </button>
+                            </div>
+                        </div>
+                    @endforeach
+
+                    {{-- Pagination --}}
+                    <div class="d-flex justify-content-center">
+                        {{ $listEvent->links() }}
+                    </div>
+                    {{-- Pagination --}}
+
                 </div>
 
                 <div class="manajemen-ticket-box" hidden>

@@ -2,17 +2,20 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use Midtrans\Snap;
 use Midtrans\Config;
 use App\Models\Event;
 use App\Models\Ticket;
+use App\Models\SnapToken;
 use App\Models\CustomForm;
 use App\Models\Transaction;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Mail;
 use App\Mail\TransactionEmail;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
+use SebastianBergmann\Diff\Diff;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 class TransactionController extends Controller
@@ -99,6 +102,12 @@ class TransactionController extends Controller
 
 			$snapToken = Snap::getSnapToken($params);
 
+			$dataToken = [
+				'transaction_id' => $transaction->id,
+				'token' => $snapToken,
+			];
+			SnapToken::create($dataToken);
+
 			return response()->json(['transaction' => $transaction, 'token' => $snapToken, 'event' => $event, 'ticket' => $ticket]);
 		}
 	}
@@ -111,6 +120,32 @@ class TransactionController extends Controller
 		} while (Transaction::where("transaction_id", "=", $uniqueCode)->first());
 
 		return $uniqueCode;
+	}
+
+
+	public function continueTransaction(Request $request)
+	{
+		$transaction = Transaction::find($request->id);
+		$event = Event::with('penyelenggara')->find($transaction->event_id);
+		$ticket = Ticket::find($transaction->ticket_id);
+		$snapToken = SnapToken::where('transaction_id', $request->id)->first();
+
+		if (!$transaction || !$event || !$ticket || !$snapToken) {
+			return response()->json(['error' => 'Gagal!!']);
+		}
+
+		$now = Carbon::now();
+		$postCreatedAt = new Carbon($transaction->created_at);
+
+		//Jika transaksi lebih dari 12 jam maka tidak bisa di pay
+		if ($now->diffInHours($postCreatedAt) > 12) {
+			$editTransaction = Transaction::where('id', $request->id)->first();
+			//$editTransaction->update(['status' => 'Expired']);
+			return response()->json(['expired' => 'Transaksi ini expired, gabisa dilanjutin guys!']);
+		}
+
+
+		return response()->json(['transaction' => $transaction, 'token' => $snapToken->token, 'event' => $event, 'ticket' => $ticket]);
 	}
 
 
@@ -165,8 +200,12 @@ class TransactionController extends Controller
 		if (!$transaksi) {
 			return response()->json('Gagal');
 		}
-		//proses delete
-		Transaction::where('id', $request->id)->delete();
+		//Proses delete
+		$deleteTransaction = Transaction::where('id', $request->id)->where('is_login', 0)->where('user_login_id', 0)->delete();
+		//Delete snap token
+		if ($deleteTransaction) {
+			SnapToken::where('transaction_id', $request->id)->delete();
+		}
 		return response()->json('Sukses hapus');
 	}
 

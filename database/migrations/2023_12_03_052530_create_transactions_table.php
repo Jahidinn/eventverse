@@ -20,7 +20,7 @@ return new class extends Migration
 			$table->string('email');
 			$table->integer('quantity');
 			$table->bigInteger('total_price');
-			$table->enum('status', ['Paid', 'Unpaid', 'Pending']);
+			$table->enum('status', ['Paid', 'Unpaid', 'Pending', 'Expired']);
 			$table->string('transaction_id')->nullable();
 			$table->integer('is_login')->default(0);
 			$table->integer('user_login_id')->default(0);

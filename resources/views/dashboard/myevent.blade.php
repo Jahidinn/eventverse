@@ -2,76 +2,132 @@
 
 @section('content')
     <!-- Content Header (Page header) -->
-    <section class="content-header">
-        <div class="container-fluid">
-            <div class="row mb-2">
-                <div class="col-sm-6">
-                    <h1>My event</h1>
-                </div>
-            </div>
+    <section class="content-header pb-0">
+        <div class="alert alert-dark bg-dashboard text-white" role="alert">
+            <strong>MY EVENT</strong> (Peserta)
         </div>
     </section>
 
     <!-- Main content -->
     <section class="content">
-
         <!-- Default box -->
         <div class="card">
             <div class="card-header">
-                <h3 class="card-title">Data event yang kamu kamu ikuti!</h3>
+                <h3 class="card-title">Ikut event apapun yang kamu mau! </h3>
 
-                <div class="card-tools">
-                    <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
-                        <i class="fas fa-minus"></i>
-                    </button>
-                    <button type="button" class="btn btn-tool" data-card-widget="remove" title="Remove">
-                        <i class="fas fa-times"></i>
-                    </button>
+            </div>
+
+            <div class="card-body px-3">
+                <a href="/search"><button class="btn btn-success mb-2 shadow-none">Jelajah event <i
+                            class="far fa-paper-plane"></i></button></a>
+                <form action="" method="GET">
+                    <div class="p-0 form-inline mb-4">
+                        <input class="form-control col shadow-none mr-1" id="search-myevent" name="key" type="text"
+                            placeholder="Cari event ..." value="{{ request('key') }}">
+                    </div>
+                </form>
+
+                {{-- Looping data my event --}}
+                @foreach ($myevents as $myevent)
+                    <div class="card mt-2">
+                        <div class="col-md-12 row card-body px-3 pb-3">
+                            <div class="col-9">
+                                {{-- Event --}}
+                                <small>
+                                    @php
+                                        $title = $myevent->event->title . ' (' . $myevent->ticket->ticket_name . ')';
+                                        if (strlen($title) > 50) {
+                                            $title = substr($title, 0, 50) . '...';
+                                        }
+                                    @endphp
+                                    {{ $title }}
+                                </small>
+                                <br>
+
+                                {{-- Status --}}
+                                @if ($myevent->status == 'Paid')
+                                    <small>
+                                        <b class="text-success"><i class="fas fa-check-circle"></i> BERHASIL</b>
+                                    </small>
+                                @elseif($myevent->status == 'Expired')
+                                    <small>
+                                        <b class="text-danger"><i class="fas fa-times-circle"></i> EXPIRED</b>
+                                    </small>
+                                @else
+                                    <small>
+                                        <b class="text-warning"><i class="fas fa-info-circle"></i> PENDING/GAGAL</b>
+                                    </small>
+                                @endif
+                                <br>
+
+                                <div class="mt-2">
+                                    {{-- button action --}}
+                                    @if ($myevent->status == 'Paid')
+                                        <button type="button" class="btn btn-info btn-sm" data-id="{{ $myevent->id }}">
+                                            <i class="fas fa-list"></i> Lihat detail
+                                        </button>
+                                    @elseif($myevent->status == 'Expired')
+                                        <button type="button" class="btn btn-info btn-sm" data-id="{{ $myevent->id }}"><i
+                                                class="fas fa-list"></i></button>
+                                        <button type="button" class="btn btn-danger btn-sm" disabled
+                                            data-id="{{ $myevent->id }}">
+                                            <i class="fas fa-trash-alt"></i>
+                                        </button>
+                                    @else
+                                        <button type="button" class="btn btn-info btn-sm lanjutkan-transaksi"
+                                            data-id="{{ $myevent->id }}">
+                                            <i class="fas fa-wallet"></i> Bayar
+                                        </button>
+                                        <button type="button" class="btn btn-info btn-sm" data-id="{{ $myevent->id }}"><i
+                                                class="fas fa-list"></i></button>
+                                        <button type="button" class="btn btn-danger btn-sm" disabled
+                                            data-id="{{ $myevent->id }}">
+                                            <i class="fas fa-trash-alt"></i>
+                                        </button>
+                                    @endif
+
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <div class="myevent-container-img">
+                                    <img class="card-img-top" src="{{ asset('storage/event-images/example1.jpg') }}"
+                                        alt="Card image cap">
+                                </div>
+                            </div>
+                        </div>
+                        <hr class="mx-2 my-0">
+                        <div class="col-md-12 card-body py-2 px-3">
+                            <small class="text-secondary">
+                                <b>Rp <span>{{ number_format($myevent->total_price, 0, ',', '.') }}
+                                    </span></b> (Qty :
+                                <span>{{ $myevent->quantity }}</span>)
+
+                            </small>
+                        </div>
+                    </div>
+                @endforeach
+
+                {{-- Pagination --}}
+                <div class="d-flex justify-content-center">
+                    {{ $myevents->links() }}
                 </div>
-            </div>
-
-            <div class="card-body">
-                <table class="table">
-                    <thead class="thead-dark">
-                        <tr>
-                            <th scope="col">No</th>
-                            <th scope="col">Event</th>
-                            <th scope="col">Tgl Post</th>
-                            <th scope="col">#</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <th scope="row">1</th>
-                            <td>Mark</td>
-                            <td>Otto</td>
-                            <td>@mdo</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">2</th>
-                            <td>Jacob</td>
-                            <td>Thornton</td>
-                            <td>@fat</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">3</th>
-                            <td>Larry</td>
-                            <td>the Bird</td>
-                            <td>@twitter</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-            <div class="card-footer">
+                {{-- Pagination --}}
 
             </div>
         </div>
-
     </section>
+
+    <!-- Modal konfirmasi checkout -->
+    @include('apps.components.modal-checkout')
 
     @if (Session::has('popup'))
         <script type="text/javascript">
             alertify.alert("Sukses!", "{{ session()->get('popup') }}");
         </script>
     @endif
+
+    {{-- Push javascript --}}
+    @push('js-myevent')
+        @include('dashboard.js.js-myevent')
+    @endpush
 @endsection

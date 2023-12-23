@@ -5,6 +5,8 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    <script type="text/javascript" src="https://app.sandbox.midtrans.com/snap/snap.js"
+        data-client-key="{{ config('midtrans.client_key') }}"></script>
 
     <title>Dashboard | Eventconnect.id</title>
 
@@ -44,16 +46,15 @@
                 <section class="content mt-3">
                     <div class="alert alert-success" role="alert">
                         <h4 class="alert-heading">Verifikasi email</h4>
-                        <p>Biar lebih aman, cek email dan <strong>verifikasi</strong> dulu ya!</p>
                         <hr>
                         <form action="/email/verification-notification" method="post">
                             @csrf
-                            <p class="mb-0">belum menerima email? <button href="/email/verification-notification"
-                                    style="text-decoration:none" class="btn btn-secondary btn-sm">Request ulang</button>
+                            <p>Biar lebih aman, cek email dan <strong>verifikasi</strong> dulu ya!
+                                <button href="/email/verification-notification" style="text-decoration:none"
+                                    class="btn btn-secondary btn-sm border-rounded px-3"><i class="fas fa-retweet"></i>
+                                    Request ulang</button>
                             </p>
                         </form>
-
-
                     </div>
                 </section>
             @endif
@@ -67,7 +68,8 @@
             <div class="float-right d-none d-sm-block">
                 <b>Version</b> 3.2.0
             </div>
-            <strong>Copyright &copy; 2014-2021 <a href="/">Eventconnect.id</a>.</strong> All rights reserved.
+            <small><strong>Copyright &copy; 2014-2021 <a href="/">Eventconnect.id</a>.</strong> All rights
+                reserved.</small>
         </footer>
 
         <!-- Control Sidebar -->
@@ -185,7 +187,7 @@
 
             $('.manajemen-event-box').attr('hidden', false);
             $('.manajemen-ticket-box').attr('hidden', true);
-            $('.manajemen-event-title').text('Data event yang kamu buat');
+            $('.manajemen-event-title').text('Buat event sesukamu! <i class="fas fa-paper-plane"></i>');
 
         });
 
@@ -236,7 +238,7 @@
 
             $('.manajemen-event-box').attr('hidden', false);
             $('.manajemen-formulir-box').attr('hidden', true);
-            $('.manajemen-event-title').text('Data event yang kamu buat');
+            $('.manajemen-event-title').text('Buat event sesukamu! <i class="fas fa-paper-plane"></i>');
 
         });
 
@@ -467,6 +469,8 @@
             });
         });
     </script>
+
+    @stack('js-myevent')
 
 </body>
 

@@ -1,45 +1,73 @@
 <script>
     $(document).ready(function(e) {
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
+
+        //Dipakai ketika menampilkan my event dengan ajax
+        // var user_id = "{{ auth()->user()->id }}"
+
+        // var myeventTable = $('#myevent-table').DataTable({
+        //     "dom": 'rtip',
+        //     "bInfo": false,
+        //     processing: true,
+        //     serverside: true,
+        //     destroy: true,
+        //     ajax: {
+        //         'type': 'GET',
+        //         'url': '/dashboard/get-myevent',
+        //         'data': {
+        //             user_id: user_id,
+        //         },
+        //     },
+        //     columns: [{
+        //         data: 'DT_RowIndex',
+        //         name: 'DT_RowIndex',
+        //         orderable: false,
+        //         searchable: false
+        //     }, {
+        //         data: 'event',
+        //         name: 'event'
+        //     }, {
+        //         data: 'quantity',
+        //         name: 'quantity'
+        //     }, {
+        //         data: 'transaction_status',
+        //         name: 'transaction_status'
+        //     }, {
+        //         data: 'action',
+        //         name: 'action'
+        //     }]
+        // });
+
+        $('#search-myevent').keyup(function() {
+            myeventTable.search($(this).val()).draw();
         });
 
-
-        var loggedIn = {{ auth()->check() ? 'true' : 'false' }};
-        if (loggedIn) {
-            $('.checkbox').on('change', function() {
-                if ($('.checkbox').is(":checked")) {
-                    $('#fullName').attr('readonly', false);
-                    $('#email').attr('readonly', false);
-                } else {
-                    $('#fullName').attr('readonly', true);
-                    $('#email').attr('readonly', true);
-                }
-            });
-        }
-
-        $('#checkout-event').submit(function(e) {
+        $('body').on('click', '.lanjutkan-transaksi', function(e) {
             e.preventDefault();
-            var formData = new FormData(this);
 
-            //Cek koneksi dulu
+            var idTransaction = $(this).data('id');
+
             if (navigator.onLine) {
                 $('#checkout-button').html('Processing ...');
                 $('#checkout-button').attr('disabled', true);
+
                 var biayaAdmin = "{{ config('app.biaya_admin') }}"
+
+                console.log(idTransaction);
 
                 $.ajax({
                     type: 'POST',
-                    url: '/event/checkout-proccess',
-                    data: formData,
-                    cache: false,
-                    contentType: false,
-                    processData: false,
+                    url: '/event/continue-transaction',
+                    data: {
+                        id: idTransaction,
+                    },
                     success: function(response) {
                         if (response.error) {
                             Swal.fire('Ooopss', response.error, 'error');
+                        } else if (response.expired) {
+                            Swal.fire('Ooopss', response.expired, 'error').then(function() {
+                                window.location = "/dashboard/myevent";
+                            });
+
                         } else {
 
                             var transaction = response.transaction;
@@ -81,6 +109,7 @@
             else {
                 Swal.fire('', 'Cek koneksi internet kamu!', 'warning');
             }
+
         })
 
         var payButton = document.getElementById('pay-button');
@@ -137,54 +166,30 @@
                 }
             })
         });
+    })
 
-        $("#checkoutModal").on('hide.bs.modal', function() {
-            $('#pay-button').html("<i class='fas fa-check'></i> Bayar sekarang");
-            $('#pay-button').attr('disabled', false);
-        });
+    $('body').on('click', '.transaction-cancel-button', function(e) {
+        e.preventDefault();
+        let idTransaction = $('#id_event').val()
+        let emailTransaction = $('#email_transaction').val()
 
-        $('body').on('click', '.transaction-cancel-button', function(e) {
-            e.preventDefault();
-            let idTransaction = $('#id_event').val()
-            let emailTransaction = $('#email_transaction').val()
+        let is_login = $('#confirm_is_login').val();
+        let user_login_id = $('#confirm_user_login_id').val();
+        //console.log(idTransaction, emailTransaction);
 
-            let is_login = $('#confirm_is_login').val();
-            let user_login_id = $('#confirm_user_login_id').val();
-            //console.log(idTransaction, emailTransaction);
-
-            Swal.fire({
-                title: "Batalkan transaksi?",
-                html: "Klik <strong>Batalkan</strong> untuk membatalkan proses pembayaran",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonText: "Batalkan",
-                cancelButtonText: `Lanjut`
-            }).then((result) => {
-                /* Read more about isConfirmed, isDenied below */
-                if (result.isConfirmed) {
-                    if (is_login != 0 || user_login_id != 0) {
-                        Swal.fire('Ok!',
-                            'Kamu bisa melanjutkan transaksi di profil dashboard ya!', );
-                        $('#checkoutModal').modal('hide');
-                    } else {
-
-                        //Hapus jika daftar tapi tidak login (beli sekali selesai)
-                        $.ajax({
-                            type: 'POST',
-                            url: "/event/transaction-delete",
-                            data: {
-                                id: idTransaction,
-                                email: emailTransaction,
-                            },
-                            success: function(response) {
-                                $('#checkoutModal').modal('hide');
-                            }
-                        });
-                    }
-                } else {
-                    //Lanjut
-                }
-            })
+        Swal.fire({
+            title: "Batalkan transaksi?",
+            html: "Klik <strong>Batalkan</strong> untuk membatalkan proses pembayaran",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: "Batalkan",
+            cancelButtonText: `Lanjut`
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $('#checkoutModal').modal('hide');
+            } else {
+                //Lanjut
+            }
         })
     })
 </script>
