@@ -55,16 +55,18 @@
 
 
                 <li class="nav-header">EVENT STATISTIK</li>
-                <li class="nav-item">
-                    <a href="../../iframe.html" class="nav-link">
-                        <i class="nav-icon fas fa-money-check-alt"></i>
-                        <p>Laporan Transaksi</p>
-                    </a>
-                </li>
+
                 <li class="nav-item">
                     <a href="https://adminlte.io/docs/3.1/" class="nav-link">
                         <i class="nav-icon fas fa-users"></i>
                         <p>Data Pendaftar</p>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a href="../../iframe.html" class="nav-link">
+                        <i class="nav-icon fas fa-money-check-alt"></i>
+                        <p>Laporan Transaksi</p>
                     </a>
                 </li>
 

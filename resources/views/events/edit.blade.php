@@ -250,8 +250,7 @@
                         <div class="modal-header">
                             <h1 class="modal-title fs-5" id="lokasiEventModalLabel"><i class="fas fa-map-marker-alt"></i>
                                 Lokasi</h1>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                aria-label="Close"></button>
+                            {{-- Close lokasi hiddden --}}
                         </div>
                         <div class="modal-body">
                             <div class="mb-2">
@@ -311,7 +310,7 @@
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+
                             <button type="button" class="btn btn-primary" id="simpan-lokasi"><i
                                     class="fas fa-check-square"></i>
                                 Simpan lokasi</button>
@@ -334,7 +333,6 @@
                         <div class="modal-body">
 
                             <div class="mb-2">
-                                <small class="text-danger">* Tanggal inti acara</small>
                                 <div class="form-group input-form-group">
                                     <label for="startDate" class="form-control-label">TANGGAL MULAI</label>
                                     <div id="editEventStartDate" class="input-group date mt-1 mb-3"

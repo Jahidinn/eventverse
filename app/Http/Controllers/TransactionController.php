@@ -73,6 +73,18 @@ class TransactionController extends Controller
 				'status' => 'Unpaid',
 			];
 
+			//Keamanan beli tiket dari sisi backend
+			$ticketQuota = Ticket::where('event_id', $request->idEvent)->first();
+			$ticketUsed = count(Transaction::where('event_id', $request->idEvent)->where('status', '!=', 'Expired')->where('ticket_id', $request->idTicket)->get());
+			$ticketAvailable = $ticketQuota->ticket_quota - $ticketUsed;
+			$today = Carbon::now()->format('Y-m-d');
+
+			if ($ticketAvailable <= 0) {
+				return response()->json(['error' => 'Ticket habis gusy!']);
+			} elseif ($ticketQuota->ticket_deadline < $today) {
+				return response()->json(['error' => 'Ticket expired!']);
+			}
+
 			$transaction = Transaction::create($data);
 
 			// insert custom form data
@@ -173,7 +185,8 @@ class TransactionController extends Controller
 			} elseif ($request->transaction_status == 'pending') {
 				$transaction = Transaction::where('transaction_id', $request->order_id)->first();
 				$transaction->update(['status' => 'Pending']);
-			} elseif ($request->transaction_status == 'expire') {
+			} else {
+				// $request->transaction_status == 'expire'
 				$transaction = Transaction::where('transaction_id', $request->order_id)->first();
 				$transaction->update(['status' => 'Expired']);
 			}

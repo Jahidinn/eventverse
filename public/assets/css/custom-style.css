@@ -377,6 +377,9 @@ button.slick-disabled {
 .custom-form-label{
 	color: #6c757d !important;
 }
+.not-allowed {
+	cursor: not-allowed !important;
+}
 
 @media only screen and (min-width: 950px) {
     .nav-menu .link-login-register {

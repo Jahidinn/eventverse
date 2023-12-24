@@ -190,7 +190,7 @@
 
             $('.manajemen-event-box').attr('hidden', false);
             $('.manajemen-ticket-box').attr('hidden', true);
-            $('.manajemen-event-title').text('Buat event sesukamu! <i class="fas fa-paper-plane"></i>');
+            $('.manajemen-event-title').html('Buat event sesukamu! <i class="fas fa-paper-plane"></i>');
 
         });
 
@@ -241,7 +241,7 @@
 
             $('.manajemen-event-box').attr('hidden', false);
             $('.manajemen-formulir-box').attr('hidden', true);
-            $('.manajemen-event-title').text('Buat event sesukamu! <i class="fas fa-paper-plane"></i>');
+            $('.manajemen-event-title').html('Buat event sesukamu! <i class="fas fa-paper-plane"></i>');
 
         });
 

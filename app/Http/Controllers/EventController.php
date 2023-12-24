@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use App\Models\Event;
 use App\Models\Theme;
 use App\Models\Cities;
@@ -91,6 +92,9 @@ class EventController extends Controller
 				'image' => $imageName,
 
 			];
+			if ($request->startDate > $request->endDate) {
+				return response()->json(['error' => 'Cek lagi tanggal event!']);
+			}
 
 			// Get ticket data
 			if ($request->ticketName) {
@@ -142,7 +146,9 @@ class EventController extends Controller
 	{
 		return view('events.show', [
 			'detailEvent' => $event,
-			'ticketData' => Ticket::where('event_id', $event->id)->get()
+			'ticketData' => Ticket::where('event_id', $event->id)->get(),
+			'ticketTransaction' => Transaction::where('event_id', $event->id)->where('status', '!=', 'Expired')->get(),
+			'dateNow' => Carbon::now()->format('Y-m-d')
 		]);
 	}
 
