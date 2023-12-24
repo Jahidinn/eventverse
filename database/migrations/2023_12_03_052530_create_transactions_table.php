@@ -22,6 +22,7 @@ return new class extends Migration
 			$table->bigInteger('total_price');
 			$table->enum('status', ['Paid', 'Unpaid', 'Pending', 'Expired']);
 			$table->string('transaction_id')->nullable();
+			$table->string('payment_type')->nullable();
 			$table->integer('is_login')->default(0);
 			$table->integer('user_login_id')->default(0);
 			$table->timestamp('created_at')->useCurrent();

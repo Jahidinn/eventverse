@@ -191,6 +191,9 @@ class TransactionController extends Controller
 				$transaction->update(['status' => 'Expired']);
 			}
 
+			$paymentMethod = Transaction::where('transaction_id', $request->order_id)->first();
+			$paymentMethod->update(['payment_type' => $request->payment_type]);
+
 			$transaction_code = $request->order_id;
 			$this->sendEmail($transaction_code);
 			return response()->json(['success' => 'Sukses kirim email'], 200);
