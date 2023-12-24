@@ -46,16 +46,29 @@
 
                                 {{-- Status --}}
                                 @if ($myevent->status == 'Paid')
+                                    {{-- IF PAID --}}
                                     <small>
                                         <b class="text-success"><i class="fas fa-check-circle"></i> BERHASIL</b>
                                     </small>
+                                @elseif($myevent->status == 'Unpaid')
+                                    {{-- IF UNPAID --}}
+                                    <small>
+                                        <b class="text-secondary"><i class="fas fa-times-circle"></i> Unpaid</b>
+                                    </small>
+                                @elseif($myevent->status == 'Pending')
+                                    {{-- IF PENDING --}}
+                                    <small>
+                                        <b class="text-warning"><i class="fas fa-times-circle"></i> PENDING</b>
+                                    </small>
                                 @elseif($myevent->status == 'Expired')
+                                    {{-- IF EXPIRED --}}
                                     <small>
                                         <b class="text-danger"><i class="fas fa-times-circle"></i> EXPIRED</b>
                                     </small>
                                 @else
+                                    {{-- ELSE --}}
                                     <small>
-                                        <b class="text-warning"><i class="fas fa-info-circle"></i> PENDING/GAGAL</b>
+                                        <b class="text-warning"><i class="fas fa-info-circle"></i> $myevent->status</b>
                                     </small>
                                 @endif
                                 <br>
@@ -63,27 +76,46 @@
                                 <div class="mt-2">
                                     {{-- button action --}}
                                     @if ($myevent->status == 'Paid')
-                                        <button type="button" class="btn btn-info btn-sm" data-id="{{ $myevent->id }}">
+                                        {{-- IF PAID --}}
+                                        <button type="button" class="btn btn-info btn-sm detail-myevent"
+                                            data-id="{{ $myevent->id }}">
                                             <i class="fas fa-list"></i> Lihat detail
                                         </button>
-                                    @elseif($myevent->status == 'Expired')
-                                        <button type="button" class="btn btn-info btn-sm" data-id="{{ $myevent->id }}"><i
-                                                class="fas fa-list"></i></button>
-                                        <button type="button" class="btn btn-danger btn-sm" disabled
+                                    @elseif($myevent->status == 'Unpaid')
+                                        {{-- IF UNPAID --}}
+                                        <button type="button" class="btn btn-info btn-sm lanjutkan-transaksi"
+                                            data-id="{{ $myevent->id }}">
+                                            <i class="fas fa-wallet"></i> Bayar
+                                        </button>
+                                        <button type="button" class="btn btn-info btn-sm detail-myevent"
+                                            data-id="{{ $myevent->id }}"><i class="fas fa-list"></i></button>
+                                        <button type="button" class="btn btn-danger btn-sm" id="delete-myevent"
                                             data-id="{{ $myevent->id }}">
                                             <i class="fas fa-trash-alt"></i>
                                         </button>
-                                    @else
+                                    @elseif($myevent->status == 'Pending')
+                                        {{-- IF PENDING --}}
                                         <button type="button" class="btn btn-info btn-sm lanjutkan-transaksi"
                                             data-id="{{ $myevent->id }}">
                                             <i class="fas fa-wallet"></i> Bayar
                                         </button>
                                         <button type="button" class="btn btn-info btn-sm" data-id="{{ $myevent->id }}"><i
-                                                class="fas fa-list"></i></button>
+                                                class="fas fa-list" detail-myevent></i></button>
+                                    @elseif($myevent->status == 'Expired')
+                                        {{-- IF EXPIRED --}}
+                                        <button type="button" class="btn btn-info btn-sm detail-myevent"
+                                            data-id="{{ $myevent->id }}"><i class="fas fa-list"></i></button>
                                         <button type="button" class="btn btn-danger btn-sm" disabled
                                             data-id="{{ $myevent->id }}">
                                             <i class="fas fa-trash-alt"></i>
                                         </button>
+                                    @else
+                                        {{-- ELSE --}}
+                                        <button type="button" class="btn btn-info btn-sm" data-id="{{ $myevent->id }}">
+                                            {{ $myevent->status }}
+                                        </button>
+                                        <button type="button" class="btn btn-info btn-sm detail-myevent"
+                                            data-id="{{ $myevent->id }}"><i class="fas fa-list"></i></button>
                                     @endif
 
                                 </div>
@@ -113,6 +145,7 @@
                 </div>
                 {{-- Pagination --}}
 
+
             </div>
         </div>
     </section>
@@ -125,6 +158,11 @@
             alertify.alert("Sukses!", "{{ session()->get('popup') }}");
         </script>
     @endif
+
+    {{-- Push javascript --}}
+    @push('js-myevent')
+        @include('apps.js.payment-process')
+    @endpush
 
     {{-- Push javascript --}}
     @push('js-myevent')

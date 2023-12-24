@@ -308,11 +308,20 @@
                 <td class="payment-info">
                     <div>
                         @if ($transaction->status == 'Paid')
+                            {{-- IF PAID --}}
                             <strong style="color: rgb(31, 148, 37)), 55)">Sukses!</strong>
-                        @elseif ($transaction->status == 'Paid')
+                        @elseif ($transaction->status == 'Unpaid')
+                            {{-- IF UNPAID --}}
+                            <strong style="color: rgb(187, 38, 38)), 55)">Unpaid!</strong>
+                        @elseif ($transaction->status == 'Pending')
+                            {{-- IF PENDING --}}
                             <strong style="color: rgb(202, 147, 44)), 55)">Pending!</strong>
+                        @elseif ($transaction->status == 'Expired')
+                            {{-- IF EXPIRED --}}
+                            <strong style="color: rgb(172, 33, 33)), 55)">Expired!</strong>
                         @else
-                            <strong style="color: rgb(148, 31, 31)), 55)">Gagal!</strong>
+                            {{-- ELSE --}}
+                            <strong style="color: rgb(179, 31, 31)), 55)">Gagal!</strong>
                         @endif
                     </div>
                 </td>

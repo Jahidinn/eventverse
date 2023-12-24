@@ -30,8 +30,14 @@ class TransactionEmail extends Mailable
 	{
 		if ($this->mailData['subjek'] == 'Paid') {
 			$status = 'Sukses';
+		} elseif ($this->mailData['subjek'] == 'Unpaid') {
+			$status = 'Unpaid';
+		} elseif ($this->mailData['subjek'] == 'Pending') {
+			$status = 'Pending';
+		} elseif ($this->mailData['subjek'] == 'Expired') {
+			$status = 'Expired';
 		} else {
-			$status = 'Gagal/pending';
+			$status = 'Gagal';
 		}
 
 		return new Envelope(

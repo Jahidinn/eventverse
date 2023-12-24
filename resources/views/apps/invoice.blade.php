@@ -19,25 +19,44 @@
                         </div>
                         <div class="mt-3 ml-2">
                             <h5 class="card-title mb-1">Halo, {{ $transaction->name }}!</h5>
+                            {{-- STATUS --}}
                             @if ($transaction->status == 'Paid')
+                                {{-- IF PAID --}}
                                 <small class="text-success"><i class="fas fa-check"></i> Selamat
                                     {{ $ticket->ticket_button == 'BELI TIKET' ? 'Pembelian tiket' : 'Pendaftaran' }} event
                                     kamu berhasil.</small>
+                            @elseif ($transaction->status == 'Unpaid')
+                                {{-- IF UNPAID --}}
+                                <small class="text-warning"><i class="fas fa-exclamation-circle"></i> Wah! sepertinya kamu
+                                    belum melakukan pembayaran!</small>
                             @elseif ($transaction->status == 'Pending')
+                                {{-- IF PENDING --}}
                                 <small class="text-warning"><i class="fas fa-exclamation-circle"></i> Pending (menunggu
                                     pembayaran)</small>
+                            @elseif ($transaction->status == 'Expired')
+                                {{-- IF EXPIRED --}}
+                                <small class="text-danger"><i class="fas fa-exclamation-circle"></i> Wah! Sepertinya
+                                    pembayaran kamu sudah expired.</small>
                             @else
+                                {{-- ELSE --}}
                                 <small class="text-danger"><i class="fas fa-exclamation-circle"></i> Wah! Sepertinya proses
                                     pembayaran kamu gagal/pending.</small>
                             @endif
+
                             <br>
                             <button type="button" class="btn btn-info btn-sm mt-2" onClick="window.location.reload();"><i
                                     class="fas fa-redo-alt"></i> Refresh
-                                invoice</button>
+                            </button>
                             <button type="button" class="btn btn-success btn-sm mt-2"
                                 data-id_transaksi="{{ $transaction->id }}" id="download-invoice"><i
-                                    class="fas fa-download"></i> Download
-                                pdf</button>
+                                    class="fas fa-file-pdf"></i> Download
+                            </button>
+
+                            @if ($transaction->status == 'Unpaid' || $transaction->status == 'Pending')
+                                <button type="button" class="btn btn-secondary btn-sm mt-2" id="lanjutkan-transaksi"
+                                    data-id_transaksi="{{ $transaction->id }}"><i class="fas fa-wallet"></i> Bayar
+                                </button>
+                            @endif
                         </div>
                         <hr class="mx-2 mt-2">
                         <div class="col-md-12 row mb-2">
@@ -55,15 +74,28 @@
                         </div>
                         <div class="col-md-12 row mb-2">
                             <div class="col-6 text-secondary">Status pembayaran</div>
+
                             @if ($transaction->status == 'Paid')
+                                {{-- IF PAID --}}
                                 <div class="col-6 text-success">Sukses!</div>
+                            @elseif ($transaction->status == 'Unpaid')
+                                {{-- IF UNPAID --}}
+                                <div class="col-6 text-warning"><small><i class="fas fa-dot-circle"></i></small>
+                                    Belum dibayar</div>
                             @elseif ($transaction->status == 'Pending')
+                                {{-- IF PENDING --}}
                                 <div class="col-6 text-warning"><small><i class="fas fa-dot-circle"></i></small>
                                     pending</div>
-                            @else
+                            @elseif ($transaction->status == 'Expired')
+                                {{-- IF EXPIRED --}}
                                 <div class="col-6 text-danger"><small><i class="fas fa-dot-circle"></i></small>
-                                    Gagal/pending</div>
+                                    Expired</div>
+                            @else
+                                {{-- ELSE --}}
+                                <div class="col-6 text-danger"><small><i class="fas fa-dot-circle"></i></small>
+                                    Gagal</div>
                             @endif
+
                         </div>
                         <div class="col-md-12 row">
                             <div class="col-6 text-secondary">Detail pesanan :</div>
@@ -123,10 +155,13 @@
         </form>
     </section>
 
+    <!-- Modal konfirmasi checkout -->
+    @include('apps.components.modal-checkout')
+
 
     {{-- javascript --}}
     @push('transaction-scripts')
-        @include('apps.js.transaction')
+        @include('apps.js.payment-process')
     @endpush
 
     @push('transaction-invoice')

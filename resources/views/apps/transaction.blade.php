@@ -138,6 +138,11 @@
 
     {{-- javascript --}}
     @push('transaction-scripts')
+        @include('apps.js.payment-process')
+    @endpush
+
+    {{-- javascript --}}
+    @push('transaction-scripts')
         @include('apps.js.transaction')
     @endpush
 

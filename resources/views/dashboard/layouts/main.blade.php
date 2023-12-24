@@ -103,7 +103,7 @@
             $('.delete-event').on('click', function(e) {
                 e.preventDefault();
                 Swal.fire({
-                    title: "Yakin hapus event?",
+                    text: "Yakin hapus event?",
                     showCancelButton: true,
                     confirmButtonText: "<i class='fas fa-trash-alt'></i> Delete",
                     confirmButtonColor: "#d33",
@@ -115,11 +115,14 @@
                             url: '/event/' + id,
                             type: 'DELETE',
                             success: function(response) {
-                                Swal.fire(response.success, '', 'success').then(
-                                    function() {
-                                        window.location =
-                                            "/dashboard/manajemen-event";
-                                    })
+                                if (response.success) {
+                                    Swal.fire(response.success, '', 'success').then(
+                                        function() {
+                                            location.reload();
+                                        })
+                                } else {
+                                    Swal.fire('Ooopss', response.error, 'error');
+                                }
                             }
                         });
                     }

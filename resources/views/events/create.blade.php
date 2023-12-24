@@ -216,8 +216,8 @@
                                                                 placeholder="No HP *" readonly id="no-hp">
                                                         </div>
                                                         <div class="text-center mb-3">
-                                                            <small class="text-success">Tambahkan <b>*</b> di akhir jika
-                                                                form wajib
+                                                            <small class="text-success">Tambahkan <b>*</b> di akhir <b>jika
+                                                                    form wajib</b>
                                                                 diisi</small>
                                                         </div>
                                                         <div class="form-wrap">

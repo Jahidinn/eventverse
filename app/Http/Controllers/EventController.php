@@ -9,6 +9,7 @@ use App\Models\Ticket;
 use App\Models\Category;
 use App\Models\Provinces;
 use App\Models\CustomForm;
+use App\Models\Transaction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Yajra\DataTables\Facades\DataTables;
@@ -232,6 +233,11 @@ class EventController extends Controller
 	public function destroy($id)
 	{
 		$event = Event::where('id', $id)->first();
+		$transaction = Transaction::where('event_id', $event->id)->get();
+
+		if ($transaction) {
+			return response()->json(['error' => 'Sudah ada peserta guys, tidak bisa DIHAPUS!']);
+		}
 
 		if ($event->image) {
 			Storage::delete('public/event-images/' . $event->image);

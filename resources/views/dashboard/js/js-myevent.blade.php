@@ -41,6 +41,12 @@
             myeventTable.search($(this).val()).draw();
         });
 
+        $('body').on('click', '.detail-myevent', function(e) {
+            e.preventDefault();
+            var id = $(this).data('id');
+            window.location = "/event/redirect-invoice/" + id;
+        })
+
         $('body').on('click', '.lanjutkan-transaksi', function(e) {
             e.preventDefault();
 
@@ -51,8 +57,6 @@
                 $('#checkout-button').attr('disabled', true);
 
                 var biayaAdmin = "{{ config('app.biaya_admin') }}"
-
-                console.log(idTransaction);
 
                 $.ajax({
                     type: 'POST',
@@ -111,60 +115,34 @@
             }
 
         })
+    })
 
-        var payButton = document.getElementById('pay-button');
-        payButton.addEventListener('click', function() {
-            $('#pay-button').html('Processing ...');
-            $('#pay-button').attr('disabled', true);
 
-            let idTransaction = $('#id_event').val()
-            // Trigger snap popup. @TODO: Replace TRANSACTION_TOKEN_HERE with your transaction token
-            window.snap.pay($('#transaction').val(), {
-                onSuccess: function(result) {
-                    /* You may add your own implementation here */
-                    window.location.href = '/event/invoice/' + idTransaction;
-                    console.log(result);
-                },
-                onPending: function(result) {
-                    /* You may add your own implementation here */
-                    $('#pay-button').html("<i class='fas fa-check'></i> Bayar sekarang");
-                    $('#pay-button').attr('disabled', false);
-                    Swal.fire({
-                        icon: "info",
-                        text: "wating your payment!",
-                        allowOutsideClick: false,
-                        allowEscapeKey: false,
-                    }).then((result) => {
-                        /* Read more about isConfirmed, isDenied below */
-                        if (result.isConfirmed) {
-                            window.location.href = '/event/invoice/' +
-                                idTransaction;
-                        }
-                    });
-                    console.log(result);
-                },
-                onError: function(result) {
-                    /* You may add your own implementation here */
-                    Swal.fire({
-                        icon: "error",
-                        text: "payment failed!!",
-                        allowOutsideClick: false,
-                        allowEscapeKey: false,
-                    });
-                    console.log(result);
-                },
-                onClose: function() {
-                    $('#pay-button').html("<i class='fas fa-check'></i> Bayar sekarang");
-                    $('#pay-button').attr('disabled', false);
-                    /* You may add your own implementation here */
-                    Swal.fire({
-                        icon: "warning",
-                        text: "you closed the popup without finishing the payment!",
-                        allowOutsideClick: false,
-                        allowEscapeKey: false,
-                    });
-                }
-            })
+    $('body').on('click', '#delete-myevent', function(e) {
+        e.preventDefault();
+        Swal.fire({
+            text: "Hapus data registrasi event kamu?",
+            showCancelButton: true,
+            confirmButtonText: "<i class='fas fa-trash-alt'></i> Delete",
+            confirmButtonColor: "#d33",
+        }).then((result) => {
+            /* Read more about isConfirmed, isDenied below */
+            if (result.isConfirmed) {
+                var id = $(this).data("id");
+                $.ajax({
+                    url: '/dashboard/delete-myevent/',
+                    data: {
+                        id: id,
+                    },
+                    type: 'POST',
+                    success: function(response) {
+                        Swal.fire('', response.success, 'success').then(
+                            function() {
+                                location.reload();
+                            })
+                    }
+                });
+            }
         });
     })
 

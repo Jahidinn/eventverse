@@ -173,7 +173,11 @@ class TransactionController extends Controller
 			} elseif ($request->transaction_status == 'pending') {
 				$transaction = Transaction::where('transaction_id', $request->order_id)->first();
 				$transaction->update(['status' => 'Pending']);
+			} elseif ($request->transaction_status == 'expire') {
+				$transaction = Transaction::where('transaction_id', $request->order_id)->first();
+				$transaction->update(['status' => 'Expired']);
 			}
+
 			$transaction_code = $request->order_id;
 			$this->sendEmail($transaction_code);
 			return response()->json(['success' => 'Sukses kirim email'], 200);
@@ -214,7 +218,7 @@ class TransactionController extends Controller
 			return response()->json('Gagal');
 		}
 		//Proses delete
-		$deleteTransaction = Transaction::where('id', $request->id)->where('is_login', 0)->where('user_login_id', 0)->delete();
+		$deleteTransaction = Transaction::where('id', $request->id)->where('is_login', 0)->where('user_login_id', 0)->where('status', 'Unpaid')->delete();
 		//Delete snap token
 		if ($deleteTransaction) {
 			SnapToken::where('transaction_id', $request->id)->delete();

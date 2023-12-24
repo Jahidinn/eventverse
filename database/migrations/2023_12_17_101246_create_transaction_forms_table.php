@@ -15,7 +15,7 @@ return new class extends Migration
 			$table->id();
 			$table->foreignId('form_id');
 			$table->foreignId('transaction_id');
-			$table->string('form_value');
+			$table->string('form_value')->nullable();
 			$table->timestamp('created_at')->useCurrent();
 			$table->timestamp('updated_at')->useCurrent();
 		});

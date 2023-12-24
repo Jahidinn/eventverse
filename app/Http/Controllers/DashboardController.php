@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use Carbon\Carbon;
 use App\Models\Event;
+use App\Models\SnapToken;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
+use App\Models\TransactionForm;
 use Yajra\DataTables\Facades\DataTables;
 
 class DashboardController extends Controller
@@ -40,6 +42,18 @@ class DashboardController extends Controller
 		return view('dashboard.myevent', [
 			'myevents' => $transaction,
 		]);
+	}
+
+	public function deleteMyevent(Request $request)
+	{
+		//Proses delete
+		$deleteTransaction = Transaction::where('id', $request->id)->where('status', 'Unpaid')->delete();
+		//Delete snap token dan data custom form
+		if ($deleteTransaction) {
+			SnapToken::where('transaction_id', $request->id)->delete();
+			TransactionForm::where('transaction_id', $request->id)->delete();
+		}
+		return response()->json(['success' => 'Data registrasi berhasil dihapus!']);
 	}
 
 	//Manajemen event
