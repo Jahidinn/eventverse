@@ -19,7 +19,8 @@
                     <div class="view-image-event position-relative">
                         <img src="{{ asset('storage/event-images/' . $detailEvent->image) }}" class="card-img-top"
                             alt="...">
-                        <button class="btn btn-info rounded-0 position-absolute">FULL <i class="fas fa-expand"></i></button>
+                        <button class="btn btn-dark rounded-0 position-absolute" data-toggle="modal"
+                            data-target="#fullImageModal"><i class="fas fa-expand"></i></button>
                     </div>
                     <div class="card-body">
                         <h5 class="card-title mt-3 mb-0">{{ $detailEvent->title }}</h5>
@@ -201,4 +202,26 @@
             @endforeach
         </div>
     </section>
+
+    <!-- Full Image Modal -->
+    <div class="modal fade" id="fullImageModal" style="z-index: 99999" aria-labelledby="fullImageModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header pb-0">
+                    <h4>Full Image</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body p-1" style="width: 100%; height:100%">
+                    <img src="{{ asset('storage/event-images/' . $detailEvent->image) }}" class="card-img-top"
+                        alt="...">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
