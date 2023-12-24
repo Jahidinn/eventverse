@@ -13,6 +13,7 @@ use App\Models\Transaction;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Mail\TransactionEmail;
+use App\Models\TransactionForm;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use SebastianBergmann\Diff\Diff;
@@ -45,8 +46,8 @@ class TransactionController extends Controller
 	{
 		$validasi = Validator::make($request->all(), [
 			'fullName' => 'required',
-			'email' => 'required',
-			'nomorHp' => 'required',
+			'email' => 'required|email',
+			'nomorHp' => 'required|min:10',
 			'idEvent' => 'required',
 			'idTicket' => 'required',
 			'quantity' => 'required',
@@ -54,7 +55,7 @@ class TransactionController extends Controller
 		]);
 
 		if ($validasi->fails()) {
-			return response()->json(['error' => 'Banner/poster kosong atau ukuran terlalu besar']);
+			return response()->json(['error' => $validasi->errors()->first()]);
 		} else {
 			$biayaAdmin = config('app.biaya_admin');
 
@@ -74,6 +75,18 @@ class TransactionController extends Controller
 
 			$transaction = Transaction::create($data);
 
+			// insert custom form data
+			if ($transaction || $request->customForm) {
+
+				foreach ($request->customForm as $key => $customForm) {
+					$dataForm[] = [
+						"transaction_id" => $transaction->id,
+						"form_id" => $key,
+						"form_value" => $customForm
+					];
+				}
+				TransactionForm::insert($dataForm);
+			}
 
 			// Set your Merchant Server Key
 			Config::$serverKey = config('midtrans.server_key');
@@ -205,6 +218,7 @@ class TransactionController extends Controller
 		//Delete snap token
 		if ($deleteTransaction) {
 			SnapToken::where('transaction_id', $request->id)->delete();
+			TransactionForm::where('transaction_id', $request->id)->delete();
 		}
 		return response()->json('Sukses hapus');
 	}

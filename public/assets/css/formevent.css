@@ -295,6 +295,10 @@ a:hover {
     padding-left: 8rem;
     /* padding-left: 2.375rem; */
 }
+.form-registration-set .normal{
+	padding-left: 0 !important;	
+}
+
 .form-registration-set input{
 	padding-left: 1rem !important;	
 }

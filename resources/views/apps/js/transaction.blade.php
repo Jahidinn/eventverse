@@ -39,6 +39,8 @@
                     processData: false,
                     success: function(response) {
                         if (response.error) {
+                            $('#checkout-button').html('Bayar sekarang!');
+                            $('#checkout-button').attr('disabled', false);
                             Swal.fire('Ooopss', response.error, 'error');
                         } else {
 

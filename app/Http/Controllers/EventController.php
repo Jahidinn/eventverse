@@ -120,11 +120,12 @@ class EventController extends Controller
 
 			// get custom form data
 			if ($request->formName) {
-
 				foreach ($request->formName as $key => $formName) {
+					$form_status = strpos($formName, '*') !== false ? 1 : 0;
 					$customForm[] = [
 						"event_id" => $dataEvent->id,
-						"form_name" => $formName
+						"form_name" => $formName,
+						"form_status" => $form_status
 					];
 				}
 				CustomForm::insert($customForm);
@@ -284,9 +285,11 @@ class EventController extends Controller
 
 	public function addFormulir(Request $request)
 	{
+		$form_status = strpos($request->form_name, '*') !== false ? 1 : 0;
 		$data = [
 			'event_id' => $request->event_id,
 			'form_name' => $request->form_name,
+			'form_status' => $form_status,
 		];
 
 		CustomForm::insert($data);
@@ -310,8 +313,10 @@ class EventController extends Controller
 
 	public function editFormulir(Request $request)
 	{
+		$form_status = strpos($request->form_name, '*') !== false ? 1 : 0;
 		$data = [
 			'form_name' => $request->form_name,
+			'form_status' => $form_status,
 		];
 
 		CustomForm::where('id', $request->id_form)->update($data);

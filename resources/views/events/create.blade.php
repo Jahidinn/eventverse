@@ -205,17 +205,21 @@
                                                     <div class="card-body">
                                                         <div class="input-group mb-3 icon-class pr-4">
                                                             <input type="text" class="form-control"
-                                                                placeholder="Nama Lengkap" readonly id="namalengkap">
+                                                                placeholder="Nama Lengkap *" readonly id="namalengkap">
                                                         </div>
                                                         <div class="input-group mb-3 icon-class">
                                                             <input type="text" class="form-control"
-                                                                placeholder="Email" readonly id="alamat-email">
+                                                                placeholder="Email *" readonly id="alamat-email">
                                                         </div>
-                                                        <div class="input-group mb-3 icon-class">
+                                                        <div class="input-group mb-1 icon-class">
                                                             <input type="text" class="form-control"
-                                                                placeholder="No HP" readonly id="no-hp">
+                                                                placeholder="No HP *" readonly id="no-hp">
                                                         </div>
-
+                                                        <div class="text-center mb-3">
+                                                            <small class="text-success">Tambahkan <b>*</b> di akhir jika
+                                                                form wajib
+                                                                diisi</small>
+                                                        </div>
                                                         <div class="form-wrap">
                                                         </div>
 

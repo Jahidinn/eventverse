@@ -15,6 +15,7 @@ return new class extends Migration
 			$table->id();
 			$table->foreignId('event_id');
 			$table->string('form_name');
+			$table->integer('form_status')->default(0);
 			$table->timestamp('created_at')->useCurrent();
 			$table->timestamp('updated_at')->useCurrent();
 		});

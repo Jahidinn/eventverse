@@ -64,10 +64,16 @@
                                 @foreach ($customForms as $customForm)
                                     <div class="form-group">
                                         <label for="customForm[{{ $customForm->id }}]" class="custom-form-label">
-                                            <small><strong>{{ $customForm->form_name }}</strong></small>
+                                            <small>
+                                                <b>{{ strtr($customForm->form_name, ['*' => '']) }}
+                                                    <span class="text-danger">{{ $customForm->form_status == 1 ? '*' : '' }}
+                                                    </span>
+                                                </b>
+                                            </small>
                                         </label>
                                         <input class="form-control rounded-0" name="customForm[{{ $customForm->id }}]"
-                                            id="customForm[{{ $customForm->id }}]" type="text" placeholder="...">
+                                            id="customForm[{{ $customForm->id }}]" type="text" placeholder="..."
+                                            {{ $customForm->form_status == 1 ? 'required' : '' }}>
                                     </div>
                                 @endforeach
                             @endif

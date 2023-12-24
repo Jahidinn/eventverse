@@ -67,7 +67,7 @@
                                     data-id="{{ $event->id }}" data-event="{{ $event->title }}">
                                     <i class="fas fa-edit"></i> Edit Tiket
                                 </button>
-                                <button type="button" class="btn btn-warning btn-sm px-3 edit-button edit-formulir-button"
+                                <button type="button" class="btn btn-sm px-3 edit-button edit-formulir-button"
                                     data-id="{{ $event->id }}" data-event="{{ $event->title }}">
                                     <i class="fas fa-edit"></i> Edit Formulir
                                 </button>
@@ -217,6 +217,10 @@
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
+                    <div class="text-center mb-0">
+                        <small class="text-success">Tambahkan <b>*</b> di akhir jika
+                            form wajib diisi</small>
+                    </div>
                     <form action="javascript:void(0)" class="addEditForm" id="">
                         @csrf
                         <div class="modal-body">
@@ -227,7 +231,7 @@
                             <div class="form-group mb-2">
                                 <label for="form_name" class="font-weight-normal">Nama formulir</label>
                                 <input type="text" class="form-control shadow-none rounded-0" id="form_name"
-                                    name="form_name" placeholder="Nama formulir">
+                                    name="form_name" placeholder="Nama formulir *">
                             </div>
                         </div>
                         <div class="modal-footer">
