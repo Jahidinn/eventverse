@@ -2,8 +2,7 @@
 <aside class="main-sidebar sidebar-dark-primary elevation-4" style="background-color: #08334b">
     <!-- Brand Logo -->
     <a href="/" class="brand-link">
-        <img src="{{ asset('assets/dashboard/dist/img/AdminLTELogo.png') }}" alt="AdminLTE Logo"
-            class="brand-image img-circle elevation-3" style="opacity: .8">
+        <img src="/assets/img/logo-e.png" alt="AdminLTE Logo" class="brand-image " style="opacity: .8">
         <span class="brand-text font-weight-light">Eventconnect.id</span>
     </a>
 
@@ -57,14 +56,16 @@
                 <li class="nav-header">EVENT STATISTIK</li>
 
                 <li class="nav-item">
-                    <a href="https://adminlte.io/docs/3.1/" class="nav-link">
+                    <a href="/dashboard/participant-data"
+                        class="nav-link {{ Request::is('dashboard/participant-data*') ? 'active' : '' }}">
                         <i class="nav-icon fas fa-users"></i>
                         <p>Data Pendaftar</p>
                     </a>
                 </li>
 
                 <li class="nav-item">
-                    <a href="../../iframe.html" class="nav-link">
+                    <a href="/dashboard/transaction-report"
+                        class="nav-link {{ Request::is('dashboard/transaction-report*') ? 'active' : '' }}">
                         <i class="nav-icon fas fa-money-check-alt"></i>
                         <p>Laporan Transaksi</p>
                     </a>

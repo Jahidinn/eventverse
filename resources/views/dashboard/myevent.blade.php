@@ -29,7 +29,7 @@
 
                 {{-- Looping data my event --}}
                 @foreach ($myevents as $myevent)
-                    <div class="card mt-2">
+                    <div class="card mt-2 ">
                         <div class="col-md-12 row card-body px-3 pb-3">
                             <div class="col-9">
                                 {{-- Event --}}
@@ -122,7 +122,8 @@
                             </div>
                             <div class="col-3">
                                 <div class="myevent-container-img">
-                                    <img class="card-img-top" src="{{ asset('storage/event-images/example1.jpg') }}"
+                                    <img class="card-img-top"
+                                        src="{{ asset('storage/event-images/' . $myevent->event->image) }}"
                                         alt="Card image cap">
                                 </div>
                             </div>

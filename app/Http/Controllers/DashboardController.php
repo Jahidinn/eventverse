@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\CustomForm;
 use Carbon\Carbon;
 use App\Models\Event;
 use App\Models\SnapToken;
@@ -59,8 +60,10 @@ class DashboardController extends Controller
 	//Manajemen event
 	public function manajemenEvent(Request $request)
 	{
+		$user_id = auth()->user()->id;
 		$search = $request->key;
-		$listEvent = Event::where('title', 'like', '%' . $search . '%')->paginate(2)->withQueryString();
+
+		$listEvent = Event::where('title', 'like', '%' . $search . '%')->where('user_id', $user_id)->paginate(2)->withQueryString();
 		return view('dashboard.manajemen-event', [
 			'listEvent' => $listEvent
 		]);
@@ -89,4 +92,60 @@ class DashboardController extends Controller
 			->make(true);
 	}
 	//Tidak dipakai (Dipakai ketika menggunakan ajax)
+
+	public function participant(Request $request)
+	{
+		$user_id = auth()->user()->id;
+		$search = $request->key;
+
+		$dataEvent = Event::where('title', 'like', '%' . $search . '%')
+			->where('user_id', $user_id)
+			->paginate(2)
+			->withQueryString();
+
+		return view('dashboard.page-participant', [
+			'dataEvent' => $dataEvent,
+		]);
+	}
+
+	public function getParticipant(Request $request)
+	{
+		if (!auth()->user()) {
+			return response()->json(['error' => 'Gagal!']);
+		}
+
+		$dataParticipant = Transaction::with(['event', 'ticket'])
+			->where('event_id', $request->id)
+			->orderByRaw('id DESC')
+			->get();
+
+		return DataTables::of($dataParticipant)
+			->addIndexColumn()
+			->addColumn('transaction_status', function ($dataParticipant) {
+				return view('dashboard.components.column-status')->with(['data' => $dataParticipant]);
+			})
+			->addColumn('transaction_action', function ($dataParticipant) {
+				return view('dashboard.components.column-action-participant')->with(['data' => $dataParticipant]);
+			})
+			->make(true);
+	}
+
+	public function getCustomformParticipant(Request $request)
+	{
+		$customForm = CustomForm::where('event_id', $request->event_id)->get();
+
+		foreach ($customForm as $form) {
+			$dataForm = TransactionForm::with(['transaction'])
+				->where('form_id', $form->id)
+				->where('transaction_id', $request->id)
+				->first();
+
+			$data[] = [
+				'nama_form' => strtr($form->form_name, ['*' => '']),
+				'form_value' => $dataForm ? $dataForm->form_value : '',
+			];
+		}
+
+		return response()->json(['data' => $data]);
+	}
 }

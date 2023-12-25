@@ -41,6 +41,9 @@ Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard
 Route::get('/dashboard/myevent', [DashboardController::class, 'myEvent'])->middleware('auth');
 Route::get('/dashboard/get-myevent', [DashboardController::class, 'getMyEvent'])->middleware('auth');
 Route::get('/dashboard/manajemen-event', [DashboardController::class, 'manajemenEvent'])->middleware('auth');
+Route::get('/dashboard/participant-data', [DashboardController::class, 'participant'])->middleware('auth');
+Route::get('/dashboard/get-participant', [DashboardController::class, 'getParticipant'])->middleware('auth');
+Route::get('/dashboard/get-customform', [DashboardController::class, 'getCustomformParticipant'])->middleware('auth');
 Route::post('/dashboard/delete-myevent', [DashboardController::class, 'deleteMyevent'])->middleware('auth');
 
 Route::get('/get-cities/{code}', [EventController::class, 'getCities']);

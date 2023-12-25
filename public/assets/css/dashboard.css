@@ -44,8 +44,45 @@
 	border: 2px solid rgba(108, 89, 179, 0.75);
 }
 
+.bg-card-blue {
+	background-color: rgb(235, 245, 251) !important;
+	box-shadow: none;
+}
+
+.select2.select2-container {
+	width: 100% !important;
+}
+
+.select2.select2-container .select2-selection{
+	border-radius: 0 ;
+	padding-top: 5px;
+	padding-left: 2px;
+	height: 35px;
+}
+.select2-selection__arrow {
+	margin-top: 3px;
+}
+.select2-selection__clear{
+	display: none;
+}
+
+.jenis-event.select2-results__options {
+	height: 50px !important;
+ }
+.select2-results__options {
+	min-height: 220px !important;
+ }
+
+.data-pendaftar{
+	font-size: 14px;
+}
+
 @media only screen and (max-width: 800px) {
 	.title-manage-event{
+		font-size: 13px;
+	}
+
+	.data-pendaftar{
 		font-size: 13px;
 	}
    

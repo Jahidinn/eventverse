@@ -30,7 +30,7 @@
                     </form>
 
                     @foreach ($listEvent as $event)
-                        <div class="card pb-2">
+                        <div class="card pb-2 bg-card-blue">
                             <div class="col-md-12 row card-body px-3 pb-2">
                                 <div class="col-9">
                                     @php
