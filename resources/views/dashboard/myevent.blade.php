@@ -23,7 +23,7 @@
                 <form action="" method="GET">
                     <div class="p-0 form-inline mb-4">
                         <input class="form-control col shadow-none mr-1" id="search-myevent" name="key" type="text"
-                            placeholder="Cari event ..." value="{{ request('key') }}">
+                            placeholder="Cari event yang kamu ikuti ..." value="{{ request('key') }}">
                     </div>
                 </form>
 

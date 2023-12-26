@@ -38,28 +38,28 @@
                         class="nav-link {{ Request::is('dashboard/myevent*') ? 'active' : '' }}">
                         <i class="nav-icon fas fa-address-card"></i>
                         <p>
-                            My event
+                            Ikut Event
                             {{-- <span class="right badge badge-danger">New</span> --}}
                         </p>
                     </a>
                 </li>
 
+
+                <li class="nav-header">EVENT CONTROL</li>
+
                 <li class="nav-item">
                     <a href="/dashboard/manajemen-event"
                         class="nav-link {{ Request::is('dashboard/manajemen-event*') ? 'active' : '' }}">
                         <i class="nav-icon fas fa-calendar"></i>
-                        <p>Manajemen event</p>
+                        <p>Manajemen Event</p>
                     </a>
                 </li>
-
-
-                <li class="nav-header">EVENT STATISTIK</li>
 
                 <li class="nav-item">
                     <a href="/dashboard/participant-data"
                         class="nav-link {{ Request::is('dashboard/participant-data*') ? 'active' : '' }}">
                         <i class="nav-icon fas fa-users"></i>
-                        <p>Data Pendaftar</p>
+                        <p>Data Peserta</p>
                     </a>
                 </li>
 
@@ -68,6 +68,14 @@
                         class="nav-link {{ Request::is('dashboard/transaction-report*') ? 'active' : '' }}">
                         <i class="nav-icon fas fa-money-check-alt"></i>
                         <p>Laporan Transaksi</p>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a href="/dashboard/event-checkin"
+                        class="nav-link {{ Request::is('dashboard/transaction-report*') ? 'active' : '' }}">
+                        <i class="nav-icon fas fa-check-square"></i>
+                        <p>Check in Peserta</p>
                     </a>
                 </li>
 

@@ -69,7 +69,7 @@
                             Swal.fire('Ooopss', response.error, 'error');
                         } else if (response.expired) {
                             Swal.fire('Ooopss', response.expired, 'error').then(function() {
-                                window.location = "/dashboard/myevent";
+                                location.reload();
                             });
 
                         } else {

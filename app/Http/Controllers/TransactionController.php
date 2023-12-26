@@ -165,7 +165,7 @@ class TransactionController extends Controller
 		//Jika transaksi lebih dari 12 jam maka tidak bisa di pay
 		if ($now->diffInHours($postCreatedAt) > 12) {
 			$editTransaction = Transaction::where('id', $request->id)->first();
-			//$editTransaction->update(['status' => 'Expired']);
+			$editTransaction->update(['status' => 'Expired']);
 			return response()->json(['expired' => 'Transaksi ini expired, gabisa dilanjutin guys!']);
 		}
 
