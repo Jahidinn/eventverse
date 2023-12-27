@@ -33,14 +33,14 @@
                         <div class="col-md-12 row card-body px-3 pb-3">
                             <div class="col-9">
                                 {{-- Event --}}
-                                <small>
+                                <small class="text-info title-manage-event">
                                     @php
                                         $title = $myevent->event->title . ' (' . $myevent->ticket->ticket_name . ')';
                                         if (strlen($title) > 50) {
                                             $title = substr($title, 0, 50) . '...';
                                         }
                                     @endphp
-                                    {{ $title }}
+                                    <b>{{ $title }}</b>
                                 </small>
                                 <br>
 
@@ -104,7 +104,7 @@
                                     @elseif($myevent->status == 'Expired')
                                         {{-- IF EXPIRED --}}
                                         <button type="button" class="btn btn-info btn-sm detail-myevent"
-                                            data-id="{{ $myevent->id }}"><i class="fas fa-list"></i></button>
+                                            data-id="{{ $myevent->id }}"><i class="fas fa-list"></i> Lihat detail</button>
                                         <button type="button" class="btn btn-danger btn-sm" disabled
                                             data-id="{{ $myevent->id }}">
                                             <i class="fas fa-trash-alt"></i>

@@ -73,7 +73,7 @@
 
                 <li class="nav-item">
                     <a href="/dashboard/event-checkin"
-                        class="nav-link {{ Request::is('dashboard/transaction-report*') ? 'active' : '' }}">
+                        class="nav-link {{ Request::is('dashboard/event-checkin*') ? 'active' : '' }}">
                         <i class="nav-icon fas fa-check-square"></i>
                         <p>Check in Peserta</p>
                     </a>

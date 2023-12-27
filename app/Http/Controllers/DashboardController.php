@@ -149,7 +149,16 @@ class DashboardController extends Controller
 		return response()->json(['data' => $data]);
 	}
 
-	public function transactionReport()
+	public function transactionReport(Request $request)
 	{
+		$user_id = auth()->user()->id;
+		$search = $request->key;
+
+		$listEvent = Event::where('title', 'like', '%' . $search . '%')->where('user_id', $user_id)->paginate(2)->withQueryString();
+
+
+		return view('dashboard.page-transaction-report', [
+			'listEvent' => $listEvent,
+		]);
 	}
 }

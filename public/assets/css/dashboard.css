@@ -8,7 +8,7 @@
 .myevent-container-img {
 	width: 80px;
 	height:80px;
-	background-color:rgb(185, 121, 121);
+	
 	margin: 0 auto;
 	position: relative;
 	overflow: hidden;
@@ -21,7 +21,7 @@
 	height:100%;
 	object-fit:cover;
 	border-radius: 5px;
-	object-position: center;
+	object-position: center; 
 }
 
 .border-rounded{
@@ -42,6 +42,38 @@
 	color: #FFF;
 	background: rgba(108, 88, 179, 0.75);
 	border: 2px solid rgba(108, 89, 179, 0.75);
+}
+
+.manajemen-event-box .transaction-button{
+	font-family: Raleway-SemiBold;
+	font-size: 13px;
+	color: #FFF;
+	letter-spacing: 1px;
+	line-height: 15px;
+	border: 2px solid rgba(58, 133, 191, 0.75);
+	border-radius: 40px;
+	background-color: rgba(58, 133, 191, 0.75);
+	transition: all 0.3s ease 0s;
+}
+.manajemen-event-box .transaction-button:hover{
+	background: transparent;
+	color: rgba(58, 133, 191, 0.75);
+	border: 2px solid rgba(58, 133, 191, 0.75);
+}
+
+.manajemen-event-box .dana{
+	font-size: 13px;
+	color: #28a745;
+	letter-spacing: 1px;
+	line-height: 15px;
+	border: 2px solid rgba(103, 192, 103, 0.75);
+	background: transparent;
+	transition: all 0.3s ease 0s;
+}
+.manajemen-event-box .dana:hover{
+	background-color: rgba(103, 192, 103, 0.75);
+	color: #FFF;
+	border: 2px solid rgba(103, 192, 103, 0.75);
 }
 
 .bg-card-blue {
