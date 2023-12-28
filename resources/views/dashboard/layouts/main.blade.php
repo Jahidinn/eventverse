@@ -249,9 +249,11 @@
 
         /* Dengan Rupiah */
         var dengan_rupiah = document.getElementById('ticket_price');
-        dengan_rupiah.addEventListener('keyup', function(e) {
-            dengan_rupiah.value = formatRupiah(this.value, 'Rp. ');
-        });
+        if (dengan_rupiah) {
+            dengan_rupiah.addEventListener('keyup', function(e) {
+                dengan_rupiah.value = formatRupiah(this.value, 'Rp. ');
+            });
+        }
 
         /* Fungsi */
         function formatRupiah(angka, prefix) {
@@ -473,6 +475,13 @@
                 }
             });
         });
+
+        $('body').on('click', '#detailReportButton', function(e) {
+            e.preventDefault();
+            console.log('hahaha');
+            $('#detailReportTransaksi').modal('show');
+
+        })
     </script>
 
     @stack('js-myevent')

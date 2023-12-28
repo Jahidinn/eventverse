@@ -52,17 +52,23 @@
                                             $title = substr($title, 0, 61) . '...';
                                         }
                                     @endphp
+                                    <span class="text-info title-manage-event"><b>{{ $title }}</b></span>
 
-                                    <a href="/event/{{ $event->slug }}"
-                                        class="text-info title-manage-event"><b>{{ $title }}</b>
-                                    </a>
                                     <br>
-                                    <button type="button" class="btn dana btn-sm mt-2 px-3 edit-ticket-button"
-                                        data-id="{{ $event->id }}" data-event="{{ $event->title }}">
-                                        <i class="fas fa-wallet"></i> <b>Rp {{ number_format($totalDana, 0, ',', '.') }}</b>
+
+                                    <button type="button" class="btn p-0" id="detailReportButton" data-toggle="tooltip"
+                                        data-placement="bottom" title="Lihat detail" data-id="112">
+                                        <small><b class="text-success"><i class="fas fa-check-circle"></i> Rp Rp
+                                                {{ number_format($totalDana, 0, ',', '.') }}</b>
+                                        </small>
                                     </button>
+                                    {{-- <button type="button" class="btn dana btn-sm mt-1 px-3" data-id="{{ $event->id }}"
+                                        data-event="{{ $event->title }}">
+                                        <i class="fas fa-wallet"></i> <b></b>
+                                    </button> --}}
                                 </div>
                             </div>
+
                             <hr class="mx-2 my-2">
                             {{-- Button edit tiket & form --}}
                             <div class="col-md-12 pb-2 card-body pt-1 pb-2 px-3">
@@ -90,4 +96,48 @@
             </div>
         </div>
     </section>
+
+    <!-- Modal detail -->
+    <div class="modal fade" id="detailReportTransaksi" tabindex="-1" aria-labelledby="detailReportTransaksiLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="detailReportTransaksiLabel">Laporan transaksi</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-6">Peserta</div>
+                        <div class="col-6">120</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">Penjualan Tiket</div>
+                        <div class="col-6">Rp 12.000</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">Biaya Transaksi</div>
+                        <div class="col-6">Rp 12.000</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">Dana di tarik</div>
+                        <div class="col-6">Rp 0</div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-6"><b>Total SALDO</b></div>
+                        <div class="col-6"><b>Rp 0</b></div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal"><i
+                            class="fas fa-times-circle"></i> Close
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection

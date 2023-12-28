@@ -39,8 +39,13 @@
                         text: "payment failed!!",
                         allowOutsideClick: false,
                         allowEscapeKey: false,
+                    }).then((result) => {
+                        /* Read more about isConfirmed, isDenied below */
+                        if (result.isConfirmed) {
+                            location.reload();
+                        }
                     });
-                    console.log(result);
+                    //console.log(result);
                 },
                 onClose: function() {
                     $('#pay-button').html("<i class='fas fa-check'></i> Bayar sekarang");
@@ -51,6 +56,11 @@
                         text: "you closed the popup without finishing the payment!",
                         allowOutsideClick: false,
                         allowEscapeKey: false,
+                    }).then((result) => {
+                        /* Read more about isConfirmed, isDenied below */
+                        if (result.isConfirmed) {
+                            location.reload();
+                        }
                     });
                 }
             })
