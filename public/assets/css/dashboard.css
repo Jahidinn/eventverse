@@ -78,6 +78,11 @@
 	border: 2px solid rgba(103, 192, 103, 0.75);
 }
 
+#detailReportButton:hover{
+	font-size: 17px;
+	transition: 0.5s;
+}
+
 .bg-card-blue {
 	background-color: rgb(235, 245, 251) !important;
 	box-shadow: none;

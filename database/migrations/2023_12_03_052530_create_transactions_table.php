@@ -26,6 +26,7 @@ return new class extends Migration
 			$table->integer('is_login')->default(0);
 			$table->integer('user_login_id')->default(0);
 			$table->date('checkin')->nullable();
+			$table->date('admin_check')->nullable();
 			$table->timestamp('created_at')->useCurrent();
 			$table->timestamp('updated_at')->useCurrent();
 		});

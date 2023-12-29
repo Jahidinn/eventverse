@@ -476,9 +476,24 @@
             });
         });
 
+        //Menampilkan saldo pada modal
         $('body').on('click', '#detailReportButton', function(e) {
             e.preventDefault();
-            console.log('hahaha');
+            var id = $(this).data('id')
+            var jumlahPeserta = $(this).data('peserta')
+            var jumlahTicket = $(this).data('ticket')
+            var jumlahPemasukan = $(this).data('pemasukan')
+            var jumlahAdminFee = $(this).data('admin_fee')
+            var jumlahPenarikan = $(this).data('penarikan')
+            var jumlahSaldoAkhir = $(this).data('saldo_akhir')
+
+            $('#total-peserta').text(jumlahPeserta)
+            $('#kategori-tiket').text(jumlahTicket)
+            $('#pemasukan').text(jumlahPemasukan.toLocaleString('id-ID'))
+            $('#admin-fee').text(jumlahAdminFee.toLocaleString('id-ID'))
+            $('#penarikan').text(jumlahPenarikan.toLocaleString('id-ID'))
+            $('#saldo_akhir').text(jumlahSaldoAkhir.toLocaleString('id-ID'))
+
             $('#detailReportTransaksi').modal('show');
 
         })

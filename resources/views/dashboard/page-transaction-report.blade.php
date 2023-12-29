@@ -34,18 +34,90 @@
 
                                     @php
 
+                                        //Biaya admin untuk customer
                                         $biayaAdmin = config('app.biaya_admin');
-                                        $totalEvent = App\Models\Transaction::where('event_id', $event->id)
-                                            ->where('status', 'Expired')
-                                            ->count();
-                                        $totalBiayaAdmin = $biayaAdmin * $totalEvent;
 
-                                        $totalDana = App\Models\Transaction::where('event_id', $event->id)
-                                            ->where('status', 'Expired')
+                                        //Total transaksi sukses
+                                        $totalPeserta = App\Models\Transaction::where('event_id', $event->id)
+                                            ->where('status', 'Paid')
+                                            ->count();
+
+                                        //Total biaya admin
+                                        $biayaAdminPeserta = $biayaAdmin * $totalPeserta;
+
+                                        //Total dana sebelum dikurangi biaya admin
+                                        $totalTransaksi = App\Models\Transaction::where('event_id', $event->id)
+                                            ->where('status', 'Paid')
                                             ->sum('total_price');
 
-                                        //Lakukan pengurangan biaya admin dari midtrans
-                                        //...............
+                                        //Pengurangan total dana dikurangi biaya admin dari user (Total dana masuk)
+                                        $totalDana = $totalTransaksi - $biayaAdminPeserta;
+
+                                        $totalTiket = App\Models\Ticket::where('event_id', $event->id)->count();
+
+                                        //Mengkategorikan dana berdasarkan metode pembayaran
+                                        //Metode BANK TRANSFER (VA)
+                                        $qty_bank_tf = App\Models\Transaction::where('event_id', $event->id)
+                                            ->where('status', 'Paid')
+                                            ->where('payment_type', 'bank_transfer')
+                                            ->count();
+
+                                        $dana_bank_tf =
+                                            App\Models\Transaction::where('event_id', $event->id)
+                                                ->where('status', 'Paid')
+                                                ->where('payment_type', 'bank_transfer')
+                                                ->sum('total_price') -
+                                            $biayaAdmin * $qty_bank_tf;
+
+                                        // Bank TF : 1.5% + 4500 per transaksi
+                                        $admin_bank_tf = 4500 * $qty_bank_tf + (1.5 / 100) * $dana_bank_tf;
+
+                                        $total_dana_bank_tf = $dana_bank_tf - $admin_bank_tf;
+
+                                        //Metode CREDIT CARD
+
+                                        $qty_credit_card = App\Models\Transaction::where('event_id', $event->id)
+                                            ->where('status', 'Paid')
+                                            ->where('payment_type', 'credit_card')
+                                            ->count();
+
+                                        $dana_credit_card =
+                                            App\Models\Transaction::where('event_id', $event->id)
+                                                ->where('status', 'Paid')
+                                                ->where('payment_type', 'credit_card')
+                                                ->sum('total_price') -
+                                            $biayaAdmin * $qty_credit_card;
+
+                                        //Credit card : 3.5% + 2500 per transaksi
+                                        $admin_credit_card = 2500 * $qty_credit_card + (3.5 / 100) * $dana_credit_card;
+
+                                        $total_dana_credit_card = $dana_credit_card - $admin_credit_card;
+
+                                        //Metode Lain (Qris, Gopay, Shopeepay, Dana, Linkaja)
+
+                                        $qty_lain = App\Models\Transaction::where('event_id', $event->id)
+                                            ->where('status', 'Paid')
+                                            ->whereNotIn('payment_type', ['bank_transfer', 'credit_card'])
+                                            ->count();
+
+                                        $dana_lain =
+                                            App\Models\Transaction::where('event_id', $event->id)
+                                                ->where('status', 'Paid')
+                                                ->whereNotIn('payment_type', ['bank_transfer', 'credit_card'])
+                                                ->sum('total_price') -
+                                            $biayaAdmin * $qty_lain;
+
+                                        // Pembayaran Lain : 3% pertransaksi / per tiket
+                                        $admin_lain = (3 / 100) * $dana_lain;
+
+                                        $total_dana_lain = $dana_lain - $admin_lain;
+
+                                        //Pengurangan biaya admin penyelenggara
+                                        $eventConnectFee = $admin_bank_tf + $admin_credit_card + $admin_lain;
+
+                                        //Belum dikurangi penarikan dana;
+
+                                        $danaBersih = $total_dana_bank_tf + $total_dana_credit_card + $total_dana_lain;
 
                                         $title = $event->title;
                                         if (strlen($title) > 61) {
@@ -56,10 +128,14 @@
 
                                     <br>
 
-                                    <button type="button" class="btn p-0" id="detailReportButton" data-toggle="tooltip"
-                                        data-placement="bottom" title="Lihat detail" data-id="112">
+                                    <button type="button" class="btn p-0 shadow-none" id="detailReportButton"
+                                        data-toggle="tooltip" data-placement="bottom" title="Klik untuk Lihat detail"
+                                        data-id="{{ $event->id }}" data-peserta="{{ $totalPeserta }}"
+                                        data-pemasukan="{{ $totalDana }}" data-admin_fee="{{ $eventConnectFee }}"
+                                        data-ticket="{{ $totalTiket }}" data-saldo_akhir="{{ $danaBersih }}"
+                                        data-penarikan="0">
                                         <small><b class="text-success"><i class="fas fa-check-circle"></i> Rp Rp
-                                                {{ number_format($totalDana, 0, ',', '.') }}</b>
+                                                {{ number_format($danaBersih, 0, ',', '.') }}</b>
                                         </small>
                                     </button>
                                     {{-- <button type="button" class="btn dana btn-sm mt-1 px-3" data-id="{{ $event->id }}"
@@ -110,26 +186,30 @@
                 </div>
 
                 <div class="modal-body">
-                    <div class="row">
+                    <div class="row mt-1">
                         <div class="col-6">Peserta</div>
-                        <div class="col-6">120</div>
+                        <div class="col-6"><b id="total-peserta">0</b> orang</div>
                     </div>
-                    <div class="row">
-                        <div class="col-6">Penjualan Tiket</div>
-                        <div class="col-6">Rp 12.000</div>
+                    <div class="row mt-1">
+                        <div class="col-6">Kategori Tiket</div>
+                        <div class="col-6"><b id="kategori-tiket">0</b> Tiket</div>
                     </div>
-                    <div class="row">
+                    <div class="row mt-1">
+                        <div class="col-6">Transaksi masuk</div>
+                        <div class="col-6"><b>Rp <span id="pemasukan">0</span></b></div>
+                    </div>
+                    <div class="row mt-1">
                         <div class="col-6">Biaya Transaksi</div>
-                        <div class="col-6">Rp 12.000</div>
+                        <div class="col-6"><b>Rp <span id="admin-fee">0</span></b></div>
                     </div>
-                    <div class="row">
+                    <div class="row mt-1">
                         <div class="col-6">Dana di tarik</div>
-                        <div class="col-6">Rp 0</div>
+                        <div class="col-6"><b>Rp <span id="penarikan">0</span></b></div>
                     </div>
                     <hr>
-                    <div class="row">
+                    <div class="row text-success">
                         <div class="col-6"><b>Total SALDO</b></div>
-                        <div class="col-6"><b>Rp 0</b></div>
+                        <div class="col-6"><b>Rp <span id="saldo_akhir">0</span></b></div>
                     </div>
                 </div>
                 <div class="modal-footer">

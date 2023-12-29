@@ -81,13 +81,7 @@
 
             </div>
             <div class="card-body px-3 daftar-peserta" hidden>
-                <div class="card mt-1 bg-card-blue">
-                    <div class="col-md-12 card-body px-3 pb-2 pt-2">
-                        <span class="title-daftar-peserta"></span>
-                        <br>
-                        <b class="text-success">Total peserta : <span class="jumlah-peserta">000</span></b>
-                    </div>
-                </div>
+
                 <div class="input-group mb-2">
                     <input type="text" class="form-control shadow-none" placeholder="Cari peserta"
                         aria-label="Cari data peserta" id="search-participant" aria-describedby="button-addon2">
@@ -96,11 +90,25 @@
                             data-toggle="modal" data-target="#filterModal"><i class="fas fa-filter"></i> Filter</button>
                     </div>
                 </div>
+
+                <div class="card mt-1 bg-card-blue">
+                    <div class="col-md-12 card-body px-3 pb-2 pt-2">
+                        <span class="title-daftar-peserta"></span>
+                        <br>
+                        <b class="text-secondary">
+                            <span class="result-label text-secondary">Total peserta
+                            </span> :
+                            <span class="jumlah-peserta text-success">000</span>
+                        </b>
+                    </div>
+                </div>
+
                 <div class="mb-2">
                     <button class="btn btn-success kembali"><i class="fas fa-chevron-circle-left"></i> Kembali</button>
                     <button class="btn btn-success"><i class="fas fa-file-excel"></i> Download data</button>
                 </div>
                 <div class="table-responsive">
+                    <small>jsjsj</small>
                     <table class="table table-striped w-100" id="data-peserta">
                         <thead class="bg-info">
                             <tr>
@@ -193,7 +201,7 @@
                     <div class="form-group">
                         <select class="form-control" id="filter-value">
                             <option value="">Semua status</option>
-                            <option value="Paid">Sukses</option>
+                            <option value="Sukses">Sukses</option>
                             <option value="Pending">Pending</option>
                             <option value="Expired">Expired</option>
                             <option value="Unpaid">Unpaid</option>

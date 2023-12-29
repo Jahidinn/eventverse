@@ -20,6 +20,7 @@ return new class extends Migration
 			$table->text('profil_picture')->nullable();
 			$table->integer('no_rekening')->unique()->nullable();
 			$table->foreignId('category_id')->default(1);
+			$table->foreignId('status')->default(1);
 			$table->string('password');
 			$table->timestamp('email_verified_at')->nullable();
 			$table->rememberToken();

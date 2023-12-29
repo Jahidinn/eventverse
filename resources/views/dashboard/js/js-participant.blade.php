@@ -48,13 +48,35 @@
 
             $('#search-participant').keyup(function() {
                 dataPeserta.search($(this).val()).draw();
+
+                if ($(this).val() != '') {
+                    var totalPesertaLabel = $(this).val();
+                    $('.result-label').text('Hasil Pencarian');
+                } else {
+                    $('.result-label').text('Peserta');
+                }
             });
 
             $('#get-filter').on('click', function(e) {
                 var status = $('#filter-value').val();
                 $('#filterModal').modal('hide')
                 dataPeserta.column(4).search(status).draw();
+
+                if (status == '') {
+                    var totalPesertaLabel = $(this).val();
+                    $('.result-label').text('Total Peserta');
+                } else {
+                    $('.result-label').text('Transaksi ' + status);
+                }
+
             })
+
+            dataPeserta.on("draw", function() {
+                updateTotal = dataPeserta.rows({
+                    search: 'applied'
+                }).count();
+                $('.jumlah-peserta').text(updateTotal);
+            });
         })
 
     })
