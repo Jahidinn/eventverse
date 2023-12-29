@@ -134,7 +134,7 @@
                                         data-pemasukan="{{ $totalDana }}" data-admin_fee="{{ $eventConnectFee }}"
                                         data-ticket="{{ $totalTiket }}" data-saldo_akhir="{{ $danaBersih }}"
                                         data-penarikan="0">
-                                        <small><b class="text-success"><i class="fas fa-check-circle"></i> Rp Rp
+                                        <small><b class="text-success"><i class="fas fa-check-circle"></i> Rp
                                                 {{ number_format($danaBersih, 0, ',', '.') }}</b>
                                         </small>
                                     </button>

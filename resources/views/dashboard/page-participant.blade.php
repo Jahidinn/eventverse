@@ -31,7 +31,7 @@
                         <div class="col-md-12 row card-body px-3 pb-3">
                             <div class="col-9">
                                 {{-- Event --}}
-                                <span>
+                                <b class="text-secondary title-manage-event">
                                     @php
                                         $title = $event->title;
                                         if (strlen($title) > 44) {
@@ -39,7 +39,7 @@
                                         }
                                     @endphp
                                     {{ $title }}
-                                </span>
+                                </b>
                                 <br>
 
                                 @php
@@ -53,7 +53,7 @@
                                     <b class="text-success"><span>{{ $participant }}</span> PENDAFTAR</b>
                                 </small>
 
-                                <br>
+                                <hr class="my-3">
 
                                 <div class="mt-2">
                                     <button type="button" class="btn btn-info btn-sm border-rounded px-3 detail-peserta"
@@ -82,8 +82,8 @@
             </div>
             <div class="card-body px-3 daftar-peserta" hidden>
 
-                <div class="input-group mb-2">
-                    <input type="text" class="form-control shadow-none" placeholder="Cari peserta"
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control shadow-none" placeholder="Cari data peserta"
                         aria-label="Cari data peserta" id="search-participant" aria-describedby="button-addon2">
                     <div class="input-group-append">
                         <button class="btn btn-outline-info shadow-none" type="button" id="button-addon2"
@@ -107,8 +107,8 @@
                     <button class="btn btn-success kembali"><i class="fas fa-chevron-circle-left"></i> Kembali</button>
                     <button class="btn btn-success"><i class="fas fa-file-excel"></i> Download data</button>
                 </div>
+                <small class="text-danger">* Klik header tabel untuk mengelompokan data sesuai header yang di pilih</small>
                 <div class="table-responsive">
-                    <small>jsjsj</small>
                     <table class="table table-striped w-100" id="data-peserta">
                         <thead class="bg-info">
                             <tr>

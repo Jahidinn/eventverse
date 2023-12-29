@@ -161,4 +161,61 @@ class DashboardController extends Controller
 			'listEvent' => $listEvent,
 		]);
 	}
+
+	public function eventCheckin(Request $request)
+	{
+		$user_id = auth()->user()->id;
+		$search = $request->key;
+
+		$dataEvent = Event::where('title', 'like', '%' . $search . '%')
+			->where('user_id', $user_id)
+			->paginate(2)
+			->withQueryString();
+
+		return view('dashboard.page-checkin-event', [
+			'dataEvent' => $dataEvent,
+		]);
+	}
+
+	public function getParticipantCheckin(Request $request)
+	{
+		if (!auth()->user()) {
+			return response()->json(['error' => 'Gagal!']);
+		}
+
+		$dataParticipant = Transaction::with(['event', 'ticket'])
+			->where('event_id', $request->id)
+			->where('status', 'Paid')
+			->orderByRaw('id DESC')
+			->get();
+
+		return DataTables::of($dataParticipant)
+			->addIndexColumn()
+			->addColumn('checkin_action', function ($dataParticipant) {
+				return view('dashboard.components.column-action-checkin')->with(['data' => $dataParticipant]);
+			})
+			->make(true);
+	}
+
+	public function checkinProcess(Request $request)
+	{
+
+		$timestamp = Carbon::now()->timestamp;
+		$tanggalCheckin = Carbon::createFromTimestamp($timestamp)->format('Y-m-d H:i:s');
+
+		$checkinTransaction = Transaction::where('transaction_id', $request->id)->first();
+
+		//Jika Tidak ada ID
+		if (!$checkinTransaction) {
+			return response()->json(['error' => 'Masukan ID dengan benar!']);
+		}
+
+		if (!empty($checkinTransaction->checkin)) {
+			return response()->json(['error' => 'Sudah di check in guys!']);
+		}
+
+		//Jika ID ada
+		$checkinTransaction->update(['checkin' => $tanggalCheckin]);
+		return response()->json(['success' => 'Berhasil checkin!']);
+	}
 }

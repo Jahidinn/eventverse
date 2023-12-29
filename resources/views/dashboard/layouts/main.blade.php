@@ -501,6 +501,7 @@
 
     @stack('js-myevent')
     @stack('js-participant')
+    @stack('js-checkin')
 
 </body>
 

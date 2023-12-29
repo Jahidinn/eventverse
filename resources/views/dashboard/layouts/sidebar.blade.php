@@ -25,7 +25,7 @@
                 data-accordion="false">
                 <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
-                <li class="nav-header">DASHBOARD</li>
+                <li class="nav-header">PESERTA</li>
                 <li class="nav-item">
                     <a href="/dashboard" class="nav-link {{ Request::is('dashboard') ? 'active' : '' }}">
                         <i class="nav-icon fas fa-home"></i>
@@ -45,7 +45,7 @@
                 </li>
 
 
-                <li class="nav-header">EVENT CONTROL</li>
+                <li class="nav-header">EVENT MANAGER</li>
 
                 <li class="nav-item">
                     <a href="/dashboard/manajemen-event"

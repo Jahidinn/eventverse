@@ -46,7 +46,7 @@
                                         <span>{{ $event->created_at->format('d-m-Y') }}</span></small><br>
                                     <div class="mt-2">
                                         <a href="/event/{{ $event->slug }}/edit" type="button"
-                                            class="btn btn-info btn-sm"><i class="fas fa-list"></i>
+                                            class="btn btn-info btn-sm"><i class="fas fa-edit"></i>
                                             Edit event</a>
                                         <button type="button" class="btn btn-danger btn-sm delete-event"
                                             data-id="{{ $event->id }}"><i class="fas fa-trash-alt"></i></button>

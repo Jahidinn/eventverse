@@ -10,6 +10,8 @@ use App\Models\Theme;
 use App\Models\Ticket;
 use App\Models\Category;
 use App\Models\CustomForm;
+use App\Models\Transaction;
+use Illuminate\Support\Str;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -75,8 +77,8 @@ class DatabaseSeeder extends Seeder
 			'location_city' => null,
 			'location_detail' => null,
 			'price_category' => 1,
-			'start_date' => Carbon::parse('2023-01-01')->format('Y-m-d'),
-			'end_date' => Carbon::parse('2023-01-01')->format('Y-m-d'),
+			'start_date' => Carbon::parse('2024-01-01')->format('Y-m-d'),
+			'end_date' => Carbon::parse('2024-01-01')->format('Y-m-d'),
 			'image' => 'example1.jpg',
 		]);
 		Event::create([
@@ -92,8 +94,8 @@ class DatabaseSeeder extends Seeder
 			'location_city' => null,
 			'location_detail' => null,
 			'price_category' => 1,
-			'start_date' => Carbon::parse('2023-01-01')->format('Y-m-d'),
-			'end_date' => Carbon::parse('2023-01-01')->format('Y-m-d'),
+			'start_date' => Carbon::parse('2024-01-01')->format('Y-m-d'),
+			'end_date' => Carbon::parse('2024-01-01')->format('Y-m-d'),
 			'image' => 'example2.jpg',
 		]);
 		Event::create([
@@ -109,8 +111,8 @@ class DatabaseSeeder extends Seeder
 			'location_city' => null,
 			'location_detail' => null,
 			'price_category' => 1,
-			'start_date' => Carbon::parse('2023-01-01')->format('Y-m-d'),
-			'end_date' => Carbon::parse('2023-01-01')->format('Y-m-d'),
+			'start_date' => Carbon::parse('2024-01-01')->format('Y-m-d'),
+			'end_date' => Carbon::parse('2024-01-01')->format('Y-m-d'),
 			'image' => 'example3.jpg',
 		]);
 		Event::create([
@@ -126,8 +128,8 @@ class DatabaseSeeder extends Seeder
 			'location_city' => null,
 			'location_detail' => null,
 			'price_category' => 1,
-			'start_date' => Carbon::parse('2023-01-01')->format('Y-m-d'),
-			'end_date' => Carbon::parse('2023-01-01')->format('Y-m-d'),
+			'start_date' => Carbon::parse('2024-01-01')->format('Y-m-d'),
+			'end_date' => Carbon::parse('2024-01-01')->format('Y-m-d'),
 			'image' => 'example4.jpg',
 		]);
 
@@ -144,8 +146,8 @@ class DatabaseSeeder extends Seeder
 			'location_city' => null,
 			'location_detail' => null,
 			'price_category' => 1,
-			'start_date' => Carbon::parse('2023-01-01')->format('Y-m-d'),
-			'end_date' => Carbon::parse('2023-01-01')->format('Y-m-d'),
+			'start_date' => Carbon::parse('2024-01-01')->format('Y-m-d'),
+			'end_date' => Carbon::parse('2024-01-01')->format('Y-m-d'),
 			'image' => 'example5.jpg',
 		]);
 
@@ -154,8 +156,8 @@ class DatabaseSeeder extends Seeder
 			"ticket_name" => 'Example ticket 1',
 			"ticket_description" => 'Ticket description 1',
 			"ticket_quota" => 100,
-			"ticket_start" => Carbon::parse('2023-01-01')->format('Y-m-d'),
-			"ticket_deadline" => Carbon::parse('2023-01-01')->format('Y-m-d'),
+			"ticket_start" => Carbon::parse('2024-01-01')->format('Y-m-d'),
+			"ticket_deadline" => Carbon::parse('2024-01-01')->format('Y-m-d'),
 			"ticket_price" => 60000,
 			"ticket_button" => 'BELI TIKET',
 		]);
@@ -164,8 +166,8 @@ class DatabaseSeeder extends Seeder
 			"ticket_name" => 'Example ticket 2',
 			"ticket_description" => 'Ticket description 2',
 			"ticket_quota" => 200,
-			"ticket_start" => Carbon::parse('2023-01-01')->format('Y-m-d'),
-			"ticket_deadline" => Carbon::parse('2023-01-01')->format('Y-m-d'),
+			"ticket_start" => Carbon::parse('2024-01-01')->format('Y-m-d'),
+			"ticket_deadline" => Carbon::parse('2024-01-01')->format('Y-m-d'),
 			"ticket_price" => 50000,
 			"ticket_button" => 'BELI TIKET',
 		]);
@@ -174,8 +176,8 @@ class DatabaseSeeder extends Seeder
 			"ticket_name" => 'Example ticket 3',
 			"ticket_description" => 'Ticket description 3',
 			"ticket_quota" => 300,
-			"ticket_start" => Carbon::parse('2023-01-01')->format('Y-m-d'),
-			"ticket_deadline" => Carbon::parse('2023-01-01')->format('Y-m-d'),
+			"ticket_start" => Carbon::parse('2024-01-01')->format('Y-m-d'),
+			"ticket_deadline" => Carbon::parse('2024-01-01')->format('Y-m-d'),
 			"ticket_price" => 40000,
 			"ticket_button" => 'BELI TIKET',
 		]);
@@ -184,8 +186,8 @@ class DatabaseSeeder extends Seeder
 			"ticket_name" => 'Example ticket 4',
 			"ticket_description" => 'Ticket description 4',
 			"ticket_quota" => 400,
-			"ticket_start" => Carbon::parse('2023-01-01')->format('Y-m-d'),
-			"ticket_deadline" => Carbon::parse('2023-01-01')->format('Y-m-d'),
+			"ticket_start" => Carbon::parse('2024-01-01')->format('Y-m-d'),
+			"ticket_deadline" => Carbon::parse('2024-01-01')->format('Y-m-d'),
 			"ticket_price" => 10000,
 			"ticket_button" => 'BELI TIKET',
 		]);
@@ -194,8 +196,8 @@ class DatabaseSeeder extends Seeder
 			"ticket_name" => 'Example ticket 5',
 			"ticket_description" => 'Ticket description 5',
 			"ticket_quota" => 500,
-			"ticket_start" => Carbon::parse('2023-01-01')->format('Y-m-d'),
-			"ticket_deadline" => Carbon::parse('2023-01-01')->format('Y-m-d'),
+			"ticket_start" => Carbon::parse('2024-01-01')->format('Y-m-d'),
+			"ticket_deadline" => Carbon::parse('2024-01-01')->format('Y-m-d'),
 			"ticket_price" => 200000,
 			"ticket_button" => 'BELI TIKET',
 		]);
@@ -219,6 +221,30 @@ class DatabaseSeeder extends Seeder
 			"event_id" => 5,
 			"form_name" => 'KTP'
 		]);
+
+		$namaArray = [
+			'Anita', 'Budi', 'Citra', 'Dian', 'Eka',
+			'Fandi', 'Gita', 'Hendra', 'Indah', 'Joko',
+			'Kartika', 'Lukman', 'Mira', 'Nina', 'Oscar',
+		];
+
+		foreach ($namaArray as $nama) {
+			Transaction::create([
+				'ticket_id' => 2,
+				'event_id' => 2,
+				'name' => $nama,
+				'phone' => '0893762373334',
+				'email' => $nama . '@email.com',
+				'is_login' => 1,
+				'user_login_id' => 1,
+				'payment_type' => 'qris',
+				'quantity' => 1,
+				'total_price' => 50500,
+				'transaction_id' => 'EC-' . strtoupper(Str::random(10)),
+				'status' => 'Paid',
+			]);
+		}
+
 
 		// Seeder data privinsi dan kota
 		// php artisan migrate:fresh --seed && php artisan laravolt:indonesia:seed

@@ -115,6 +115,22 @@
 .data-pendaftar{
 	font-size: 14px;
 }
+.daftar-peserta .form-search{
+	padding-left: 2.3rem !important;
+	padding-bottom: 8px;
+}
+
+.daftar-peserta .form-control-icon {
+    position: absolute !important;
+    z-index: 20;
+    display: block;
+    width: 2.375rem;
+    height: 2.375rem;
+    line-height: 2.375rem;
+    text-align: center;
+    pointer-events: none;
+    color: #aaa;
+}
 
 @media only screen and (max-width: 800px) {
 	.title-manage-event{

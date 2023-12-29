@@ -37,9 +37,9 @@
         //     }]
         // });
 
-        $('#search-myevent').keyup(function() {
-            myeventTable.search($(this).val()).draw();
-        });
+        // $('#search-myevent').keyup(function() {
+        //     myeventTable.search($(this).val()).draw();
+        // });
 
         $('body').on('click', '.detail-myevent', function(e) {
             e.preventDefault();
