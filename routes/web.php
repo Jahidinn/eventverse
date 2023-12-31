@@ -49,6 +49,7 @@ Route::get('/dashboard/transaction-report', [DashboardController::class, 'transa
 Route::get('/dashboard/event-checkin', [DashboardController::class, 'eventCheckin'])->middleware('auth');
 Route::get('/dashboard/get-participan-checkin', [DashboardController::class, 'getParticipantCheckin'])->middleware('auth');
 Route::post('/dashboard/participant-checkin', [DashboardController::class, 'checkinProcess'])->middleware('auth');
+Route::post('/dashboard/withdraw-process', [DashboardController::class, 'withdraw'])->middleware('auth');
 
 Route::get('/get-cities/{code}', [EventController::class, 'getCities']);
 Route::get('/check-url', [EventController::class, 'cekUrl']);

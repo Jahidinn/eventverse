@@ -9,6 +9,7 @@ use App\Models\SnapToken;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
 use App\Models\TransactionForm;
+use App\Models\WithdrawData;
 use Yajra\DataTables\Facades\DataTables;
 
 class DashboardController extends Controller
@@ -217,5 +218,31 @@ class DashboardController extends Controller
 		//Jika ID ada
 		$checkinTransaction->update(['checkin' => $tanggalCheckin]);
 		return response()->json(['success' => 'Berhasil checkin!']);
+	}
+
+	public function withdraw(Request $request)
+	{
+		$data = [
+			'event_id' => $request->wdEventId,
+			'user_id' => $request->wdUserId,
+			'rekening' => $request->wdRekening,
+			'amount' => $request->wdAmount,
+			'status' => 'Proses',
+		];
+
+		//Proteksi siapa yang mencairkan
+		$user_id = auth()->user()->id;
+		$dataEvent = Event::where('id', $request->wdEventId)->where('user_id', $user_id)->first();
+
+		if (empty($dataEvent)) {
+			return response()->json(['error' => 'Pelanggaran!']);
+		}
+
+		$submitWithdraw = WithdrawData::create($data);
+
+		if (!$submitWithdraw) {
+			return response()->json(['error' => 'Gagal request withdraw!']);
+		}
+		return response()->json(['success' => 'Berhasil request penarikan dana!']);
 	}
 }

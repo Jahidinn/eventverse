@@ -22,7 +22,7 @@
                 <div class="table-responsive py-0 manajemen-event-box">
                     <form action="" method="GET">
                         <div class="p-0 form-inline mb-4">
-                            <input class="form-control col shadow-none" name="key" type="text"
+                            <input class="form-control col shadow-none" name="key" type="search"
                                 placeholder="Cari event ..." value="{{ request('key') }}">
                         </div>
                     </form>
@@ -149,12 +149,15 @@
                             {{-- Button edit tiket & form --}}
                             <div class="col-md-12 pb-2 card-body pt-1 pb-2 px-3">
 
-                                <button type="button" class="btn transaction-button btn-sm px-3 edit-ticket-button"
-                                    data-id="{{ $event->id }}" data-event="{{ $event->title }}">
+                                <button type="button" class="btn transaction-button btn-sm px-3 withdraw-button"
+                                    data-id="{{ $event->id }}" data-event="{{ $event->title }}"
+                                    data-peserta="{{ $totalPeserta }}" data-pemasukan="{{ $totalDana }}"
+                                    data-admin_fee="{{ $eventConnectFee }}" data-ticket="{{ $totalTiket }}"
+                                    data-saldo_akhir="{{ $danaBersih }}" data-penarikan="0">
                                     <i class="fas fa-download"></i> Tarik Dana
                                 </button>
 
-                                <button type="button" class="btn btn-sm px-3 transaction-button edit-formulir-button"
+                                <button type="button" class="btn btn-sm px-3 transaction-button history-withdraw"
                                     data-id="{{ $event->id }}" data-event="{{ $event->title }}">
                                     <i class="fas fa-history"></i> Riwayat
                                 </button>
@@ -217,6 +220,71 @@
                             class="fas fa-times-circle"></i> Close
                     </button>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal penarikan dana-->
+    <div class="modal fade" id="withdrawModal" tabindex="-1" aria-labelledby="withdrawModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="withdrawModalLabel">Penarikan dana</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form action="javascript:void(0)" id="withdraw-form">
+                    <div class="modal-body">
+                        <div class="row mt-1">
+                            <div class="col-6">Pemasukan</div>
+                            <div class="col-6"><b>Rp <span id="wd-pemasukan">0</span></b></div>
+                        </div>
+                        <div class="row mt-1">
+                            <div class="col-6">Admin fee</div>
+                            <div class="col-6"><b>Rp <span id="wd-admin">0</span></b></div>
+                        </div>
+                        <div class="row mt-1">
+                            <div class="col-6">History</div>
+                            <div class="col-6"><b>Rp <span id="wd-history">0</span></b></div>
+                        </div>
+                        <div class="row mt-1">
+                            <div class="col-6">Rekening</div>
+                            <div class="col-6"><b class="text-info"><span id="wd-rekening">0</span></b></div>
+                        </div>
+
+                        <hr>
+                        <div class="row text-success">
+                            <div class="col-6"><b>Saldo tersedia</b></div>
+                            <div class="col-6"><b>Rp <span id="wd-limit">0</span></b></div>
+                        </div>
+                        <hr class="mb-0">
+
+                        <small class="text-warning">Min penarikan <b>Rp 10.000</b></small>
+
+                        <div class="form-group mt-2">
+                            <label for="jumlah-penarikan">Jumlah penarikan</label>
+                            <input type="hidden" id="limit-withdraw">
+                            <input [value]="units * 600 + 2500 | number" type="text" class="form-control"
+                                id="jumlah-penarikan" placeholder="Rp 0" required>
+                            <small class="text-danger limit-notif" hidden>Maksimal penarikan <b>Rp <span
+                                        class="limit-notif-value"></span></b>
+                            </small>
+                            <input type="hidden" name="wdEventId" id="wd-event-id">
+                            <input type="hidden" name="wdUserId" value="{{ auth()->user()->id }}">
+                            <input type="hidden" name="wdRekening" value="{{ auth()->user()->no_rekening }}">
+                            <input type="hidden" name="wdAmount" id="jumlah-penarikan-fixed">
+                        </div>
+
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary" id="submit-withdraw"><i
+                                class="fas fa-wallet"></i> Tarik dana
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
