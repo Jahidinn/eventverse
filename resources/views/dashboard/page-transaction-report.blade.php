@@ -115,9 +115,10 @@
                                         //Pengurangan biaya admin penyelenggara
                                         $eventConnectFee = $admin_bank_tf + $admin_credit_card + $admin_lain;
 
-                                        //Belum dikurangi penarikan dana;
+                                        // penarikan dana;
+                                        $danaDitarik = App\Models\WithdrawData::where('event_id', $event->id)->sum('amount');
 
-                                        $danaBersih = $total_dana_bank_tf + $total_dana_credit_card + $total_dana_lain;
+                                        $danaBersih = $total_dana_bank_tf + $total_dana_credit_card + $total_dana_lain - $danaDitarik;
 
                                         $title = $event->title;
                                         if (strlen($title) > 61) {
@@ -130,12 +131,11 @@
 
                                     <button type="button" class="btn p-0 shadow-none" id="detailReportButton"
                                         data-toggle="tooltip" data-placement="bottom" title="Klik untuk Lihat detail"
-                                        data-id="{{ $event->id }}" data-peserta="{{ $totalPeserta }}"
-                                        data-pemasukan="{{ $totalDana }}" data-admin_fee="{{ $eventConnectFee }}"
-                                        data-ticket="{{ $totalTiket }}" data-saldo_akhir="{{ $danaBersih }}"
-                                        data-penarikan="0">
-                                        <small><b class="text-success"><i class="fas fa-check-circle"></i> Rp
-                                                {{ number_format($danaBersih, 0, ',', '.') }}</b>
+                                        data-id="{{ $event->id }}">
+                                        <small>
+                                            <b class="text-success"><i class="fas fa-check-circle"></i> Rp
+                                                <span
+                                                    id="view-total-dana-button">{{ number_format($danaBersih, 0, ',', '.') }}</span></b>
                                         </small>
                                     </button>
                                     {{-- <button type="button" class="btn dana btn-sm mt-1 px-3" data-id="{{ $event->id }}"
@@ -150,10 +150,7 @@
                             <div class="col-md-12 pb-2 card-body pt-1 pb-2 px-3">
 
                                 <button type="button" class="btn transaction-button btn-sm px-3 withdraw-button"
-                                    data-id="{{ $event->id }}" data-event="{{ $event->title }}"
-                                    data-peserta="{{ $totalPeserta }}" data-pemasukan="{{ $totalDana }}"
-                                    data-admin_fee="{{ $eventConnectFee }}" data-ticket="{{ $totalTiket }}"
-                                    data-saldo_akhir="{{ $danaBersih }}" data-penarikan="0">
+                                    data-id="{{ $event->id }}" data-event="{{ $event->title }}">
                                     <i class="fas fa-download"></i> Tarik Dana
                                 </button>
 
@@ -270,7 +267,7 @@
                             <small class="text-danger limit-notif" hidden>Maksimal penarikan <b>Rp <span
                                         class="limit-notif-value"></span></b>
                             </small>
-                            <input type="hidden" name="wdEventId" id="wd-event-id">
+                            <input type="hidden" name="event_id" id="wd-event-id">
                             <input type="hidden" name="wdUserId" value="{{ auth()->user()->id }}">
                             <input type="hidden" name="wdRekening" value="{{ auth()->user()->no_rekening }}">
                             <input type="hidden" name="wdAmount" id="jumlah-penarikan-fixed">

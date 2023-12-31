@@ -46,6 +46,7 @@ Route::get('/dashboard/get-participant', [DashboardController::class, 'getPartic
 Route::get('/dashboard/get-customform', [DashboardController::class, 'getCustomformParticipant'])->middleware('auth');
 Route::post('/dashboard/delete-myevent', [DashboardController::class, 'deleteMyevent'])->middleware('auth');
 Route::get('/dashboard/transaction-report', [DashboardController::class, 'transactionReport'])->middleware('auth');
+Route::get('/dashboard/get-transaction-report', [DashboardController::class, 'getTransactionReport'])->middleware('auth');
 Route::get('/dashboard/event-checkin', [DashboardController::class, 'eventCheckin'])->middleware('auth');
 Route::get('/dashboard/get-participan-checkin', [DashboardController::class, 'getParticipantCheckin'])->middleware('auth');
 Route::post('/dashboard/participant-checkin', [DashboardController::class, 'checkinProcess'])->middleware('auth');

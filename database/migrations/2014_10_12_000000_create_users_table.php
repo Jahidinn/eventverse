@@ -18,7 +18,8 @@ return new class extends Migration
 			$table->string('email')->unique();
 			$table->string('no_tlp')->unique()->nullable();
 			$table->text('profil_picture')->nullable();
-			$table->integer('no_rekening')->unique()->nullable();
+			$table->bigInteger('no_rekening')->unique()->nullable();
+			$table->string('bank')->nullable();
 			$table->foreignId('category_id')->default(1);
 			$table->foreignId('status')->default(1);
 			$table->string('password');

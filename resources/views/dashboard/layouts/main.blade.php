@@ -480,21 +480,31 @@
         $('body').on('click', '#detailReportButton', function(e) {
             e.preventDefault();
             var id = $(this).data('id')
-            var jumlahPeserta = $(this).data('peserta')
-            var jumlahTicket = $(this).data('ticket')
-            var jumlahPemasukan = $(this).data('pemasukan')
-            var jumlahAdminFee = $(this).data('admin_fee')
-            var jumlahPenarikan = $(this).data('penarikan')
-            var jumlahSaldoAkhir = $(this).data('saldo_akhir')
 
-            $('#total-peserta').text(jumlahPeserta)
-            $('#kategori-tiket').text(jumlahTicket)
-            $('#pemasukan').text(jumlahPemasukan.toLocaleString('id-ID'))
-            $('#admin-fee').text(jumlahAdminFee.toLocaleString('id-ID'))
-            $('#penarikan').text(jumlahPenarikan.toLocaleString('id-ID'))
-            $('#saldo_akhir').text(jumlahSaldoAkhir.toLocaleString('id-ID'))
+            $.ajax({
+                url: '/dashboard/get-transaction-report',
+                type: 'GET',
+                data: {
+                    event_id: id
+                },
+                success: function(response) {
+                    if (response.data) {
+                        $('#total-peserta').text(response.data.peserta)
+                        $('#kategori-tiket').text(response.data.tiket)
+                        $('#pemasukan').text(Number(response.data.danaTotal).toLocaleString('id-ID'))
+                        $('#admin-fee').text(Number(response.data.fee).toLocaleString('id-ID'))
+                        $('#penarikan').text(Number(response.data.danaDitarik).toLocaleString('id-ID'))
+                        $('#saldo_akhir').text(Number(response.data.danaBersih).toLocaleString('id-ID'))
 
-            $('#detailReportTransaksi').modal('show');
+                        $('#detailReportTransaksi').modal('show');
+
+                    } else {
+                        Swal.fire('', 'Gagal!', 'error')
+
+                    }
+                }
+            });
+
 
         })
 
@@ -506,6 +516,7 @@
             $('#penarikan').text(0)
             $('#saldo_akhir').text(0)
         })
+
         $('#withdrawModal').on('hidden.bs.modal', function() {
             $('#jumlah-penarikan-fixed').val(0);
             $('#jumlah-penarikan').val('');
@@ -518,22 +529,33 @@
         $('body').on('click', '.withdraw-button', function(e) {
             e.preventDefault();
             var id = $(this).data('id')
-            var jumlahPeserta = $(this).data('peserta')
-            var jumlahTicket = $(this).data('ticket')
-            var jumlahPemasukan = $(this).data('pemasukan')
-            var jumlahAdminFee = $(this).data('admin_fee')
-            var jumlahPenarikan = $(this).data('penarikan')
-            var jumlahSaldoAkhir = $(this).data('saldo_akhir')
 
-            $('#wd-pemasukan').text(Number(jumlahPemasukan).toLocaleString('id-ID'))
-            $('#wd-limit').text(Number(jumlahSaldoAkhir).toLocaleString('id-ID'))
-            $('#wd-history').text(Number(jumlahPenarikan).toLocaleString('id-ID'))
-            $('#wd-admin').text(Number(jumlahAdminFee).toLocaleString('id-ID'))
+            $.ajax({
+                url: '/dashboard/get-transaction-report',
+                type: 'GET',
+                data: {
+                    event_id: id
+                },
+                success: function(response) {
+                    if (response.data) {
+                        $('#wd-pemasukan').text(Number(response.data.danaTotal).toLocaleString('id-ID'))
+                        $('#wd-limit').text(Number(response.data.danaBersih).toLocaleString('id-ID'))
+                        $('#wd-history').text(Number(response.data.danaDitarik).toLocaleString('id-ID'))
+                        $('#wd-admin').text(Number(response.data.fee).toLocaleString('id-ID'))
+                        $('#limit-withdraw').val(response.data.danaBersih)
+
+                        $('#withdrawModal').modal('show');
+
+                    } else {
+                        Swal.fire('', 'Gagal!', 'error')
+
+                    }
+                }
+            });
+
             $('#wd-rekening').text({{ auth()->user()->no_rekening }})
-            $('#limit-withdraw').val(jumlahSaldoAkhir)
             $('#wd-event-id').val(id)
 
-            $('#withdrawModal').modal('show');
             $('.limit-notif').attr('hidden', true);
             $('#submit-withdraw').attr('disabled', true)
 

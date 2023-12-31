@@ -2,14 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\CustomForm;
 use Carbon\Carbon;
 use App\Models\Event;
+use App\Models\Ticket;
 use App\Models\SnapToken;
+use App\Models\CustomForm;
 use App\Models\Transaction;
+use App\Models\WithdrawData;
 use Illuminate\Http\Request;
 use App\Models\TransactionForm;
-use App\Models\WithdrawData;
 use Yajra\DataTables\Facades\DataTables;
 
 class DashboardController extends Controller
@@ -163,6 +164,103 @@ class DashboardController extends Controller
 		]);
 	}
 
+	public function getTransactionReport(Request $request)
+	{
+		$event_id = $request->event_id;
+		//Biaya admin untuk customer
+		$biayaAdmin = config('app.biaya_admin');
+
+		//Total transaksi sukses
+		$totalPeserta = Transaction::where('event_id', $event_id)
+			->where('status', 'Paid')
+			->count();
+
+		//Total biaya admin
+		$biayaAdminPeserta = $biayaAdmin * $totalPeserta;
+
+		//Total dana sebelum dikurangi biaya admin
+		$totalTransaksi = Transaction::where('event_id', $event_id)
+			->where('status', 'Paid')
+			->sum('total_price');
+
+		//Pengurangan total dana dikurangi biaya admin dari user (Total dana masuk)
+		$totalDana = $totalTransaksi - $biayaAdminPeserta;
+
+		$totalTiket = Ticket::where('event_id', $event_id)->count();
+
+		//Mengkategorikan dana berdasarkan metode pembayaran
+		//Metode BANK TRANSFER (VA)
+		$qty_bank_tf = Transaction::where('event_id', $event_id)
+			->where('status', 'Paid')
+			->where('payment_type', 'bank_transfer')
+			->count();
+
+		$dana_bank_tf = Transaction::where('event_id', $event_id)
+			->where('status', 'Paid')
+			->where('payment_type', 'bank_transfer')
+			->sum('total_price') -
+			$biayaAdmin * $qty_bank_tf;
+
+		// Bank TF : 1.5% + 4500 per transaksi
+		$admin_bank_tf = 4500 * $qty_bank_tf + (1.5 / 100) * $dana_bank_tf;
+
+		$total_dana_bank_tf = $dana_bank_tf - $admin_bank_tf;
+
+		//Metode CREDIT CARD
+
+		$qty_credit_card = Transaction::where('event_id', $event_id)
+			->where('status', 'Paid')
+			->where('payment_type', 'credit_card')
+			->count();
+
+		$dana_credit_card = Transaction::where('event_id', $event_id)
+			->where('status', 'Paid')
+			->where('payment_type', 'credit_card')
+			->sum('total_price') -
+			$biayaAdmin * $qty_credit_card;
+
+		//Credit card : 3.5% + 2500 per transaksi
+		$admin_credit_card = 2500 * $qty_credit_card + (3.5 / 100) * $dana_credit_card;
+
+		$total_dana_credit_card = $dana_credit_card - $admin_credit_card;
+
+		//Metode Lain (Qris, Gopay, Shopeepay, Dana, Linkaja)
+
+		$qty_lain = Transaction::where('event_id', $event_id)
+			->where('status', 'Paid')
+			->whereNotIn('payment_type', ['bank_transfer', 'credit_card'])
+			->count();
+
+		$dana_lain = Transaction::where('event_id', $event_id)
+			->where('status', 'Paid')
+			->whereNotIn('payment_type', ['bank_transfer', 'credit_card'])
+			->sum('total_price') -
+			$biayaAdmin * $qty_lain;
+
+		// Pembayaran Lain : 3% pertransaksi / per tiket
+		$admin_lain = (3 / 100) * $dana_lain;
+
+		$total_dana_lain = $dana_lain - $admin_lain;
+
+		//Pengurangan biaya admin penyelenggara
+		$eventConnectFee = $admin_bank_tf + $admin_credit_card + $admin_lain;
+
+		// penarikan dana;
+		$danaDitarik = WithdrawData::where('event_id', $event_id)->sum('amount');
+
+		$danaBersih = $total_dana_bank_tf + $total_dana_credit_card + $total_dana_lain - $danaDitarik;
+
+		$data = [
+			'danaTotal' => $totalDana,
+			'peserta' => $totalPeserta,
+			'tiket' => $totalTiket,
+			'fee' => $eventConnectFee,
+			'danaDitarik' => $danaDitarik,
+			'danaBersih' => $danaBersih,
+		];
+		return response()->json(['data' => $data]);
+	}
+
 	public function eventCheckin(Request $request)
 	{
 		$user_id = auth()->user()->id;
@@ -222,21 +320,26 @@ class DashboardController extends Controller
 
 	public function withdraw(Request $request)
 	{
+		//Proteksi siapa yang mencairkan
+		$user_id = auth()->user()->id;
+		$dataEvent = Event::where('id', $request->event_id)->where('user_id', $user_id)->first();
+
+		if (empty($dataEvent)) {
+			return response()->json(['error' => 'Pelanggaran!']);
+		}
+
+		//Memanggil data report
+		$transactionReportData = $this->getTransactionReport($request);
+
+		//dd($transactionReportData);
+
 		$data = [
-			'event_id' => $request->wdEventId,
+			'event_id' => $request->event_id,
 			'user_id' => $request->wdUserId,
 			'rekening' => $request->wdRekening,
 			'amount' => $request->wdAmount,
 			'status' => 'Proses',
 		];
-
-		//Proteksi siapa yang mencairkan
-		$user_id = auth()->user()->id;
-		$dataEvent = Event::where('id', $request->wdEventId)->where('user_id', $user_id)->first();
-
-		if (empty($dataEvent)) {
-			return response()->json(['error' => 'Pelanggaran!']);
-		}
 
 		$submitWithdraw = WithdrawData::create($data);
 

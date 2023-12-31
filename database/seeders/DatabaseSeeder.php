@@ -26,14 +26,18 @@ class DatabaseSeeder extends Seeder
 			'name' => 'Jahidin',
 			'username' => 'Jahidin',
 			'email' => 'Jahidin@gmail.com',
-			'password' => bcrypt('123456')
+			'password' => bcrypt('123456'),
+			'no_rekening' => '627277272',
+			'bank' => 'BCA',
 		]);
 
 		User::create([
 			'name' => 'JAY',
 			'username' => 'JAY',
 			'email' => 'Jahidin.ispirit@gmail.com',
-			'password' => bcrypt('123456')
+			'password' => bcrypt('123456'),
+			'no_rekening' => '6272778872',
+			'bank' => 'BRI',
 		]);
 
 		$categories = [
