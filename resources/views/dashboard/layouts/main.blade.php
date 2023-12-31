@@ -548,12 +548,11 @@
 
                     } else {
                         Swal.fire('', 'Gagal!', 'error')
-
                     }
                 }
             });
 
-            $('#wd-rekening').text({{ auth()->user()->no_rekening }})
+            $('#wd-rekening').text("{{ auth()->user()->bank . ' ' . auth()->user()->no_rekening }}")
             $('#wd-event-id').val(id)
 
             $('.limit-notif').attr('hidden', true);
@@ -617,6 +616,8 @@
                         $('#submit-withdraw').html('<i class="fas fa-wallet"></i> Tarik dana')
                         $('#submit-withdraw').attr('disabled', false)
                         $('#withdrawModal').modal('hide');
+                        $('#view-total-dana-button' + response.event_id).html(response.saldo);
+                        console.log(response.saldo);
                     } else {
                         Swal.fire('', response.error, 'error')
                         $('#submit-withdraw').html('<i class="fas fa-wallet"></i> Tarik dana')

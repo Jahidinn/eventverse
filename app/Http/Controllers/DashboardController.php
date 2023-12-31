@@ -245,8 +245,11 @@ class DashboardController extends Controller
 		//Pengurangan biaya admin penyelenggara
 		$eventConnectFee = $admin_bank_tf + $admin_credit_card + $admin_lain;
 
-		// penarikan dana;
-		$danaDitarik = WithdrawData::where('event_id', $event_id)->sum('amount');
+		// penarikan dana -> tambahkan yang statusnya hanya sukses dan berhasil, dan pending
+		$danaDitarik = WithdrawData::where('event_id', $event_id)->where(function ($query) {
+			$query->where('status', 'Sukses')
+				->orWhere('status', 'Proses');
+		})->sum('amount');
 
 		$danaBersih = $total_dana_bank_tf + $total_dana_credit_card + $total_dana_lain - $danaDitarik;
 
@@ -258,7 +261,12 @@ class DashboardController extends Controller
 			'danaDitarik' => $danaDitarik,
 			'danaBersih' => $danaBersih,
 		];
-		return response()->json(['data' => $data]);
+
+		if ($request->from_request == 'withdraw') {
+			return $data;
+		} else {
+			return response()->json(['data' => $data]);
+		}
 	}
 
 	public function eventCheckin(Request $request)
@@ -324,19 +332,28 @@ class DashboardController extends Controller
 		$user_id = auth()->user()->id;
 		$dataEvent = Event::where('id', $request->event_id)->where('user_id', $user_id)->first();
 
-		if (empty($dataEvent)) {
+		if (empty($dataEvent) || !$user_id) {
 			return response()->json(['error' => 'Pelanggaran!']);
 		}
 
 		//Memanggil data report
-		$transactionReportData = $this->getTransactionReport($request);
+		$checkHistory = $this->getTransactionReport($request);
 
-		//dd($transactionReportData);
+
+		if ($request->wdAmount > $checkHistory['danaBersih']) {
+			return response()->json(['error' => 'Pelanggaran!']);
+		}
+
+		//cek rekening bank dan bank
+		if (!$request->wdRekening || !$request->wdBank) {
+			return response()->json(['error' => 'Belum ada data rekening bank!']);
+		}
 
 		$data = [
 			'event_id' => $request->event_id,
 			'user_id' => $request->wdUserId,
 			'rekening' => $request->wdRekening,
+			'bank' => $request->wdBank,
 			'amount' => $request->wdAmount,
 			'status' => 'Proses',
 		];
@@ -345,7 +362,9 @@ class DashboardController extends Controller
 
 		if (!$submitWithdraw) {
 			return response()->json(['error' => 'Gagal request withdraw!']);
+		} else {
+			$updateHistory = $this->getTransactionReport($request);
+			return response()->json(['success' => 'Berhasil request penarikan dana!', 'event_id' => $request->event_id, 'saldo' => $updateHistory['danaBersih']]);
 		}
-		return response()->json(['success' => 'Berhasil request penarikan dana!']);
 	}
 }

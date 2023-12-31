@@ -15,9 +15,11 @@ return new class extends Migration
 			$table->id();
 			$table->foreignId('event_id');
 			$table->foreignId('user_id');
-			$table->integer('rekening');
+			$table->bigInteger('rekening');
+			$table->string('bank');
 			$table->bigInteger('amount');
-			$table->enum('status', ['Proses', 'Pending', 'Sukses', 'Gagal']);
+			$table->enum('status', ['Proses', 'Sukses', 'Gagal', 'Batal']);
+			$table->integer('admin_check')->default(0);
 			$table->timestamp('created_at')->useCurrent();
 			$table->timestamp('updated_at')->useCurrent();
 		});

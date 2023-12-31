@@ -135,7 +135,7 @@
                                         <small>
                                             <b class="text-success"><i class="fas fa-check-circle"></i> Rp
                                                 <span
-                                                    id="view-total-dana-button">{{ number_format($danaBersih, 0, ',', '.') }}</span></b>
+                                                    id="view-total-dana-button{{ $event->id }}">{{ number_format($danaBersih, 0, ',', '.') }}</span></b>
                                         </small>
                                     </button>
                                     {{-- <button type="button" class="btn dana btn-sm mt-1 px-3" data-id="{{ $event->id }}"
@@ -176,7 +176,7 @@
     <!-- Modal detail -->
     <div class="modal fade" id="detailReportTransaksi" tabindex="-1" aria-labelledby="detailReportTransaksiLabel"
         aria-hidden="true">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="detailReportTransaksiLabel">Laporan transaksi</h5>
@@ -199,11 +199,11 @@
                         <div class="col-6"><b>Rp <span id="pemasukan">0</span></b></div>
                     </div>
                     <div class="row mt-1">
-                        <div class="col-6">Biaya Transaksi</div>
+                        <div class="col-6">Total admin fee</div>
                         <div class="col-6"><b>Rp <span id="admin-fee">0</span></b></div>
                     </div>
                     <div class="row mt-1">
-                        <div class="col-6">Dana di tarik</div>
+                        <div class="col-6">History penarikan</div>
                         <div class="col-6"><b>Rp <span id="penarikan">0</span></b></div>
                     </div>
                     <hr>
@@ -223,7 +223,7 @@
 
     <!-- Modal penarikan dana-->
     <div class="modal fade" id="withdrawModal" tabindex="-1" aria-labelledby="withdrawModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="withdrawModalLabel">Penarikan dana</h5>
@@ -238,11 +238,11 @@
                             <div class="col-6"><b>Rp <span id="wd-pemasukan">0</span></b></div>
                         </div>
                         <div class="row mt-1">
-                            <div class="col-6">Admin fee</div>
+                            <div class="col-6">Total admin fee</div>
                             <div class="col-6"><b>Rp <span id="wd-admin">0</span></b></div>
                         </div>
                         <div class="row mt-1">
-                            <div class="col-6">History</div>
+                            <div class="col-6">History penarikan</div>
                             <div class="col-6"><b>Rp <span id="wd-history">0</span></b></div>
                         </div>
                         <div class="row mt-1">
@@ -267,9 +267,11 @@
                             <small class="text-danger limit-notif" hidden>Maksimal penarikan <b>Rp <span
                                         class="limit-notif-value"></span></b>
                             </small>
+                            <input type="hidden" name="from_request" value="withdraw">
                             <input type="hidden" name="event_id" id="wd-event-id">
                             <input type="hidden" name="wdUserId" value="{{ auth()->user()->id }}">
                             <input type="hidden" name="wdRekening" value="{{ auth()->user()->no_rekening }}">
+                            <input type="hidden" name="wdBank" value="{{ auth()->user()->bank }}">
                             <input type="hidden" name="wdAmount" id="jumlah-penarikan-fixed">
                         </div>
 

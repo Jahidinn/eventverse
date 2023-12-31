@@ -36,7 +36,7 @@ class DatabaseSeeder extends Seeder
 			'username' => 'JAY',
 			'email' => 'Jahidin.ispirit@gmail.com',
 			'password' => bcrypt('123456'),
-			'no_rekening' => '6272778872',
+			'no_rekening' => '627277888872',
 			'bank' => 'BRI',
 		]);
 
@@ -251,6 +251,28 @@ class DatabaseSeeder extends Seeder
 				'payment_type' => 'qris',
 				'quantity' => 1,
 				'total_price' => 50500,
+				'transaction_id' => 'EC-' . strtoupper(Str::random(10)),
+				'status' => 'Paid',
+			]);
+		}
+
+		$namaArray2 = [
+			'Fatkhan', 'Ana', 'Kusuma', 'Noviayu', 'Alfian',
+			'Joko', 'Naeli', 'indah', 'hendra', 'Abdul',
+		];
+
+		foreach ($namaArray2 as $nama2) {
+			Transaction::create([
+				'ticket_id' => 1,
+				'event_id' => 1,
+				'name' => $nama2,
+				'phone' => '021162373334',
+				'email' => $nama2 . '@email.com',
+				'is_login' => 1,
+				'user_login_id' => 1,
+				'payment_type' => 'bank_transfer',
+				'quantity' => 1,
+				'total_price' => 60500,
 				'transaction_id' => 'EC-' . strtoupper(Str::random(10)),
 				'status' => 'Paid',
 			]);
