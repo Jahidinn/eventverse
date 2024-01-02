@@ -81,9 +81,10 @@
 
                 <li class="nav-header">PROFIL</li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i class="nav-icon fas fa-user-edit text-primary"></i>
-                        <p class="text">Setting</p>
+                    <a href="/dashboard/my-profile"
+                        class="nav-link {{ Request::is('dashboard/my-profile*') ? 'active' : '' }}">
+                        <i class="nav-icon fas fa-user-edit"></i>
+                        <p class="text">Setting profil</p>
                     </a>
                 </li>
                 <li class="nav-item">

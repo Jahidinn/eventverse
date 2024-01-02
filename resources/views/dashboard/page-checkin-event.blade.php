@@ -16,7 +16,7 @@
                 <h3 class="card-title">Butuh checkin peserta? <b class="text-info">bisa dong!</b> </h3>
             </div>
 
-            <div class="card-body px-3 daftar-event text-dark">
+            <div class="card-body px-3 daftar-event text-dark bg-card-blue">
 
                 <form action="" method="GET">
                     <div class="p-0 form-inline mb-4">
@@ -27,7 +27,7 @@
 
                 {{-- Looping data my event --}}
                 @foreach ($dataEvent as $event)
-                    <div class="card mt-2 bg-card-blue">
+                    <div class="card mt-2">
                         <div class="col-md-12 row card-body px-3 pb-3">
                             <div class="col-9">
                                 {{-- Event --}}

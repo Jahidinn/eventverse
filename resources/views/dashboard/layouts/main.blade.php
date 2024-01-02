@@ -628,6 +628,7 @@
         });
     </script>
 
+    @stack('js-my-profile')
     @stack('js-myevent')
     @stack('js-participant')
     @stack('js-checkin')

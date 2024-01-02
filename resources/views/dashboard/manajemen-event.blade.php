@@ -17,7 +17,7 @@
                 <h3 class="card-title manajemen-event-title">Buat event sesukamu! <i class="fas fa-paper-plane"></i></h3>
             </div>
 
-            <div class="card-body px-2 pt-3">
+            <div class="card-body px-2 pt-3 bg-card-blue">
                 <div class="table-responsive py-0 manajemen-event-box">
                     <div class="mb-2">
                         <a href="/event/create" class="btn btn-success"><i class="fas fa-plus-circle"></i> Buat event</a>
@@ -30,7 +30,7 @@
                     </form>
 
                     @foreach ($listEvent as $event)
-                        <div class="card pb-2 bg-card-blue">
+                        <div class="card pb-2">
                             <div class="col-md-12 row card-body px-3 pb-2">
                                 <div class="col-9">
                                     @php

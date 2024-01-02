@@ -85,7 +85,8 @@
 
 .bg-card-blue {
 	background-color: rgb(235, 245, 251) !important;
-	box-shadow: none;
+	/* box-shadow: none; */
+	/* border: none !important; */
 }
 
 .select2.select2-container {
@@ -131,6 +132,59 @@
     pointer-events: none;
     color: #aaa;
 }
+
+/* Edit profile  */
+.tb-container{
+	display: grid;
+	place-items: center;
+}
+
+.img-container {
+	width: 120px;
+	height:120px;
+	margin: 0 auto;
+	position: relative;
+	overflow: hidden;
+}
+
+.img-container img {
+	width:100%;
+	height:100%;
+	object-fit:cover;
+	border-radius: 50%;
+	object-position: center;
+}
+
+.tb-container input {
+	display: none;
+  }
+  
+.tb-container label{
+	width: 130px;
+	height: 30px;
+	background: transparent;
+	color: rgba(58, 133, 191, 0.75);
+	border: 2px solid rgba(58, 133, 191, 0.75);
+	font-size: 14px;
+	border-radius: 40px;
+	cursor: pointer;
+	display: flex;
+	left: 0;
+	right: 0;
+	text-align: center;
+	z-index: 2;
+	align-items: center;
+	justify-content: center;
+	margin:0 auto;
+	transition: 0.5s;
+  }
+
+.tb-container label:hover{
+	background-color: rgba(58, 133, 191, 0.75);
+	color: #FFF;
+	border: 2px solid rgba(58, 133, 191, 0.75);
+
+  }
 
 @media only screen and (max-width: 800px) {
 	.title-manage-event{

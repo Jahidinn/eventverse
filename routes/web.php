@@ -8,6 +8,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\TransactionController;
+use App\Http\Controllers\UserProfileController;
 
 /*
 |--------------------------------------------------------------------------
@@ -51,6 +52,12 @@ Route::get('/dashboard/event-checkin', [DashboardController::class, 'eventChecki
 Route::get('/dashboard/get-participan-checkin', [DashboardController::class, 'getParticipantCheckin'])->middleware('auth');
 Route::post('/dashboard/participant-checkin', [DashboardController::class, 'checkinProcess'])->middleware('auth');
 Route::post('/dashboard/withdraw-process', [DashboardController::class, 'withdraw'])->middleware('auth');
+
+Route::get('/dashboard/my-profile', [UserProfileController::class, 'index'])->middleware('auth');
+Route::post('/dashboard/edit-profile-image', [UserProfileController::class, 'editImage'])->middleware('auth');
+Route::post('/dashboard/edit-password', [UserProfileController::class, 'editPassword'])->middleware('auth');
+Route::get('/dashboard/get-data-profile', [UserProfileController::class, 'getMyProfile'])->middleware('auth');
+Route::post('/dashboard/edit-profile-process', [UserProfileController::class, 'editProfile'])->middleware('auth');
 
 Route::get('/get-cities/{code}', [EventController::class, 'getCities']);
 Route::get('/check-url', [EventController::class, 'cekUrl']);

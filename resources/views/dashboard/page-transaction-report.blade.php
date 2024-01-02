@@ -18,7 +18,7 @@
                 </h3>
             </div>
 
-            <div class="card-body px-2 pt-3">
+            <div class="card-body px-2 pt-3 bg-card-blue">
                 <div class="table-responsive py-0 manajemen-event-box">
                     <form action="" method="GET">
                         <div class="p-0 form-inline mb-4">
@@ -28,7 +28,7 @@
                     </form>
 
                     @foreach ($listEvent as $event)
-                        <div class="card pb-2 bg-card-blue">
+                        <div class="card pb-2">
                             <div class="col-md-12 row card-body px-3 pb-2">
                                 <div class="col-12">
 

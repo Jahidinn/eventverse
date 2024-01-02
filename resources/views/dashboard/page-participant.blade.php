@@ -17,7 +17,7 @@
 
             </div>
 
-            <div class="card-body px-3 daftar-event text-dark">
+            <div class="card-body px-3 daftar-event text-dark bg-card-blue">
                 <form action="" method="GET">
                     <div class="p-0 form-inline mb-4">
                         <input class="form-control col shadow-none mr-1" id="search-myevent" name="key" type="search"
@@ -27,7 +27,7 @@
 
                 {{-- Looping data my event --}}
                 @foreach ($dataEvent as $event)
-                    <div class="card mt-2 bg-card-blue">
+                    <div class="card mt-2">
                         <div class="col-md-12 row card-body px-3 pb-3">
                             <div class="col-9">
                                 {{-- Event --}}
@@ -91,7 +91,7 @@
                     </div>
                 </div>
 
-                <div class="card mt-1 bg-card-blue">
+                <div class="card mt-1 bg-card-blue shadow-none">
                     <div class="col-md-12 card-body px-3 pb-2 pt-2">
                         <span class="title-daftar-peserta"></span>
                         <br>
