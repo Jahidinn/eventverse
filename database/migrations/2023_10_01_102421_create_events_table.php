@@ -9,11 +9,14 @@ return new class extends Migration
 	/**
 	 * Run the migrations.
 	 */
+
 	public function up(): void
 	{
 		Schema::create('events', function (Blueprint $table) {
 			$table->id();
 			$table->foreignId('user_id');
+			$table->enum('organizer', ['individual', 'org'])->default('individual');
+			$table->foreignId('organizer_id')->nullable();
 			$table->string('title');
 			$table->string('slug');
 			$table->foreignId('category');

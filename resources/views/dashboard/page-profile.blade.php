@@ -51,7 +51,7 @@
                             </button>
                         </div>
                         <p class="card-text"><small class="text-muted">Last updated
-                                {{ auth()->user()->created_at->diffForHumans() }}</small></p>
+                                {{ auth()->user()->updated_at->diffForHumans() }}</small></p>
                     </div>
                 </div>
             </div>
