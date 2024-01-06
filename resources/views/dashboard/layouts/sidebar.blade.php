@@ -88,6 +88,13 @@
                     </a>
                 </li>
                 <li class="nav-item">
+                    <a href="/dashboard/my-organization"
+                        class="nav-link {{ Request::is('dashboard/my-organization*') ? 'active' : '' }}">
+                        <i class="nav-icon fas fa-users"></i>
+                        <p class="text">Organisasi</p>
+                    </a>
+                </li>
+                <li class="nav-item">
                     <a href="#" class="nav-link">
                         <i class="nav-icon fas fa-sign-out-alt text-danger"></i>
                         <p>Logout</p>

@@ -7,6 +7,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\OrganizationController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\UserProfileController;
 
@@ -58,6 +59,8 @@ Route::post('/dashboard/edit-profile-image', [UserProfileController::class, 'edi
 Route::post('/dashboard/edit-password', [UserProfileController::class, 'editPassword'])->middleware('auth');
 Route::get('/dashboard/get-data-profile', [UserProfileController::class, 'getMyProfile'])->middleware('auth');
 Route::post('/dashboard/edit-profile-process', [UserProfileController::class, 'editProfile'])->middleware('auth');
+
+Route::get('dashboard/my-organization', [OrganizationController::class, 'index'])->middleware('auth');
 
 Route::get('/get-cities/{code}', [EventController::class, 'getCities']);
 Route::get('/check-url', [EventController::class, 'cekUrl']);

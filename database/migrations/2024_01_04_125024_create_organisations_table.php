@@ -18,7 +18,8 @@ return new class extends Migration
 			$table->string('org_institution');
 			$table->string('org_address');
 			$table->string('org_contact');
-			$table->enum('org_status', ['Public', 'Private'])->default('Public');
+			$table->enum('org_type', ['Public', 'Private'])->default('Public');
+			$table->integer('org_status')->default(1);
 			$table->string('org_image')->nullable();
 			$table->foreignId('user_created');
 			$table->timestamp('created_at')->useCurrent();

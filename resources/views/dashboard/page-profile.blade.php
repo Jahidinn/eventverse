@@ -37,6 +37,7 @@
                     <input type="file" name="imageProfileEdit" id="profile-file-upload-edit" accept="image/*"
                         onchange="profileFileUpload(event);" />
                 </div>
+
                 <div class="col-md-8">
                     <div class="card-body">
                         <h5 class="card-title"><b>{{ auth()->user()->name }}</b></h5>
@@ -93,34 +94,35 @@
                     </button>
                 </div>
                 <form action="" id="edit-my-profile">
+                    @csrf
                     <div class="modal-body">
                         <div class="form-group">
-                            <span class="text-secondary">username</span>
+                            <span class="text-secondary">Username</span>
                             <input type="text" class="form-control shadow-none mt-1" id="p_username" name="p_username"
                                 readonly required>
                         </div>
                         <div class="form-group">
-                            <span class="text-secondary">nama lengkap</span>
+                            <span class="text-secondary">Nama lengkap</span>
                             <input type="text" class="form-control shadow-none mt-1" id="p_name" required
                                 name="p_name">
                         </div>
                         <div class="form-group">
-                            <span class="text-secondary">email</span>
+                            <span class="text-secondary">Email</span>
                             <input type="text" class="form-control shadow-none mt-1" id="p_email" required
                                 name="p_email">
                         </div>
                         <div class="form-group">
-                            <span class="text-secondary">nomer hp</span>
+                            <span class="text-secondary">Nomer hp</span>
                             <input type="text" class="form-control shadow-none mt-1" id="p_no_tlp" required
                                 name="p_no_tlp" minlength="9">
                         </div>
                         <div class="form-group">
-                            <span class="text-secondary">nomer rekening</span>
+                            <span class="text-secondary">Nomer rekening</span>
                             <input type="text" class="form-control shadow-none mt-1" id="p_no_rekening" required
                                 name="p_no_rekening">
                         </div>
                         <div class="form-group">
-                            <span class="text-secondary">bank</span>
+                            <span class="text-secondary">Bank</span>
                             <input type="text" class="form-control shadow-none mt-1" id="p_bank" required
                                 name="p_bank">
                         </div>
