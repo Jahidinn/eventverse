@@ -13,18 +13,22 @@
 
         <div class="card">
             <div class="card-body">
-                <button class="btn btn-info" data-toggle="modal" data-target="#addOrganisasiModal">Ikut organisasi</button>
+                <button class="btn btn-info rounded-0" data-toggle="modal" data-target="#addOrganisasiModal">Ikut
+                    organisasi</button>
                 <hr>
                 <table class="table table-striped">
                     <thead>
                         <tr>
-                            <th scope="col">Organisasi yang kamu ikuti</th>
-                            <th scope="col">#</th>
+                            <th scope="col">Ikut organisasi</th>
+                            <th scope="col">Status</th>
+                            <th scope="col" style="width: 100px;">#</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
-                            <td>Nama organisasi</td>
+                            <td>Nama organisasi ukm rekaya ilmu pengetahuan dan taknologi universitas gadjah
+                                mada 2023 bidang ilmu websit</td>
+                            <td>Anggota</td>
                             <td>
                                 <button class="btn btn-sm btn-danger">
                                     Keluar <i class="fas fa-caret-square-right"></i>
@@ -80,7 +84,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <span class="mr-auto btn text-secondary kelola-org-from-add"><b><i class="fas fa-cog"></i> Buat
+                    <span class="mr-auto btn text-primary kelola-org-from-add"><b><i class="fas fa-cog"></i> Buat
                             organisasi</b></span>
                 </div>
             </div>
@@ -100,19 +104,20 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <button class="btn btn-info mb-3 buat-organisasi"><i class="fas fa-plus"></i> Buat organisasi</button>
-                    <input type="search" class="form-control shadow-none mb-3" id="search" name="search"
+                    <button class="btn btn-info mb-3 rounded-0 buat-organisasi"><i class="fas fa-plus"></i> Buat
+                        organisasi</button>
+                    <input type="search" class="form-control shadow-none mb-3" id="org_search" name="org_search"
                         placeholder="Cari organisasi kamu">
                     <div>
-                        <table class="table table-striped">
+                        <table class="table table-striped" id="my-organization-table">
                             <thead>
                                 <tr>
                                     <th scope="col">Organisasi</th>
-                                    <th scope="col">#</th>
+                                    <th scope="col" style="width: 100px;">#</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
+                                {{-- <tr>
                                     <td>Nama organisasi</td>
                                     <td>
                                         <button class="btn btn-sm btn-info">
@@ -122,7 +127,7 @@
                                             <i class="fas fa-trash-alt"></i> Del
                                         </button>
                                     </td>
-                                </tr>
+                                </tr> --}}
                             </tbody>
                         </table>
                     </div>
@@ -145,7 +150,8 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <form action="" id="edit-add-organization">
+                <form action="" id="create-organization">
+                    @csrf
                     <div class="modal-body">
                         <div class="row">
                             <div class="col-8">
@@ -156,7 +162,7 @@
                                             placeholder="No file selected" readonly>
                                         <span class="input-group-btn">
                                             <div class="btn btn-success custom-file-uploader">
-                                                <input type="file" name="org_logo" id="org_logo"
+                                                <input type="file" name="org_logo_input" id="org_logo_input"
                                                     onchange="this.form.filename.value = this.files.length ? this.files[0].name : ''" />
                                                 Pilih logo
                                             </div>
@@ -165,8 +171,10 @@
                                 </div>
                             </div>
                             <div class="col-4 text-center">
-                                <img src="{{ asset('storage/organization-images') . '/' . 'logo.png' }}"
-                                    class="img-circle" alt="User Image" style="max-width: 80px;">
+                                <div class="org_logo_container">
+                                    <img src="{{ asset('storage/organization-images') . '/' . 'logo.png' }}"
+                                        class="img-circle" alt="User Image" id="org_logo">
+                                </div>
                             </div>
                         </div>
                         <div class="form-group">
@@ -182,7 +190,7 @@
                         <div class="form-group">
                             <span class="text-secondary">Alamat</span>
                             <input type="text" class="form-control shadow-none mt-1" id="org_address" required
-                                name="org_address" minlength="9">
+                                name="org_address">
                         </div>
                         <div class="form-group">
                             <span class="text-secondary">Kontak</span>
@@ -191,8 +199,10 @@
                         </div>
                         <div class="form-group">
                             <span class="text-secondary">Tipe organisasi</span>
-                            <input type="text" class="form-control shadow-none mt-1" id="org_type" required
-                                name="org_type">
+                            <select class="form-control shadow-none mt-1" id="org_type" required name="org_type">
+                                <option value="public">Public</option>
+                                <option value="private">Private</option>
+                            </select>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -207,16 +217,17 @@
     {{-- Modal TAMBAH organisasi --}}
 
     {{-- Modal EDIT organisasi --}}
-    <div class="modal fade" id="addOrgModal" tabindex="-1" aria-labelledby="addOrgModalLabel" aria-hidden="true">
+    <div class="modal fade" id="editOrgModal" tabindex="-1" aria-labelledby="editOrgModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="addOrgModalLabel">Buat organisasi</h5>
+                    <h5 class="modal-title" id="editOrgModalLabel">Edit organisasi</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <form action="" id="edit-add-organization">
+                <form action="" id="edit-organization">
+                    @csrf
                     <div class="modal-body">
                         <div class="row">
                             <div class="col-8">
@@ -227,7 +238,7 @@
                                             placeholder="No file selected" readonly>
                                         <span class="input-group-btn">
                                             <div class="btn btn-success custom-file-uploader">
-                                                <input type="file" name="org_logo" id="org_logo"
+                                                <input type="file" name="org_logo_input_edit" id="org_logo_input_edit"
                                                     onchange="this.form.filename.value = this.files.length ? this.files[0].name : ''" />
                                                 Pilih logo
                                             </div>
@@ -235,41 +246,49 @@
                                     </div>
                                 </div>
                             </div>
+                            <input type="hidden" name="org_id_edit" id="org_id_edit">
+                            <input type="hidden" name="org_org_id_edit" id="org_org_id_edit">
+                            <input type="hidden" name="org_image_prev" id="org_image_prev">
                             <div class="col-4 text-center">
-                                <img src="{{ asset('storage/organization-images') . '/' . 'logo.png' }}"
-                                    class="img-circle" alt="User Image" style="max-width: 80px;">
+                                <div class="org_logo_container">
+                                    <img src="{{ asset('storage/organization-images') . '/' . 'logo.png' }}"
+                                        class="img-circle" alt="User Image" id="org_logo_edit">
+                                </div>
                             </div>
                         </div>
                         <div class="form-group">
                             <span class="text-secondary">Nama organisasi</span>
-                            <input type="text" class="form-control shadow-none mt-1" id="org_name" required
-                                name="org_name">
+                            <input type="text" class="form-control shadow-none mt-1" id="org_name_edit" required
+                                name="org_name_edit">
                         </div>
                         <div class="form-group">
                             <span class="text-secondary">Institusi</span>
-                            <input type="text" class="form-control shadow-none mt-1" id="org_institution" required
-                                name="org_institution">
+                            <input type="text" class="form-control shadow-none mt-1" id="org_institution_edit"
+                                required name="org_institution_edit">
                         </div>
                         <div class="form-group">
                             <span class="text-secondary">Alamat</span>
-                            <input type="text" class="form-control shadow-none mt-1" id="org_address" required
-                                name="org_address" minlength="9">
+                            <input type="text" class="form-control shadow-none mt-1" id="org_address_edit" required
+                                name="org_address_edit">
                         </div>
                         <div class="form-group">
                             <span class="text-secondary">Kontak</span>
-                            <input type="text" class="form-control shadow-none mt-1" id="org_contact" required
-                                name="org_contact">
+                            <input type="text" class="form-control shadow-none mt-1" id="org_contact_edit" required
+                                name="org_contact_edit">
                         </div>
                         <div class="form-group">
                             <span class="text-secondary">Tipe organisasi</span>
-                            <input type="text" class="form-control shadow-none mt-1" id="org_type" required
-                                name="org_type">
+                            <select class="form-control shadow-none mt-1" id="org_type_edit" required
+                                name="org_type_edit">
+                                <option value="Public">Public</option>
+                                <option value="Private">Private</option>
+                            </select>
                         </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">cancel</button>
                         <button type="submit" class="btn btn-primary"><i class="fas fa-check-square"></i>
-                            Buat organisasi</button>
+                            Simpan</button>
                     </div>
                 </form>
             </div>

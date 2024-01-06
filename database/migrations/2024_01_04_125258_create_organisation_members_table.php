@@ -16,7 +16,7 @@ return new class extends Migration
 			$table->foreignId('user_id');
 			$table->foreignId('org_id');
 			$table->string('position');
-			$table->integer('status')->default(0);
+			$table->integer('status')->default(1);
 			$table->timestamp('created_at')->useCurrent();
 			$table->timestamp('updated_at')->useCurrent();
 		});

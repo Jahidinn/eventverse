@@ -60,7 +60,12 @@ Route::post('/dashboard/edit-password', [UserProfileController::class, 'editPass
 Route::get('/dashboard/get-data-profile', [UserProfileController::class, 'getMyProfile'])->middleware('auth');
 Route::post('/dashboard/edit-profile-process', [UserProfileController::class, 'editProfile'])->middleware('auth');
 
-Route::get('dashboard/my-organization', [OrganizationController::class, 'index'])->middleware('auth');
+Route::get('/dashboard/my-organization', [OrganizationController::class, 'index'])->middleware('auth');
+Route::post('/dashboard/add-organization', [OrganizationController::class, 'createOrg'])->middleware('auth');
+Route::post('/dashboard/edit-organization', [OrganizationController::class, 'editOrg'])->middleware('auth');
+Route::get('/dashboard/get-myorganization', [OrganizationController::class, 'getMyOrg'])->middleware('auth');
+Route::get('/dashboard/detail-organization', [OrganizationController::class, 'detailOrg'])->middleware('auth');
+Route::post('/dashboard/delete-organization', [OrganizationController::class, 'deleteOrg'])->middleware('auth');
 
 Route::get('/get-cities/{code}', [EventController::class, 'getCities']);
 Route::get('/check-url', [EventController::class, 'cekUrl']);
