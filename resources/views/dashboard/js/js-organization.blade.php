@@ -404,4 +404,16 @@
         });
 
     })
+
+    $('body').on('click', '.org-info', function(e) {
+        e.preventDefault();
+        $('.my-org-info').attr('hidden', false)
+        $('.data-my-org').attr('hidden', true)
+    })
+
+    $('body').on('click', '.back-my-org-info', function(e) {
+        e.preventDefault();
+        $('.my-org-info').attr('hidden', true)
+        $('.data-my-org').attr('hidden', false)
+    })
 </script>

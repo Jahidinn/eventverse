@@ -225,6 +225,14 @@
 	width: 80px !important;
   }
 
+  .nav-tabs .nav-link{
+	color: #1b1b1b !important;
+  }
+  .nav-tabs .active{
+	background-color: #17a2b8 !important;
+	color: #FFF !important;
+  }
+
 @media only screen and (max-width: 800px) {
 	.title-manage-event{
 		font-size: 13px;

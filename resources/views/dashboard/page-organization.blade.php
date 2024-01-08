@@ -88,32 +88,103 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <button class="btn btn-info mb-3 rounded-0 buat-organisasi"><i class="fas fa-plus"></i> Buat
-                        organisasi</button>
-                    <input type="search" class="form-control shadow-none mb-3" id="org_search" name="org_search"
-                        placeholder="Cari organisasi kamu">
-                    <div>
-                        <table class="table table-striped" id="my-organization-table">
-                            <thead>
-                                <tr>
-                                    <th scope="col">Organisasi</th>
-                                    <th scope="col" style="width: 100px;"></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {{-- <tr>
-                                    <td>Nama organisasi</td>
-                                    <td>
-                                        <button class="btn btn-sm btn-info">
-                                            <i class="fas fa-edit"></i> Edit
-                                        </button>
-                                        <button class="btn btn-sm btn-danger">
-                                            <i class="fas fa-trash-alt"></i> Del
-                                        </button>
-                                    </td>
-                                </tr> --}}
-                            </tbody>
-                        </table>
+                    <div class="data-my-org">
+                        <button class="btn btn-info mb-3 rounded-0 buat-organisasi"><i class="fas fa-plus"></i> Buat
+                            organisasi</button>
+                        <input type="search" class="form-control shadow-none mb-3" id="org_search" name="org_search"
+                            placeholder="Cari organisasi kamu">
+                        <div>
+                            <table class="table table-striped" id="my-organization-table">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Organisasi</th>
+                                        <th scope="col" style="width: 100px;"></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {{-- <tr>
+										<td>Nama organisasi</td>
+										<td>
+											<button class="btn btn-sm btn-info">
+												<i class="fas fa-edit"></i> Edit
+											</button>
+											<button class="btn btn-sm btn-danger">
+												<i class="fas fa-trash-alt"></i> Del
+											</button>
+										</td>
+									</tr> --}}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="my-org-info" hidden>
+                        <span class="btn back-my-org-info"><i class="fas fa-arrow-left"></i> Kembali</span>
+                        <hr>
+                        <div class="card text-center">
+                            <div class="card-body text-center">
+                                <div class="org_logo_container">
+                                    <img src="{{ asset('storage/organization-images') . '/' . 'logo.png' }}"
+                                        class="img-circle" alt="User Image" id="org_logo">
+                                </div>
+                                <b>Nama Organisasi</b><br>
+                                <span class="badge badge-secondary">Public</span>
+                            </div>
+                        </div>
+                        <ul class="nav nav-tabs p-0 border-0" role="tablist">
+                            <li class="nav-item col-6 p-0">
+                                <a class="nav-link active" data-toggle="tab" href="#participant" role="tab">Anggota</a>
+                            </li>
+                            <li class="nav-item col-6 p-0 mb-2">
+                                <a class="nav-link" data-toggle="tab" href="#request" role="tab">Request <span
+                                        class="badge badge-secondary">8</span></a>
+                            </li>
+                        </ul>
+
+                        <!-- Tab panes -->
+                        <div class="tab-content">
+                            <div class="tab-pane active" id="participant" role="tabpanel">
+                                <input type="search" class="form-control shadow-none mb-3 mt-2" id="org_search"
+                                    name="org_search" placeholder="Cari anggota">
+                                <table class="table table-striped" id="organization-member-table">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Anggota</th>
+                                            <th scope="col" style="width: 150px;"></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>Nama Anggota</td>
+                                            <td>
+                                                <button class="btn btn-sm btn-danger">
+                                                    <i class="fas fa-minus-circle"></i> Remove
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="tab-pane" id="request" role="tabpanel">
+                                <table class="table table-striped" id="organization-request-table">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Member request</th>
+                                            <th scope="col" style="width: 100px;"></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>Nama Anggota</td>
+                                            <td>
+                                                <button class="btn btn-sm btn-success">
+                                                    <i class="fas fa-check-square"></i> Accept
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer">
