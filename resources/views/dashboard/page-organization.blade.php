@@ -12,80 +12,64 @@
     <section class="content">
 
         <div class="card">
-            <div class="card-body">
-                <button class="btn btn-info rounded-0" data-toggle="modal" data-target="#addOrganisasiModal">Ikut
+            <div class="card-body px-2">
+                <button class="btn btn-info rounded-0 mb-3" data-toggle="modal" data-target="#followOrganisasiModal">Ikut
                     organisasi</button>
-                <hr>
-                <table class="table table-striped">
+
+                <table class="table table-striped" id="myfollowing-table">
                     <thead>
                         <tr>
-                            <th scope="col">Ikut organisasi</th>
-                            <th scope="col">Status</th>
-                            <th scope="col" style="width: 100px;">#</th>
+                            <th scope="col">Organisasi</th>
+                            <th scope="col" style="width: 82px;"></th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>Nama organisasi ukm rekaya ilmu pengetahuan dan taknologi universitas gadjah
-                                mada 2023 bidang ilmu websit</td>
-                            <td>Anggota</td>
-                            <td>
-                                <button class="btn btn-sm btn-danger">
-                                    Keluar <i class="fas fa-caret-square-right"></i>
-                                </button>
-                            </td>
-                        </tr>
+
                     </tbody>
                 </table>
                 <hr>
-                <span>Kelola organisasi kamu sendiri!
-                    <button class="btn btn-success btn-sm" data-toggle="modal" data-target="#kelolaOragisasiModal">
+                <span class="btn pl-0 text-info" data-toggle="modal" data-target="#kelolaOragisasiModal"><i
+                        class="fas fa-cog"></i> Kelola organisasimu
+                    sendiri!
+                    {{-- <button class="btn btn-success btn-sm">
                         <b><i class="fas fa-cog"></i> Kelola sekarang!</b>
-                    </button>
+                    </button> --}}
                 </span>
             </div>
         </div>
     </section>
 
     {{-- Modal ikut organisasi --}}
-    <div class="modal fade" id="addOrganisasiModal" tabindex="-1" aria-labelledby="addOrganisasiModalLabel"
+    <div class="modal fade" id="followOrganisasiModal" tabindex="-1" aria-labelledby="followOrganisasiModalLabel"
         aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="addOrganisasiModalLabel">Ikut organisasi</h5>
+                    <h5 class="modal-title" id="followOrganisasiModalLabel">Ikut organisasi</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
-                    <input type="search" class="form-control shadow-none mb-3" id="search" name="search"
-                        placeholder="cari organisasi">
+                    <input type="search" class="form-control shadow-none mb-3" id="follow_org_search"
+                        name="follow_org_search" placeholder="cari organisasi">
 
-                    <div>
-                        <table class="table table-striped">
-                            <thead>
+                    <div id="org-follow-container" hidden>
+                        <table class="table table-striped w-100" id="get-data-org-table">
+                            <thead hidden>
                                 <tr>
                                     <th scope="col">Organisasi</th>
-                                    <th scope="col">#</th>
+                                    <th scope="col" class="w-25">#</th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                <tr>
-                                    <td>Nama organisasi</td>
-                                    <td>
-                                        <button class="btn btn-sm btn-info">
-                                            <i class="fas fa-plus"></i> Ikuti
-                                        </button>
-                                    </td>
-                                </tr>
-                            </tbody>
+                            {{-- <tbody>
+                            </tbody> --}}
                         </table>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <span class="mr-auto btn text-primary kelola-org-from-add"><b><i class="fas fa-cog"></i> Buat
-                            organisasi</b></span>
+                    <span class="mr-auto btn text-primary kelola-org-from-add"><i class="fas fa-cog"></i> Buat
+                        organisasi</span>
                 </div>
             </div>
         </div>
@@ -113,7 +97,7 @@
                             <thead>
                                 <tr>
                                     <th scope="col">Organisasi</th>
-                                    <th scope="col" style="width: 100px;">#</th>
+                                    <th scope="col" style="width: 100px;"></th>
                                 </tr>
                             </thead>
                             <tbody>

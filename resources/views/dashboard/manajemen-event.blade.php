@@ -20,7 +20,8 @@
             <div class="card-body px-2 pt-3 bg-card-blue">
                 <div class="table-responsive py-0 manajemen-event-box">
                     <div class="mb-2">
-                        <a href="/event/create" class="btn btn-success"><i class="fas fa-plus-circle"></i> Buat event</a>
+                        <a href="/event/create" class="btn btn-success rounded-0"><i class="fas fa-plus-circle"></i> Buat
+                            event</a>
                     </div>
                     <form action="" method="GET">
                         <div class="p-0 form-inline mb-4">
@@ -46,9 +47,9 @@
                                         <span>{{ $event->created_at->format('d-m-Y') }}</span></small><br>
                                     <div class="mt-2">
                                         <a href="/event/{{ $event->slug }}/edit" type="button"
-                                            class="btn btn-info btn-sm"><i class="fas fa-edit"></i>
+                                            class="btn btn-info btn-sm rounded-0"><i class="fas fa-edit"></i>
                                             Edit event</a>
-                                        <button type="button" class="btn btn-danger btn-sm delete-event"
+                                        <button type="button" class="btn btn-danger btn-sm rounded-0 delete-event"
                                             data-id="{{ $event->id }}"><i class="fas fa-trash-alt"></i></button>
                                     </div>
                                 </div>

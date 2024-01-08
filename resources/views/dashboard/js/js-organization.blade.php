@@ -110,6 +110,7 @@
                     Swal.fire('', response.success, 'success');
                     $('#addOrgModal').modal('hide');
                     $('#my-organization-table').DataTable().ajax.reload();
+                    $('#myfollowing-table').DataTable().ajax.reload();
 
                 } else {
                     Swal.fire('', response.error, 'error');
@@ -207,7 +208,8 @@
             dataType: 'json',
             success: function(response) {
                 if (response.success) {
-                    Swal.fire('', response.success, 'success');
+                    //Swal.fire('', response.success, 'success');
+                    alertify.success('<i class="fas fa-check"></i> ' + response.success);
                     $('#editOrgModal').modal('hide');
                     $('#my-organization-table').DataTable().ajax.reload();
 
@@ -242,8 +244,11 @@
                         org_id: org_id,
                     },
                     success: function(response) {
-                        Swal.fire('', response.success, 'success')
+                        //Swal.fire('', response.success, 'success')
+                        alertify.success('<i class="fas fa-check"></i> ' + response
+                            .success);
                         $('#my-organization-table').DataTable().ajax.reload();
+                        $('#myfollowing-table').DataTable().ajax.reload();
                     },
                     error: function(jqXHR, textStatus, errorThrown) {
                         Swal.fire('', 'error!', 'error');
@@ -255,4 +260,148 @@
             }
         });
     });
+
+    //Handle follow organisasi
+
+    $('#followOrganisasiModal').on('shown.bs.modal', function(e) {
+        e.preventDefault();
+        var dataOrganization = $('#get-data-org-table').DataTable({
+            "dom": 'rtip',
+            "bInfo": false,
+            "bPaginate": false,
+            "ordering": false,
+            processing: true,
+            serverside: true,
+            destroy: true,
+            ajax: {
+                'type': 'GET',
+                'url': '/dashboard/get-organization',
+            },
+
+            columns: [{
+                data: 'org',
+                name: 'org'
+            }, {
+                data: 'org_follow',
+                name: 'org_follow',
+                class: 'width-25',
+            }]
+        });
+
+        $('#follow_org_search').keyup(function() {
+            dataOrganization.search($(this).val()).draw();
+
+            if ($(this).val() == '' || $(this).val() == null) {
+                $('#org-follow-container').attr('hidden', true);
+            } else {
+                $('#org-follow-container').attr('hidden', false);
+            }
+        });
+    })
+
+    $('#followOrganisasiModal').on('hidden.bs.modal', function(e) {
+        $('#org-follow-container').attr('hidden', true);
+        $('#follow_org_search').val('');
+    });
+
+    $('body').on('click', '.follow-organization', function(e) {
+        e.preventDefault();
+        var org_id = $(this).data("org_id");
+
+        $.ajax({
+            url: '/dashboard/follow-organization',
+            type: 'POST',
+            data: {
+                org_id: org_id,
+            },
+            success: function(response) {
+                if (response.success) {
+                    alertify.success('<i class="fas fa-check"></i> ' + response.success);
+                    $('#followOrganisasiModal').modal('hide');
+                    $('#myfollowing-table').DataTable().ajax.reload();
+                } else {
+                    Swal.fire('', response.error, 'error')
+                }
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                //Swal.fire('', 'error!', 'error');
+            }
+
+        });
+
+    })
+
+    $(document).ready(function(e) {
+
+        var dataFollowingOrganization = $('#myfollowing-table').DataTable({
+            "dom": 'rtip',
+            "bInfo": false,
+            "ordering": false,
+            processing: true,
+            serverside: true,
+            "oLanguage": {
+                "sEmptyTable": "Kamu belum gabung organisasi apapun!"
+            },
+            language: {
+                'paginate': {
+                    'previous': '<i class="fas fa-chevron-circle-left"></i>',
+                    'next': '<i class="fas fa-chevron-circle-right"></i>'
+                }
+            },
+            destroy: true,
+            ajax: {
+                'type': 'GET',
+                'url': '/dashboard/get-foll-organization',
+            },
+
+            columns: [{
+                data: 'org_nama',
+                name: 'org_nama'
+            }, {
+                data: 'org_unfollow',
+                name: 'org_unfollow',
+            }]
+        });
+    })
+
+    $('body').on('click', '.unfollow-organization', function(e) {
+        e.preventDefault();
+        var org_id = $(this).data("org_id");
+
+        Swal.fire({
+            text: "Keluar Organisasi?",
+            showCancelButton: true,
+            confirmButtonColor: "#d33",
+            confirmButtonText: "<i class='fas fa-trash-alt'></i> Keluar",
+        }).then((result) => {
+            /* Read more about isConfirmed, isDenied below */
+            if (result.isConfirmed) {
+                console.log(org_id);
+
+                $.ajax({
+                    url: '/dashboard/unfollow-organization',
+                    type: 'POST',
+                    data: {
+                        org_id: org_id,
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                            alertify.success('<i class="fas fa-check"></i> ' + response
+                                .success);
+                            $('#myfollowing-table').DataTable().ajax.reload();
+                        } else {
+                            Swal.fire('', response.error, 'error')
+                        }
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        //Swal.fire('', 'error!', 'error');
+                    }
+
+                });
+            } else if (result.isDenied) {
+                Swal.fire("Changes are not saved", "", "info");
+            }
+        });
+
+    })
 </script>

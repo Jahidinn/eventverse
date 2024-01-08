@@ -89,7 +89,7 @@ class OrganizationController extends Controller
 
 		return DataTables::of($dataOrganization)
 			->addColumn('org', function ($dataOrganization) {
-				return view('dashboard.components.column-myorg')->with(['data' => $dataOrganization]);
+				return view('dashboard.components.column-org-name')->with(['data' => $dataOrganization]);
 			})
 			->addColumn('org_action', function ($dataOrganization) {
 				return view('dashboard.components.column-myorg-action')->with(['data' => $dataOrganization]);
@@ -165,9 +165,9 @@ class OrganizationController extends Controller
 			$sukseUpdateOrg = Organisation::where('id', $request->org_id_edit)->update($data);
 
 			if ($sukseUpdateOrg) {
-				return response()->json(['success' => 'Organisasi berhasil dibuat!']);
+				return response()->json(['success' => 'Organisasi berhasil di edit!']);
 			} else {
-				return response()->json(['error' => 'Gagall membuat organisasi!']);
+				return response()->json(['error' => 'Gagall edit organisasi!']);
 			}
 		}
 	}
@@ -189,5 +189,93 @@ class OrganizationController extends Controller
 		} else {
 			return response()->json(['error' => 'Gagal!']);
 		}
+	}
+
+	//Handle follow org
+	public function getOrg(Request $request)
+	{
+		if (!auth()->user()) {
+			return response()->json(['error' => 'Gagal!']);
+		}
+
+		$user_id = auth()->user()->id;
+		$dataOrganization = Organisation::orderByRaw('id DESC')
+			->get();
+
+		return DataTables::of($dataOrganization)
+			->addColumn('org', function ($dataOrganization) {
+				return view('dashboard.components.column-org-name')->with(['data' => $dataOrganization]);
+			})
+			->addColumn('org_follow', function ($dataOrganization) {
+				return view('dashboard.components.column-org-follow')->with(['data' => $dataOrganization]);
+			})
+			->make(true);
+	}
+
+	public function followOrg(Request $request)
+	{
+		$user_id = auth()->user()->id;
+		$org_id = $request->org_id;
+
+		//cek siapa pembuat organisasi
+		$cekOwner = Organisation::where('id', $org_id)->first();
+		$owner = $cekOwner->user_created == $user_id ? 'Owner' : 'Member';
+
+		$data = [
+			'user_id' => $user_id,
+			'org_id' => $org_id,
+			'position' => $owner,
+			'status' => 1,
+		];
+
+		//Cek sudah ikut apa belum
+		$cekOrg = OrganisationMember::where('user_id', $user_id)->where('org_id', $org_id)->first();
+		if ($cekOrg) {
+			return response()->json(['error' => 'Kamu sudah sudah gabung organisasi ini!']);
+		}
+
+		$follow = OrganisationMember::create($data);
+
+		if ($follow) {
+			return response()->json(['success' => 'Berhasil request gabung organisasi']);
+		} else {
+			return response()->json(['error' => 'Gagal!']);
+		}
+	}
+
+	public function unfollowOrg(Request $request)
+	{
+		$user_id = auth()->user()->id;
+		$org_id = $request->org_id;
+
+		$delete = OrganisationMember::where('user_id', $user_id)->where('id', $org_id)->delete();
+
+		if ($delete) {
+			return response()->json(['success' => 'Berhasil keluar organisasi']);
+		} else {
+			return response()->json(['error' => 'Gagal!']);
+		}
+	}
+
+	public function myFollowingOrg(Request $request)
+	{
+
+		$user_id = auth()->user()->id;
+
+		$dataOrganization = OrganisationMember::with(['user', 'org'])->where('user_id', $user_id)
+			->orderByRaw('id DESC')
+			->get();
+
+		return DataTables::of($dataOrganization)
+			->addColumn('org_nama', function ($dataOrganization) {
+				return view('dashboard.components.column-org-following-name')->with(['data' => $dataOrganization]);
+			})
+			->addColumn('org_position', function ($dataOrganization) {
+				return view('dashboard.components.column-org-foll-position')->with(['data' => $dataOrganization]);
+			})
+			->addColumn('org_unfollow', function ($dataOrganization) {
+				return view('dashboard.components.column-org-unfollow')->with(['data' => $dataOrganization]);
+			})
+			->make(true);
 	}
 }

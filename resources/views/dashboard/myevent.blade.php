@@ -77,44 +77,46 @@
                                     {{-- button action --}}
                                     @if ($myevent->status == 'Paid')
                                         {{-- IF PAID --}}
-                                        <button type="button" class="btn btn-info btn-sm detail-myevent"
+                                        <button type="button" class="btn btn-info btn-sm rounded-0 detail-myevent"
                                             data-id="{{ $myevent->id }}">
                                             <i class="fas fa-list"></i> Lihat detail
                                         </button>
                                     @elseif($myevent->status == 'Unpaid')
                                         {{-- IF UNPAID --}}
-                                        <button type="button" class="btn btn-info btn-sm lanjutkan-transaksi"
+                                        <button type="button" class="btn btn-info btn-sm rounded-0 lanjutkan-transaksi"
                                             data-id="{{ $myevent->id }}">
                                             <i class="fas fa-wallet"></i> Bayar
                                         </button>
-                                        <button type="button" class="btn btn-info btn-sm detail-myevent"
+                                        <button type="button" class="btn btn-info btn-sm rounded-0 detail-myevent"
                                             data-id="{{ $myevent->id }}"><i class="fas fa-list"></i></button>
-                                        <button type="button" class="btn btn-danger btn-sm" id="delete-myevent"
+                                        <button type="button" class="btn btn-danger rounded-0 btn-sm" id="delete-myevent"
                                             data-id="{{ $myevent->id }}">
                                             <i class="fas fa-trash-alt"></i>
                                         </button>
                                     @elseif($myevent->status == 'Pending')
                                         {{-- IF PENDING --}}
-                                        <button type="button" class="btn btn-info btn-sm lanjutkan-transaksi"
+                                        <button type="button" class="btn btn-info btn-sm rounded-0 lanjutkan-transaksi"
                                             data-id="{{ $myevent->id }}">
                                             <i class="fas fa-wallet"></i> Bayar
                                         </button>
-                                        <button type="button" class="btn btn-info btn-sm" data-id="{{ $myevent->id }}"><i
-                                                class="fas fa-list" detail-myevent></i></button>
+                                        <button type="button" class="btn btn-info rounded-0 btn-sm"
+                                            data-id="{{ $myevent->id }}"><i class="fas fa-list"
+                                                detail-myevent></i></button>
                                     @elseif($myevent->status == 'Expired')
                                         {{-- IF EXPIRED --}}
-                                        <button type="button" class="btn btn-info btn-sm detail-myevent"
+                                        <button type="button" class="btn btn-info btn-sm rounded-0 detail-myevent"
                                             data-id="{{ $myevent->id }}"><i class="fas fa-list"></i> Lihat detail</button>
-                                        <button type="button" class="btn btn-danger btn-sm" disabled
+                                        <button type="button" class="btn btn-danger btn-sm rounded-0" disabled
                                             data-id="{{ $myevent->id }}">
                                             <i class="fas fa-trash-alt"></i>
                                         </button>
                                     @else
                                         {{-- ELSE --}}
-                                        <button type="button" class="btn btn-info btn-sm" data-id="{{ $myevent->id }}">
+                                        <button type="button" class="btn btn-info btn-sm rounded-0"
+                                            data-id="{{ $myevent->id }}">
                                             {{ $myevent->status }}
                                         </button>
-                                        <button type="button" class="btn btn-info btn-sm detail-myevent"
+                                        <button type="button" class="btn btn-info btn-sm detail-myevent rounded-0"
                                             data-id="{{ $myevent->id }}"><i class="fas fa-list"></i></button>
                                     @endif
 

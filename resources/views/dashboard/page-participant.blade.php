@@ -31,7 +31,7 @@
                         <div class="col-md-12 row card-body px-3 pb-3">
                             <div class="col-9">
                                 {{-- Event --}}
-                                <b class="text-secondary title-manage-event">
+                                <b class="text-info title-manage-event">
                                     @php
                                         $title = $event->title;
                                         if (strlen($title) > 44) {
@@ -50,13 +50,13 @@
                                 @endphp
 
                                 <small>
-                                    <b class="text-success"><span>{{ $participant }}</span> PENDAFTAR</b>
+                                    <b class="text-secondary"><span>{{ $participant }}</span> PENDAFTAR</b>
                                 </small>
 
                                 <hr class="my-3">
 
                                 <div class="mt-2">
-                                    <button type="button" class="btn btn-info btn-sm border-rounded px-3 detail-peserta"
+                                    <button type="button" class="btn btn-info btn-sm rounded-0 px-3 detail-peserta"
                                         data-id="{{ $event->id }}" data-participant="{{ $participant }}"
                                         data-title="{{ $event->title }}">
                                         <i class="fas fa-users"></i> Detail Peserta

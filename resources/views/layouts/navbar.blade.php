@@ -25,16 +25,16 @@
             <li><a href="/price">biaya</a></li>
 
             @if (Auth::check())
-                <li style="position: relative;top: -7px; padding: 0; margin: 0; overflow: hidden;"><a href="/dashboard"
+                <li style="position: relative;top: -7px; padding: 1; margin: 0; "><a href="/dashboard"
                         class=" link-login-register"><button class="btn btn-success w-100 px-1 mr-4 py-1"><i
                                 class="fas fa-user mr-1"></i> {{ auth()->user()->name }}</button></a>
                 </li>
             @else
-                <li style="position: relative;top: -7px; padding: 0; margin: 0; overflow: hidden;"><a href="/login"
+                <li style="position: relative;top: -7px; padding: 0; margin: 0;"><a href="/login"
                         class=" link-login-register"><button
                             class="btn btn-success w-100 px-3 mr-4 py-1">Login</button></a>
                 </li>
-                <li style="position: relative;top: -7px; padding: 0; margin: 0; overflow: hidden;"><a href="/register"
+                <li style="position: relative;top: -7px; padding: 0; margin: 0;"><a href="/register"
                         class="link-login-register"><button class="btn btn-primary w-100 px-3 py-1">Daftar</button></a>
                 </li>
             @endif

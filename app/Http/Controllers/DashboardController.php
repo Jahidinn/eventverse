@@ -40,7 +40,7 @@ class DashboardController extends Controller
 				$query->where('title', 'like', '%' . $search . '%');
 			});
 		}
-		$transaction = $transaction->paginate(2)->withQueryString();
+		$transaction = $transaction->paginate(10)->withQueryString()->onEachSide(2);
 
 		return view('dashboard.myevent', [
 			'myevents' => $transaction,

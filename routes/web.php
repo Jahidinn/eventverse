@@ -66,6 +66,10 @@ Route::post('/dashboard/edit-organization', [OrganizationController::class, 'edi
 Route::get('/dashboard/get-myorganization', [OrganizationController::class, 'getMyOrg'])->middleware('auth');
 Route::get('/dashboard/detail-organization', [OrganizationController::class, 'detailOrg'])->middleware('auth');
 Route::post('/dashboard/delete-organization', [OrganizationController::class, 'deleteOrg'])->middleware('auth');
+Route::get('/dashboard/get-organization', [OrganizationController::class, 'getOrg'])->middleware('auth');
+Route::post('/dashboard/follow-organization', [OrganizationController::class, 'followOrg'])->middleware('auth');
+Route::post('/dashboard/unfollow-organization', [OrganizationController::class, 'unfollowOrg'])->middleware('auth');
+Route::get('/dashboard/get-foll-organization', [OrganizationController::class, 'myFollowingOrg'])->middleware('auth');
 
 Route::get('/get-cities/{code}', [EventController::class, 'getCities']);
 Route::get('/check-url', [EventController::class, 'cekUrl']);
