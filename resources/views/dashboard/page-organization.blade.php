@@ -122,12 +122,12 @@
                         <hr>
                         <div class="card text-center">
                             <div class="card-body text-center">
-                                <div class="org_logo_container">
+                                <div class="org_logo_container org-info-logo-container">
                                     <img src="{{ asset('storage/organization-images') . '/' . 'logo.png' }}"
-                                        class="img-circle" alt="User Image" id="org_logo">
+                                        class="img-circle" alt="User Image" id="org-info-logo">
                                 </div>
-                                <b>Nama Organisasi</b><br>
-                                <span class="badge badge-secondary">Public</span>
+                                <b class="org-info-name">Nama Organisasi</b><br>
+                                <span class="badge badge-secondary org-info-type">Public</span>
                             </div>
                         </div>
                         <ul class="nav nav-tabs p-0 border-0" role="tablist">
@@ -143,25 +143,16 @@
                         <!-- Tab panes -->
                         <div class="tab-content">
                             <div class="tab-pane active" id="participant" role="tabpanel">
-                                <input type="search" class="form-control shadow-none mb-3 mt-2" id="org_search"
-                                    name="org_search" placeholder="Cari anggota">
+                                <input type="search" class="form-control shadow-none mb-3 mt-2" id="member-search"
+                                    name="member-search" placeholder="Cari anggota">
                                 <table class="table table-striped" id="organization-member-table">
                                     <thead>
                                         <tr>
                                             <th scope="col">Anggota</th>
-                                            <th scope="col" style="width: 150px;"></th>
+                                            <th scope="col" style="width: 90px;"></th>
                                         </tr>
                                     </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>Nama Anggota</td>
-                                            <td>
-                                                <button class="btn btn-sm btn-danger">
-                                                    <i class="fas fa-minus-circle"></i> Remove
-                                                </button>
-                                            </td>
-                                        </tr>
-                                    </tbody>
+
                                 </table>
                             </div>
                             <div class="tab-pane" id="request" role="tabpanel">

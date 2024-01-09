@@ -278,4 +278,21 @@ class OrganizationController extends Controller
 			})
 			->make(true);
 	}
+
+	public function getOrgMember(Request $request)
+	{
+		$dataMember = OrganisationMember::with(['user', 'org'])->where('org_id', $request->org_id)
+			->whereIn('position', ['Owner', 'Member'])
+			->orderByRaw('id ASC')
+			->get();
+
+		return DataTables::of($dataMember)
+			->addColumn('member_name', function ($dataMember) {
+				return view('dashboard.components.column-member-name')->with(['data' => $dataMember]);
+			})
+			->addColumn('member_action', function ($dataMember) {
+				return view('dashboard.components.column-add-remove-member')->with(['data' => $dataMember]);
+			})
+			->make(true);
+	}
 }

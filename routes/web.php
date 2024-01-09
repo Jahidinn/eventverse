@@ -71,6 +71,8 @@ Route::post('/dashboard/follow-organization', [OrganizationController::class, 'f
 Route::post('/dashboard/unfollow-organization', [OrganizationController::class, 'unfollowOrg'])->middleware('auth');
 Route::get('/dashboard/get-foll-organization', [OrganizationController::class, 'myFollowingOrg'])->middleware('auth');
 
+Route::get('/dashboard/get-organization-member', [OrganizationController::class, 'getOrgMember'])->middleware('auth');
+
 Route::get('/get-cities/{code}', [EventController::class, 'getCities']);
 Route::get('/check-url', [EventController::class, 'cekUrl']);
 

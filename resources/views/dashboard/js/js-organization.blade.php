@@ -409,11 +409,63 @@
         e.preventDefault();
         $('.my-org-info').attr('hidden', false)
         $('.data-my-org').attr('hidden', true)
+
+        var org_id = $(this).data("id");
+        var org_name = $(this).data("name");
+        var org_type = $(this).data("type");
+        var org_logo = $(this).data("logo");
+
+        if (org_logo == null || org_logo == '') {
+            org_logo = 'logo.png'
+        }
+
+        $('.org-info-type').text(org_type)
+        $('.org-info-name').text(org_name)
+        $("#org-info-logo").attr("src", "{{ asset('storage/organization-images/') }}/" + org_logo);
+
+        var organizationMember = $('#organization-member-table').DataTable({
+            "dom": 'rtip',
+            "bInfo": false,
+            //"bPaginate": false,
+            "ordering": false,
+            processing: true,
+            serverside: true,
+            language: {
+                'paginate': {
+                    'previous': '<i class="fas fa-chevron-circle-left"></i>',
+                    'next': '<i class="fas fa-chevron-circle-right"></i>'
+                }
+            },
+            destroy: true,
+            ajax: {
+                'type': 'GET',
+                'url': '/dashboard/get-organization-member',
+                data: {
+                    org_id: org_id,
+                },
+            },
+
+            columns: [{
+                data: 'member_name',
+                name: 'member_name'
+            }, {
+                data: 'member_action',
+                name: 'member_action',
+            }]
+        });
+
+        $('#member-search').keyup(function() {
+            organizationMember.search($(this).val()).draw();
+        });
     })
 
     $('body').on('click', '.back-my-org-info', function(e) {
         e.preventDefault();
         $('.my-org-info').attr('hidden', true)
         $('.data-my-org').attr('hidden', false)
+
+        $('.org-info-type').text('type')
+        $('.org-info-name').text('name')
+        $("#org-info-logo").attr("src", "{{ asset('storage/organization-images/logo.png') }}");
     })
 </script>
