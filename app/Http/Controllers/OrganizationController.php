@@ -219,7 +219,7 @@ class OrganizationController extends Controller
 
 		//cek siapa pembuat organisasi
 		$cekOwner = Organisation::where('id', $org_id)->first();
-		$owner = $cekOwner->user_created == $user_id ? 'Owner' : 'Member';
+		$owner = $cekOwner->user_created == $user_id ? 'Owner' : 'Request join';
 
 		$data = [
 			'user_id' => $user_id,
@@ -292,6 +292,23 @@ class OrganizationController extends Controller
 			})
 			->addColumn('member_action', function ($dataMember) {
 				return view('dashboard.components.column-add-remove-member')->with(['data' => $dataMember]);
+			})
+			->make(true);
+	}
+
+	public function getOrgMemberReequest(Request $request)
+	{
+		$dataMember = OrganisationMember::with(['user', 'org'])->where('org_id', $request->org_id)
+			->whereIn('position', ['Request join'])
+			->orderByRaw('id ASC')
+			->get();
+
+		return DataTables::of($dataMember)
+			->addColumn('member_name', function ($dataMember) {
+				return view('dashboard.components.column-member-name')->with(['data' => $dataMember]);
+			})
+			->addColumn('member_action', function ($dataMember) {
+				return view('dashboard.components.column-member-request')->with(['data' => $dataMember]);
 			})
 			->make(true);
 	}

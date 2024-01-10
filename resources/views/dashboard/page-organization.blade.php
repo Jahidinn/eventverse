@@ -87,14 +87,14 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <div class="modal-body">
+                <div class="modal-body ">
                     <div class="data-my-org">
                         <button class="btn btn-info mb-3 rounded-0 buat-organisasi"><i class="fas fa-plus"></i> Buat
                             organisasi</button>
                         <input type="search" class="form-control shadow-none mb-3" id="org_search" name="org_search"
                             placeholder="Cari organisasi kamu">
                         <div>
-                            <table class="table table-striped" id="my-organization-table">
+                            <table class="table table-striped w-100" id="my-organization-table">
                                 <thead>
                                     <tr>
                                         <th scope="col">Organisasi</th>
@@ -136,7 +136,7 @@
                             </li>
                             <li class="nav-item col-6 p-0 mb-2">
                                 <a class="nav-link" data-toggle="tab" href="#request" role="tab">Request <span
-                                        class="badge badge-secondary">8</span></a>
+                                        class="badge badge-secondary member-request-count">0</span></a>
                             </li>
                         </ul>
 
@@ -145,7 +145,7 @@
                             <div class="tab-pane active" id="participant" role="tabpanel">
                                 <input type="search" class="form-control shadow-none mb-3 mt-2" id="member-search"
                                     name="member-search" placeholder="Cari anggota">
-                                <table class="table table-striped" id="organization-member-table">
+                                <table class="table table-striped w-100" id="organization-member-table">
                                     <thead>
                                         <tr>
                                             <th scope="col">Anggota</th>
@@ -155,24 +155,15 @@
 
                                 </table>
                             </div>
-                            <div class="tab-pane" id="request" role="tabpanel">
-                                <table class="table table-striped" id="organization-request-table">
+                            <div class="tab-pane" id="request">
+                                <table class="table table-striped w-100" id="organization-request-table">
                                     <thead>
                                         <tr>
                                             <th scope="col">Member request</th>
-                                            <th scope="col" style="width: 100px;"></th>
+                                            <th scope="col" class="w-25"></th>
                                         </tr>
                                     </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>Nama Anggota</td>
-                                            <td>
-                                                <button class="btn btn-sm btn-success">
-                                                    <i class="fas fa-check-square"></i> Accept
-                                                </button>
-                                            </td>
-                                        </tr>
-                                    </tbody>
+
                                 </table>
                             </div>
                         </div>

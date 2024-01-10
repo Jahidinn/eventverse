@@ -457,6 +457,45 @@
         $('#member-search').keyup(function() {
             organizationMember.search($(this).val()).draw();
         });
+
+        var organizationMemberReq = $('#organization-request-table').DataTable({
+            "dom": 'rtip',
+            "bInfo": false,
+            //"bPaginate": false,
+            "ordering": false,
+            processing: true,
+            serverside: true,
+            language: {
+                'paginate': {
+                    'previous': '<i class="fas fa-chevron-circle-left"></i>',
+                    'next': '<i class="fas fa-chevron-circle-right"></i>'
+                }
+            },
+            destroy: true,
+            ajax: {
+                'type': 'GET',
+                'url': '/dashboard/get-organization-request',
+                data: {
+                    org_id: org_id,
+                },
+            },
+
+            columns: [{
+                data: 'member_name',
+                name: 'member_name'
+            }, {
+                data: 'member_action',
+                name: 'member_action',
+                class: 'width-20 px-0',
+            }]
+        });
+
+        organizationMemberReq.on("draw", function() {
+            memberRequest = organizationMemberReq.rows({
+                search: 'applied'
+            }).count();
+            $('.member-request-count').text(memberRequest);
+        });
     })
 
     $('body').on('click', '.back-my-org-info', function(e) {
@@ -468,4 +507,9 @@
         $('.org-info-name').text('name')
         $("#org-info-logo").attr("src", "{{ asset('storage/organization-images/logo.png') }}");
     })
+
+    $('#kelolaOragisasiModal').on('hidden.bs.modal', function(e) {
+        $('.my-org-info').attr('hidden', true)
+        $('.data-my-org').attr('hidden', false)
+    });
 </script>

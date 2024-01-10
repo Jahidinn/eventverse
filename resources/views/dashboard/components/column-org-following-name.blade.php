@@ -3,8 +3,6 @@
         <span class="badge badge-info">{{ $data->position }}</span>
     @elseif($data->position == 'Request gabung')
         <span class="badge badge-warning">{{ $data->position }}</span>
-    @elseif($data->position == 'Request keluar')
-        <span class="badge badge-warning">{{ $data->position }}</span>
     @else
         <span class="badge badge-secondary">{{ $data->position }}</span>
     @endif

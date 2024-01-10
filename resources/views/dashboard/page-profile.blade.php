@@ -73,7 +73,7 @@
                 </div>
                 <div class="row col-md-8 p-0 pl-3 mt-2">
                     <div class="col-5">Organisasi</div>
-                    <div class="col-7">UKM rekayasa ilminpen getahuan dan teknologi</div>
+                    <div class="col-7 pr-1">UKM rekayasa ilmu penge <br> tahuan dan teknologi</div>
                 </div>
                 <div class="row col-md-8 p-0 pl-3 mt-2">
                     <div class="col-5"></div>
