@@ -394,7 +394,7 @@
                         }
                     },
                     error: function(jqXHR, textStatus, errorThrown) {
-                        //Swal.fire('', 'error!', 'error');
+                        Swal.fire('', 'error!', 'error');
                     }
 
                 });
@@ -512,4 +512,33 @@
         $('.my-org-info').attr('hidden', true)
         $('.data-my-org').attr('hidden', false)
     });
+
+    $('body').on('click', '.org-accept-member', function(e) {
+        e.preventDefault();
+        var org_member_id = $(this).data("org_member_id");
+
+        $.ajax({
+            url: '/dashboard/accept-follow',
+            type: 'POST',
+            data: {
+                org_member_id: org_member_id,
+            },
+            success: function(response) {
+                if (response.success) {
+                    alertify.success('<i class="fas fa-check"></i> ' + response
+                        .success);
+                    $('#organization-request-table').DataTable().ajax.reload();
+                    $('#organization-member-table').DataTable().ajax.reload();
+                } else {
+                    Swal.fire('', response.error, 'error')
+                }
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                Swal.fire('', 'error!', 'error');
+            }
+
+        });
+
+        console.log(org_member_id);
+    })
 </script>

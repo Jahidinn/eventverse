@@ -312,4 +312,17 @@ class OrganizationController extends Controller
 			})
 			->make(true);
 	}
+
+	public function AcceptFollow(Request $request)
+	{
+		$dataMember = OrganisationMember::find($request->org_member_id);
+		$update = $dataMember->update(['position' => 'Member']);
+
+		if ($update) {
+			return response()->json(['success' => 'Anggota organisasi ditambahkan!']);
+		} else {
+			# code...
+			return response()->json(['error' => 'Gagal menambahkan!']);
+		}
+	}
 }
