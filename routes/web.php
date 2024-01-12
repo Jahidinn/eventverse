@@ -71,6 +71,7 @@ Route::get('/dashboard/get-organization', [OrganizationController::class, 'getOr
 Route::post('/dashboard/follow-organization', [OrganizationController::class, 'followOrg'])->middleware('auth');
 Route::post('/dashboard/unfollow-organization', [OrganizationController::class, 'unfollowOrg'])->middleware('auth');
 Route::post('/dashboard/accept-follow', [OrganizationController::class, 'AcceptFollow'])->middleware('auth');
+Route::post('/dashboard/remove-member', [OrganizationController::class, 'removeMember'])->middleware('auth');
 Route::get('/dashboard/get-foll-organization', [OrganizationController::class, 'myFollowingOrg'])->middleware('auth');
 
 Route::get('/dashboard/get-organization-member', [OrganizationController::class, 'getOrgMember'])->middleware('auth');

@@ -325,4 +325,24 @@ class OrganizationController extends Controller
 			return response()->json(['error' => 'Gagal menambahkan!']);
 		}
 	}
+
+	public function removeMember(Request $request)
+	{
+		$user_id = auth()->user()->id;
+		$member_id = $request->org_member_id;
+
+		//cek orwner atau bukan
+		$cekMember = OrganisationMember::where('user_id', $user_id)->where('position', 'Owner')->first();
+		if (!$cekMember || empty($cekMember)) {
+			return response()->json(['error' => 'Erorrr!']);
+		}
+
+		$delete = OrganisationMember::where('id', $member_id)->delete();
+
+		if ($delete) {
+			return response()->json(['success' => 'Berhasil dikeluarkan!']);
+		} else {
+			return response()->json(['error' => 'Gagal!']);
+		}
+	}
 }

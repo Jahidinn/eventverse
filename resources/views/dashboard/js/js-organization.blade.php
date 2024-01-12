@@ -405,6 +405,8 @@
 
     })
 
+
+    //Proses menampilkan halaman detail dan manajemen member organisasi 
     $('body').on('click', '.org-info', function(e) {
         e.preventDefault();
         $('.my-org-info').attr('hidden', false)
@@ -423,6 +425,7 @@
         $('.org-info-name').text(org_name)
         $("#org-info-logo").attr("src", "{{ asset('storage/organization-images/') }}/" + org_logo);
 
+        //Data member organisasi
         var organizationMember = $('#organization-member-table').DataTable({
             "dom": 'rtip',
             "bInfo": false,
@@ -458,6 +461,7 @@
             organizationMember.search($(this).val()).draw();
         });
 
+        //Data member request
         var organizationMemberReq = $('#organization-request-table').DataTable({
             "dom": 'rtip',
             "bInfo": false,
@@ -498,6 +502,7 @@
         });
     })
 
+    //Proses kembali dari manajemen member organisasi
     $('body').on('click', '.back-my-org-info', function(e) {
         e.preventDefault();
         $('.my-org-info').attr('hidden', true)
@@ -513,6 +518,7 @@
         $('.data-my-org').attr('hidden', false)
     });
 
+    //ajax prosess menerima request member
     $('body').on('click', '.org-accept-member', function(e) {
         e.preventDefault();
         var org_member_id = $(this).data("org_member_id");
@@ -538,7 +544,49 @@
             }
 
         });
+    })
 
-        console.log(org_member_id);
+
+    //ajax prosess mengeluarkan member
+    $('body').on('click', '.org-remove-member', function(e) {
+        e.preventDefault();
+        var org_member_id = $(this).data("org_member_id");
+        var org_member_name = $(this).data("org_member_name");
+
+        Swal.fire({
+            text: "Keluarkan " + org_member_name + " ?",
+            showCancelButton: true,
+            confirmButtonColor: "#d33",
+            confirmButtonText: "<i class='fas fa-minus-circle'></i> Keluarkan",
+        }).then((result) => {
+            /* Read more about isConfirmed, isDenied below */
+            if (result.isConfirmed) {
+
+                $.ajax({
+                    url: '/dashboard/remove-member',
+                    type: 'POST',
+                    data: {
+                        org_member_id: org_member_id,
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                            alertify.success('<i class="fas fa-check"></i> ' + response
+                                .success);
+                            $('#organization-request-table').DataTable().ajax.reload();
+                            $('#organization-member-table').DataTable().ajax.reload();
+                        } else {
+                            Swal.fire('', response.error, 'error')
+                        }
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        Swal.fire('', 'error!', 'error');
+                    }
+
+                });
+            } else if (result.isDenied) {
+                Swal.fire("Changes are not saved", "", "info");
+            }
+        });
+
     })
 </script>
