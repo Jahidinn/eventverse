@@ -24,11 +24,22 @@
                     </div>
                     <div class="card-body">
                         <h5 class="card-title mt-3 mb-0">{{ $detailEvent->title }}</h5>
-                        <a href="">
-                            <small>
-                                <strong> <i
-                                        class="fas fa-user-circle mr-1 text-secondary"></i>{{ $detailEvent->penyelenggara->name }}</strong>
-                            </small>
+                        @php
+                            if ($detailEvent->organizer == 'org') {
+                                $penyelenggara = $detailEvent->org->org_name;
+                            } elseif ($detailEvent->organizer == 'individual') {
+                                $penyelenggara = $detailEvent->individual->name;
+                            } elseif ($detailEvent->organizer == null || $detailEvent->organizer_id == null || $detailEvent->organizer == '' || $detailEvent->organizer_id == '') {
+                                $penyelenggara = '';
+                            } else {
+                                $penyelenggara = '';
+                            }
+
+                        @endphp
+                        <a href="" class=" mt-2 badge badge-info">
+
+                            <i class="fas fa-user-circle mr-1"></i>{{ $penyelenggara }}
+
                         </a>
                         <hr>
 
@@ -163,29 +174,73 @@
             <div class="col-12 col-md-4 m-0 p-1 ">
 
                 <div class="card mx-1 shadow">
-                    <div class="card-body">
-                        <h5>A propos de l'auteur</h5>
+                    <div class="card-body text-left">
+                        <h5>Info penyelenggara</h5>
                         <hr />
-                        <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Cupiditate amet ullam excepturi
-                            odio impedit saepe nemo repellendus,</p>
+
+                        @if ($detailEvent->organizer == 'org')
+                            {{-- Jika penyelenggar organisasi --}}
+                            @php
+                                $detailEvent->org->org_image ? ($logo = $detailEvent->org->org_image) : ($logo = 'default-user.jpg');
+                            @endphp
+
+                            <div id="org-info-logo-container">
+                                <img src="{{ asset('storage/organization-images') . '/' . $logo }}" class="org-info-logo">
+                            </div>
+
+                            <a class="badge badge-info mt-3"
+                                href="/organisasi/{{ $detailEvent->org->org_id }}">{{ $detailEvent->org->org_name }}</a>
+                            <p class="mb-1 mt-1">{{ $detailEvent->org->org_contact }}</p>
+                            <p class="mb-1">{{ $detailEvent->org->org_institution }}</p>
+                        @elseif($detailEvent->organizer == 'individual')
+                            {{-- Jika penyelenggar individual --}}
+
+                            @php
+                                $detailEvent->individual->profile_picture ? ($logo = $detailEvent->individual->profile_picture) : ($logo = 'default-user.jpg');
+                            @endphp
+
+                            <div id="org-info-logo-container">
+                                <img src="{{ asset('storage/profile-images') . '/' . $logo }}" class="org-info-logo">
+                            </div>
+
+                            <a class="badge badge-info mt-3"
+                                href="/user/{{ $detailEvent->individual->username }}">{{ $detailEvent->individual->name }}</a>
+                            <p class="mb-1 mt-1">{{ $detailEvent->individual->email }}</p>
+                            {{-- Mengatasi jika ada info penyelenggara kosong --}}
+                        @elseif(
+                            $detailEvent->organizer == null ||
+                                $detailEvent->organizer_id == null ||
+                                $detailEvent->organizer == '' ||
+                                $detailEvent->organizer_id == '')
+                            <div id="org-info-logo-container">
+                                <img src="{{ asset('storage/profile-images') . '/default-user.jpg' }}"
+                                    class="org-info-logo">
+                            </div>
+                            <a class="badge badge-info mt-3">No info!</a>
+                        @else
+                            <a class="badge badge-info mt-3">No info!</a>
+                        @endif
+
                     </div>
                 </div>
+
                 <br />
+
                 <div class="card mx-1 shadow">
                     <div class="card-body">
-                        <h5>Les formations</h5>
+                        <h6>Buat eventmu sekarang!</h6>
                         <hr />
-                        <button type="button" class="btn btn-light">Payantes</button>
-                        <button type="button" class="btn btn-dark">Gratuites</button>
+                        <a type="button" href="/login" class="btn btn-light">Login</a>
+                        <a type="button" href="/event/create" class="btn btn-dark">Buat!</a>
                     </div>
                 </div>
                 <br />
                 <div class="card mx-1">
                     <div class="card-body">
-                        <h5>Présentation</h5>
+                        <h6>Bingung? Panduan buat event 👇</h6>
                         <hr />
                         <div class="ratio ratio-16x9">
-                            <iframe src="https://www.youtube.com/embed/ZEyAs3NWH4A" title="YouTube video"
+                            <iframe src="https://www.youtube.com/embed/FJwe5Ju9-Zw" title="YouTube video"
                                 allowfullscreen></iframe>
                         </div>
                     </div>
