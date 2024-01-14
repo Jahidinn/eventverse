@@ -3,9 +3,9 @@
 
 @section('content')
     {{-- Form input --}}
-    <form action="/event/{{ $detailEvent->slug }}" method="post" id="form-event-edit">
+    <form action="javascript:void(0)" method="post" id="form-event-edit" enctype="multipart/form-data">
         @csrf
-        @method('put')
+        {{-- @method('put') --}}
 
         <div class="container pb-3 px-0">
             <div class="row m-1">
@@ -20,14 +20,14 @@
                         <div class="card-body">
 
                             <input type="hidden" name="eventId" id="id-event" value="{{ $detailEvent->id }}">
+                            <input type="hidden" id="prev-image-event" value="{{ $detailEvent->image }}">
 
                             {{-- Banner image --}}
                             <div class="tb-container mt-0">
                                 <img id="tb-image-edit" src="{{ asset('storage/event-images/' . $detailEvent->image) }}" />
                                 <label for="tb-file-upload-edit" class="shadow"><i class="fas fa-image"></i> Edit
                                     gambar</label>
-                                <input type="file" name="bannerEventEdit" id="tb-file-upload-edit" accept="image/*"
-                                    onchange="editFileUpload(event);" />
+                                <input type="file" name="bannerEventEdit" id="tb-file-upload-edit" accept="image/*" />
                             </div>
                             <small class="text-danger" id="image-warning" hidden>Max ukuran banner 500KB</small>
                             {{-- End banner / poster image --}}
@@ -44,7 +44,7 @@
                                         <div class="form-group input-form-group event-title">
                                             <span class="form-control-feedback url">eventconnect.id/</span>
                                             <input type="text" class="form-control mb-0" name="linkEvent" required
-                                                placeholder="contoh-LINK-2023" id="url-event"
+                                                placeholder="contoh-LINK-2023" id="url-event-edit"
                                                 value="{{ $detailEvent->slug }}">
 
                                             {{-- Peringatan link url / slug --}}
@@ -62,16 +62,22 @@
                                 <div class="row event-heading">
                                     <div class="col-md-3 pr-2">
 
-                                        <div class="form-group blocked  input-form-group">
+                                        <div class="form-group input-form-group">
                                             <label class="form-control-label" for="userName">PENYELENGGARA</label>
                                             <span class="fas fa-users form-control-feedback"></span>
-                                            <input type="text" readonly class="form-control"
-                                                value="{{ auth()->user()->name }}" id="userName" name="username_id"
-                                                autocomplete="off">
+                                            <input type="text" class="form-control penyelenggara-event" value=""
+                                                id="penyelenggaraEvent" name="penyelenggaraEvent" autocomplete="off"
+                                                inputmode="none" readonly>
+
                                             <input type="hidden" name="userId" value="{{ auth()->user()->id }}">
-                                            <div class="form-text text-danger mt-0 pt-0">
+
+                                            {{-- <input type="text" readonly class="form-control"
+                                                value="{{ auth()->user()->name }}" id="userName" name="username_id"
+                                                autocomplete="off"> --}}
+                                            {{-- <div class="form-text text-danger mt-0 pt-0">
                                                 Form otomatis
-                                            </div>
+                                            </div> --}}
+
                                         </div>
                                     </div>
                                     <div class="col-md-3">
@@ -80,7 +86,7 @@
                                                     class="fas fa-pencil-alt"></i></label>
                                             <span class="fas fa-list form-control-feedback"></span>
                                             <input type="text" class="form-control kategori-event" inputmode="none"
-                                                id="kategori-event" required
+                                                id="kategori-event" readonly name="create-category"
                                                 value="{{ $detailEvent->categories->category }} ({{ $detailEvent->themes->theme }})">
                                         </div>
                                     </div>
@@ -90,17 +96,18 @@
                                                     class="fas fa-pencil-alt"></i></label>
                                             <span class="fas fa-map-marker-alt form-control-feedback"></span>
                                             <input type="text" class="form-control lokasi-event" inputmode="none"
-                                                id="lokasiEvent" required
+                                                id="lokasiEvent" readonly name="create-lokasi"
                                                 value="{{ $detailEvent->location_jenis == 'Offline' ? $detailEvent->location_jenis . ' (' . $detailEvent->location_detail . ', ' . $detailEvent->location_city . ', ' . $detailEvent->province->name . ')' : $detailEvent->location_jenis }}">
                                         </div>
                                     </div>
+
                                     <div class="col-md-3">
                                         <div class="form-group input-form-group">
                                             <label class="form-control-label" for="tanggalEvent">TANGGAL EVENT <i
                                                     class="fas fa-pencil-alt"></i></label>
                                             <span class="far fa-calendar-alt form-control-feedback"></span>
                                             <input type="text" class="form-control tanggal-event" inputmode="none"
-                                                id="tanggalEvent" required
+                                                id="tanggalEvent" readonly name="create-tanggal"
                                                 value="({{ $detailEvent->start_date->format('Y-m-d') }}) - ({{ $detailEvent->end_date->format('Y-m-d') }})">
                                         </div>
                                     </div>
@@ -155,6 +162,74 @@
                         <button type="submit" class="btn btn-success w-100 mb-3" id="submit"><i
                                 class="fas fa-check"></i>
                             Simpan perubahan</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal set penyelenggara-->
+            <div class="modal fade" id="penyelenggaraEventModal" tabindex="-1"
+                aria-labelledby="penyelenggaraEventModalLabel" aria-hidden="true" data-bs-keyboard="false"
+                data-bs-backdrop="static">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="penyelenggaraEventModalLabel">Penyelenggara</h5>
+
+                        </div>
+                        <div class="modal-body">
+                            <div class="mb-2">
+                                <div class="form-group input-form-group">
+                                    <label for="provinces" class="form-control-label mb-2">KATEGORI PENYELENGGARA</label>
+                                    <select class="form-select mt-1" id="organizerEvent" name="organizerEvent"
+                                        style="z-index: 100000000">
+                                        @foreach ($jenisPenyelenggara as $penyelenggara)
+                                            @if ($detailEvent->organizer == $penyelenggara['jenis'])
+                                                <option value="{{ $penyelenggara['jenis'] }}" selected>
+                                                    {{ $penyelenggara['text'] }}
+                                                </option>
+                                            @else
+                                                <option value="{{ $penyelenggara['jenis'] }}">
+                                                    {{ $penyelenggara['text'] }}
+                                                </option>
+                                            @endif
+                                        @endforeach
+
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="mb-2 cont-individual">
+                                <div class="form-group">
+                                    <label for="organizerId" class="form-control-label">PENYELENGGARA</label>
+                                    <input type="text" class="form-control" id="organizer-individual"
+                                        value="{{ auth()->user()->name }}" readonly>
+                                </div>
+                            </div>
+
+                            <div class="mb-2 cont-org" hidden>
+                                <div class="form-group input-form-group">
+                                    <div class="org-id-container">
+                                        <label for="organizerId" class="form-control-label">ORGANISASI</label>
+                                        <select class="form-select mt-1" id="organizerId" name="organizerId" disabled>
+                                            <option value="" selected>Pilih Organisasi</option>
+                                        </select>
+                                    </div>
+                                    <input type="hidden" id="previousEvent" value="{{ $detailEvent->organizer_id }}">
+
+                                    <div class="event-no-org mt-2">
+                                        <small class="text-danger">Kamu belum ikut organisasi apapun guys</small><br>
+                                        <a href="/dashboard/my-organization" class="btn btn-sm btn-success"><i
+                                                class="fas fa-plus"></i> Ikut
+                                            organisasi</a>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="modal-footer">
+
+                            <button type="button" class="btn btn-primary" id="simpan-organization">Simpan</button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -327,8 +402,7 @@
                         <div class="modal-header">
                             <h1 class="modal-title fs-5" id="tanggalEventModalLabel"><i class="fas fa-calendar-alt"></i>
                                 Tanggal Event</h1>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                aria-label="Close"></button>
+                            {{-- Tombol close dihilangkan --}}
                         </div>
                         <div class="modal-body">
 
@@ -358,7 +432,7 @@
 
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                            {{-- Tombol close dihilangkan --}}
                             <button type="button" class="btn btn-primary" id="simpan-tanggal"><i
                                     class="fas fa-check-square"></i>
                                 Simpan tanggal</button>

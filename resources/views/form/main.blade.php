@@ -346,6 +346,7 @@
             e.preventDefault();
             var startDate = $('#startDate').val();
             var endDate = $('#endDate').val();
+
             if (startDate == '' || startDate == null) {
                 $('#startDate').addClass('border-danger');
                 $('#endDate').removeClass('border-danger');
@@ -355,8 +356,15 @@
             } else {
                 $('#endDate').removeClass('border-danger');
                 $('#startDate').removeClass('border-danger');
-                $('.tanggal-event').val('(' + startDate + ') - (' + endDate + ')');
-                $('#tanggalEventModal').modal('hide');
+
+                // Membandingkan dua tanggal
+                if (startDate > endDate) {
+                    Swal.fire('', 'Cek lagi tanggal mulai dan selesai event!', '');
+                } else {
+                    $('.tanggal-event').val('(' + startDate + ') - (' + endDate + ')');
+                    $('#tanggalEventModal').modal('hide');
+                }
+
             }
 
         });
@@ -581,6 +589,7 @@
                 });
             });
 
+            ///
             $('#delete-event').on('click', function(e) {
                 e.preventDefault();
 
@@ -599,6 +608,7 @@
                     }
                 });
             });
+            ///
 
             //cek ketersediaan URL
             $('#url-event').on('keyup', function(e) {

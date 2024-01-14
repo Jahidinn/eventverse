@@ -95,8 +95,10 @@ Route::post('/delete-formulir', [EventController::class, 'deleteFormulir']);
 
 Route::post('/event-edit-image', [EventController::class, 'editImage']);
 
+Route::post('/event-edit', [EventController::class, 'editProcess'])->middleware('auth');
 //detail event
 Route::resource('/event', EventController::class, ['except' => ['show']])->middleware('auth');
+
 
 //Checkout
 Route::get('/event/checkout', [TransactionController::class, 'checkoutPreview']);

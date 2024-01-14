@@ -1,8 +1,8 @@
 <script>
     //preview image
-    const fileUpload = (event) => {
+    const fileUpload = (poster) => {
 
-        const files = event.target.files;
+        const files = poster.target.files;
         const filesLength = files.length;
         if (filesLength > 0) {
             const imageSrc = URL.createObjectURL(files[0]);
@@ -22,11 +22,18 @@
 
         if (fileSizeInKB < fileLimit) {
             $('#image-warning').hide();
+            fileUpload({
+                target: {
+                    files: [inputElement.files[0]]
+                }
+            });
+
             // Swal.fire(
             //     'Ok!',
             //     'Berhasil menambahkan gambar!',
             //     'success'
             // )
+
             // add file to db here
         } else {
             $('#image-warning').removeAttr('hidden');

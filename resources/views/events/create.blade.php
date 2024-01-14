@@ -22,8 +22,7 @@
                                 <img id="tb-image" />
                                 <label for="tb-file-upload" class="shadow"><i class="fas fa-image"></i> Poster atau
                                     banner</label>
-                                <input type="file" name="bannerEvent" id="tb-file-upload" accept="image/*"
-                                    onchange="fileUpload(event);">
+                                <input type="file" name="bannerEvent" id="tb-file-upload" accept="image/*">
                             </div>
                             <small class="text-danger" id="image-warning" hidden>Max ukuran banner 500KB</small>
 
@@ -452,8 +451,7 @@
                         <div class="modal-header">
                             <h1 class="modal-title fs-5" id="tanggalEventModalLabel"><i class="fas fa-calendar-alt"></i>
                                 Tanggal Event</h1>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                aria-label="Close"></button>
+                            {{-- Tombol close dihilangkan --}}
                         </div>
                         <div class="modal-body">
 
@@ -482,7 +480,7 @@
 
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                            {{-- Tombol close dihilangkan --}}
                             <button type="button" class="btn btn-primary" id="simpan-tanggal"><i
                                     class="fas fa-check-square"></i>
                                 Simpan tanggal</button>

@@ -19,6 +19,16 @@ class Event extends Model
 		return $this->belongsTo(User::class, 'user_id');
 	}
 
+	public function individual()
+	{
+		return $this->belongsTo(User::class, 'organizer_id');
+	}
+
+	public function org()
+	{
+		return $this->belongsTo(Organisation::class, 'organizer_id');
+	}
+
 	public function province()
 	{
 		return $this->belongsTo(Province::class, 'location_province', 'code');

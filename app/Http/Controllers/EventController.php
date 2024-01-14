@@ -92,7 +92,7 @@ class EventController extends Controller
 			'userId.required' => 'Kolom User ID wajib diisi!',
 
 			'organizerEvent.required' => 'Kolom Organizer Event wajib diisi!',
-			'bannerEvent.required' => 'Kolom Banner Event wajib diisi!',
+			'bannerEvent.required' => 'Banner/Poster Event wajib diisi!',
 			'bannerEvent.max' => 'Ukuran maksimum banner adalah 616 KB!',
 			'linkEvent.required' => 'Kolom Link Event wajib diisi!',
 			'linkEvent.unique' => 'Link Event sudah digunakan.',
@@ -213,6 +213,11 @@ class EventController extends Controller
 			['lokasi' => 'Online'],
 			['lokasi' => 'Offline'],
 		];
+
+		$jenisPenyelenggara = [
+			['jenis' => 'individual', 'text' => 'Individu'],
+			['jenis' => 'org', 'text' => 'Organisasi'],
+		];
 		return view('events.edit', [
 			'detailEvent' => $event,
 			'ticketData' => Ticket::where('event_id', $event->id)->get(),
@@ -220,6 +225,7 @@ class EventController extends Controller
 			'category' => Category::all(),
 			'theme' => Theme::all(),
 			'jenisLokasi' => $jenisLokasi,
+			'jenisPenyelenggara' => $jenisPenyelenggara,
 		]);
 	}
 
@@ -254,7 +260,7 @@ class EventController extends Controller
 			Event::where('id', $request->eventId)->update($data);
 
 			//response suksess
-			return response()->json(['success' => 'Banner berhasil diubah!']);
+			return response()->json(['success' => 'Banner/poster event berhasil diubah!', 'img' => $imageName]);
 		}
 	}
 
@@ -271,38 +277,99 @@ class EventController extends Controller
 	/**
 	 * Update the specified resource in storage.
 	 */
+
 	public function update(Request $request)
 	{
-		// if (($request->organizerEvent == 'org' && ($request->organizerId == '' || empty($request->organizerId))) || $request->organizerEvent == 'individual') {
-		// 	$type = 'individual';
-		// 	$org_id = $request->userId;
-		// } else {
-		// 	$type = $request->organizerEvent;
-		// 	$org_id = $request->organizerId;
-		// }
+	}
 
-		$data = [
-			'user_id' => $request->userId,
-			// 'organizer' => $type,
-			// 'organizer_id' => $org_id,
-			'title' => $request->titleEvent,
-			'slug' => $request->linkEvent,
-			'category' => $request->kategoriEvent,
-			'description' => $request->descriptionEvent,
-			'terms' => $request->terms,
-			'theme' => $request->temaEvent,
-			'location_jenis' => $request->jenisEvent,
-			'location_province' => $request->provinces,
-			'location_city' => $request->cities,
-			'location_detail' => $request->detailAlamat,
-			'price_category' => $request->priceCategory,
-			'start_date' => $request->startDate,
-			'end_date' => $request->endDate,
+	public function editProcess(Request $request)
+	{
+		$validasi = Validator::make($request->all(), [
+			'penyelenggaraEvent' => 'required',
+			'create-category' => 'required',
+			'create-lokasi' => 'required',
+			'create-tanggal' => 'required',
 
-		];
+			'organizerEvent' => 'required',
+			'linkEvent' => 'required',
+			'titleEvent' => 'required',
+			'kategoriEvent' => 'required',
+			'descriptionEvent' => 'required',
+			'terms' => 'required',
+			'temaEvent' => 'required',
+			'jenisEvent' => 'required',
+			'priceCategory' => 'required',
+			'startDate' => 'required',
+			'endDate' => 'required',
+		], [
+			'penyelenggaraEvent.required' => 'Kolom Penyelenggara Event wajib diisi!',
+			'create-category.required' => 'Kolom Kategori Event wajib diisi!',
+			'create-lokasi.required' => 'Kolom Lokasi Event wajib diisi!',
+			'create-tanggal.required' => 'Kolom Tanggal Event wajib diisi!',
+			'userId.required' => 'Kolom User ID wajib diisi!',
 
-		Event::where('id', $request->eventId)->update($data);
-		return redirect('/event/' . $request->linkEvent)->with(['success' => 'Event berhasil di edit!']);
+			'organizerEvent.required' => 'Kolom Organizer Event wajib diisi!',
+			'linkEvent.required' => 'Kolom Link Event wajib diisi!',
+			'linkEvent.unique' => 'Link Event sudah digunakan.',
+			'titleEvent.required' => 'Kolom Judul Event wajib diisi!',
+			'kategoriEvent.required' => 'Kolom Kategori Event wajib diisi!',
+			'descriptionEvent.required' => 'Kolom Deskripsi Event wajib diisi!',
+			'terms.required' => 'Kolom Syarat & Ketentuan Event wajib diisi!',
+			'temaEvent.required' => 'Kolom Tema Event wajib diisi!',
+			'jenisEvent.required' => 'Kolom Jenis Event wajib diisi!',
+			'priceCategory.required' => 'Kolom Kategori Harga wajib diisi!',
+			'startDate.required' => 'Kolom Tanggal Mulai Event wajib diisi!',
+			'endDate.required' => 'Kolom Tanggal Selesai Event wajib diisi!',
+		]);
+
+		//Response jika validasi gagal
+		if ($validasi->fails()) {
+			return response()->json(['error' => $validasi->errors()->first()]);
+		}
+
+		//Jika lolos validasi atau validasi berhasil
+		else {
+
+			//Cek URL
+			$event = Event::where('id', $request->eventId)->first();
+			if ($request->linkEvent != $event->slug) {
+				$cekURL = Event::where('slug', $request->linkEvent)->first();
+				if ($cekURL) {
+					return response()->json(['error' => 'Link event sudah digunakan!']);
+				}
+			}
+
+			if (($request->organizerEvent == 'org' && ($request->organizerId == '' || empty($request->organizerId))) || $request->organizerEvent == 'individual') {
+				$type = 'individual';
+				$org_id = $request->userId;
+			} else {
+				$type = $request->organizerEvent;
+				$org_id = $request->organizerId;
+			}
+
+			$data = [
+				'organizer' => $type,
+				'organizer_id' => $org_id,
+				'title' => $request->titleEvent,
+				'slug' => $request->linkEvent,
+				'category' => $request->kategoriEvent,
+				'description' => $request->descriptionEvent,
+				'terms' => $request->terms,
+				'theme' => $request->temaEvent,
+				'location_jenis' => $request->jenisEvent,
+				'location_province' => $request->provinces,
+				'location_city' => $request->cities,
+				'location_detail' => $request->detailAlamat,
+				'price_category' => $request->priceCategory,
+				'start_date' => $request->startDate,
+				'end_date' => $request->endDate,
+			];
+
+			Event::where('id', $request->eventId)->update($data);
+			return response()->json(['success' => 'Data Berhasil di edit!', 'url' => $request->linkEvent]);
+
+			//return redirect('/event/' . $request->linkEvent)->with(['success' => 'Event berhasil di edit!']);
+		}
 	}
 
 	/**
