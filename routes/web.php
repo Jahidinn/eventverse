@@ -79,6 +79,7 @@ Route::get('/dashboard/get-organization-request', [OrganizationController::class
 
 Route::get('/get-cities/{code}', [EventController::class, 'getCities']);
 Route::get('/check-url', [EventController::class, 'cekUrl']);
+Route::get('/get-my-org', [EventController::class, 'getMyOrg']);
 
 Route::get('/get-ticket', [EventController::class, 'getTicket']);
 Route::get('/get-formulir', [EventController::class, 'getFormulir']);

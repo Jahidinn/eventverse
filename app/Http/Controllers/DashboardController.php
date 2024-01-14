@@ -11,6 +11,7 @@ use App\Models\Transaction;
 use App\Models\WithdrawData;
 use Illuminate\Http\Request;
 use App\Models\TransactionForm;
+use Illuminate\Support\Facades\Redirect;
 use Yajra\DataTables\Facades\DataTables;
 
 class DashboardController extends Controller
@@ -66,6 +67,12 @@ class DashboardController extends Controller
 		$search = $request->key;
 
 		$listEvent = Event::where('title', 'like', '%' . $search . '%')->where('user_id', $user_id)->paginate(2)->withQueryString();
+
+		if ($listEvent->isEmpty()) {
+			// Lakukan pengalihan URL atau tindakan lainnya
+			return Redirect::to('/dashboard/manajemen-event');
+		}
+
 		return view('dashboard.manajemen-event', [
 			'listEvent' => $listEvent
 		]);

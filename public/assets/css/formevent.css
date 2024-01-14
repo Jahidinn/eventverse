@@ -263,10 +263,14 @@ a:hover {
 .jenis-event.select2-results__options {
 	height: 50px !important;
  }
+ 
 .select2-results__options {
 	min-height: 350px !important;
  }
- 
+
+ #penyelenggaraEventModal .select2-results__options {
+	min-height: 100px !important;
+ } 
 
 @media only screen and (max-width: 750px) {
     .formevent-box {

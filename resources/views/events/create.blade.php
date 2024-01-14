@@ -56,24 +56,32 @@
                                 <div class="row event-heading">
                                     <div class="col-md-3 pr-2">
 
-                                        <div class="form-group blocked  input-form-group">
+                                        {{-- untuk merubah bg beri kelas blocked --}}
+                                        <div class="form-group input-form-group">
                                             <label class="form-control-label" for="userName">PENYELENGGARA</label>
                                             <span class="fas fa-users form-control-feedback"></span>
-                                            <input type="text" readonly class="form-control"
-                                                value="{{ auth()->user()->name }}" id="userName" name="username_id"
-                                                autocomplete="off">
+                                            <input type="text" class="form-control penyelenggara-event" value=""
+                                                id="penyelenggaraEvent" name="penyelenggaraEvent" autocomplete="off"
+                                                inputmode="none" readonly>
                                             <input type="hidden" name="userId" value="{{ auth()->user()->id }}">
-                                            <div class="form-text text-danger mt-0 pt-0">
+
+                                            {{-- <input type="text" class="form-control penyelenggara-event"
+                                                value="{{ auth()->user()->name }}" id="userName" name="username_id"
+                                                autocomplete="off" inputmode="none"> --}}
+
+                                            {{-- <div class="form-text text-danger mt-0 pt-0">
                                                 Form otomatis
-                                            </div>
+                                            </div> --}}
+
                                         </div>
+
                                     </div>
                                     <div class="col-md-3">
                                         <div class="form-group input-form-group">
                                             <label class="form-control-label" for="kategori-event">KATEGORI EVENT</label>
                                             <span class="fas fa-list form-control-feedback"></span>
                                             <input type="text" class="form-control kategori-event" inputmode="none"
-                                                id="kategori-event" required>
+                                                id="kategori-event" name="create-category">
                                         </div>
                                     </div>
                                     <div class="col-md-3">
@@ -81,7 +89,7 @@
                                             <label class="form-control-label" for="lokasiEvent">LOKASI</label>
                                             <span class="fas fa-map-marker-alt form-control-feedback"></span>
                                             <input type="text" class="form-control lokasi-event" inputmode="none"
-                                                id="lokasiEvent" required>
+                                                id="lokasiEvent" name="create-lokasi">
                                         </div>
                                     </div>
                                     <div class="col-md-3">
@@ -89,7 +97,7 @@
                                             <label class="form-control-label" for="tanggalEvent">TANGGAL EVENT</label>
                                             <span class="far fa-calendar-alt form-control-feedback"></span>
                                             <input type="text" class="form-control tanggal-event" inputmode="none"
-                                                id="tanggalEvent" required>
+                                                id="tanggalEvent" name="create-tanggal">
                                         </div>
                                     </div>
 
@@ -242,9 +250,64 @@
                             event</button>
                     </div>
                 </div>
+            </div>
 
+            <!-- Modal set penyelenggara-->
+            <div class="modal fade" id="penyelenggaraEventModal" tabindex="-1"
+                aria-labelledby="penyelenggaraEventModalLabel" aria-hidden="true" data-bs-keyboard="false"
+                data-bs-backdrop="static">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="penyelenggaraEventModalLabel">Penyelenggara</h5>
 
+                        </div>
+                        <div class="modal-body">
+                            <div class="mb-2">
+                                <div class="form-group input-form-group">
+                                    <label for="provinces" class="form-control-label mb-2">KATEGORI PENYELENGGARA</label>
+                                    <select class="form-select mt-1" id="organizerEvent" name="organizerEvent"
+                                        style="z-index: 100000000">
+                                        <option value="individual">Individu</option>
+                                        <option value="org">Organisasi</option>
+                                    </select>
+                                </div>
+                            </div>
 
+                            <div class="mb-2 cont-individual">
+                                <div class="form-group">
+                                    <label for="organizerId" class="form-control-label">PENYELENGGARA</label>
+                                    <input type="text" class="form-control" id="organizer-individual"
+                                        value="{{ auth()->user()->name }}" readonly>
+                                </div>
+                            </div>
+
+                            <div class="mb-2 cont-org" hidden>
+                                <div class="form-group input-form-group">
+                                    <div class="org-id-container">
+                                        <label for="organizerId" class="form-control-label">ORGANISASI</label>
+                                        <select class="form-select mt-1" id="organizerId" name="organizerId" disabled>
+                                            <option value="" selected>Pilih Organisasi</option>
+                                        </select>
+                                    </div>
+                                    <input type="hidden" id="previousEvent">
+
+                                    <div class="event-no-org mt-2">
+                                        <small class="text-danger">Kamu belum ikut organisasi apapun guys</small><br>
+                                        <a href="/dashboard/my-organization" class="btn btn-sm btn-success"><i
+                                                class="fas fa-plus"></i> Ikut
+                                            organisasi</a>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="modal-footer">
+
+                            <button type="button" class="btn btn-primary" id="simpan-organization">Simpan</button>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <!-- Modal kategori event-->
@@ -332,7 +395,7 @@
                             <div class="mb-2">
 
                                 <div class="form-group input-form-group jenis-event">
-                                    <label for="provinces" class="form-control-label">EVENT</label>
+                                    <label for="jenisEvent" class="form-control-label">EVENT</label>
                                     <select class="form-select mt-1" id="jenis-event" name="jenisEvent"
                                         aria-label="Default select example" style="z-index: 100000000">
                                         <option value="Offline">Offline</option>
@@ -400,8 +463,7 @@
                                     <label for="startDate" class="form-control-label">TANGGAL MULAI</label>
                                     <div id="eventStartDate" class="input-group date mt-1 mb-3"
                                         data-date-format="yyyy-mm-dd">
-                                        <input class="form-control ps-2" id="startDate" name="startDate" type="text"
-                                            required>
+                                        <input class="form-control ps-2" id="startDate" name="startDate" type="text">
                                         <span class="input-group-addon"></span>
                                     </div>
                                 </div>
@@ -411,8 +473,7 @@
                                     <label for="endDate" class="form-control-label">TANGGAL SELESAI</label>
                                     <div id="eventEndDate" class="input-group date mt-1 mb-3"
                                         data-date-format="yyyy-mm-dd">
-                                        <input class="form-control ps-2" id="endDate" name="endDate" type="text"
-                                            required>
+                                        <input class="form-control ps-2" id="endDate" name="endDate" type="text">
                                         <span class="input-group-addon"></span>
                                     </div>
 

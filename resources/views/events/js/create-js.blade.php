@@ -22,11 +22,11 @@
 
         if (fileSizeInKB < fileLimit) {
             $('#image-warning').hide();
-            Swal.fire(
-                'Ok!',
-                'Berhasil menambahkan gambar!',
-                'success'
-            )
+            // Swal.fire(
+            //     'Ok!',
+            //     'Berhasil menambahkan gambar!',
+            //     'success'
+            // )
             // add file to db here
         } else {
             $('#image-warning').removeAttr('hidden');

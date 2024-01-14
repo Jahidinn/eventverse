@@ -10,6 +10,8 @@ use App\Models\Ticket;
 use App\Models\Category;
 use App\Models\Provinces;
 use App\Models\CustomForm;
+use App\Models\Organisation;
+use App\Models\OrganisationMember;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -64,18 +66,66 @@ class EventController extends Controller
 	{
 
 		$validasi = Validator::make($request->all(), [
-			'bannerEvent' => 'required|max:616'
+			'penyelenggaraEvent' => 'required',
+			'create-category' => 'required',
+			'create-lokasi' => 'required',
+			'create-tanggal' => 'required',
+
+			'userId' => 'required',
+			'organizerEvent' => 'required',
+			'bannerEvent' => 'required|max:616',
+			'linkEvent' => 'required|unique:events,slug',
+			'titleEvent' => 'required',
+			'kategoriEvent' => 'required',
+			'descriptionEvent' => 'required',
+			'terms' => 'required',
+			'temaEvent' => 'required',
+			'jenisEvent' => 'required',
+			'priceCategory' => 'required',
+			'startDate' => 'required',
+			'endDate' => 'required',
+		], [
+			'penyelenggaraEvent.required' => 'Kolom Penyelenggara Event wajib diisi!',
+			'create-category.required' => 'Kolom Kategori Event wajib diisi!',
+			'create-lokasi.required' => 'Kolom Lokasi Event wajib diisi!',
+			'create-tanggal.required' => 'Kolom Tanggal Event wajib diisi!',
+			'userId.required' => 'Kolom User ID wajib diisi!',
+
+			'organizerEvent.required' => 'Kolom Organizer Event wajib diisi!',
+			'bannerEvent.required' => 'Kolom Banner Event wajib diisi!',
+			'bannerEvent.max' => 'Ukuran maksimum banner adalah 616 KB!',
+			'linkEvent.required' => 'Kolom Link Event wajib diisi!',
+			'linkEvent.unique' => 'Link Event sudah digunakan.',
+			'titleEvent.required' => 'Kolom Judul Event wajib diisi!',
+			'kategoriEvent.required' => 'Kolom Kategori Event wajib diisi!',
+			'descriptionEvent.required' => 'Kolom Deskripsi Event wajib diisi!',
+			'terms.required' => 'Kolom Syarat & Ketentuan Event wajib diisi!',
+			'temaEvent.required' => 'Kolom Tema Event wajib diisi!',
+			'jenisEvent.required' => 'Kolom Jenis Event wajib diisi!',
+			'priceCategory.required' => 'Kolom Kategori Harga wajib diisi!',
+			'startDate.required' => 'Kolom Tanggal Mulai Event wajib diisi!',
+			'endDate.required' => 'Kolom Tanggal Selesai Event wajib diisi!',
 		]);
 
 		if ($validasi->fails()) {
-			return response()->json(['error' => 'Banner/poster kosong atau ukuran terlalu besar']);
+			return response()->json(['error' => $validasi->errors()->first()]);
 		} else {
 
 			//Remove white space
 			$imageName = preg_replace('/\s+/', '-', time() . '-' . $request->file('bannerEvent')->getClientOriginalName());
 
+			if (($request->organizerEvent == 'org' && ($request->organizerId == '' || empty($request->organizerId))) || $request->organizerEvent == 'individual') {
+				$type = 'individual';
+				$org_id = $request->userId;
+			} else {
+				$type = $request->organizerEvent;
+				$org_id = $request->organizerId;
+			}
+
 			$data = [
 				'user_id' => $request->userId,
+				'organizer' => $type,
+				'organizer_id' => $org_id,
 				'title' => $request->titleEvent,
 				'slug' => $request->linkEvent,
 				'category' => $request->kategoriEvent,
@@ -92,8 +142,9 @@ class EventController extends Controller
 				'image' => $imageName,
 
 			];
+
 			if ($request->startDate > $request->endDate) {
-				return response()->json(['error' => 'Cek lagi tanggal event!']);
+				return response()->json(['error' => 'Tanggal event tidak sesuai!']);
 			}
 
 			// Get ticket data
@@ -107,6 +158,7 @@ class EventController extends Controller
 				$dataEvent = Event::where('slug', $request->linkEvent)->first();
 
 				foreach ($request->ticketName as $key => $ticketName) {
+
 					$finalValues[] = [
 						"event_id" => $dataEvent->id,
 						"ticket_name" => $ticketName,
@@ -130,7 +182,7 @@ class EventController extends Controller
 					$customForm[] = [
 						"event_id" => $dataEvent->id,
 						"form_name" => $formName,
-						"form_status" => $form_status
+						"form_status" => $form_status,
 					];
 				}
 				CustomForm::insert($customForm);
@@ -138,7 +190,7 @@ class EventController extends Controller
 
 			//dd($data, $finalValues, $customForm);
 
-			return response()->json(['success' => 'Data Berhasil Disimpan']);
+			return response()->json(['success' => 'Data Berhasil Disimpan', 'url' => $request->linkEvent]);
 		}
 	}
 
@@ -206,13 +258,33 @@ class EventController extends Controller
 		}
 	}
 
+	public function getMyOrg()
+	{
+		$myOrg = OrganisationMember::with(['user', 'org'])->where('user_id', auth()->user()->id)->get();
+		if (!$myOrg || empty($myOrg)) {
+			return response()->json(['error' => '']);
+		} else {
+			return response()->json(['data' => $myOrg]);
+		}
+	}
+
 	/**
 	 * Update the specified resource in storage.
 	 */
 	public function update(Request $request)
 	{
+		// if (($request->organizerEvent == 'org' && ($request->organizerId == '' || empty($request->organizerId))) || $request->organizerEvent == 'individual') {
+		// 	$type = 'individual';
+		// 	$org_id = $request->userId;
+		// } else {
+		// 	$type = $request->organizerEvent;
+		// 	$org_id = $request->organizerId;
+		// }
+
 		$data = [
 			'user_id' => $request->userId,
+			// 'organizer' => $type,
+			// 'organizer_id' => $org_id,
 			'title' => $request->titleEvent,
 			'slug' => $request->linkEvent,
 			'category' => $request->kategoriEvent,
@@ -241,7 +313,7 @@ class EventController extends Controller
 		$event = Event::where('id', $id)->first();
 		$transaction = Transaction::where('event_id', $event->id)->get();
 
-		if ($transaction) {
+		if (empty($transaction)) {
 			return response()->json(['error' => 'Sudah ada peserta guys, tidak bisa DIHAPUS!']);
 		}
 

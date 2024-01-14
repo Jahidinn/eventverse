@@ -1,7 +1,7 @@
 @if ($data->position == 'Owner')
-    <button class="btn btn-sm btn-success unfollow-organization">
-        <i class="fas fa-check"></i> Owner
-    </button>
+    {{-- <button class="btn btn-sm btn-success unfollow-organization">
+        <i class="fas fa-check-circle"></i> Owner
+    </button> --}}
 @elseif($data->position == 'Request join')
     <button class="btn btn-sm btn-warning cancel-follow-organization" data-org_id="{{ $data->id }}">
         <i class="fas fa-times-circle"></i> Cancel

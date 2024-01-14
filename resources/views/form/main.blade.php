@@ -71,6 +71,16 @@
                 $('.select2-search__field').attr("placeholder", "Cari ... ");
             });
 
+            $("#organizerEvent").select2({
+                dropdownParent: $("#penyelenggaraEventModal"),
+                allowClear: true
+            });
+
+            $("#organizerId").select2({
+                dropdownParent: $("#penyelenggaraEventModal"),
+                allowClear: true
+            });
+
             $("#kategoriEvent").select2({
                 dropdownParent: $("#kategoriEventModal"),
                 allowClear: true
@@ -91,6 +101,98 @@
             $("#cities").select2({
                 dropdownParent: $("#lokasiEventModal"),
                 allowClear: true
+            });
+
+            $('#penyelenggaraEventModal').on('shown.bs.modal', function() {
+                var previousOrg = $('#previousEvent').val();
+                $.ajax({
+                    url: '/get-my-org',
+                    type: 'GET',
+                    cache: false,
+                    dataType: 'JSON',
+                    success: function(response) {
+                        var myOrg = $('#organizerId');
+                        myOrg.empty();
+
+                        if (response.data == '' || !response.data) {
+                            $('.org-id-container').attr('hidden', true);
+                            $('.event-no-org').attr('hidden', false);
+
+                        } else {
+                            $('.org-id-container').attr('hidden', false);
+                            $('.event-no-org').attr('hidden', true);
+                            myOrg.attr('hidden', false);
+                            myOrg.removeAttr('disabled');
+
+                            $("#organizerId").append(
+                                '<option value="">Pilih Organisasi</option>');
+                            $.each(response.data, function(index, item) {
+                                var selectedAttribute = (item.org.id == previousOrg) ?
+                                    'selected' : '';
+
+                                $("#organizerId").append('<option value="' + item.org
+                                    .id + '" ' + selectedAttribute + '>' + item.org
+                                    .org_name + '</option>');
+                            });
+                        }
+
+                    }
+                })
+            });
+
+            // Event ketika modal disembunyikan (hidden)
+            $('#penyelenggaraEventModal').on('hidden.bs.modal', function() {
+                var penyelenggaraEvent = $('#penyelenggaraEvent').val();
+                var myOrg = $('#organizerId').val();
+                var orgType = $('#organizerEvent').val();
+                $('#previousEvent').val(myOrg);
+
+                //reset jika tidak memilih organisasi tapi tepenya organisasi
+                if (orgType == 'org' && (myOrg == '' || myOrg == null)) {
+                    $('#organizerEvent').val('individual').trigger('change');
+                    $('#organizerId').val('').trigger('change');
+                }
+
+            });
+
+            //Simpan penyelenggara
+            $('body').on('click', '#simpan-organization', function(e) {
+                e.preventDefault();
+                var myOrg = $('#organizerId').val();
+                var orgType = $('#organizerEvent').val();
+
+                //reset jika tidak memilih organisasi tapi tepenya organisasi
+                if (orgType == 'org' && (myOrg == '' || myOrg == null)) {
+                    $('.org-id-container .select2-container .select2-selection').addClass("border-danger");;
+                    e.preventDefault();
+                } else {
+                    $('.org-id-container .select2-container .select2-selection').removeClass(
+                        "border-danger");
+
+                    if ($('#organizerEvent').val() == 'org') {
+                        $('#penyelenggaraEvent').val($('#organizerId').find("option:selected").text())
+                        $('#penyelenggaraEventModal').modal('hide')
+                    } else {
+                        $('#penyelenggaraEvent').val($('#organizer-individual').val())
+                        $('#penyelenggaraEventModal').modal('hide')
+                    }
+                }
+            });
+
+            //Penyelenggara event
+            $('body').on('change', '#organizerEvent', function(e) {
+                e.preventDefault();
+                var orgType = $('#organizerEvent').val();
+
+                if (orgType == 'individual') {
+                    //reset input offline dan hilangkan kolom input alamat
+                    $('.cont-individual').attr('hidden', false);
+                    $('.cont-org').attr('hidden', true);
+                } else {
+
+                    $('.cont-individual').attr('hidden', true);
+                    $('.cont-org').attr('hidden', false);
+                }
             });
 
             //lokasi event
@@ -150,6 +252,10 @@
         });
         $('trix-editor').css("min-height", "250px");
 
+        $(".penyelenggara-event").click(function() {
+            $("#penyelenggaraEventModal").modal("show");
+        });
+
         $(".kategori-event").click(function() {
             $("#kategoriEventModal").modal("show");
         });
@@ -157,6 +263,7 @@
         $(".lokasi-event").click(function() {
             $("#lokasiEventModal").modal("show");
         });
+
         $(".tanggal-event").click(function() {
             $("#tanggalEventModal").modal("show");
         });
@@ -239,8 +346,19 @@
             e.preventDefault();
             var startDate = $('#startDate').val();
             var endDate = $('#endDate').val();
-            $('.tanggal-event').val('(' + startDate + ') - (' + endDate + ')');
-            $('#tanggalEventModal').modal('hide');
+            if (startDate == '' || startDate == null) {
+                $('#startDate').addClass('border-danger');
+                $('#endDate').removeClass('border-danger');
+            } else if (endDate == '' || endDate == null) {
+                $('#endDate').addClass('border-danger');
+                $('#startDate').removeClass('border-danger');
+            } else {
+                $('#endDate').removeClass('border-danger');
+                $('#startDate').removeClass('border-danger');
+                $('.tanggal-event').val('(' + startDate + ') - (' + endDate + ')');
+                $('#tanggalEventModal').modal('hide');
+            }
+
         });
 
 
@@ -447,9 +565,17 @@
                     processData: false,
                     success: function(response) {
                         if (response.error) {
-                            Swal.fire('Ooopss', response.error, 'error');
+                            Swal.fire('', response.error, 'error');
                         } else {
-                            Swal.fire(response.success, '', 'success');
+                            Swal.fire({
+                                text: response.success,
+                                icon: 'success',
+                                willClose: () => {
+                                    // Aksi yang akan dijalankan setelah alert ditutup
+                                    window.location.href = "/" + response.url;
+                                }
+                            });
+
                         }
                     }
                 });
