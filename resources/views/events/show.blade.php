@@ -26,9 +26,9 @@
                         <h5 class="card-title mt-3 mb-0">{{ $detailEvent->title }}</h5>
                         @php
                             if ($detailEvent->organizer == 'org') {
-                                $penyelenggara = $detailEvent->org->org_name;
+                                $penyelenggara = $detailEvent->org->org_name ?? '';
                             } elseif ($detailEvent->organizer == 'individual') {
-                                $penyelenggara = $detailEvent->individual->name;
+                                $penyelenggara = $detailEvent->individual->name ?? '';
                             } elseif ($detailEvent->organizer == null || $detailEvent->organizer_id == null || $detailEvent->organizer == '' || $detailEvent->organizer_id == '') {
                                 $penyelenggara = '';
                             } else {
@@ -178,7 +178,7 @@
                         <h5>Info penyelenggara</h5>
                         <hr />
 
-                        @if ($detailEvent->organizer == 'org')
+                        @if ($detailEvent->organizer == 'org' && $detailEvent->organizer_id)
                             {{-- Jika penyelenggar organisasi --}}
                             @php
                                 $detailEvent->org->org_image ? ($logo = $detailEvent->org->org_image) : ($logo = 'default-user.jpg');
@@ -192,7 +192,7 @@
                                 href="/organisasi/{{ $detailEvent->org->org_id }}">{{ $detailEvent->org->org_name }}</a>
                             <p class="mb-1 mt-1">{{ $detailEvent->org->org_contact }}</p>
                             <p class="mb-1">{{ $detailEvent->org->org_institution }}</p>
-                        @elseif($detailEvent->organizer == 'individual')
+                        @elseif($detailEvent->organizer == 'individual' && $detailEvent->organizer_id)
                             {{-- Jika penyelenggar individual --}}
 
                             @php
@@ -207,17 +207,12 @@
                                 href="/user/{{ $detailEvent->individual->username }}">{{ $detailEvent->individual->name }}</a>
                             <p class="mb-1 mt-1">{{ $detailEvent->individual->email }}</p>
                             {{-- Mengatasi jika ada info penyelenggara kosong --}}
-                        @elseif(
-                            $detailEvent->organizer == null ||
-                                $detailEvent->organizer_id == null ||
-                                $detailEvent->organizer == '' ||
-                                $detailEvent->organizer_id == '')
+                        @else
                             <div id="org-info-logo-container">
                                 <img src="{{ asset('storage/profile-images') . '/default-user.jpg' }}"
                                     class="org-info-logo">
                             </div>
-                            <a class="badge badge-info mt-3">No info!</a>
-                        @else
+
                             <a class="badge badge-info mt-3">No info!</a>
                         @endif
 

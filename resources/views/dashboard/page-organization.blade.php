@@ -30,7 +30,7 @@
                 <hr>
                 <span class="btn pl-0 text-info" data-toggle="modal" data-target="#kelolaOragisasiModal"><i
                         class="fas fa-cog"></i> Kelola organisasimu
-                    sendiri!
+                    sendiri <i class="fab fa-telegram-plane"></i>
                     {{-- <button class="btn btn-success btn-sm">
                         <b><i class="fas fa-cog"></i> Kelola sekarang!</b>
                     </button> --}}
@@ -87,7 +87,7 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <div class="modal-body ">
+                <div class="modal-body">
                     <div class="data-my-org">
                         <button class="btn btn-info mb-3 rounded-0 buat-organisasi"><i class="fas fa-plus"></i> Buat
                             organisasi</button>
@@ -122,10 +122,12 @@
                         <hr>
                         <div class="card text-center">
                             <div class="card-body text-center">
+
                                 <div class="org_logo_container org-info-logo-container">
                                     <img src="{{ asset('storage/organization-images') . '/' . 'logo.png' }}"
                                         class="img-circle" alt="User Image" id="org-info-logo">
                                 </div>
+
                                 <b class="org-info-name">Nama Organisasi</b><br>
                                 <span class="badge badge-secondary org-info-type">Public</span>
                             </div>

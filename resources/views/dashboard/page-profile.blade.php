@@ -73,12 +73,16 @@
                 </div>
                 <div class="row col-md-8 p-0 pl-3 mt-2">
                     <div class="col-5">Organisasi</div>
-                    <div class="col-7 pr-1">UKM rekayasa ilmu penge <br> tahuan dan teknologi</div>
+                    <div class="col-7 pr-1"><a href="/dashboard/organization" class="btn btn-info btn-sm rounded-0">Setting
+                            organisasi</a></div>
                 </div>
-                <div class="row col-md-8 p-0 pl-3 mt-2">
-                    <div class="col-5"></div>
-                    <div class="col-7"><button class="btn btn-info btn-sm">Edit organisasi</button></div>
-                </div>
+                @foreach ($org as $organisasi)
+                    <div class="row col-md-8 p-0 pl-3 mt-2">
+                        <div class="col-5"></div>
+                        <div class="col-7"><small><i class="far fa-dot-circle text-success"></i></small>
+                            {{ $organisasi->org->org_name }}</div>
+                    </div>
+                @endforeach
             </div>
         </div>
     </section>

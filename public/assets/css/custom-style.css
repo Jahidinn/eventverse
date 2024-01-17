@@ -397,6 +397,26 @@ button.slick-disabled {
 	object-position: center;
 }
 
+.org-detail-logo-container {
+	width: 150px;
+	height:150px;
+	margin-top: 10px !important;
+	overflow: hidden;
+	margin: 0 auto;
+}
+
+.org-detail-logo-container img {
+	width:100%;
+	height:100%;
+	object-fit:cover;
+	border-radius: 50%;
+	object-position: center;
+}
+
+.tabs .tab-link{
+	background-color: #f5f9fd;
+}
+
 @media only screen and (min-width: 950px) {
     .nav-menu .link-login-register {
         padding-right: 0px;
@@ -429,6 +449,10 @@ button.slick-disabled {
 	}
 	.search-result-box .card-event-search {
 		padding: 0 10px;
+	}
+	.org-detail-logo-container {
+		width: 100px;
+		height:100px;
 	}
 
 	

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Event;
 use Illuminate\Support\Str;
 use App\Models\Organisation;
 use App\Models\OrganisationMember;
@@ -344,5 +345,19 @@ class OrganizationController extends Controller
 		} else {
 			return response()->json(['error' => 'Gagal!']);
 		}
+	}
+
+	public function detailOrganisasi(Request $request, $organisasi)
+	{
+
+		$detailOrganisasi = Organisation::where('org_id', $organisasi)->first();
+		$orgMember = OrganisationMember::with(['user', 'org'])->where('org_id', $organisasi)->first();
+		$orgEvent = Event::where('organizer', 'org')->where('organizer_id', $organisasi)->get();
+
+		return view('events.page-show-org', [
+			'detailOrganisasi' => $detailOrganisasi,
+			'orgMember' => $orgMember,
+			'orgEvent' => $orgEvent,
+		]);
 	}
 }

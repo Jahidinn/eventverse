@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\OrganisationMember;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -12,7 +13,10 @@ class UserProfileController extends Controller
 {
 	public function index()
 	{
-		return view('dashboard.page-profile');
+		$org = OrganisationMember::with(['org'])->where('user_id', auth()->user()->id)->get();
+		return view('dashboard.page-profile', [
+			'org' => $org
+		]);
 	}
 
 	public function editImage(Request $request)
@@ -124,5 +128,9 @@ class UserProfileController extends Controller
 
 			return response()->json(['success' => 'Sukses ubah profil 👌']);
 		}
+	}
+
+	public function userPublicInfo(Request $request, $username)
+	{
 	}
 }
