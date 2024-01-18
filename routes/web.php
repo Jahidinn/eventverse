@@ -77,8 +77,8 @@ Route::get('/dashboard/get-foll-organization', [OrganizationController::class, '
 Route::get('/dashboard/get-organization-member', [OrganizationController::class, 'getOrgMember'])->middleware('auth');
 Route::get('/dashboard/get-organization-request', [OrganizationController::class, 'getOrgMemberReequest'])->middleware('auth');
 
-Route::get('/organisasi/{organisasi}', [OrganizationController::class, 'detailOrganisasi'])->middleware('auth');
-Route::get('/user/{username}', [UserProfileController::class, 'userPublicInfo'])->middleware('auth');
+Route::get('/organisasi/{organisasi}', [OrganizationController::class, 'detailOrganisasi']);
+Route::get('/user/{username}', [UserProfileController::class, 'userPublicInfo']);
 
 Route::get('/get-cities/{code}', [EventController::class, 'getCities']);
 Route::get('/check-url', [EventController::class, 'cekUrl']);

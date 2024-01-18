@@ -412,9 +412,27 @@ button.slick-disabled {
 	border-radius: 50%;
 	object-position: center;
 }
+.org-list-logo-container {
+	width: 50px;
+	height:50px;
+	overflow: hidden;
+	margin: 0 auto;
+}
+
+.org-list-logo-container img {
+	width:100%;
+	height:100%;
+	object-fit:cover;
+	border-radius: 50%;
+	object-position: center;
+}
 
 .tabs .tab-link{
 	background-color: #f5f9fd;
+}
+.bg-soft-blue{
+	background-color: #eff0f6;
+  border: .01rem solid #e0e1ed;
 }
 
 @media only screen and (min-width: 950px) {
