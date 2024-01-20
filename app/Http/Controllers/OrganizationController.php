@@ -12,6 +12,8 @@ use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Facades\Validator;
 use Svg\Tag\Rect;
 
+use function Laravel\Prompts\error;
+
 class OrganizationController extends Controller
 {
 	public function index()
@@ -176,6 +178,12 @@ class OrganizationController extends Controller
 	public function deleteOrg(Request $request)
 	{
 		$dataOrg = Organisation::find($request->org_id);
+
+		//Cek apakah sudah ada event dengan id organisasi tesb
+		$cekOrg = Event::where('organizer', 'org')->where('organizer_id', $request->org_id);
+		if ($cekOrg->count() > 0) {
+			return response()->json(['error' => 'Tidak bisa dihapus! ada event aktif dengan penyelenggara organisasi ini!']);
+		}
 
 		// Hapus file gambarnya juga
 		if ($dataOrg->org_image) {

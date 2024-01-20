@@ -266,7 +266,11 @@ class EventController extends Controller
 
 	public function getMyOrg()
 	{
-		$myOrg = OrganisationMember::with(['user', 'org'])->where('user_id', auth()->user()->id)->get();
+		$myOrg = OrganisationMember::with(['user', 'org'])
+			->where('user_id', auth()->user()->id)
+			->whereIn('position', ['Member', 'Owner'])
+			->get();
+
 		if (!$myOrg || empty($myOrg)) {
 			return response()->json(['error' => '']);
 		} else {

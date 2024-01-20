@@ -374,4 +374,23 @@ class DashboardController extends Controller
 			return response()->json(['success' => 'Berhasil request penarikan dana!', 'event_id' => $request->event_id, 'saldo' => $updateHistory['danaBersih']]);
 		}
 	}
+
+	public function withdrawHistory(Request $request)
+	{
+		$user_id = auth()->user()->id;
+		$dataWD = WithdrawData::where('event_id', $request->id)->where('user_id', $user_id)->get();
+
+		return DataTables::of($dataWD)
+			->addIndexColumn()
+			->addColumn('wd', function ($dataWD) {
+				return number_format($dataWD->amount, 0, ',', '.');
+			})
+			->addColumn('tanggal', function ($dataWD) {
+				return $dataWD->created_at->format('d M Y');
+			})
+			->addColumn('wd-status', function ($dataWD) {
+				return view('dashboard.components.column-status-withdraw')->with(['data' => $dataWD]);
+			})
+			->make(true);
+	}
 }

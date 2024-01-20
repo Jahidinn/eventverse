@@ -18,11 +18,13 @@
             </div>
 
             <div class="card-body px-2 pt-3 bg-card-blue">
+
+                <div class="mb-2">
+                    <a href="/event/create" class="btn btn-success rounded-0"><i class="fas fa-plus-circle"></i> Buat
+                        event</a>
+                </div>
+
                 <div class="table-responsive py-0 manajemen-event-box">
-                    <div class="mb-2">
-                        <a href="/event/create" class="btn btn-success rounded-0"><i class="fas fa-plus-circle"></i> Buat
-                            event</a>
-                    </div>
                     <form action="" method="GET">
                         <div class="p-0 form-inline mb-4">
                             <input class="form-control col shadow-none mr-1" name="key" type="text"

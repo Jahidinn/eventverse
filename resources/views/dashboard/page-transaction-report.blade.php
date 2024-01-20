@@ -116,7 +116,9 @@
                                         $eventConnectFee = $admin_bank_tf + $admin_credit_card + $admin_lain;
 
                                         // penarikan dana;
-                                        $danaDitarik = App\Models\WithdrawData::where('event_id', $event->id)->sum('amount');
+                                        $danaDitarik = App\Models\WithdrawData::where('event_id', $event->id)
+                                            ->whereIn('status', ['Sukses', 'Proses'])
+                                            ->sum('amount');
 
                                         $danaBersih = $total_dana_bank_tf + $total_dana_credit_card + $total_dana_lain - $danaDitarik;
 
@@ -287,4 +289,50 @@
             </div>
         </div>
     </div>
+
+    <!-- Modal History penarikan-->
+    <div class="modal fade" id="withdrawHistoryModal" tabindex="-1" aria-labelledby="withdrawHistoryModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="withdrawHistoryModalLabel">History penarikan</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <input type="search" class="form-control shadow-none mb-3 mt-2" id="wd-history-search"
+                        name="wd-history-search" placeholder="Cari riwayat transaksi">
+                    <div class="table-responsive">
+                        <table class="table table-striped w-100" id="withdraw-history">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Jumlah</th>
+                                    <th scope="col">Tanggal</th>
+                                    <th scope="col">Status</th>
+                                </tr>
+                            </thead>
+                            {{-- <tbody>
+                                <tr>
+                                    <th scope="row">900.450.000</th>
+                                    <td>220 Marc 2024</td>
+                                    <td>
+                                        <span class="badge badge-success">Sukses</span>
+                                    </td>
+                                </tr>
+                            </tbody> --}}
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    {{-- Push javascript --}}
+    @push('js-transaction-report')
+        @include('dashboard.js.js-transaction-report')
+    @endpush
 @endsection

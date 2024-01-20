@@ -245,10 +245,14 @@
                     },
                     success: function(response) {
                         //Swal.fire('', response.success, 'success')
-                        alertify.success('<i class="fas fa-check"></i> ' + response
-                            .success);
-                        $('#my-organization-table').DataTable().ajax.reload();
-                        $('#myfollowing-table').DataTable().ajax.reload();
+                        if (response.success) {
+                            alertify.success('<i class="fas fa-check"></i> ' + response
+                                .success);
+                            $('#my-organization-table').DataTable().ajax.reload();
+                            $('#myfollowing-table').DataTable().ajax.reload();
+                        } else {
+                            Swal.fire('', response.error, 'error');
+                        }
                     },
                     error: function(jqXHR, textStatus, errorThrown) {
                         Swal.fire('', 'error!', 'error');

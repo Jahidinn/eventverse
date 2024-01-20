@@ -53,6 +53,7 @@ Route::get('/dashboard/event-checkin', [DashboardController::class, 'eventChecki
 Route::get('/dashboard/get-participan-checkin', [DashboardController::class, 'getParticipantCheckin'])->middleware('auth');
 Route::post('/dashboard/participant-checkin', [DashboardController::class, 'checkinProcess'])->middleware('auth');
 Route::post('/dashboard/withdraw-process', [DashboardController::class, 'withdraw'])->middleware('auth');
+Route::get('/dashboard/withdraw-history', [DashboardController::class, 'withdrawHistory'])->middleware('auth');
 
 Route::get('/dashboard/my-profile', [UserProfileController::class, 'index'])->middleware('auth');
 Route::post('/dashboard/edit-profile-image', [UserProfileController::class, 'editImage'])->middleware('auth');
