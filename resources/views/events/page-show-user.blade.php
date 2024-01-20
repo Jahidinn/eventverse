@@ -11,22 +11,22 @@
                         <div class="col-md-3">
 
                             @php
-                                $detailOrganisasi->org_image ? ($image = $detailOrganisasi->org_image) : ($image = 'logo.png');
+                                $detailProfile->profile_picture ? ($profileImg = $detailProfile->profile_picture) : ($profileImg = 'default-user.jpg');
                             @endphp
 
                             <div class="org-detail-logo-container">
-                                <img src="{{ asset('storage/organization-images') . '/' . $image }}" class="img-circle"
+                                <img src="{{ asset('storage/profile-images') . '/' . $profileImg }}" class="img-circle"
                                     alt="User Image">
                             </div>
                         </div>
 
                         <div class="col-md-9">
                             <div class="card-body">
-                                <h5 class="card-title">{{ $detailOrganisasi->org_name }}</h5>
-                                <p class="card-text mb-0">{{ $detailOrganisasi->org_contact }}</p>
-                                <p class="card-text mb-0">{{ $detailOrganisasi->org_institution }}</p>
+                                <h5 class="card-title">{{ $detailProfile->name }}</h5>
+                                <p class="card-text mb-0">{{ '@' . $detailProfile->username }}</p>
+                                <p class="card-text mb-0">{{ $detailProfile->email }}</p>
                                 <p class="card-text mt-3"><small class="text-muted">Member since
-                                        {{ $detailOrganisasi->created_at->diffForHumans() }}</small></p>
+                                        {{ $detailProfile->created_at->diffForHumans() }}</small></p>
                             </div>
                         </div>
                     </div>
@@ -37,14 +37,14 @@
                                 <button class="tab-link current w-100 m-0 py-2" data-tab="org-event">Event</button>
                             </div>
                             <div class="col p-0">
-                                <button class="tab-link w-100 py-2" data-tab="org-member">Member</button>
+                                <button class="tab-link w-100 py-2" data-tab="org-member">Organisasi</button>
                             </div>
                         </div>
                         <div id="org-event" class="tab-content current p-2 mt-3">
                             <table class="table table-striped">
                                 <tbody>
 
-                                    @foreach ($orgEvent as $event)
+                                    @foreach ($listEvent as $event)
                                         <tr>
                                             <td style="width: 50px;">
                                                 <div class="org-list-logo-container">
@@ -68,19 +68,20 @@
                             <table class="table table-striped">
                                 <tbody>
 
-                                    @foreach ($orgMember as $member)
+                                    @foreach ($listOrg as $organisasi)
                                         <tr>
                                             <td style="width: 50px;">
                                                 <div class="org-list-logo-container">
                                                     @php
-                                                        $member->user->profile_picture ? ($profileImg = $member->user->profile_picture) : ($profileImg = 'default-user.jpg');
+                                                        $organisasi->org->org_image ? ($organisasiImg = $organisasi->org->org_image) : ($organisasiImg = 'logo.png');
                                                     @endphp
-                                                    <img src="{{ asset('storage/profile-images') . '/' . $profileImg }}"
+                                                    <img src="{{ asset('storage/organization-images') . '/' . $organisasiImg }}"
                                                         class="img-circle" alt="User Image">
                                                 </div>
                                             </td>
                                             <td style="vertical-align: middle;">
-                                                <a href="/user/{{ $member->user->username }}">{{ $member->user->name }}</a>
+                                                <a
+                                                    href="/organisasi/{{ $organisasi->org->org_id }}">{{ $organisasi->org->org_name }}</a>
                                             </td>
                                         </tr>
                                     @endforeach

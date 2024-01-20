@@ -80,7 +80,8 @@
             },
             success: function(response) {
                 if (response.success) {
-                    Swal.fire('', response.success, 'success');
+                    alertify.success('<i class="fas fa-check"></i> ' + response
+                        .success);
                     $('#data-peserta').DataTable().ajax.reload(null, false);
 
                 } else {

@@ -66,7 +66,7 @@ class DashboardController extends Controller
 		$user_id = auth()->user()->id;
 		$search = $request->key;
 
-		$listEvent = Event::where('title', 'like', '%' . $search . '%')->where('user_id', $user_id)->paginate(2)->withQueryString();
+		$listEvent = Event::where('title', 'like', '%' . $search . '%')->where('user_id', $user_id)->paginate(10)->withQueryString();
 
 		if ($listEvent->isEmpty()) {
 			// Lakukan pengalihan URL atau tindakan lainnya

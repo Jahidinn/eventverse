@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\OrganisationMember;
 use App\Models\User;
+use App\Models\Event;
 use Illuminate\Http\Request;
+use App\Models\OrganisationMember;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
@@ -130,7 +131,21 @@ class UserProfileController extends Controller
 		}
 	}
 
+	//View for public
 	public function userPublicInfo(Request $request, $username)
 	{
+		$detailProfile = User::where('username', $username)->first();
+		$listOrg = OrganisationMember::with(['user', 'org'])->where('user_id', $detailProfile->id)->get();
+		$listEvent = Event::where('organizer', 'individual')->where('organizer_id', $detailProfile->id)->get();
+
+		if (empty($detailProfile)) {
+			abort(404, 'Resource not found.');
+		}
+
+		return view('events.page-show-user', [
+			'detailProfile' => $detailProfile,
+			'listOrg' => $listOrg,
+			'listEvent' => $listEvent,
+		]);
 	}
 }

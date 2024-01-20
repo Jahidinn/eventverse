@@ -194,8 +194,9 @@
                             <a class="mt-3 badge badge-info text-left" href="/organisasi/{{ $detailEvent->org->org_id }}">
                                 <b>{{ strlen($detailEvent->org->org_name) > 40 ? substr($detailEvent->org->org_name, 0, 40) . ' ...' : $detailEvent->org->org_name }}</b>
                             </a>
+                            <p class="card-text mt-1 mb-1"><small class="text-muted">Organisasi</small></p>
 
-                            <p class="mb-1 mt-1">{{ $detailEvent->org->org_contact }}</p>
+                            <p class="mb-1">{{ $detailEvent->org->org_contact }}</p>
                             <p class="mb-1">{{ $detailEvent->org->org_institution }}</p>
                         @elseif($detailEvent->organizer == 'individual' && $detailEvent->organizer_id)
                             {{-- Jika penyelenggar individual --}}
@@ -210,7 +211,10 @@
 
                             <a class="badge badge-info mt-3"
                                 href="/user/{{ $detailEvent->individual->username }}">{{ strlen($detailEvent->individual->name) > 40 ? substr($detailEvent->individual->name, 0, 40) . ' ...' : $detailEvent->individual->name }}</a>
-                            <p class="mb-1 mt-1">{{ $detailEvent->individual->email }}</p>
+
+                            <p class="card-text mt-1 mb-1"><small class="text-muted">Organisasi</small></p>
+
+                            <p class="mb-1">{{ $detailEvent->individual->email }}</p>
                             {{-- Mengatasi jika ada info penyelenggara kosong --}}
                         @else
                             <div id="org-info-logo-container">
