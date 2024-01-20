@@ -351,8 +351,12 @@ class OrganizationController extends Controller
 	{
 
 		$detailOrganisasi = Organisation::where('org_id', $organisasi)->first();
-		$orgMember = OrganisationMember::with(['user', 'org'])->where('org_id', $organisasi)->first();
-		$orgEvent = Event::where('organizer', 'org')->where('organizer_id', $organisasi)->get();
+		$orgMember = OrganisationMember::with(['user', 'org'])->where('org_id', $detailOrganisasi->id)->get();
+		$orgEvent = Event::where('organizer', 'org')->where('organizer_id', $detailOrganisasi->id)->get();
+
+		if (empty($detailOrganisasi)) {
+			abort(404, 'Resource not found.');
+		}
 
 		return view('events.page-show-org', [
 			'detailOrganisasi' => $detailOrganisasi,

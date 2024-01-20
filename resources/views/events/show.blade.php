@@ -27,19 +27,22 @@
                         @php
                             if ($detailEvent->organizer == 'org') {
                                 $penyelenggara = $detailEvent->org->org_name ?? '';
+                                $link = '/organisasi' . '/' . $detailEvent->org->org_id;
                             } elseif ($detailEvent->organizer == 'individual') {
                                 $penyelenggara = $detailEvent->individual->name ?? '';
+                                $link = '/user' . '/' . $detailEvent->individual->username;
                             } elseif ($detailEvent->organizer == null || $detailEvent->organizer_id == null || $detailEvent->organizer == '' || $detailEvent->organizer_id == '') {
                                 $penyelenggara = '';
+                                $link = '';
                             } else {
                                 $penyelenggara = '';
+                                $link = '';
                             }
 
                         @endphp
-                        <a href="" class=" mt-2 badge badge-info">
-
-                            <i class="fas fa-user-circle mr-1"></i>{{ $penyelenggara }}
-
+                        <a href="{{ $link }}" class=" mt-2 badge badge-info">
+                            <i
+                                class="fas fa-user-circle mr-1"></i>{{ strlen($penyelenggara) > 40 ? substr($penyelenggara, 0, 40) . ' ...' : $penyelenggara }}
                         </a>
                         <hr>
 
@@ -188,8 +191,10 @@
                                 <img src="{{ asset('storage/organization-images') . '/' . $logo }}" class="org-info-logo">
                             </div>
 
-                            <a class="badge badge-info mt-3"
-                                href="/organisasi/{{ $detailEvent->org->org_id }}">{{ $detailEvent->org->org_name }}</a>
+                            <a class="mt-3 badge badge-info text-left" href="/organisasi/{{ $detailEvent->org->org_id }}">
+                                <b>{{ strlen($detailEvent->org->org_name) > 40 ? substr($detailEvent->org->org_name, 0, 40) . ' ...' : $detailEvent->org->org_name }}</b>
+                            </a>
+
                             <p class="mb-1 mt-1">{{ $detailEvent->org->org_contact }}</p>
                             <p class="mb-1">{{ $detailEvent->org->org_institution }}</p>
                         @elseif($detailEvent->organizer == 'individual' && $detailEvent->organizer_id)
@@ -204,7 +209,7 @@
                             </div>
 
                             <a class="badge badge-info mt-3"
-                                href="/user/{{ $detailEvent->individual->username }}">{{ $detailEvent->individual->name }}</a>
+                                href="/user/{{ $detailEvent->individual->username }}">{{ strlen($detailEvent->individual->name) > 40 ? substr($detailEvent->individual->name, 0, 40) . ' ...' : $detailEvent->individual->name }}</a>
                             <p class="mb-1 mt-1">{{ $detailEvent->individual->email }}</p>
                             {{-- Mengatasi jika ada info penyelenggara kosong --}}
                         @else

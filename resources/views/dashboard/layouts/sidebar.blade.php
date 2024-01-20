@@ -88,7 +88,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="/dashboard/my-organization"
+                    <a href="/dashboard/organization"
                         class="nav-link {{ Request::is('dashboard/organization*') ? 'active' : '' }}">
                         <i class="nav-icon fas fa-users"></i>
                         <p class="text">Organisasi</p>

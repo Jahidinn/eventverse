@@ -69,7 +69,7 @@
 </div>
 
 <div class="container">
-    <div class="copyright">2018 - 2023
+    <div class="copyright">2018 - {{ date('Y') }}
         &copy; Copyright <strong><span>mediapresasi.com</span></strong>. All Rights Reserved
     </div>
     <!-- All the links in the footer should remain intact. -->

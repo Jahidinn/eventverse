@@ -6,7 +6,7 @@
         <!-- Stack the columns on mobile by making one full-width and the other half-width -->
         <div class="row m-0 p-0">
             <div class="col-md-12 m-0 p-2">
-                <div class="card mb-3 shadow border-0">
+                <div class="card mb-3 border-0 my-shadow">
                     <div class="row no-gutters">
                         <div class="col-md-3">
 
@@ -40,48 +40,53 @@
                                 <button class="tab-link w-100 py-2" data-tab="org-member">Member</button>
                             </div>
                         </div>
-                        <div id="org-event" class="tab-content current p-2 px-3 ">
-                            <div class="card mt-2 bg-soft-blue">
-                                <table class="table table-borderless">
-                                    <tbody>
-                                        <tr class="">
-                                            <th scope="row">
+                        <div id="org-event" class="tab-content current p-2 mt-3">
+                            <table class="table table-striped">
+                                <tbody>
+
+                                    @foreach ($orgEvent as $event)
+                                        <tr>
+                                            <td style="width: 50px;">
                                                 <div class="org-list-logo-container">
-                                                    <img src="{{ asset('storage/organization-images') . '/' . $image }}"
+                                                    @php
+                                                        $event->image ? ($eventImg = $event->image) : ($eventImg = 'logo.png');
+                                                    @endphp
+                                                    <img src="{{ asset('storage/event-images') . '/' . $eventImg }}"
                                                         class="img-circle" alt="User Image">
                                                 </div>
-                                            </th>
-                                            <td class="">
-                                                <a href="">Mark ggsgds ggsgdsd sgdgsdgs hsgdgsdgs hsdgsgd sgdgsgdsg
-                                                    gsgdgsdg gsgdgsd
-                                                    sydysd gsgdgs hsdd ydysd hsdgsd hsgdgsd hhsds hsdgd gsgdg</a>
+                                            </td>
+                                            <td style="vertical-align: middle;">
+                                                <a href="/{{ $event->slug }}">{{ $event->title }}</a>
                                             </td>
                                         </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                            <div class="card mt-2 bg-soft-blue">
-                                <table class="table table-borderless">
-                                    <tbody>
-                                        <tr class="">
-                                            <th scope="row">
-                                                <div class="org-list-logo-container">
-                                                    <img src="{{ asset('storage/organization-images') . '/' . $image }}"
-                                                        class="img-circle" alt="User Image">
-                                                </div>
-                                            </th>
-                                            <td class="">
-                                                <a href="">Mark ggsgds ggsgdsd sgdgsdgs hsgdgsdgs hsdgsgd sgdgsgdsg
-                                                    gsgdgsdg gsgdgsd
-                                                    sydysd gsgdgs hsdd ydysd hsdgsd hsgdgsd hhsds hsdgd gsgdg</a>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
+                                    @endforeach
+
+                                </tbody>
+                            </table>
                         </div>
-                        <div id="org-member" class="tab-content p-2">
-                            Member
+                        <div id="org-member" class="tab-content p-2 mt-3">
+                            <table class="table table-striped">
+                                <tbody>
+
+                                    @foreach ($orgMember as $member)
+                                        <tr>
+                                            <td style="width: 50px;">
+                                                <div class="org-list-logo-container">
+                                                    @php
+                                                        $member->user->profile_picture ? ($profileImg = $member->user->profile_picture) : ($profileImg = 'default-user.jpg');
+                                                    @endphp
+                                                    <img src="{{ asset('storage/profile-images') . '/' . $profileImg }}"
+                                                        class="img-circle" alt="User Image">
+                                                </div>
+                                            </td>
+                                            <td style="vertical-align: middle;">
+                                                <a href="">{{ $member->user->name }}</a>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+
+                                </tbody>
+                            </table>
                         </div>
                     </div>
 
