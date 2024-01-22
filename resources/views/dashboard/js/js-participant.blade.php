@@ -9,6 +9,8 @@
             $('.daftar-peserta').attr('hidden', false)
             $('.daftar-event').attr('hidden', true)
 
+            $('.download-participant-data').attr('data-id', id);
+
             var dataPeserta = $('#data-peserta').DataTable({
                 "dom": 'rtip',
                 "bInfo": false,
@@ -97,6 +99,7 @@
         $('.daftar-peserta').attr('hidden', true)
         $('.daftar-event').attr('hidden', false)
     })
+
     $('body').on('click', '.detail-transaksi', function(e) {
         e.preventDefault();
         var id = $(this).data("id");
@@ -141,5 +144,21 @@
         });
 
         $('#detailTransaksiModal').modal('show');
+    })
+
+    //Download data peserta
+    $('body').on('click', '.download-participant-data', function(e) {
+        //e.preventDefault();
+        var id = $(this).data("id");
+        $('.download-participant-data').html('<i class="fas fa-spinner fa-spin"></i> Downloading')
+        $('.download-participant-data').attr('disabled', true)
+        window.location.replace('/dashboard/participant-download-excel/' + id);
+
+        setTimeout(function() {
+            $('.download-participant-data').html('<i class="fas fa-file-excel"></i> Download data');
+            $('.download-participant-data').attr('disabled', false);
+            alertify.success('<i class="fas fa-check"></i> ' + 'Downloaded successfully');
+        }, 1000);
+
     })
 </script>

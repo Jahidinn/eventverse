@@ -9,4 +9,9 @@ class CustomForm extends Model
 {
 	use HasFactory;
 	protected $guarded = ['id'];
+
+	public function value()
+	{
+		return $this->hasMany(TransactionForm::class, 'form_id', 'id');
+	}
 }

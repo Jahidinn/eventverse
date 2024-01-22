@@ -23,6 +23,7 @@ return new class extends Migration
 			$table->foreignId('category_id')->default(1);
 			$table->foreignId('status')->default(1);
 			$table->string('password');
+			$table->boolean('verified')->default(false);
 			$table->timestamp('email_verified_at')->nullable();
 			$table->rememberToken();
 			$table->timestamps();

@@ -105,7 +105,8 @@
 
                 <div class="mb-2">
                     <button class="btn btn-success kembali"><i class="fas fa-chevron-circle-left"></i> Kembali</button>
-                    <button class="btn btn-success"><i class="fas fa-file-excel"></i> Download data</button>
+                    <button class="btn btn-success download-participant-data"><i class="fas fa-file-excel"></i> Download
+                        data</button>
                 </div>
                 <small class="text-danger">* Klik header tabel untuk mengelompokan data sesuai header yang di pilih</small>
                 <div class="table-responsive">

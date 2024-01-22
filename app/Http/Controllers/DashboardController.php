@@ -12,7 +12,13 @@ use App\Models\WithdrawData;
 use Illuminate\Http\Request;
 use App\Models\TransactionForm;
 use Illuminate\Support\Facades\Redirect;
+use PhpOffice\PhpSpreadsheet\Style\Fill;
 use Yajra\DataTables\Facades\DataTables;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Style\Color;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use PhpOffice\PhpSpreadsheet\Style\Border;
+use PhpOffice\PhpSpreadsheet\Style\Alignment;
 
 class DashboardController extends Controller
 {
@@ -392,5 +398,231 @@ class DashboardController extends Controller
 				return view('dashboard.components.column-status-withdraw')->with(['data' => $dataWD]);
 			})
 			->make(true);
+	}
+
+	public function downloadExcel(Request $request, $id)
+	{
+		$user_id = auth()->user()->id;
+
+		//Cek yang download pembuat event atau bukan
+		$cekUser = Event::where('id', $id)->first();
+		if ($cekUser->user_id != $user_id) {
+
+			//Jika bukan jangan lanjutkan download
+			abort(404, 'Resource not found.');
+		}
+
+		//Dapatkan data transaksi / peserta
+		$participants = Transaction::with(['ticket', 'event'])->where('event_id', $id)
+			->orderBy('ticket_id', 'asc')
+			->orderBy('status')
+			->get();
+
+		//Data custom forms
+		$customForms = CustomForm::where('event_id', $id)->get();
+
+		// Mendapatkan instance kontroller saat membuat objek
+		$dashboardController = new DashboardController();
+
+		// Panggil fungsi getTransactionReport untuk mendapatkan perhitungan data transaksi
+		$transaksi = $dashboardController->getTransactionReport(app('request')->merge(['event_id' => $id]));
+		$dataTransaksi = json_decode(json_encode($transaksi), true)['original']['data'];
+
+		$danaTotal = number_format($dataTransaksi['danaTotal'], 0, ',', '.');
+		$danaDitarik = number_format($dataTransaksi['danaDitarik'], 0, ',', '.');
+		$fee = number_format($dataTransaksi['fee'], 0, ',', '.');
+		$danaBersih = number_format($dataTransaksi['danaBersih'], 0, ',', '.');
+		$peserta = number_format(count($participants), 0, ',', '.');
+		$tiket = number_format($dataTransaksi['tiket'], 0, ',', '.');
+
+		// Membuat objek Spreadsheet
+		$spreadsheet = new Spreadsheet();
+		$sheet = $spreadsheet->getActiveSheet();
+
+		// Mengatur tinggi baris untuk baris pertama
+		$sheet->getRowDimension(1)->setRowHeight(10);
+		$sheet->getRowDimension(2)->setRowHeight(30);
+		$sheet->getRowDimension(3)->setRowHeight(25);
+		$sheet->getRowDimension(4)->setRowHeight(25);
+		$sheet->getRowDimension(5)->setRowHeight(20);
+		$sheet->getColumnDimension('A')->setWidth(3);
+
+		$startColumnForm = 9;
+		$lastColumn = count($customForms) + $startColumnForm - 1;
+
+		$row = 6;
+		$lastRow = count($participants) + $row;
+
+		// Melakukan merge pada sel-sel tertentu
+		$sheet->mergeCells('B2:' . chr(65 + $lastColumn) . '2');
+
+		$sheet->mergeCells('B' . $row - 3 . ':C' . $row - 3);
+		$sheet->mergeCells('B' . $row - 2 . ':C' . $row - 2);
+
+		$sheet->mergeCells('D' . $row - 3 . ':E' . $row - 3);
+		$sheet->mergeCells('D' . $row - 2 . ':E' . $row - 2);
+
+		$sheet->mergeCells('F' . $row - 3 . ':G' . $row - 3);
+		$sheet->mergeCells('F' . $row - 2 . ':G' . $row - 2);
+
+		$sheet->mergeCells('H' . $row - 3 . ':' . chr(65 + $lastColumn) . $row - 2);
+
+		//Title event
+		$sheet->setCellValue('B2', $cekUser->title);
+		//Perhitungan data
+		$sheet->setCellValue('B' . $row - 3, 'Total eserta (' . $peserta . ')');
+		$sheet->setCellValue('B' . $row - 2, 'Total tiket (' . $tiket . ')');
+
+		$sheet->setCellValue('D' . $row - 3, 'Total pemasukan (Rp ' . $danaTotal . ')');
+		$sheet->setCellValue('D' . $row - 2, 'Total pencairan (Rp ' . $danaDitarik . ')');
+
+		$sheet->setCellValue('F' . $row - 3, 'Biaya layanan (Rp ' . $fee . ')');
+		$sheet->setCellValue('F' . $row - 2, 'Saldo Akhir (Rp ' . $danaBersih . ')');
+
+		// Data header
+		$sheet->setCellValue('B' . $row - 1, 'Ticket Pendaftaran');
+		$sheet->setCellValue('C' . $row - 1, 'ID');
+		$sheet->setCellValue('D' . $row - 1, 'Nama');
+		$sheet->setCellValue('E' . $row - 1, 'Email');
+		$sheet->setCellValue('F' . $row - 1, 'Tlp');
+		$sheet->setCellValue('G' . $row - 1, 'Biaya');
+		$sheet->setCellValue('H' . $row - 1, 'Status');
+		$sheet->setCellValue('I' . $row - 1, 'Pembayaran');
+
+		//Looping header dinamis berdasarkan custom form
+		$headerCustom = $startColumnForm;
+		foreach ($customForms as $value) {
+			// Gunakan huruf alfabet untuk menentukan nama kolom berdasarkan indeks
+			$columnName = chr(65 + $headerCustom);
+			$sheet->setCellValue($columnName . $row - 1, $value->form_name ?? '');
+
+			// Tingkatkan indeks kolom untuk langkah berikutnya
+			$headerCustom++;
+		}
+
+		//Looping isi data transaksi atau peserta event
+		foreach ($participants as $participant) {
+			//Looping data wajib
+			$sheet->setCellValue('B' . $row, $participant->ticket->ticket_name);
+			$sheet->setCellValue('C' . $row, $participant->transaction_id);
+			$sheet->setCellValue('D' . $row, $participant->name);
+			$sheet->setCellValue('E' . $row, $participant->email);
+			$sheet->setCellValue('F' . $row, $participant->phone);
+			$sheet->setCellValue('G' . $row, $participant->ticket->ticket_price);
+			$sheet->getStyle('G' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->setCellValue('H' . $row, $participant->status);
+			$sheet->setCellValue('I' . $row, $participant->payment_type);
+
+			//Looping data value custom form
+			$customColumnIndex = $startColumnForm;
+			foreach ($customForms as $value) {
+				$columnName = chr(65 + $customColumnIndex);
+				$data = TransactionForm::where('transaction_id', $participant->id)->where('form_id', $value->id)->first();
+				$sheet->setCellValue($columnName . $row, $data->form_value ?? '');
+
+				// Tingkatkan indeks kolom untuk langkah berikutnya
+				$customColumnIndex++;
+			}
+			$row++;
+		}
+
+
+		//STYLING TABEL
+
+		$sheet->getStyle('B2:' . chr(65 + $lastColumn) . $lastRow)
+			->getAlignment()
+			->setVertical(Alignment::VERTICAL_CENTER);
+
+		$sheet->getStyle($row - 1)
+			->getAlignment()
+			->setVertical(Alignment::VERTICAL_CENTER);
+
+		$sheet->getStyle('B2:' . chr(65 + $lastColumn) . 2)
+			->getFill()
+			->setFillType(Fill::FILL_SOLID)
+			->getStartColor()
+			->setARGB('d9d9d9');
+
+		$sheet->getStyle('B5:' . chr(65 + $lastColumn) . 5)
+			->getFill()
+			->setFillType(Fill::FILL_SOLID)
+			->getStartColor()
+			->setARGB('9ee8ff');
+
+		$sheet->getStyle(2)
+			->getAlignment()
+			->setHorizontal('center');
+
+		$sheet->getStyle('B5:' . chr(65 + $lastColumn) . $lastRow)
+			->getAlignment()
+			->setHorizontal('left');
+
+		$sheet->getStyle('B2:' . chr(65 + $lastColumn) . $lastRow)
+			->getBorders()
+			->getInside()
+			->setBorderStyle(Border::BORDER_DASHED)
+			->setColor(new Color('c4c4c4'));
+
+		$sheet->getStyle('B2:' . chr(65 + $lastColumn) . $lastRow)
+			->getBorders()
+			->getOutline()
+			->setBorderStyle(Border::BORDER_MEDIUM);
+
+		$sheet->getStyle('B5:' . chr(65 + $lastColumn) . '5')
+			->getBorders()
+			->getOutline()
+			->setBorderStyle(Border::BORDER_MEDIUM)
+			->setColor(new Color('000000'));
+
+		$sheet->getStyle('B2:' . chr(65 + $lastColumn) . '2')
+			->getBorders()
+			->getOutline()
+			->setBorderStyle(Border::BORDER_MEDIUM)
+			->setColor(new Color('000000'));
+
+		// Mengatur lebar kolom otomatis sesuai dengan panjang karakter
+		foreach ($sheet->getColumnIterator() as $column) {
+			$columnIndex = $column->getColumnIndex();
+			// Pastikan kolom dimulai dari B dan seterusnya
+			if ($columnIndex < 'B') {
+				continue;
+			}
+
+			// Mengatur lebar kolom A dan B menjadi 25
+			if ($columnIndex == 'B' || $columnIndex == 'C') {
+				$maxWidth = 26;
+			} else {
+				$maxWidth = 23; // Lebar maksimal untuk kolom lainnya
+			}
+
+			$sheet->getColumnDimension($columnIndex)->setWidth($maxWidth);
+
+			// Mengatur wrap text untuk setiap sel di kolom
+			foreach ($sheet->getRowIterator() as $row) {
+				$cell = $sheet->getCell($columnIndex . $row->getRowIndex());
+				//$sheet->getStyle($cell->getCoordinate())->getAlignment()->setWrapText(true);
+
+				if ($row->getRowIndex() == 2 || $row->getRowIndex() == 5) {
+					$sheet->getStyle($cell->getCoordinate())->getFont()->setBold(true);
+					$sheet->getStyle($cell->getCoordinate())->getFont()->setSize(12);
+				}
+			}
+		}
+
+
+		// Menyiapkan respons untuk file Excel
+		$writer = new Xlsx($spreadsheet);
+
+		// Nama file Excel yang akan didownload
+		$filename = 'Data peserta-' . time() . '.xlsx';
+
+		// Set header untuk menentukan jenis respons
+		header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+		header('Content-Disposition: attachment;filename="' . $filename . '"');
+		header('Cache-Control: max-age=0');
+
+		// Mengirim file Excel ke browser
+		$writer->save('php://output');
+		//return response()->json(['success' => 'Sukses download']);
 	}
 }

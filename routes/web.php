@@ -43,15 +43,19 @@ Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard
 Route::get('/dashboard/myevent', [DashboardController::class, 'myEvent'])->middleware('auth');
 Route::get('/dashboard/get-myevent', [DashboardController::class, 'getMyEvent'])->middleware('auth');
 Route::get('/dashboard/manajemen-event', [DashboardController::class, 'manajemenEvent'])->middleware('auth');
-Route::get('/dashboard/participant-data', [DashboardController::class, 'participant'])->middleware('auth');
-Route::get('/dashboard/get-participant', [DashboardController::class, 'getParticipant'])->middleware('auth');
 Route::get('/dashboard/get-customform', [DashboardController::class, 'getCustomformParticipant'])->middleware('auth');
 Route::post('/dashboard/delete-myevent', [DashboardController::class, 'deleteMyevent'])->middleware('auth');
-Route::get('/dashboard/transaction-report', [DashboardController::class, 'transactionReport'])->middleware('auth');
-Route::get('/dashboard/get-transaction-report', [DashboardController::class, 'getTransactionReport'])->middleware('auth');
+
+Route::get('/dashboard/participant-data', [DashboardController::class, 'participant'])->middleware('auth');
+Route::get('/dashboard/get-participant', [DashboardController::class, 'getParticipant'])->middleware('auth');
+Route::get('/dashboard/participant-download-excel/{id}', [DashboardController::class, 'downloadExcel'])->middleware('auth');
+
 Route::get('/dashboard/event-checkin', [DashboardController::class, 'eventCheckin'])->middleware('auth');
 Route::get('/dashboard/get-participan-checkin', [DashboardController::class, 'getParticipantCheckin'])->middleware('auth');
 Route::post('/dashboard/participant-checkin', [DashboardController::class, 'checkinProcess'])->middleware('auth');
+
+Route::get('/dashboard/transaction-report', [DashboardController::class, 'transactionReport'])->middleware('auth');
+Route::get('/dashboard/get-transaction-report', [DashboardController::class, 'getTransactionReport'])->middleware('auth');
 Route::post('/dashboard/withdraw-process', [DashboardController::class, 'withdraw'])->middleware('auth');
 Route::get('/dashboard/withdraw-history', [DashboardController::class, 'withdrawHistory'])->middleware('auth');
 

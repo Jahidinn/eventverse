@@ -10,6 +10,11 @@ class TransactionForm extends Model
 	use HasFactory;
 	protected $guarded = ['id'];
 
+	public function form()
+	{
+		return $this->belongsTo(CustomForm::class, 'form_id', 'id');
+	}
+
 	public function transaction()
 	{
 		return $this->belongsTo(Transaction::class, 'transaction_id');
