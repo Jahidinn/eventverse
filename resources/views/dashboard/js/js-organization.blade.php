@@ -18,6 +18,9 @@
             processing: true,
             serverside: true,
             destroy: true,
+            "oLanguage": {
+                "sEmptyTable": "Kamu belum punya organisasi nih!"
+            },
             ajax: {
                 'type': 'GET',
                 'url': '/dashboard/get-myorganization',
@@ -344,7 +347,7 @@
             processing: true,
             serverside: true,
             "oLanguage": {
-                "sEmptyTable": "Kamu belum gabung organisasi apapun!"
+                "sEmptyTable": "Kamu belum gabung organisasi apapun sob!"
             },
             language: {
                 'paginate': {

@@ -18,12 +18,19 @@
             </div>
 
             <div class="card-body px-3 daftar-event text-dark bg-card-blue">
-                <form action="" method="GET">
+                <form action="" method="GET" {{ $dataEvent->isEmpty() ? 'hidden' : '' }}>
                     <div class="p-0 form-inline mb-4">
                         <input class="form-control col shadow-none mr-1" id="search-myevent" name="key" type="search"
                             placeholder="Cari event ..." value="{{ request('key') }}">
                     </div>
                 </form>
+
+                @if ($dataEvent->isEmpty())
+                    <div class="alert alert-warning" role="alert">
+                        Wah kamu belum <b>punya event</b> sob! <a href="/event/create"
+                            class="text-info text-decoration-none">Buat event <i class="fas fa-paper-plane"></i></a>
+                    </div>
+                @endif
 
                 {{-- Looping data my event --}}
                 @foreach ($dataEvent as $event)

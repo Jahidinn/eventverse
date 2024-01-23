@@ -20,12 +20,17 @@
             <div class="card-body px-3">
                 <a href="/search"><button class="btn btn-success mb-2 shadow-none">Jelajah event <i
                             class="far fa-paper-plane"></i></button></a>
-                <form action="" method="GET">
+                <form action="" method="GET" {{ $myevents->isEmpty() ? 'hidden' : '' }}>
                     <div class="p-0 form-inline mb-4">
                         <input class="form-control col shadow-none mr-1" id="search-myevent" name="key" type="text"
                             placeholder="Cari event yang kamu ikuti ..." value="{{ request('key') }}">
                     </div>
                 </form>
+                @if ($myevents->isEmpty())
+                    <div class="alert alert-warning" role="alert">
+                        Wah kamu belum <b>ikut event</b> apapun guys!
+                    </div>
+                @endif
 
                 {{-- Looping data my event --}}
                 @foreach ($myevents as $myevent)

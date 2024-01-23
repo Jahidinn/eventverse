@@ -20,12 +20,19 @@
 
             <div class="card-body px-2 pt-3 bg-card-blue">
                 <div class="table-responsive py-0 manajemen-event-box">
-                    <form action="" method="GET">
+                    <form action="" method="GET" {{ $listEvent->isEmpty() ? 'hidden' : '' }}>
                         <div class="p-0 form-inline mb-4">
                             <input class="form-control col shadow-none" name="key" type="search"
                                 placeholder="Cari event ..." value="{{ request('key') }}">
                         </div>
                     </form>
+
+                    @if ($listEvent->isEmpty())
+                        <div class="alert alert-warning" role="alert">
+                            Wah kamu belum <b>punya event</b> sob! <a href="/event/create"
+                                class="text-info text-decoration-none">Buat event <i class="fas fa-paper-plane"></i></a>
+                        </div>
+                    @endif
 
                     @foreach ($listEvent as $event)
                         <div class="card pb-2">

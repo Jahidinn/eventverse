@@ -74,10 +74,10 @@ class DashboardController extends Controller
 
 		$listEvent = Event::where('title', 'like', '%' . $search . '%')->where('user_id', $user_id)->paginate(10)->withQueryString();
 
-		if ($listEvent->isEmpty()) {
-			// Lakukan pengalihan URL atau tindakan lainnya
-			return Redirect::to('/dashboard/manajemen-event');
-		}
+		// if ($listEvent->isEmpty()) {
+		// 	// Lakukan pengalihan URL atau tindakan lainnya
+		// 	return Redirect::to('/dashboard/manajemen-event');
+		// }
 
 		return view('dashboard.manajemen-event', [
 			'listEvent' => $listEvent
