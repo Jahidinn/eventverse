@@ -2,41 +2,76 @@
 
 @section('content')
     <!-- Content Header (Page header) -->
-    <section class="content-header">
-        <div class="container-fluid">
-            <div class="row mb-2">
-                <div class="col-sm-6">
-                    <h1>Dashboard</h1>
-                </div>
-            </div>
+    <section class="content-header pb-0">
+        <div class="alert alert-dark bg-dashboard text-white" role="alert">
+            <strong>HOME PAGE</strong>
         </div>
     </section>
 
     <!-- Main content -->
     <section class="content">
 
-        <!-- Default box -->
-        <div class="card">
-            <div class="card-header">
-                <h3 class="card-title">Title</h3>
+        <div class="row">
+            <div class="col-12 col-sm-6 col-md-3">
+                <div class="info-box">
+                    <span class="info-box-icon bg-info elevation-1"><i class="fas fa-user-plus"></i></span>
 
-                <div class="card-tools">
-                    <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
-                        <i class="fas fa-minus"></i>
-                    </button>
-                    <button type="button" class="btn btn-tool" data-card-widget="remove" title="Remove">
-                        <i class="fas fa-times"></i>
-                    </button>
+                    <div class="info-box-content">
+                        <span class="info-box-text">Ikut event</span>
+                        <span class="info-box-number">
+                            10
+                        </span>
+                    </div>
+                    <!-- /.info-box-content -->
                 </div>
+                <!-- /.info-box -->
             </div>
+            <!-- /.col -->
+            <div class="col-12 col-sm-6 col-md-3">
+                <div class="info-box mb-3">
+                    <span class="info-box-icon bg-danger elevation-1"><i class="fas fa-calendar-check"></i></span>
 
-            <div class="card-body">
-                Dashboard eventconnect.id
+                    <div class="info-box-content">
+                        <span class="info-box-text">Event kamu</span>
+                        <span class="info-box-number">410</span>
+                    </div>
+                    <!-- /.info-box-content -->
+                </div>
+                <!-- /.info-box -->
             </div>
-            <div class="card-footer">
-                Footer
+            <!-- /.col -->
+
+            <!-- fix for small devices only -->
+            <div class="clearfix hidden-md-up"></div>
+
+            <div class="col-12 col-sm-6 col-md-3">
+                <div class="info-box mb-3">
+                    <span class="info-box-icon bg-success elevation-1"><i class="fas fa-users"></i></span>
+
+                    <div class="info-box-content">
+                        <span class="info-box-text">Peserta event</span>
+                        <span class="info-box-number">760.000</span>
+                    </div>
+                    <!-- /.info-box-content -->
+                </div>
+                <!-- /.info-box -->
             </div>
+            <!-- /.col -->
+            <div class="col-12 col-sm-6 col-md-3">
+                <div class="info-box mb-3">
+                    <span class="info-box-icon bg-secondary elevation-1"><i class="fas fa-wallet"></i></span>
+
+                    <div class="info-box-content">
+                        <span class="info-box-text">Total transaksi</span>
+                        <span class="info-box-number">200,000,000</span>
+                    </div>
+                    <!-- /.info-box-content -->
+                </div>
+                <!-- /.info-box -->
+            </div>
+            <!-- /.col -->
         </div>
+        <!-- /.row -->
 
     </section>
 

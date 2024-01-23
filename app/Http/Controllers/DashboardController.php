@@ -24,7 +24,10 @@ class DashboardController extends Controller
 {
 	public function index()
 	{
-		return view('dashboard.index');
+		//Tambahkan data myevent, event, peserta, transaksi
+		return view('dashboard.index', [
+			'data' => '',
+		]);
 	}
 
 	//My event
