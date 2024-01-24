@@ -17,9 +17,9 @@
                     <span class="info-box-icon bg-info elevation-1"><i class="fas fa-user-plus"></i></span>
 
                     <div class="info-box-content">
-                        <span class="info-box-text">Ikut event</span>
+                        <span class="info-box-text">Event diikuti</span>
                         <span class="info-box-number">
-                            10
+                            {{ number_format($eventDiikuti, 0, ',', '.') }}
                         </span>
                     </div>
                     <!-- /.info-box-content -->
@@ -32,8 +32,8 @@
                     <span class="info-box-icon bg-danger elevation-1"><i class="fas fa-calendar-check"></i></span>
 
                     <div class="info-box-content">
-                        <span class="info-box-text">Event kamu</span>
-                        <span class="info-box-number">410</span>
+                        <span class="info-box-text">Event dibuat</span>
+                        <span class="info-box-number">{{ number_format($eventDibuat, 0, ',', '.') }}</span>
                     </div>
                     <!-- /.info-box-content -->
                 </div>
@@ -49,8 +49,8 @@
                     <span class="info-box-icon bg-success elevation-1"><i class="fas fa-users"></i></span>
 
                     <div class="info-box-content">
-                        <span class="info-box-text">Peserta event</span>
-                        <span class="info-box-number">760.000</span>
+                        <span class="info-box-text">Peserta dijangkau</span>
+                        <span class="info-box-number">{{ number_format($totalPeserta, 0, ',', '.') }}</span>
                     </div>
                     <!-- /.info-box-content -->
                 </div>
@@ -63,7 +63,7 @@
 
                     <div class="info-box-content">
                         <span class="info-box-text">Total transaksi</span>
-                        <span class="info-box-number">200,000,000</span>
+                        <span class="info-box-number">{{ number_format($totalTransaksi, 0, ',', '.') }}</span>
                     </div>
                     <!-- /.info-box-content -->
                 </div>

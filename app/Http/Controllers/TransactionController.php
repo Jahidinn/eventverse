@@ -88,16 +88,18 @@ class TransactionController extends Controller
 			$transaction = Transaction::create($data);
 
 			// insert custom form data
-			if ($transaction || $request->customForm) {
+			if ($request->customForm) {
+				if ($transaction || $request->customForm) {
 
-				foreach ($request->customForm as $key => $customForm) {
-					$dataForm[] = [
-						"transaction_id" => $transaction->id,
-						"form_id" => $key,
-						"form_value" => $customForm
-					];
+					foreach ($request->customForm as $key => $customForm) {
+						$dataForm[] = [
+							"transaction_id" => $transaction->id,
+							"form_id" => $key,
+							"form_value" => $customForm
+						];
+					}
+					TransactionForm::insert($dataForm);
 				}
-				TransactionForm::insert($dataForm);
 			}
 
 			// Set your Merchant Server Key
@@ -169,7 +171,6 @@ class TransactionController extends Controller
 			return response()->json(['expired' => 'Transaksi ini expired, gabisa dilanjutin guys!']);
 		}
 
-
 		return response()->json(['transaction' => $transaction, 'token' => $snapToken->token, 'event' => $event, 'ticket' => $ticket]);
 	}
 
@@ -202,7 +203,9 @@ class TransactionController extends Controller
 
 	public function redirectInvoice($id)
 	{
-		return redirect('/event/invoice/' . $id);
+		// Render view tanpa langsung redirect
+		return view('apps.redirect-to-invoice', ['invoiceId' => $id]);
+		//return redirect('/event/invoice/' . $id);
 	}
 
 

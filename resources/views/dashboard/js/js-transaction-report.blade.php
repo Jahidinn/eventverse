@@ -79,7 +79,7 @@
         $('#wd-event-id').val(id)
 
         $('.limit-notif').attr('hidden', true);
-        $('#submit-withdraw').attr('disabled', true)
+        $('#submit-withdraw').attr('disabled', true);
 
 
         $('#jumlah-penarikan').on('input', function() {
