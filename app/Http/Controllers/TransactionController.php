@@ -59,6 +59,16 @@ class TransactionController extends Controller
 		} else {
 			$biayaAdmin = config('app.biaya_admin');
 
+			if ($request->totalPrice == 0 || empty($request->totalPrice)) {
+				$status = 'Paid';
+				$quantity = 1;
+				$price = 0;
+			} else {
+				$status = 'Unpaid';
+				$quantity = $request->totalPrice / $request->quantity;
+				$price = $request->totalPrice + $biayaAdmin;
+			}
+
 			$data = [
 				'ticket_id' => $request->idTicket,
 				'event_id' => $request->idEvent,
@@ -67,10 +77,10 @@ class TransactionController extends Controller
 				'email' => $request->email,
 				'is_login' => $request->is_login,
 				'user_login_id' => $request->user_login_id,
-				'quantity' => $request->totalPrice / $request->quantity,
-				'total_price' => $request->totalPrice + $biayaAdmin,
+				'quantity' => $quantity,
+				'total_price' => $price,
 				'transaction_id' => $this->generateUniqueCode(),
-				'status' => 'Unpaid',
+				'status' => $status,
 			];
 
 			//Keamanan beli tiket dari sisi backend
@@ -80,9 +90,24 @@ class TransactionController extends Controller
 			$today = Carbon::now()->format('Y-m-d');
 
 			if ($ticketAvailable <= 0) {
-				return response()->json(['error' => 'Ticket habis gusy!']);
+				return response()->json(['error' => 'Ticket habis guys!']);
 			} elseif ($ticketQuota->ticket_deadline < $today) {
 				return response()->json(['error' => 'Ticket expired!']);
+			}
+
+			//Jika event gratis langsung masukan transaksi tanpa pembayaran
+			if ($request->totalPrice == 0 || empty($request->totalPrice)) {
+				///Proteksi jika mengirimkan data gratis tapi tiket pada database tidak gratis
+				$dataTicket = Ticket::where('id', $request->idTicket)->first();
+
+				if (($dataTicket->ticket_price !== null && $dataTicket->ticket_price != 0) || $dataTicket->ticket_price != 0) {
+					// Membuat respons JSON
+					return response()->json(['error' => 'Pelanggaran data!']);
+				}
+
+				$transaction = Transaction::create($data);
+				$this->sendEmail($transaction->transaction_id);
+				return response()->json(['success' => 'Berhasil melakukan pendaftaran!', 'id' => $transaction->id]);
 			}
 
 			$transaction = Transaction::create($data);

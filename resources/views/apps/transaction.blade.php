@@ -90,6 +90,7 @@
                             Order review
                         </div>
                         <div class="card-body px-2">
+
                             <div class="card mb-3" style="max-width: 540px;">
                                 <div class="row no-gutters">
                                     <div class="col-md-2 checkout-image-cover">
@@ -107,6 +108,7 @@
                                     </div>
                                 </div>
                             </div>
+
                             <div class="alert alert-primary" role="alert">
                                 {{ $detailTicket->ticket_name }} <strong><span
                                         class="badge badge-secondary p-2">1X</span></strong>

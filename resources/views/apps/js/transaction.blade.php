@@ -25,7 +25,7 @@
 
             //Cek koneksi dulu
             if (navigator.onLine) {
-                $('#checkout-button').html('Processing ...');
+                $('#checkout-button').html('<i class="fas fa-spinner fa-spin"></i> Processing ...');
                 $('#checkout-button').attr('disabled', true);
                 var biayaAdmin = "{{ config('app.biaya_admin') }}"
 
@@ -41,6 +41,24 @@
                             $('#checkout-button').html('Bayar sekarang!');
                             $('#checkout-button').attr('disabled', false);
                             Swal.fire('Ooopss', response.error, 'error');
+                        } else if (response.success) {
+                            $('#checkout-button').html('Bayar sekarang!');
+                            $('#checkout-button').attr('disabled', false);
+                            Swal.fire({
+                                text: response.success,
+                                icon: 'success',
+                                showCancelButton: false, // Hilangkan tombol Cancel
+                                confirmButtonText: 'OK',
+                                allowOutsideClick: false,
+                                allowEscapeKey: false,
+                            }).then((result) => {
+                                // Periksa apakah pengguna mengklik tombol "OK"
+                                if (result.isConfirmed) {
+                                    // Alihkan ke halaman yang diinginkan
+                                    window.location.href = '/event/invoice/' +
+                                        response.id;
+                                }
+                            });
                         } else {
 
                             var transaction = response.transaction;

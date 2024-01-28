@@ -3,7 +3,7 @@
 
         var payButton = document.getElementById('pay-button');
         payButton.addEventListener('click', function() {
-            $('#pay-button').html('Processing ...');
+            $('#pay-button').html('<i class="fas fa-spinner fa-spin"></i> Processing ...');
             $('#pay-button').attr('disabled', true);
 
             let idTransaction = $('#id_event').val()

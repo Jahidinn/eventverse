@@ -166,7 +166,7 @@ class EventController extends Controller
 						"ticket_quota" => $request->ticketQuota[$key],
 						"ticket_start" => $request->ticketDate[$key],
 						"ticket_deadline" => $request->ticketDeadline[$key],
-						"ticket_price" => $request->ticketPrice[$key],
+						"ticket_price" => $request->ticketPrice[$key] ?? 0,
 						"ticket_button" => $request->ticketButton[$key],
 					];
 				}
