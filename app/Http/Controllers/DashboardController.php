@@ -527,13 +527,20 @@ class DashboardController extends Controller
 
 		//Looping isi data transaksi atau peserta event
 		foreach ($participants as $participant) {
+			if ($participant->total_price == 0 || $participant->total_price == '') {
+				$price = 0;
+			} else {
+				$price = $participant->total_price - config('app.biaya_admin');
+			}
+
 			//Looping data wajib
 			$sheet->setCellValue('B' . $row, $participant->ticket->ticket_name);
 			$sheet->setCellValue('C' . $row, $participant->transaction_id);
 			$sheet->setCellValue('D' . $row, $participant->name);
 			$sheet->setCellValue('E' . $row, $participant->email);
 			$sheet->setCellValue('F' . $row, $participant->phone);
-			$sheet->setCellValue('G' . $row, $participant->ticket->ticket_price);
+			$sheet->getStyle('F' . $row)->getNumberFormat()->setFormatCode('0');
+			$sheet->setCellValue('G' . $row, $price);
 			$sheet->getStyle('G' . $row)->getNumberFormat()->setFormatCode('#,##0');
 			$sheet->setCellValue('H' . $row, $participant->status);
 			$sheet->setCellValue('I' . $row, $participant->payment_type);

@@ -272,8 +272,12 @@
                 <td style="padding-bottom: 25px;"></td>
                 <td style="padding-bottom: 25px;">Biaya admin</td>
                 <td style="padding-bottom: 25px;" class="right"></td>
-                <td style="padding-bottom: 25px;" class="bold">Rp
-                    {{ number_format(config('app.biaya_admin'), 0, ',', '.') }}</td>
+                @if ($transaction->total_price == 0 || $transaction->total_price == '')
+                    <td style="padding-bottom: 25px;" class="bold">Rp 0</td>
+                @else
+                    <td style="padding-bottom: 25px;" class="bold">Rp
+                        {{ number_format(config('app.biaya_admin'), 0, ',', '.') }}</td>
+                @endif
             </tr>
             <tr>
                 <td></td>
@@ -326,7 +330,11 @@
                     </div>
                 </td>
                 <td class="large">{{ $transaction->updated_at->format('d M Y') }}</td>
-                <td class="large total">Rp {{ number_format($transaction->total_price, 0, ',', '.') }}</td>
+                @if ($transaction->total_price == 0 || $transaction->total_price == '')
+                    <td class="large total">GRATIS</td>
+                @else
+                    <td class="large total">Rp {{ number_format($transaction->total_price, 0, ',', '.') }}</td>
+                @endif
             </tr>
         </tbody>
     </table>

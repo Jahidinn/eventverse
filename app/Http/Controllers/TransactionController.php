@@ -107,15 +107,9 @@ class TransactionController extends Controller
 
 				$transaction = Transaction::create($data);
 				$this->sendEmail($transaction->transaction_id);
-				return response()->json(['success' => 'Berhasil melakukan pendaftaran!', 'id' => $transaction->id]);
-			}
 
-			$transaction = Transaction::create($data);
-
-			// insert custom form data
-			if ($request->customForm) {
+				// insert custom form data
 				if ($transaction || $request->customForm) {
-
 					foreach ($request->customForm as $key => $customForm) {
 						$dataForm[] = [
 							"transaction_id" => $transaction->id,
@@ -125,6 +119,21 @@ class TransactionController extends Controller
 					}
 					TransactionForm::insert($dataForm);
 				}
+				return response()->json(['success' => 'Berhasil melakukan pendaftaran!', 'id' => $transaction->id]);
+			}
+
+			$transaction = Transaction::create($data);
+
+			// insert custom form data
+			if ($transaction || $request->customForm) {
+				foreach ($request->customForm as $key => $customForm) {
+					$dataForm[] = [
+						"transaction_id" => $transaction->id,
+						"form_id" => $key,
+						"form_value" => $customForm
+					];
+				}
+				TransactionForm::insert($dataForm);
 			}
 
 			// Set your Merchant Server Key

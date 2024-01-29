@@ -113,7 +113,11 @@
                                 {{ $detailTicket->ticket_name }} <strong><span
                                         class="badge badge-secondary p-2">1X</span></strong>
                                 <hr>
-                                <strong>Rp {{ number_format($detailTicket->ticket_price, 0, ',', '.') }}</strong>
+                                @if ($detailTicket->ticket_price == 0 || $detailTicket->ticket_price == '')
+                                    <strong>GRATIS</strong>
+                                @else
+                                    <strong>Rp {{ number_format($detailTicket->ticket_price, 0, ',', '.') }}</strong>
+                                @endif
 
                                 <input type="hidden" name="idEvent" value="{{ $detailEvent->id }}">
                                 <input type="hidden" name="idTicket" value="{{ $detailTicket->id }}">

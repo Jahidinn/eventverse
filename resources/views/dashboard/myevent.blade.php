@@ -40,7 +40,7 @@
                                 {{-- Event --}}
                                 <small class="text-info title-manage-event">
                                     @php
-                                        $title = $myevent->event->title . ' (' . $myevent->ticket->ticket_name . ')';
+                                        $title = $myevent->event->title ?? '' . ' (' . $myevent->ticket->ticket_name . ')';
                                         if (strlen($title) > 50) {
                                             $title = substr($title, 0, 50) . '...';
                                         }

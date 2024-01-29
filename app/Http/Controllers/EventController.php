@@ -382,9 +382,9 @@ class EventController extends Controller
 	public function destroy($id)
 	{
 		$event = Event::where('id', $id)->first();
-		$transaction = Transaction::where('event_id', $event->id)->get();
+		$transaction = Transaction::where('event_id', $event->id)->exists();
 
-		if (empty($transaction)) {
+		if ($transaction) {
 			return response()->json(['error' => 'Sudah ada peserta guys, tidak bisa DIHAPUS!']);
 		}
 

@@ -181,6 +181,7 @@ class OrganizationController extends Controller
 
 		//Cek apakah sudah ada event dengan id organisasi tesb
 		$cekOrg = Event::where('organizer', 'org')->where('organizer_id', $request->org_id);
+
 		if ($cekOrg->count() > 0) {
 			return response()->json(['error' => 'Tidak bisa dihapus! ada event aktif dengan penyelenggara organisasi ini!']);
 		}

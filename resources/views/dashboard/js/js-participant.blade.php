@@ -111,7 +111,7 @@
         $('.p-email').text($(this).data("email"))
         $('.p-phone').text($(this).data("phone"))
         $('.p-ticket').text($(this).data("ticket"))
-        $('.p-biaya').text($(this).data("biaya"))
+        $('.p-biaya').text(numberWithCommas($(this).data("biaya")))
         $('.p-status').text($(this).data("status"))
         $('.p-id').text($(this).data("id_transaksi"))
         $('.p-pembayaran').text($(this).data("pembayaran"))
@@ -145,6 +145,10 @@
 
         $('#detailTransaksiModal').modal('show');
     })
+
+    function numberWithCommas(number) {
+        return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
 
     //Download data peserta
     $('body').on('click', '.download-participant-data', function(e) {

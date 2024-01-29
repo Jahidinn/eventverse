@@ -141,9 +141,15 @@
                                         <hr class="dashed">
                                         <div class="row">
                                             <div class="col">
-                                                <span class="badge badge-secondary py-2 rounded-0 ">
-                                                    <strong><i class="fas fa-tag"></i> Rp
-                                                        {{ number_format($ticket->ticket_price, 0, ',', '.') }}</strong>
+                                                <span class="badge badge-secondary py-2 px-2 rounded-0 ">
+                                                    @if ($ticket->ticket_price == 0 || $ticket->ticket_price == '')
+                                                        <strong><i class="fas fa-tag"></i> GRATIS </strong>
+                                                    @else
+                                                        <strong>
+                                                            <i class="fas fa-tag"></i> Rp
+                                                            {{ number_format($ticket->ticket_price, 0, ',', '.') }}
+                                                        </strong>
+                                                    @endif
                                                 </span>
                                             </div>
                                             <div class="col text-right">
@@ -212,7 +218,7 @@
                             <a class="badge badge-info mt-3"
                                 href="/user/{{ $detailEvent->individual->username }}">{{ strlen($detailEvent->individual->name) > 40 ? substr($detailEvent->individual->name, 0, 40) . ' ...' : $detailEvent->individual->name }}</a>
 
-                            <p class="card-text mt-1 mb-1"><small class="text-muted">Organisasi</small></p>
+                            <p class="card-text mt-1 mb-1"><small class="text-muted">Individu</small></p>
 
                             <p class="mb-1">{{ $detailEvent->individual->email }}</p>
                             {{-- Mengatasi jika ada info penyelenggara kosong --}}

@@ -120,8 +120,15 @@
                                 {{ $ticket->ticket_name }} <strong><span
                                         class="badge badge-secondary p-2">{{ $transaction->quantity }}X</span>
                                     <hr>
-                                    Total bayar :<strong class="text-success"> Rp
-                                        {{ number_format($transaction->total_price, 0, ',', '.') }}</strong>
+                                    Total bayar :
+
+                                    @if ($transaction->total_price == 0 || $transaction->total_price == '')
+                                        <strong class="text-success"> GRATIS </strong>
+                                    @else
+                                        <strong class="text-success"> Rp
+                                            {{ number_format($transaction->total_price, 0, ',', '.') }}
+                                        </strong>
+                                    @endif
                             </div>
                         </div>
                         <div class="col-md-12 text-center">
