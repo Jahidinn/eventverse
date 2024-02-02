@@ -451,6 +451,19 @@ class EventController extends Controller
 		return response()->json(['success' => 'Berhasil menambah form pendaftaran!']);
 	}
 
+	//Cek kemanan tiket untuk front-end
+	public function checkTicketParticipant(Request $request)
+	{
+		$id = $request->id;
+		$participant = Transaction::where('ticket_id', $id)->exists();
+
+		if ($participant) {
+			return response()->json(['data' => 1]);
+		} else {
+			return response()->json(['data' => 0]);
+		}
+	}
+
 	public function editTicket(Request $request)
 	{
 		$data = [
@@ -462,8 +475,23 @@ class EventController extends Controller
 			'ticket_button' => $request->ticket_button,
 		];
 
-		Ticket::where('id', $request->id_ticket)->update($data);
-		return response()->json(['success' => 'Berhasil EDIT tiket pendaftaran!']);
+		$ticket = Ticket::find($request->id_ticket);
+		$participant = Transaction::where('ticket_id', $request->id_ticket)->exists();
+
+		if ($ticket) {
+			//periksa keamanan ticket di backend
+			if ($data['ticket_price'] != $ticket->ticket_price && $participant) {
+				//Jika ada perubahan harga dan ada peserta
+				return response()->json(['error' => 'Sudah ada peserta terdaftar! tidak bisa edit harga tiket, silahkan bisa menambah tiket baru!']);
+			} else {
+				//Jika tidak ada perubahan harga atau tidak ada peserta
+				$ticket->update($data);
+				return response()->json(['success' => 'Berhasil EDIT tiket pendaftaran!']);
+			}
+		} else {
+			// Handle jika tiket tidak ditemukan
+			return response()->json(['error' => 'Tiket tidak ditemukan.']);
+		}
 	}
 
 	public function editFormulir(Request $request)

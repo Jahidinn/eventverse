@@ -173,7 +173,7 @@
                                 <input type="text" class="form-control shadow-none rounded-0 mb-0" id="ticket_price"
                                     name="ticket_price" placeholder="Rp 100.000" required>
                                 <div class="form-text text-danger mt-1 pt-0">
-                                    <small>*isi angka 0 jika gratis.</small>
+                                    <small id="price_notification">*isi angka 0 jika gratis.</small>
                                 </div>
                             </div>
                             <div class="form-group mb-2">

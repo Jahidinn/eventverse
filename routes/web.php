@@ -95,6 +95,7 @@ Route::get('/get-formulir', [EventController::class, 'getFormulir']);
 Route::post('/add-ticket', [EventController::class, 'addTicket']);
 Route::post('/add-formulir', [EventController::class, 'addFormulir']);
 
+Route::get('/check-ticket-participant', [EventController::class, 'checkTicketParticipant']);
 Route::post('/edit-ticket', [EventController::class, 'editTicket']);
 Route::post('/edit-formulir', [EventController::class, 'editFormulir']);
 

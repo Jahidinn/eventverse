@@ -313,7 +313,29 @@
         //Edit Ticket
         $('body').on('click', '.edit-ticket', function(e) {
             e.preventDefault();
-            $('#addEditTicketModal').modal('show');
+            var id = $(this).data('id');
+
+            //Menentukan boleh edit harga atau tidak dari sisi front end
+            $.ajax({
+                type: 'GET',
+                url: "{{ url('/check-ticket-participant') }}",
+                data: {
+                    id: id,
+                },
+                success: function(response) {
+                    if (response.data == 1) {
+                        $('#ticket_price').attr('disabled', true);
+                        $('#price_notification').text(
+                            'Sudah ada peserta terdaftar dengan tiket ini, harga tidak bisa diubah!'
+                        );
+
+                    } else {
+                        $('#ticket_price').attr('disabled', false);
+                        $('#price_notification').text('*isi angka 0 jika gratis.');
+                    }
+                }
+            });
+
             $('#addEditTicketModalLabel').text('Edit tiket pendaftaran')
             $('.addEditTicket').attr('id', 'edit-ticket-form')
             $('.btn-ticket-submit').attr('id', 'submit-edit-ticket')
@@ -325,6 +347,8 @@
             $('#ticket_start').val($(this).data('ticket_start'));
             $('#ticket_deadline').val($(this).data('ticket_deadline'));
             $('#ticket_button option[value="' + $(this).data('ticket_button') + '"]').prop("selected", true);
+
+            $('#addEditTicketModal').modal('show');
         });
 
         $('body').on('click', '#submit-edit-ticket', function(e) {
