@@ -443,8 +443,15 @@
                             id: ticket_id,
                         },
                         success: function(response) {
-                            Swal.fire('', response.success, 'success')
-                            $('#ticket-table').DataTable().ajax.reload()
+                            if (response.success) {
+                                Swal.fire('', response.success, 'success')
+                                $('#ticket-table').DataTable().ajax.reload()
+                            }
+                            //Error delete notif
+                            else {
+                                Swal.fire('', response.error, 'error')
+                            }
+
                         }
                     });
                 } else if (result.isDenied) {

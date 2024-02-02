@@ -480,8 +480,18 @@ class EventController extends Controller
 
 	public function deleteTicket(Request $request)
 	{
-		Ticket::where('id', $request->id)->delete();
-		return response()->json(['success' => 'Tiket pendaftaran berhasil DIHAPUS!']);
+		//Cek tiket, jika sudah ada peserta maka tidak dapat dihapus
+		$participant = Transaction::where('ticket_id', $request->id)->exists();
+
+		if ($participant) {
+			# code...
+			return response()->json(['error' => 'Sudah ada peserta terdaftar!']);
+		}
+		// Jika tidak ada peserta terdaftar
+		else {
+			Ticket::where('id', $request->id)->delete();
+			return response()->json(['success' => 'Tiket pendaftaran berhasil DIHAPUS!']);
+		}
 	}
 
 	public function deleteFormulir(Request $request)
