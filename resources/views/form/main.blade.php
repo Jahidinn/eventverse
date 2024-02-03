@@ -387,6 +387,7 @@
                 var ticketEndDate = $("#ticketEndDate").val();
                 var ticketButton = $("#ticketButton").val();
                 var ticketButtonText = $("#ticketButton").children("option:selected").text();
+                var checkboxValue = $("#ticketMoreQty").is(":checked") ? 1 : 0; //bisa order lebih dari 1x?
 
                 var ticketPrice = $("#ticketPrice").val();
                 if (ticketPrice.replace(/[^0-9]/g, '') == 0 || ticketPrice == '') {
@@ -424,40 +425,52 @@
                         x++; //text box increment
                         //menambah tiket
 
-                        $(wrapper).append(
-                            '<div class="card border-0 m-0 p-0 mt-3 bg-none"><button class="btn btn-danger remove_field px-0" style="z-index: 3;"><i class="fas fa-trash-alt"></i></button><div class="card ticket-card mt-1"><div class="card-body"><small><div class="alert alert-info w-100 py-2"><strong>' +
-                            ticketName +
-                            '</strong></div></small><input type="hidden" value="' +
-                            ticketName + '" name="ticketName[' +
-                            x +
-                            ']"><hr class="dashed"><input type="hidden" value="' +
-                            ticketDescription +
-                            '"  name="ticketDescription[' +
-                            x +
-                            ']" id=""><p class="card-text pt-0"><small class="text-white icon-class"><i class="fas fa-hourglass-end pr-4"></i>Berakhir : <strong>' +
-                            ticketEndDate +
-                            '</strong><span class="alert alert-info py-1 px-2 ms-2"><strong>Kuota : ' +
-                            ticketQuota + '</strong><input type="hidden" value="' +
-                            ticketQuota +
-                            '" name="ticketQuota[' + x +
-                            ']"></span></small></p><input type="hidden" value="' +
-                            ticketDate +
-                            '" name="ticketDate[' +
-                            x +
-                            ']"><input type="hidden" value="' +
-                            ticketEndDate +
-                            '" name="ticketDeadline[' +
-                            x +
-                            ']"><hr class="dashed"><div class="row"><div class="col"><span class="badge bg-secondary py-2 rounded-0"><strong><i class="fas fa-tag"></i> ' +
-                            ticketPrice + '</strong><input type="hidden" value="' + price +
-                            '" name="ticketPrice[' +
-                            x +
-                            ']"></span><input type="hidden" value="' + ticketButton +
-                            '" name="ticketButton[' + x +
-                            ']"></div><div class="col text-end"><button type="button" class="btn btn-sm btn-success px-3"><strong>' +
-                            ticketButtonText +
-                            '</strong></button></div></div></div></div></div>'
-                        ); // add input boxes.
+                        $(wrapper).append(`
+							<div class="card border-0 m-0 p-0 mt-3 bg-none">
+								<button class="btn btn-danger remove_field px-0" style="z-index: 3;">
+									<i class="fas fa-trash-alt"></i>
+								</button>
+								<div class="card ticket-card mt-1">
+									<div class="card-body">
+										<small>
+											<div class="alert alert-info w-100 py-2">
+												<strong>${ticketName}</strong>
+											</div>
+										</small>
+										<input type="hidden" value="${ticketName}" name="ticketName[${x}]">
+										<hr class="dashed">
+										<input type="hidden" value="${ticketDescription}" name="ticketDescription[${x}]" id="">
+										<p class="card-text pt-0">
+											<small class="text-white icon-class">
+												<i class="fas fa-hourglass-end pr-4"></i>Berakhir : <strong>${ticketEndDate}</strong>
+												<span class="alert alert-info py-1 px-2 ms-2"><strong>Kuota : ${ticketQuota}</strong>
+													<input type="hidden" value="${ticketQuota}" name="ticketQuota[${x}]">
+												</span>
+											</small>
+										</p>
+										<input type="hidden" value="${ticketDate}" name="ticketDate[${x}]">
+										<input type="hidden" value="${ticketEndDate}" name="ticketDeadline[${x}]">
+										<hr class="dashed">
+										<div class="row">
+											<div class="col">
+												<span class="badge bg-secondary py-2 rounded-0">
+													<strong><i class="fas fa-tag"></i> ${ticketPrice}</strong>
+													<input type="hidden" value="${price}" name="ticketPrice[${x}]">
+												</span>
+												<input type="hidden" value="${ticketButton}" name="ticketButton[${x}]">
+												<input type="hidden" value="${checkboxValue}" name="moreQuantity[${x}]">
+											</div>
+											<div class="col text-end">
+												<button type="button" class="btn btn-sm btn-success px-3">
+													<strong>${ticketButtonText}</strong>
+												</button>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						`);
+                        // add input boxes.
                     }
                     $("#ticketModal").modal('hide');
                     $('#ticket-example').addClass("d-none");
@@ -502,6 +515,7 @@
                 $("#ticketDescription").val('');
                 $("#ticketPrice").val('');
                 $("#ticketQuota").val('');
+                $("#ticketMoreQty").prop("checked", false);
 
                 $("#ticketName").removeClass('border border-danger');
                 $("#ticketQuota").removeClass('border border-danger');

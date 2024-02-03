@@ -95,6 +95,21 @@ class TransactionController extends Controller
 				return response()->json(['error' => 'Ticket expired!']);
 			}
 
+			//Cek keamanan boleh order lebih dari 1x atau engga
+			$ticketQuantity = Ticket::find($request->idTicket)->more_quantity;
+
+			$cekTransaction = Transaction::where('event_id', $request->idEvent)
+				->where('ticket_id', $request->idTicket)
+				->where(function ($query) use ($request) {
+					$query->where('email', $request->email)
+						->orWhere('phone', $request->nomorHp);
+				})->exists();
+			//Jika tidak boleh lebih dari 1 dan sudah ada peserta terdaftar
+			if ($ticketQuantity == 0 && $cekTransaction) {
+				return response()->json(['error' => 'Max registrasi tiket ini cuma 1x, cek lagi email atau nomer hp ya!']);
+			}
+
+
 			//Jika event gratis langsung masukan transaksi tanpa pembayaran
 			if ($request->totalPrice == 0 || empty($request->totalPrice)) {
 				///Proteksi jika mengirimkan data gratis tapi tiket pada database tidak gratis

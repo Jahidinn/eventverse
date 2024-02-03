@@ -168,6 +168,7 @@ class EventController extends Controller
 						"ticket_deadline" => $request->ticketDeadline[$key],
 						"ticket_price" => $request->ticketPrice[$key] ?? 0,
 						"ticket_button" => $request->ticketButton[$key],
+						"more_quantity" => $request->moreQuantity[$key] && $request->moreQuantity[$key] == 1 ? 1 : 0,
 					];
 				}
 				Ticket::insert($finalValues);
@@ -190,7 +191,7 @@ class EventController extends Controller
 
 			//dd($data, $finalValues, $customForm);
 
-			return response()->json(['success' => 'Data Berhasil Disimpan', 'url' => $request->linkEvent]);
+			return response()->json(['success' => 'Berhasil posting event', 'url' => $request->linkEvent]);
 		}
 	}
 
@@ -370,7 +371,7 @@ class EventController extends Controller
 			];
 
 			Event::where('id', $request->eventId)->update($data);
-			return response()->json(['success' => 'Data Berhasil di edit!', 'url' => $request->linkEvent]);
+			return response()->json(['success' => 'Event Berhasil di edit!', 'url' => $request->linkEvent]);
 
 			//return redirect('/event/' . $request->linkEvent)->with(['success' => 'Event berhasil di edit!']);
 		}
@@ -424,6 +425,29 @@ class EventController extends Controller
 
 	public function addTicket(Request $request)
 	{
+		// Validasi data formulir
+		$validator = Validator::make($request->all(), [
+			'event_id' => 'required',
+			'ticket_name' => 'required',
+			'ticket_price' => 'required',
+			'ticket_quota' => 'required|numeric',
+			'ticket_start' => 'required',
+			'ticket_deadline' => 'required',
+			'ticket_button' => 'required',
+		]);
+
+		// Jika validasi gagal, kembalikan respons dengan pesan kesalahan pertama
+		if ($validator->fails()) {
+			$firstError = $validator->errors()->first();
+			return response()->json(['error' => $firstError], 400);
+		}
+
+		if ($request->input('ticket_more_qty') && $request->input('ticket_more_qty') == 1) {
+			$moreQty = 1;
+		} else {
+			$moreQty = 0;
+		}
+
 		$data = [
 			'event_id' => $request->event_id,
 			'ticket_name' => $request->ticket_name,
@@ -432,6 +456,7 @@ class EventController extends Controller
 			'ticket_start' => $request->ticket_start,
 			'ticket_deadline' => $request->ticket_deadline,
 			'ticket_button' => $request->ticket_button,
+			'more_quantity' => $moreQty,
 		];
 
 		Ticket::insert($data);
@@ -466,6 +491,29 @@ class EventController extends Controller
 
 	public function editTicket(Request $request)
 	{
+		// Validasi data formulir
+		$validator = Validator::make($request->all(), [
+			'event_id' => 'required',
+			'ticket_name' => 'required',
+			'ticket_price' => 'required',
+			'ticket_quota' => 'required|numeric',
+			'ticket_start' => 'required',
+			'ticket_deadline' => 'required',
+			'ticket_button' => 'required',
+		]);
+
+		// Jika validasi gagal, kembalikan respons dengan pesan kesalahan pertama
+		if ($validator->fails()) {
+			$firstError = $validator->errors()->first();
+			return response()->json(['error' => $firstError], 400);
+		}
+
+		if ($request->input('ticket_more_qty') && $request->input('ticket_more_qty') == 1) {
+			$moreQty = 1;
+		} else {
+			$moreQty = 0;
+		}
+
 		$data = [
 			'ticket_name' => $request->ticket_name,
 			'ticket_price' => preg_replace("/[^0-9]/", '', $request->ticket_price),
@@ -473,6 +521,7 @@ class EventController extends Controller
 			'ticket_start' => $request->ticket_start,
 			'ticket_deadline' => $request->ticket_deadline,
 			'ticket_button' => $request->ticket_button,
+			'more_quantity' => $moreQty,
 		];
 
 		$ticket = Ticket::find($request->id_ticket);

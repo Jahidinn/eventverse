@@ -492,7 +492,7 @@
             <!-- Modal Ticket-->
             <div class="modal fade" id="ticketModal" tabindex="-1" aria-labelledby="ticketModal" aria-hidden="true"
                 data-bs-keyboard="false" data-bs-backdrop="static">
-                <div class="modal-dialog">
+                <div class="modal-dialog modal-lg">
                     <div class="modal-content">
                         <div class="modal-header">
                             <h1 class="modal-title fs-5" id="ticketModal">Tambah tiket registrassi</h1>
@@ -520,24 +520,31 @@
                                             placeholder="Deskripsi" name="ticketDescription">
                                     </div>
                                 </div>
-                                <div class="mb-2">
-                                    <div class="form-group input-form-group">
-                                        <label for="ticketPrice" class="form-control-label">HARGA TIKET</label>
-                                        <span class="fas fa-tags form-control-feedback pt-1"></span>
-                                        <input type="text" class="form-control mt-1" id="ticketPrice"
-                                            placeholder="100.000" required>
-                                        <div class="form-text text-danger mt-1 pt-0">
-                                            *isi 0 jika gratis.
+                                <div class="mb-2 row">
+                                    <div class="col-6">
+                                        <div class="form-group input-form-group">
+                                            <label for="ticketPrice" class="form-control-label">HARGA TIKET</label>
+                                            <span class="fas fa-tags form-control-feedback pt-1"></span>
+                                            <input type="text" class="form-control mt-1" id="ticketPrice"
+                                                placeholder="100.000" required>
+                                            <div class="form-text text-danger mt-1 pt-0">
+                                                isi 0 jika gratis
+                                            </div>
                                         </div>
                                     </div>
+
+                                    <div class="col-6">
+                                        <div class="form-group input-form-group">
+                                            <label for="ticketQuota" class="form-control-label">KUOTA PENDAFTAR</label>
+                                            <span class="fas fa-users form-control-feedback pt-1"></span>
+                                            <input type="number" class="form-control mt-1" id="ticketQuota"
+                                                placeholder="500" required>
+                                        </div>
+                                    </div>
+
                                 </div>
                                 <div class="mb-2">
-                                    <div class="form-group input-form-group">
-                                        <label for="ticketQuota" class="form-control-label">KUOTA PENDAFTAR</label>
-                                        <span class="fas fa-users form-control-feedback pt-1"></span>
-                                        <input type="number" class="form-control mt-1" id="ticketQuota"
-                                            placeholder="500" required>
-                                    </div>
+
                                 </div>
                                 <div class="row">
                                     <div class="col-6">
@@ -561,16 +568,29 @@
                                     </div>
                                 </div>
 
-                                <div class="mb-2">
-                                    <div class="form-group input-form-group">
-                                        <label for="ticketButton" class="form-control-label">LABEL</label>
-                                        <select class="form-select mt-1" id="ticketButton" name="ticketButton"
-                                            aria-label="Default select example">
-                                            <option value="BELI TIKET" selected>BELI TIKET</option>
-                                            <option value="DAFTAR">DAFTAR</option>
-                                        </select>
+                                <div class="mb-2 row">
+                                    <div class="col-6">
+                                        <div class="form-group input-form-group">
+                                            <label for="ticketButton" class="form-control-label">LABEL</label>
+                                            <select class="form-select mt-1" id="ticketButton" name="ticketButton"
+                                                aria-label="Default select example">
+                                                <option value="BELI TIKET" selected>BELI TIKET</option>
+                                                <option value="DAFTAR">DAFTAR</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="form-check mt-4">
+                                            <input class="form-check-input" type="checkbox" value=""
+                                                id="ticketMoreQty" name="ticketMoreQty">
+                                            <label class="form-check-label" for="ticketMoreQty">
+                                                Bisa registrasi <b>lebih dari 1X</b>
+                                            </label>
+                                        </div>
                                     </div>
                                 </div>
+
+
                             </form>
                         </div>
 

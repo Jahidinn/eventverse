@@ -18,7 +18,7 @@
             </div>
 
             <div class="card-body px-2 pt-3 bg-card-blue">
-                <div class="table-responsive py-0 manajemen-event-box">
+                <div class="py-0 manajemen-event-box">
                     <div class="mb-2">
                         <a href="/event/create" class="btn btn-success rounded-0"><i class="fas fa-plus-circle"></i> Buat
                             event</a>
@@ -170,7 +170,7 @@
         <!-- Modal edit ticket-->
         <div class="modal fade" id="addEditTicketModal" tabindex="-1" aria-labelledby="addEditTicketModalLabel"
             aria-hidden="true">
-            <div class="modal-dialog">
+            <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="addEditTicketModalLabel">Edit ticket</h5>
@@ -189,42 +189,71 @@
                                 <input type="text" class="form-control shadow-none rounded-0" id="ticket_name"
                                     name="ticket_name" placeholder="Nama tiket pendaftaran" required>
                             </div>
-                            <div class="form-group mb-2">
-                                <label for="ticket_price" class="form-control-label">HARGA</label>
-                                <input type="text" class="form-control shadow-none rounded-0 mb-0" id="ticket_price"
-                                    name="ticket_price" placeholder="Rp 100.000" required>
-                                <div class="form-text text-danger mt-1 pt-0">
-                                    <small id="price_notification">*isi angka 0 jika gratis.</small>
+                            <div class="row">
+                                <div class="col-6">
+                                    <div class="form-group mb-2">
+                                        <label for="ticket_price" class="form-control-label">HARGA</label>
+                                        <input type="text" class="form-control shadow-none rounded-0 mb-0"
+                                            id="ticket_price" name="ticket_price" placeholder="Rp 100.000" required>
+                                        <div class="form-text text-danger mt-1 pt-0">
+                                            <small id="price_notification">isi angka 0 jika gratis.</small>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="form-group mb-2">
-                                <label for="ticket_quota" class="form-control-label">KUOTA PENDAFTAR</label>
-                                <input type="number" class="form-control shadow-none rounded-0" id="ticket_quota"
-                                    name="ticket_quota" placeholder="100" required>
-                            </div>
-                            <div class="form-group mb-2">
-                                <label for="ticket_start" class="form-control-label">BERLAKU DARI</label>
-                                <div id="datepicker" class="input-group date mt-1 mb-3" data-date-format="yyyy-mm-dd">
-                                    <input class="form-control shadow-none rounded-0" id="ticket_start"
-                                        name="ticket_start" type="text" required>
-                                    <span class="input-group-addon"></span>
-                                </div>
-                            </div>
-                            <div class="form-group mb-2">
-                                <label for="ticket_deadline" class="form-control-label">BERLAKU SAMPAI</label>
-                                <div id="datepicker" class="input-group date mt-1 mb-3" data-date-format="yyyy-mm-dd">
-                                    <input class="form-control shadow-none rounded-0" id="ticket_deadline"
-                                        name="ticket_deadline" type="text" required>
-                                    <span class="input-group-addon"></span>
+                                <div class="col-6">
+                                    <div class="form-group mb-2">
+                                        <label for="ticket_quota" class="form-control-label">KUOTA PENDAFTAR</label>
+                                        <input type="number" class="form-control shadow-none rounded-0"
+                                            id="ticket_quota" name="ticket_quota" placeholder="100" required>
+                                    </div>
                                 </div>
                             </div>
 
-                            <div class="form-group mb-2">
-                                <label for="ticket_deadline" class="form-control-label">LABEL</label>
-                                <select class="form-control" id="ticket_button" name="ticket_button">
-                                    <option value="DAFTAR">DAFTAR</option>
-                                    <option value="BELI TIKET">BELI TIKET</option>
-                                </select>
+                            <div class="row">
+                                <div class="col-6">
+                                    <div class="form-group mb-2">
+                                        <label for="ticket_start" class="form-control-label">BERLAKU DARI</label>
+                                        <div id="datepicker" class="input-group date mt-1 mb-3"
+                                            data-date-format="yyyy-mm-dd">
+                                            <input class="form-control shadow-none rounded-0" id="ticket_start"
+                                                name="ticket_start" type="text" required>
+                                            <span class="input-group-addon"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="form-group mb-2">
+                                        <label for="ticket_deadline" class="form-control-label">BERLAKU SAMPAI</label>
+                                        <div id="datepicker" class="input-group date mt-1 mb-3"
+                                            data-date-format="yyyy-mm-dd">
+                                            <input class="form-control shadow-none rounded-0" id="ticket_deadline"
+                                                name="ticket_deadline" type="text" required>
+                                            <span class="input-group-addon"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-6">
+                                    <div class="form-group mb-2">
+                                        <label for="ticket_deadline" class="form-control-label">LABEL</label>
+                                        <select class="form-control" id="ticket_button" name="ticket_button">
+                                            <option value="DAFTAR">DAFTAR</option>
+                                            <option value="BELI TIKET">BELI TIKET</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="form-check mt-4">
+                                        <input class="form-check-input" type="checkbox" id="ticket_more_qty"
+                                            name="ticket_more_qty" value="1">
+
+                                        <label class="form-check-label" for="ticket_more_qty">
+                                            Bisa registrasi <b>lebih dari 1X</b>
+                                        </label>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <div class="modal-footer">

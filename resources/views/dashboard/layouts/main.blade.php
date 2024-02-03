@@ -289,6 +289,7 @@
 
         $('body').on('click', '#submit-add-ticket', function(e) {
             e.preventDefault();
+            loading();
             var formData = new FormData(document.getElementById("add-ticket-form"));
 
             $.ajax({
@@ -306,6 +307,12 @@
                         $('#addEditTicketModal').modal('hide')
                         $('#ticket-table').DataTable().ajax.reload()
                     }
+                    Swal.close();
+                },
+                error: function(xhr, status, error, ) {
+                    var err = eval("(" + xhr.responseText + ")");
+                    Swal.close()
+                    Swal.fire('Error', err.error);
                 }
             });
         });
@@ -324,13 +331,13 @@
                 },
                 success: function(response) {
                     if (response.data == 1) {
-                        $('#ticket_price').attr('disabled', true);
+                        $('#ticket_price').attr('readonly', true);
                         $('#price_notification').text(
                             'Sudah ada peserta terdaftar dengan tiket ini, harga tidak bisa diubah!'
                         );
 
                     } else {
-                        $('#ticket_price').attr('disabled', false);
+                        $('#ticket_price').attr('readonly', false);
                         $('#price_notification').text('*isi angka 0 jika gratis.');
                     }
                 }
@@ -348,11 +355,18 @@
             $('#ticket_deadline').val($(this).data('ticket_deadline'));
             $('#ticket_button option[value="' + $(this).data('ticket_button') + '"]').prop("selected", true);
 
+            if ($(this).data('ticket_more_qty') == 1) {
+                $("#ticket_more_qty").prop("checked", true);
+            } else {
+                $("#ticket_more_qty").prop("checked", false);
+            }
+
             $('#addEditTicketModal').modal('show');
         });
 
         $('body').on('click', '#submit-edit-ticket', function(e) {
             e.preventDefault();
+            loading();
             var formData = new FormData(document.getElementById("edit-ticket-form"));
 
             $.ajax({
@@ -363,6 +377,7 @@
                 contentType: false,
                 processData: false,
                 success: function(response) {
+                    Swal.close();
                     if (response.error) {
                         Swal.fire('Ooopss', response.error, 'error');
                     } else {
@@ -370,9 +385,22 @@
                         $('#addEditTicketModal').modal('hide')
                         $('#ticket-table').DataTable().ajax.reload()
                     }
+                },
+                error: function(xhr, status, error, ) {
+                    var err = eval("(" + xhr.responseText + ")");
+                    Swal.close();
+                    Swal.fire('Error', err.error);
                 }
             });
         });
+
+        function loading() {
+            Swal.fire({
+                title: '<i class="fas fa-spinner fa-spin"></i> memproses',
+                showConfirmButton: false,
+                allowOutsideClick: false
+            });
+        }
 
         $('#addEditTicketModal').on('hidden.bs.modal', function() {
             $(this).find('form').trigger('reset');
