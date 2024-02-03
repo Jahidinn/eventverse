@@ -539,24 +539,28 @@
                                             placeholder="500" required>
                                     </div>
                                 </div>
-                                <label for="ticketDate" class="form-control-label">START REGISTRASI</label>
-                                <div class="form-inline">
-
-                                    <div id="datepicker" class="input-group date mt-1 mb-3"
-                                        data-date-format="yyyy-mm-dd">
-                                        <input class="form-control" id="ticketDate" name="ticketDate" type="text"
-                                            required>
-                                        <span class="input-group-addon"></span>
+                                <div class="row">
+                                    <div class="col-6">
+                                        <label for="ticketDate" class="form-control-label">START REGISTRASI</label>
+                                        <div id="datepicker" class="input-group date mt-1 mb-3"
+                                            data-date-format="yyyy-mm-dd">
+                                            <input class="form-control" id="ticketDate" name="ticketDate" type="text"
+                                                required>
+                                            <span class="input-group-addon"></span>
+                                        </div>
                                     </div>
 
-                                    <label for="ticketEndDate" class="form-control-label">END REGISTRASI</label>
-                                    <div id="datepicker" class="input-group date mt-1 mb-3"
-                                        data-date-format="yyyy-mm-dd">
-                                        <input class="form-control" id="ticketEndDate" name="ticketEndDate"
-                                            type="text" required>
-                                        <span class="input-group-addon"></span>
+                                    <div class="col-6">
+                                        <label for="ticketEndDate" class="form-control-label">END REGISTRASI</label>
+                                        <div id="datepicker" class="input-group date mt-1 mb-3"
+                                            data-date-format="yyyy-mm-dd">
+                                            <input class="form-control" id="ticketEndDate" name="ticketEndDate"
+                                                type="text" required>
+                                            <span class="input-group-addon"></span>
+                                        </div>
                                     </div>
                                 </div>
+
                                 <div class="mb-2">
                                     <div class="form-group input-form-group">
                                         <label for="ticketButton" class="form-control-label">LABEL</label>

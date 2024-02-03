@@ -36,17 +36,27 @@
                 @foreach ($myevents as $myevent)
                     <div class="card mt-2 ">
                         <div class="col-md-12 row card-body px-3 pb-3">
-                            <div class="col-9">
+
+                            {{-- Poster / Image --}}
+                            <div class="p-2">
+                                <div class="myevent-container-img">
+                                    <img class="card-img-top"
+                                        src="{{ asset('storage/event-images/' . $myevent->event->image) }}"
+                                        alt="Card image cap">
+                                </div>
+                            </div>
+
+                            <div class="col">
                                 {{-- Event --}}
-                                <small class="text-info title-manage-event">
-                                    @php
-                                        $title = $myevent->event->title ?? '' . ' (' . $myevent->ticket->ticket_name . ')';
-                                        if (strlen($title) > 50) {
-                                            $title = substr($title, 0, 50) . '...';
-                                        }
-                                    @endphp
-                                    <b>{{ $title }}</b>
-                                </small>
+                                @php
+                                    $title = $myevent->event->title ?? '' . ' (' . $myevent->ticket->ticket_name . ')';
+                                    if (strlen($title) > 50) {
+                                        $title = substr($title, 0, 50) . '...';
+                                    }
+                                @endphp
+                                <a href="/{{ $myevent->event->slug }}"
+                                    class="text-info text-decoration-none title-manage-event"><b>{{ $title }}</b></a>
+
                                 <br>
 
                                 {{-- Status --}}
@@ -127,13 +137,7 @@
 
                                 </div>
                             </div>
-                            <div class="col-3">
-                                <div class="myevent-container-img">
-                                    <img class="card-img-top"
-                                        src="{{ asset('storage/event-images/' . $myevent->event->image) }}"
-                                        alt="Card image cap">
-                                </div>
-                            </div>
+
                         </div>
                         <hr class="mx-2 my-0">
                         <div class="col-md-12 card-body py-2 px-3">

@@ -98,24 +98,26 @@
                     </div>
                 </div>
 
-                <div class="card mt-1 bg-card-blue shadow-none">
+                <div class="card mt-1 bg-card-blue shadow-none border-0">
                     <div class="col-md-12 card-body px-3 pb-2 pt-2">
-                        <span class="title-daftar-peserta"></span>
+                        <span class="title-daftar-peserta text-info"></span>
                         <br>
-                        <b class="text-secondary">
-                            <span class="result-label text-secondary">Total peserta
+                        <span class="text-secondary">
+                            <span class="result-label text-dark">Total peserta
                             </span> :
-                            <span class="jumlah-peserta text-success">000</span>
-                        </b>
+                            <b class="jumlah-peserta text-success">000</b>
+                        </span>
                     </div>
                 </div>
 
                 <div class="mb-2">
-                    <button class="btn btn-success kembali"><i class="fas fa-chevron-circle-left"></i> Kembali</button>
+                    <button class="btn btn-secondary kembali"><i class="fas fa-chevron-circle-left"></i> Kembali</button>
                     <button class="btn btn-success download-participant-data"><i class="fas fa-file-excel"></i> Download
                         data</button>
                 </div>
                 <small class="text-danger">* Klik header tabel untuk mengelompokan data sesuai header yang di pilih</small>
+
+                {{-- Tabel data peserta --}}
                 <div class="table-responsive">
                     <table class="table table-striped w-100" id="data-peserta">
                         <thead class="bg-info">
@@ -130,6 +132,7 @@
                         </thead>
                     </table>
                 </div>
+
             </div>
         </div>
     </section>

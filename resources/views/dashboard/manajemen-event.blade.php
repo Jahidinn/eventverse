@@ -18,13 +18,12 @@
             </div>
 
             <div class="card-body px-2 pt-3 bg-card-blue">
-
-                <div class="mb-2">
-                    <a href="/event/create" class="btn btn-success rounded-0"><i class="fas fa-plus-circle"></i> Buat
-                        event</a>
-                </div>
-
                 <div class="table-responsive py-0 manajemen-event-box">
+                    <div class="mb-2">
+                        <a href="/event/create" class="btn btn-success rounded-0"><i class="fas fa-plus-circle"></i> Buat
+                            event</a>
+                    </div>
+
                     <form action="" method="GET">
                         <div class="p-0 form-inline mb-4" {{ $listEvent->isEmpty() ? 'hidden' : '' }}>
                             <input class="form-control col shadow-none mr-1" name="key" type="text"
@@ -42,11 +41,19 @@
                     @foreach ($listEvent as $event)
                         <div class="card pb-2">
                             <div class="col-md-12 row card-body px-3 pb-2">
-                                <div class="col-9">
+
+                                <div class="p-2">
+                                    <div class="myevent-container-img">
+                                        <img class="card-img-top" src="{{ asset('storage/event-images/' . $event->image) }}"
+                                            alt="Card image cap">
+                                    </div>
+                                </div>
+
+                                <div class="col ">
                                     @php
                                         $title = $event->title;
                                         if (strlen($title) > 41) {
-                                            $title = substr($title, 0, 41) . '...';
+                                            $title = substr($title, 0, 45) . ' ...';
                                         }
                                     @endphp
 
@@ -63,12 +70,7 @@
                                     </div>
                                 </div>
 
-                                <div class="col-3">
-                                    <div class="myevent-container-img">
-                                        <img class="card-img-top" src="{{ asset('storage/event-images/' . $event->image) }}"
-                                            alt="Card image cap">
-                                    </div>
-                                </div>
+
                             </div>
                             <hr class="mx-2 my-2">
                             {{-- Button edit tiket & form --}}
@@ -93,44 +95,62 @@
 
                 </div>
 
+                {{-- Manajemen ticket  --}}
                 <div class="manajemen-ticket-box" hidden>
-                    <div class="text-center mb-2"><strong class="event-title-for-ticket"></strong></div>
-                    <div class="table-responsive">
-                        <button class="btn btn-info btn-sm shadow-none" id="add-ticket-button"><i class="fas fa-plus"></i>
-                            Tambah tiket</button>
-                        <div class="my-2 form-inline">
-                            <button class="btn btn-secondary btn-sm w-25 shadow-none" id="back-from-ticket"><i
-                                    class="fas fa-arrow-left"></i>
-                                Back</button>
-                            <input class="form-control form-control-sm col ml-2 shadow-none" id="search-ticket"
-                                type="text" placeholder="Cari tiket ..">
-                        </div>
+                    {{-- Title event --}}
+                    <div class="text-left mb-2">
+                        <strong class="event-title-for-ticket"></strong>
+                    </div>
+                    <hr>
 
-                        <table id="ticket-table" class="table table-striped table-bordered" style="width:100%">
+                    {{-- Button --}}
+                    <button class="btn btn-secondary btn-sm shadow-none rounded-0" id="back-from-ticket"><i
+                            class="fas fa-arrow-left"></i>
+                        Kembali</button>
+                    <button class="btn btn-info btn-sm shadow-none" id="add-ticket-button"><i class="fas fa-plus"></i>
+                        Tambah tiket</button>
+
+                    {{-- Search ticket field --}}
+                    <div class="my-2 form-inline mt-3">
+                        <input class="form-control col shadow-none" id="search-ticket" type="text"
+                            placeholder="Cari tiket ..">
+                    </div>
+
+                    <div class="table-responsive">
+                        {{-- Tabel ticket --}}
+                        <table id="ticket-table" class="table table-striped table-bordered w-100">
                             <thead class="thead-dark">
                                 <tr>
-                                    <th>Tiket</th>
+                                    <th style="min-width: 120px">Tiket</th>
                                     <th>Harga</th>
                                     <th>Kuota</th>
-                                    <th>#</th>
+                                    <th style="min-width: 100px">#</th>
                                 </tr>
                             </thead>
                         </table>
                     </div>
                 </div>
 
+                {{-- Manajemen formulir --}}
                 <div class="manajemen-formulir-box" hidden>
-                    <div class="text-center mb-2"><strong class="event-title-for-formulir"></strong></div>
+
+                    <div class="text-left mb-2"><strong class="event-title-for-formulir"></strong></div>
+                    <hr>
+                    {{-- Button --}}
+                    <button class="btn btn-secondary btn-sm shadow-none" id="back-from-formulir"><i
+                            class="fas fa-arrow-left"></i>
+                        Kembali</button>
+                    <button class="btn btn-info btn-sm shadow-none" id="add-formulir-button"><i class="fas fa-plus"></i>
+                        Tambah formulir</button>
+
+                    {{-- FORM search --}}
+                    <div class="my-2 mt-3 form-inline">
+                        <input class="form-control col shadow-none" id="search-form" type="text"
+                            placeholder="Cari formulir ..">
+                    </div>
+
+                    {{-- Tabel data formulir --}}
                     <div class="table-responsive">
-                        <button class="btn btn-info btn-sm shadow-none" id="add-formulir-button"><i class="fas fa-plus"></i>
-                            Tambah formulir</button>
-                        <div class="my-2 form-inline">
-                            <button class="btn btn-secondary btn-sm w-25 shadow-none" id="back-from-formulir"><i
-                                    class="fas fa-arrow-left"></i>
-                                Back</button>
-                            <input class="form-control form-control-sm col ml-2 shadow-none" id="search-form" type="text"
-                                placeholder="Cari formulir ..">
-                        </div>
                         <table id="form-table" class="table table-striped table-bordered" style="width:100%">
                             <thead class="thead-dark">
                                 <tr>
@@ -140,6 +160,7 @@
                             </thead>
                         </table>
                     </div>
+
                 </div>
             </div>
         </div>
