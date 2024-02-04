@@ -428,22 +428,21 @@
                         $(wrapper).append(`
 							<div class="card border-0 m-0 p-0 mt-3 bg-none">
 								<button class="btn btn-danger remove_field px-0" style="z-index: 3;">
-									<i class="fas fa-trash-alt"></i>
+									<i class="fas fa-trash-alt"></i> Delete
 								</button>
-								<div class="card ticket-card mt-1">
+								<div class="card ticket-card rounded-0 mt-1">
+									<div class="card-header bg-dark text-white rounded-0">
+                                        <small>
+                                            <strong>${ticketName}</strong>
+                                        </small>
+                                    </div>
 									<div class="card-body">
-										<small>
-											<div class="alert alert-info w-100 py-2">
-												<strong>${ticketName}</strong>
-											</div>
-										</small>
 										<input type="hidden" value="${ticketName}" name="ticketName[${x}]">
-										<hr class="dashed">
 										<input type="hidden" value="${ticketDescription}" name="ticketDescription[${x}]" id="">
 										<p class="card-text pt-0">
-											<small class="text-white icon-class">
+											<small class="text-secondary icon-class">
 												<i class="fas fa-hourglass-end pr-4"></i>Berakhir : <strong>${ticketEndDate}</strong>
-												<span class="alert alert-info py-1 px-2 ms-2"><strong>Kuota : ${ticketQuota}</strong>
+												<span class="alert alert-success py-1 px-2 ms-2"><strong>Kuota : ${ticketQuota}</strong>
 													<input type="hidden" value="${ticketQuota}" name="ticketQuota[${x}]">
 												</span>
 											</small>
@@ -462,7 +461,7 @@
 											</div>
 											<div class="col text-end">
 												<button type="button" class="btn btn-sm btn-success px-3">
-													<strong>${ticketButtonText}</strong>
+													<strong>${ticketButtonText} <i class="fas fa-arrow-circle-right"></i></strong>
 												</button>
 											</div>
 										</div>

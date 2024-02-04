@@ -30,9 +30,18 @@ class TransactionController extends Controller
 		$detailEvent = Event::with('penyelenggara')->where('id', $request->event)->first();
 		$detailTicket = Ticket::where('id', $request->ticket)->where('event_id', $request->event)->first();
 		$customForms = CustomForm::where('event_id', $request->event)->get();
+		$today = Carbon::now()->format('Y-m-d');
+
+		$ticketUsed = count(Transaction::where('event_id', $request->event)->where('status', '!=', 'Expired')->where('ticket_id', $request->ticket)->get());
+		$ticketAvailable = $detailTicket->ticket_quota - $ticketUsed;
 
 		if (!$detailEvent || !$detailTicket || !$customForms) {
 			return redirect('/search');
+		}
+
+		//Jika tiket sudah deadlin, belum mulai, atau quota full
+		if ($ticketAvailable <= 0 || $detailTicket->ticket_deadline < $today || $detailTicket->ticket_start > $today) {
+			return redirect('/' . $detailEvent->slug);
 		}
 
 		return view('apps.transaction', [
@@ -84,7 +93,7 @@ class TransactionController extends Controller
 			];
 
 			//Keamanan beli tiket dari sisi backend
-			$ticketQuota = Ticket::where('event_id', $request->idEvent)->first();
+			$ticketQuota = Ticket::where('event_id', $request->idEvent)->where('id', $request->idTicket)->first();
 			$ticketUsed = count(Transaction::where('event_id', $request->idEvent)->where('status', '!=', 'Expired')->where('ticket_id', $request->idTicket)->get());
 			$ticketAvailable = $ticketQuota->ticket_quota - $ticketUsed;
 			$today = Carbon::now()->format('Y-m-d');
@@ -93,6 +102,8 @@ class TransactionController extends Controller
 				return response()->json(['error' => 'Ticket habis guys!']);
 			} elseif ($ticketQuota->ticket_deadline < $today) {
 				return response()->json(['error' => 'Ticket expired!']);
+			} elseif ($ticketQuota->ticket_start > $today) {
+				return response()->json(['error' => 'Pendaftaran tiket ini belum dibuka!']);
 			}
 
 			//Cek keamanan boleh order lebih dari 1x atau engga

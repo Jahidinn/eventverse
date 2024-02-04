@@ -10,8 +10,17 @@
     <div class="sidebar">
         <!-- Sidebar user (optional) -->
         <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+            @php
+                if (!auth()->user()->profile_picture || auth()->user()->profile_picture == '') {
+                    $photo = 'default-user.jpg';
+                } else {
+                    $photo = auth()->user()->profile_picture;
+                }
+
+            @endphp
+
             <div class="image">
-                <img src="{{ asset('assets/dashboard/dist/img/user2-160x160.jpg') }}" class="img-circle elevation-2"
+                <img src="{{ asset('storage/profile-images') . '/' . $photo }}" class="img-circle elevation-2"
                     alt="User Image">
             </div>
             <div class="info">

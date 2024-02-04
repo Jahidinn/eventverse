@@ -87,6 +87,7 @@
                             </div>
                         </div>
 
+                        {{-- Tab deskripsi --}}
                         <div id="tab-1" class="tab-content current p-0">
                             <div>
                                 <h5 class="card-title">Deskripsi</h5>
@@ -106,33 +107,33 @@
                                 <p class="card-text"><small class="text-muted"></small></p>
                             </div>
                         </div>
-                        <div id="tab-2" class="tab-content p-0">
-                            <h5 class="card-title">Ticket</h5>
 
+                        {{-- Tab ticket event --}}
+                        <div id="tab-2" class="tab-content p-0">
+                            <h5 class="card-title">Tiket pendaftaran</h5>
                             @foreach ($ticketData as $ticket)
-                                <div class="card shadow-sm ticket-card mt-3" id="ticket-example">
+                                <div class="card shadow-sm ticket-card mt-3 rounded-0" id="ticket-example">
+                                    <div class="card-header bg-dark text-white rounded-0">
+                                        <small><strong>{{ $ticket->ticket_name }}</strong></small>
+                                    </div>
+
                                     <div class="card-body p-3">
-                                        <small>
-                                            <div class="alert alert-info w-100 py-1 pl-2">
-                                                <strong>{{ $ticket->ticket_name }}</strong>
-                                            </div>
-                                        </small>
-                                        <hr class="dashed">
                                         @php
                                             $ticketUsed = count($ticketTransaction->where('ticket_id', $ticket->id));
                                             $ticketQuota = $ticket->ticket_quota - $ticketUsed;
 
                                             $tanggalSekarang = $dateNow;
+                                            $ticketStart = $ticket->ticket_start;
                                             $deadline = $ticket->ticket_deadline;
 
                                         @endphp
                                         <p class="card-text pt-0">
                                             <small class="text-muted icon-class">
-                                                <span class="text-white">
+                                                <span class="text-secondary">
                                                     <i class="fas fa-hourglass-end pr-1"></i>
                                                     Berakhir : <strong>{{ $deadline }}</strong>
                                                 </span>
-                                                <span class="alert alert-info py-1 px-2 ms-1 ml-1">
+                                                <span class="alert alert-success py-1 px-2 ms-1 ml-1">
                                                     Kuota :
                                                     <strong>{{ $ticketQuota }}</strong>
                                                 </span>
@@ -159,13 +160,18 @@
                                                     </button>
                                                 @elseif($deadline < $tanggalSekarang)
                                                     <button class="btn btn-danger bg-none btn-sm ticket-button not-allowed"
-                                                        disabled>Sudah berakhir!
+                                                        disabled>Closed!
+                                                    </button>
+                                                @elseif($ticketStart > $tanggalSekarang)
+                                                    <button class="btn btn-info bg-none btn-sm ticket-button not-allowed"
+                                                        disabled>Opening soon!
                                                     </button>
                                                 @else
                                                     <button class="btn btn-success btn-sm ticket-button"
                                                         data-id="{{ $ticket->id }}"
                                                         data-event_id="{{ $detailEvent->id }}"
                                                         data-label_button="{{ $ticket->ticket_button }}">{{ $ticket->ticket_button }}
+                                                        <i class="fas fa-arrow-circle-right"></i>
                                                     </button>
                                                 @endif
                                             </div>

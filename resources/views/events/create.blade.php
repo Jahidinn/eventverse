@@ -153,29 +153,30 @@
                                 </div>
 
                             </div>
+
                             <div id="tab-2" class="tab-content p-0">
-                                <div>
+                                {{-- Tab ticket --}}
+                                <div class="">
                                     <div>
                                         <button type="button" class="btn btn-success mb-2 icon-class"
                                             data-bs-toggle="modal" data-bs-target="#ticketModal" id="add-ticket-modal"><i
                                                 class="fas fa-plus"></i>Tambah tiket</button>
                                     </div>
-                                    <div class="card  ticket-card mt-3" id="ticket-example">
 
-                                        <div class="card-body">
+                                    <div class="card ticket-card mt-3 rounded-0" id="ticket-example">
+                                        <div class="card-header bg-dark text-white rounded-0">
                                             <small>
-                                                <div class="alert alert-info w-100 py-2">
-                                                    <strong>Contoh Tiket Pendaftaran</strong>
-                                                </div>
+                                                <strong>Contoh Tiket Pendaftaran</strong>
                                             </small>
-                                            <hr class="dashed">
+                                        </div>
+                                        <div class="card-body">
                                             <p class="card-text pt-0">
                                                 <small class="text-muted icon-class">
-                                                    <span class="text-white">
+                                                    <span class="text-secondary">
                                                         <i class="fas fa-hourglass-end pr-4"></i>
                                                         Berakhir : <strong>12-20-2023</strong>
                                                     </span>
-                                                    <span class="alert alert-info py-1 px-2 ms-2">
+                                                    <span class="alert alert-success py-1 px-2 ms-2">
                                                         <strong>Kuota : 100</strong>
                                                         <input type="hidden">
                                                     </span>
@@ -190,7 +191,8 @@
                                                 </div>
                                                 <div class="col text-end">
                                                     <button type="button"
-                                                        class="btn btn-success btn-sm px-3"><strong>DAFTAR</strong>
+                                                        class="btn btn-success btn-sm px-3"><strong>DAFTAR <i
+                                                                class="fas fa-arrow-circle-right"></i></strong>
                                                     </button>
                                                 </div>
                                             </div>
@@ -202,12 +204,12 @@
                                 </div>
                                 <hr>
                                 <div class="mt-4">
-                                    <div class="bg-dark text-white text-center py-1"><strong>FORMULIR</strong></div>
+                                    <div class="bg-secondary text-white text-center py-1"><strong>FORMULIR</strong></div>
                                     <div class="text-center py-1 text-danger"><small>* Form data yang harus di isi oleh
                                             peserta</small></div>
                                     <div class="card mt-2 shadow-sm">
                                         <div class="card-body form-registration-set">
-                                            <div class="col-lg-8 col-md-8 mx-auto">
+                                            <div class="col-lg-9 col-md-9 mx-auto">
                                                 <div class="card mt-2 shadow-sm">
                                                     <div class="card-body">
                                                         <div class="input-group mb-3 icon-class pr-4">
