@@ -43,7 +43,7 @@
     <script type="text/javascript" src="https://unpkg.com/trix@2.0.0/dist/trix.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/js/bootstrap-datepicker.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
     <script>
@@ -359,9 +359,10 @@
 
                 // Membandingkan dua tanggal
                 if (startDate > endDate) {
-                    Swal.fire('', 'Cek lagi tanggal mulai dan selesai event!', '');
+                    Swal.fire('', 'Cek lagi tanggal mulai dan tanggal selesai event!', '');
                 } else {
-                    $('.tanggal-event').val('(' + startDate + ') - (' + endDate + ')');
+                    $('.tanggal-event').val(moment(startDate).format('DD MMM YYYY') + ' - ' + moment(endDate)
+                        .format('DD MMM YYYY'));
                     $('#tanggalEventModal').modal('hide');
                 }
 
@@ -380,6 +381,8 @@
             var ticketStock = 0;
             $(add_button).click(function(e) { //on add input button click
                 e.preventDefault();
+                var endEventDate = $("#endDate").val(); //Tanggal berakhir event
+
                 var ticketName = $("#ticketName").val();
                 var ticketDescription = $("#ticketDescription").val();
                 var ticketQuota = $("#ticketQuota").val();
@@ -390,6 +393,7 @@
                 var checkboxValue = $("#ticketMoreQty").is(":checked") ? 1 : 0; //bisa order lebih dari 1x?
 
                 var ticketPrice = $("#ticketPrice").val();
+
                 if (ticketPrice.replace(/[^0-9]/g, '') == 0 || ticketPrice == '') {
                     ticketPrice = "GRATIS!";
                     price = 0;
@@ -419,6 +423,15 @@
                     $("#ticketQuota").removeClass('border border-danger');
                     $("#ticketName").removeClass('border border-danger');
                     $("#ticketDescription").removeClass('border border-danger');
+                } else if (ticketEndDate > endEventDate) {
+                    $("#ticketDate").removeClass('border border-danger');
+                    $("#ticketEndDate").addClass('border border-danger');
+                    $("#ticketQuota").removeClass('border border-danger');
+                    $("#ticketName").removeClass('border border-danger');
+                    $("#ticketDescription").removeClass('border border-danger');
+                    Swal.fire('',
+                        'Sepertinya periode tiket pendaftaran melebihi tanggal berakhirnya event!',
+                        '');
                 } else {
                     ticketStock++
                     if (ticketStock <= max_fields) { //max input box allowed
@@ -481,6 +494,8 @@
                 }
             });
             $('#add-ticket-modal').on("click", function(e) {
+                var tanggalEvent = $('#tanggalEvent').val();
+
                 if (ticketStock >= max_fields) {
                     //$("#add-ticket-modal").addClass("disabled");
                     Swal.fire({
@@ -489,6 +504,10 @@
                         text: 'Maksimal hanya menambahkan 5 ticket guys!',
                         footer: '<a href="">pelajari lebih lanjut?</a>'
                     });
+                } else if (tanggalEvent == '') {
+                    Swal.fire('', 'Isi tanggal event sebelum buat tiket pendaftaran!', '');
+                } else {
+                    $("#ticketModal").modal('show');
                 }
 
             });

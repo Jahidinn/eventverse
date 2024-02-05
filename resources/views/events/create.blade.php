@@ -159,8 +159,7 @@
                                 <div class="">
                                     <div>
                                         <button type="button" class="btn btn-success mb-2 icon-class"
-                                            data-bs-toggle="modal" data-bs-target="#ticketModal" id="add-ticket-modal"><i
-                                                class="fas fa-plus"></i>Tambah tiket</button>
+                                            id="add-ticket-modal"><i class="fas fa-plus"></i>Tambah tiket</button>
                                     </div>
 
                                     <div class="card ticket-card mt-3 rounded-0" id="ticket-example">
@@ -247,8 +246,8 @@
                     <div>
                         <button type="submit" class="btn btn-success w-50 mb-3" id="submit"><i
                                 class="fas fa-check-square"></i>
-                            Posting
-                            event</button>
+                            POSTING EVENT
+                        </button>
                     </div>
                 </div>
             </div>
