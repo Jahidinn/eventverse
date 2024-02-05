@@ -189,6 +189,19 @@ class DashboardController extends Controller
 		return response()->json(['data' => $data]);
 	}
 
+	public function checkEventDate(Request $request)
+	{
+		$event_id = $request->event_id;
+		$cekEvent = Event::find($event_id);
+		$today = Carbon::now()->format('Y-m-d');
+
+		if ($cekEvent->end_date >= $today) {
+			return response()->json(['error' => 'Event belum selesai, tidak bisa melakukan penarikan!']);
+		} else {
+			return response()->json(['success' => 'Ok!']);
+		}
+	}
+
 	public function transactionReport(Request $request)
 	{
 		$user_id = auth()->user()->id;
@@ -372,6 +385,13 @@ class DashboardController extends Controller
 
 		if (empty($dataEvent) || !$user_id) {
 			return response()->json(['error' => 'Pelanggaran!']);
+		}
+
+		//Proteksi ke 2 menghindari proses penarikan sebelum event selesai
+		$today = Carbon::now()->format('Y-m-d');
+
+		if ($dataEvent->end_date >= $today) {
+			return response()->json(['error' => 'Belum bisa melakukan penarikan!']);
 		}
 
 		//Memanggil data report

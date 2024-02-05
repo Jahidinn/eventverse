@@ -22,7 +22,7 @@
                     $('#detailReportTransaksi').modal('show');
 
                 } else {
-                    Swal.fire('', 'Gagal!', 'error')
+                    Swal.fire('', 'Gagal!', 'error');
 
                 }
             }
@@ -53,6 +53,28 @@
         e.preventDefault();
         var id = $(this).data('id')
 
+        //Cek event sudah berakhir atau belum
+        $.ajax({
+            url: '/dashboard/check-event-date',
+            type: 'GET',
+            data: {
+                event_id: id
+            },
+            success: function(response) {
+                //Jika sudah berakhir maka boleh melakukan penarikan
+                if (response.success) {
+                    showWitdraw(id);
+                }
+                //Jika belum maka tampilkan error
+                else {
+                    Swal.fire('', response.error, 'error')
+                }
+            }
+        });
+    })
+
+    //Function menangani proses request penarikan
+    function showWitdraw(id) {
         $.ajax({
             url: '/dashboard/get-transaction-report',
             type: 'GET',
@@ -112,7 +134,7 @@
                 }
             }
         });
-    })
+    }
 
     // $('body').on('click', '#submit-withdraw', function(e) {
     //     e.preventDefault();

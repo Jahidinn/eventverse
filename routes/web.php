@@ -56,6 +56,7 @@ Route::post('/dashboard/participant-checkin', [DashboardController::class, 'chec
 
 Route::get('/dashboard/transaction-report', [DashboardController::class, 'transactionReport'])->middleware('auth');
 Route::get('/dashboard/get-transaction-report', [DashboardController::class, 'getTransactionReport'])->middleware('auth');
+Route::get('/dashboard/check-event-date', [DashboardController::class, 'checkEventDate'])->middleware('auth');
 Route::post('/dashboard/withdraw-process', [DashboardController::class, 'withdraw'])->middleware('auth');
 Route::get('/dashboard/withdraw-history', [DashboardController::class, 'withdrawHistory'])->middleware('auth');
 
