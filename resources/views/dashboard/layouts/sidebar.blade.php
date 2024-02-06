@@ -1,5 +1,5 @@
 <!-- Main Sidebar Container -->
-<aside class="main-sidebar sidebar-dark-primary elevation-4" style="background-color: #08334b">
+<aside class="main-sidebar sidebar-dark-primary elevation-4 position-fixed" style="background-color: #08334b">
     <!-- Brand Logo -->
     <a href="/" class="brand-link">
         <img src="/assets/img/logo-e.png" alt="AdminLTE Logo" class="brand-image " style="opacity: .8">

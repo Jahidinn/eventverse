@@ -10,6 +10,7 @@ use App\Models\Ticket;
 use App\Models\Category;
 use App\Models\Provinces;
 use App\Models\CustomForm;
+use App\Models\EventVisitor;
 use App\Models\Organisation;
 use App\Models\OrganisationMember;
 use App\Models\Transaction;
@@ -195,8 +196,25 @@ class EventController extends Controller
 		}
 	}
 
-	public function show(Event $event)
+	public function show(Event $event, Request $request)
 	{
+		//Menyimpan data visitor unik berdasarkan IP Address
+		$ipAddress = $request->ip();
+		$cekUnique = EventVisitor::where('ip_address', $ipAddress)->where('event_id', $event->id)->exists();
+
+		//Jika belum ada visitor
+		if (!$cekUnique) {
+			//Masukan ip address dan event yag dikunjungi
+			EventVisitor::create([
+				'ip_address' => $ipAddress,
+				'event_id' => $event->id,
+			]);
+
+			// Update kolom pengunjung di tabel Event
+			$event = Event::find($event->id);
+			$event->increment('visitor');
+		}
+
 		return view('events.show', [
 			'detailEvent' => $event,
 			'ticketData' => Ticket::where('event_id', $event->id)->get(),

@@ -77,6 +77,8 @@ class DatabaseSeeder extends Seeder
 
 		Event::create([
 			'user_id' => 1,
+			'organizer' => 'individual',
+			'organizer_id' => 1,
 			'title' => 'Example event 1',
 			'slug' => 'example1',
 			'category' => 2,
@@ -94,6 +96,8 @@ class DatabaseSeeder extends Seeder
 		]);
 		Event::create([
 			'user_id' => 1,
+			'organizer' => 'individual',
+			'organizer_id' => 1,
 			'title' => 'Example event 2',
 			'slug' => 'example2',
 			'category' => 3,
@@ -111,6 +115,8 @@ class DatabaseSeeder extends Seeder
 		]);
 		Event::create([
 			'user_id' => 1,
+			'organizer' => 'individual',
+			'organizer_id' => 1,
 			'title' => 'Example event 3',
 			'slug' => 'example3',
 			'category' => 3,
@@ -128,6 +134,8 @@ class DatabaseSeeder extends Seeder
 		]);
 		Event::create([
 			'user_id' => 1,
+			'organizer' => 'individual',
+			'organizer_id' => 1,
 			'title' => 'Example event 4',
 			'slug' => 'example4',
 			'category' => 4,
@@ -146,6 +154,8 @@ class DatabaseSeeder extends Seeder
 
 		Event::create([
 			'user_id' => 1,
+			'organizer' => 'individual',
+			'organizer_id' => 1,
 			'title' => 'Example event 5',
 			'slug' => 'example5',
 			'category' => 7,
