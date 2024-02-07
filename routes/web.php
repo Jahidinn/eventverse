@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminDashboardController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PDFController;
@@ -59,6 +60,8 @@ Route::get('/dashboard/get-transaction-report', [DashboardController::class, 'ge
 Route::get('/dashboard/check-event-date', [DashboardController::class, 'checkEventDate'])->middleware('auth');
 Route::post('/dashboard/withdraw-process', [DashboardController::class, 'withdraw'])->middleware('auth');
 Route::get('/dashboard/withdraw-history', [DashboardController::class, 'withdrawHistory'])->middleware('auth');
+
+Route::get('/dashboard/admin', [AdminDashboardController::class, 'index'])->middleware(['auth', 'admin']);
 
 Route::get('/dashboard/my-profile', [UserProfileController::class, 'index'])->middleware('auth');
 Route::post('/dashboard/edit-profile-image', [UserProfileController::class, 'editImage'])->middleware('auth');
