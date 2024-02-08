@@ -61,7 +61,17 @@ Route::get('/dashboard/check-event-date', [DashboardController::class, 'checkEve
 Route::post('/dashboard/withdraw-process', [DashboardController::class, 'withdraw'])->middleware('auth');
 Route::get('/dashboard/withdraw-history', [DashboardController::class, 'withdrawHistory'])->middleware('auth');
 
-Route::get('/dashboard/admin', [AdminDashboardController::class, 'index'])->middleware(['auth', 'admin']);
+Route::middleware(['auth'])->group(function () {
+	// Rute-rute yang akan terkena middleware auth
+	// LIST ROUTE ......
+
+	Route::middleware(['admin'])->group(function () {
+		// Rute-rute yang akan terkena middleware administrator
+		Route::get('/administrator', [AdminDashboardController::class, 'index']);
+		Route::get('/dashboard/admin', [AdminDashboardController::class, 'index']);
+	});
+});
+
 
 Route::get('/dashboard/my-profile', [UserProfileController::class, 'index'])->middleware('auth');
 Route::post('/dashboard/edit-profile-image', [UserProfileController::class, 'editImage'])->middleware('auth');

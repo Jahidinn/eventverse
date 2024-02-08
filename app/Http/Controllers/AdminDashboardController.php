@@ -2,39 +2,61 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
+use App\Models\User;
 use App\Models\Event;
 use App\Models\Transaction;
+use App\Models\EventVisitor;
+use App\Models\Organisation;
+use App\Models\WithdrawData;
 use Illuminate\Http\Request;
 
 class AdminDashboardController extends Controller
 {
 	public function index()
 	{
-		//Tambahkan data myevent, event, peserta, transaksi
-		$user_id = auth()->user()->id;
-		$totalPeserta = 0;
-		$biayaAdmin = config('app.biaya_admin');
-		$totalTransaksi = 0;
+		$totalEvent = Event::count();
+		$registeredUser = User::count();
+		$organization = Organisation::count();
+		$allParticipant = Transaction::count();
 
-		$eventDiikuti = Transaction::where('user_login_id', $user_id)->count();
-		$eventDibuat = Event::where('user_id', $user_id)->get();
+		//Participant atau transaksi unik
+		$uniqueParticipant = Transaction::groupBy(['email', 'event_id'])->get();
+		$uniqueParticipantCount = count($uniqueParticipant);
 
-		foreach ($eventDibuat as $event) {
-			$jumlahPeserta = Transaction::where('event_id', $event->id)->where('status', 'Paid')->count();
-			$transaksi = Transaction::where('event_id', $event->id)->where('status', 'Paid')->sum('total_price');
+		$totalTransaksi = Transaction::where('status', 'Paid')->sum('total_price');
+		$totalWithdraw = WithdrawData::where('status', 'Sukses')->sum('amount');
 
-			// Tambahkan jumlah peserta ke totalPeserta
-			$totalPeserta += $jumlahPeserta;
+		$activeTransaction = $totalTransaksi - $totalWithdraw;
 
-			// Tambahkan jumlah transaksi ke totalTransaksi
-			$totalTransaksi += $transaksi;
-		}
+		$uniqueVisitor = EventVisitor::count();
+
+		// Dapatkan bulan dan tahun sekarang
+		$now = Carbon::now();
+		$currentMonth = $now->month;
+		$currentYear = $now->year;
+
+		// Lakukan query untuk menghitung data pada bulan dan tahun sekarang
+		$participantThisMonth = Transaction::whereMonth('created_at', $currentMonth)
+			->whereYear('created_at', $currentYear)
+			->count();
+
+		//Article on progress
+		$totalArticle = '000';
+
 
 		return view('dashboard.admin-dashboard.admin-index', [
-			'eventDiikuti' => $eventDiikuti,
-			'eventDibuat' => count($eventDibuat),
-			'totalPeserta' => $totalPeserta,
-			'totalTransaksi' => $totalTransaksi - ($biayaAdmin * $totalPeserta),
+			'totalEvent' => $totalEvent,
+			'registeredUser' => $registeredUser,
+			'organization' => $organization,
+			'allParticipant' => $allParticipant,
+			'uniqueParticipant' => $uniqueParticipantCount,
+			'totalTransaksi' => $totalTransaksi,
+			'totalWithdraw' => $totalWithdraw,
+			'activeTransaction' => $activeTransaction,
+			'participantThisMonth' => $participantThisMonth,
+			'uniqueVisitor' => $uniqueVisitor,
+			'totalArticle' => $totalArticle,
 		]);
 	}
 }

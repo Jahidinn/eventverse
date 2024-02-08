@@ -1,0 +1,120 @@
+.bg-dashboard{
+	background-color: #146C94 !important;
+}
+
+.main-sidebar .sidebar .nav a{
+	color: #fff !important;
+  }
+
+.main-sidebar{
+	background-color: #146C94 !important;
+	color: #fff !important;
+}
+
+.bg-ungu{
+	background-color: #D09CFA !important;
+	color: #FFF !important;
+}
+.bg-green{
+	background-color: #74E291 !important;
+	color: #FFF !important;
+}
+.bg-ungu2{
+	background-color: #7C96AB !important;
+	color: #FFF !important;
+}
+.bg-pink{
+	background-color: #FE7171 !important;
+	color: #FFF !important;
+}
+.bg-orange{
+	background-color: #FFA447 !important;
+	color: #FFF !important;
+}
+.bg-orange a{
+	color: #FFF !important;
+}
+.bg-blue{
+	background-color: #6895D2 !important;
+	color: #FFF !important;
+}
+
+.sidebar .nav .active{
+	background-color: #2092c7 !important;
+	color: #FFF !important;
+}
+
+.brand-link {
+    border-bottom: 1px solid #90a4b5 !important;
+}
+
+.user-panel {
+    border-bottom: 1px solid #90a4b5 !important;
+	align-items: center;
+	text-align: center;
+}
+
+.user-panel .image {
+	width: 44px !important;
+	height:44px !important;
+	position: relative !important;
+	overflow: hidden !important;
+	padding: 0;
+	border-radius: 50%;
+}
+
+.user-panel .image img {
+	width:100% !important;
+	height:100% !important;
+	object-fit:cover !important;
+	border-radius: 5px !important;
+	object-position: top !important; 
+}
+
+.width-20{
+	width: 90px !important;
+}
+
+.border-rounded{
+	border-radius: 40px !important;
+}
+
+.bg-card-blue {
+	background-color: #f4f6f9 !important;
+	/* box-shadow: none; */
+	/* border: none !important; */
+}
+
+.select2.select2-container {
+	width: 100% !important;
+}
+
+.select2.select2-container .select2-selection{
+	border-radius: 0 ;
+	padding-top: 5px;
+	padding-left: 2px;
+	height: 35px;
+}
+.select2-selection__arrow {
+	margin-top: 3px;
+}
+.select2-selection__clear{
+	display: none;
+}
+
+.jenis-event.select2-results__options {
+	height: 50px !important;
+ }
+ 
+.select2-results__options {
+	min-height: 220px !important;
+ }
+
+@media only screen and (max-width: 800px) {
+	.title-manage-event{
+		font-size: 13px;
+	}
+	.data-pendaftar{
+		font-size: 13px;
+	}
+}

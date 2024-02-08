@@ -64,7 +64,7 @@ class AuthController extends Controller
 			$request->session()->regenerate();
 
 			if (auth()->user()->category_id == 2) {
-				return redirect()->intended('/dashboard/admin');
+				return redirect()->intended('/administrator');
 			} else {
 				return redirect()->intended('/dashboard/myevent');
 			}

@@ -1,10 +1,10 @@
-@extends('dashboard.layouts.main')
+@extends('dashboard.admin-dashboard.layouts.main')
 
 @section('content')
     <!-- Content Header (Page header) -->
     <section class="content-header pb-0">
-        <div class="alert alert-dark bg-dashboard text-white" role="alert">
-            <strong>HOME PAGE</strong>
+        <div class="alert alert-dark bg-dashboard text-white mx-1" role="alert">
+            <strong>DASHBOARD</strong>
         </div>
     </section>
 
@@ -12,66 +12,140 @@
     <section class="content p-0">
 
         <div class="row m-0">
-            <div class="col-12 col-sm-6 col-md-3">
-                <div class="info-box">
-                    <span class="info-box-icon bg-info elevation-1"><i class="fas fa-user-plus"></i></span>
+            <div class="col-lg-3 col-12">
+                <!-- small box -->
+                <div class="small-box bg-info">
+                    <div class="inner">
+                        <h3>{{ number_format($totalEvent, 0, ',', '.') }}</h3>
 
-                    <div class="info-box-content">
-                        <span class="info-box-text">Event diikuti</span>
-                        <span class="info-box-number">
-                            {{ number_format($eventDiikuti, 0, ',', '.') }}
-                        </span>
+                        <p>All events</p>
                     </div>
-                    <!-- /.info-box-content -->
-                </div>
-                <!-- /.info-box -->
-            </div>
-            <!-- /.col -->
-            <div class="col-12 col-sm-6 col-md-3">
-                <div class="info-box mb-3">
-                    <span class="info-box-icon bg-danger elevation-1"><i class="fas fa-calendar-check"></i></span>
-
-                    <div class="info-box-content">
-                        <span class="info-box-text">Event dibuat</span>
-                        <span class="info-box-number">{{ number_format($eventDibuat, 0, ',', '.') }}</span>
+                    <div class="icon">
+                        <i class="fas fa-clipboard-list"></i>
                     </div>
-                    <!-- /.info-box-content -->
+                    <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
                 </div>
-                <!-- /.info-box -->
             </div>
-            <!-- /.col -->
+            <!-- ./col -->
+            <div class="col-lg-3 col-12">
+                <!-- small box -->
+                <div class="small-box bg-success">
+                    <div class="inner">
+                        <h3>{{ number_format($registeredUser, 0, ',', '.') }}</h3>
 
-            <!-- fix for small devices only -->
-            <div class="clearfix hidden-md-up"></div>
-
-            <div class="col-12 col-sm-6 col-md-3">
-                <div class="info-box mb-3">
-                    <span class="info-box-icon bg-success elevation-1"><i class="fas fa-users"></i></span>
-
-                    <div class="info-box-content">
-                        <span class="info-box-text">Peserta dijangkau</span>
-                        <span class="info-box-number">{{ number_format($totalPeserta, 0, ',', '.') }}</span>
+                        <p>Registered users</p>
                     </div>
-                    <!-- /.info-box-content -->
-                </div>
-                <!-- /.info-box -->
-            </div>
-            <!-- /.col -->
-            <div class="col-12 col-sm-6 col-md-3">
-                <div class="info-box mb-3">
-                    <span class="info-box-icon bg-secondary elevation-1"><i class="fas fa-wallet"></i></span>
-
-                    <div class="info-box-content">
-                        <span class="info-box-text">Total transaksi</span>
-                        <span class="info-box-number">{{ number_format($totalTransaksi, 0, ',', '.') }}</span>
+                    <div class="icon">
+                        <i class="fas fa-user-check"></i>
                     </div>
-                    <!-- /.info-box-content -->
+                    <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
                 </div>
-                <!-- /.info-box -->
             </div>
-            <!-- /.col -->
+            <!-- ./col -->
+            <div class="col-lg-3 col-12">
+                <!-- small box -->
+                <div class="small-box bg-orange">
+                    <div class="inner">
+                        <h3>{{ number_format($organization, 0, ',', '.') }}</h3>
+
+                        <p>Organizations</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fas fa-chalkboard-teacher"></i>
+                    </div>
+                    <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                </div>
+            </div>
+            <!-- ./col -->
+            <div class="col-lg-3 col-12">
+                <!-- small box -->
+                <div class="small-box bg-pink">
+                    <div class="inner">
+                        <h3>{{ number_format($allParticipant, 0, ',', '.') }}</h3>
+
+                        <p>All event participant</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                </div>
+            </div>
+            <div class="col-lg-3 col-12">
+                <!-- small box -->
+                <div class="small-box bg-ungu">
+                    <div class="inner">
+                        <h3>Rp {{ formatAngka($activeTransaction) }}</h3>
+
+                        <p>Active transaction</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fas fa-file-invoice-dollar"></i>
+                    </div>
+                    <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-12">
+                <!-- small box -->
+                <div class="small-box bg-green">
+                    <div class="inner">
+                        <h3>{{ number_format($uniqueVisitor, 0, ',', '.') }}</h3>
+
+                        <p>Unique visitor</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fas fa-user-shield"></i>
+                    </div>
+                    <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                </div>
+            </div>
+            <div class="col-lg-3 col-12">
+                <!-- small box -->
+                <div class="small-box bg-ungu2">
+                    <div class="inner">
+                        <h3>{{ number_format($participantThisMonth, 0, ',', '.') }}</h3>
+
+                        <p>Participant this month</p>
+                    </div>
+                    <div class="icon">
+                        <i class="far fa-calendar-check"></i>
+                    </div>
+                    <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                </div>
+            </div>
+            <div class="col-lg-3 col-12">
+                <!-- small box -->
+                <div class="small-box bg-blue">
+                    <div class="inner">
+                        <h3>{{ number_format($totalArticle, 0, ',', '.') }}</h3>
+
+                        <p>Article</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fas fa-newspaper"></i>
+                    </div>
+                    <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                </div>
+            </div>
+            <!-- ./col -->
         </div>
         <!-- /.row -->
+
+        @php
+            function formatAngka($angka)
+            {
+                if ($angka >= 1000000000) {
+                    return number_format($angka / 1000000000, 1) . 'B';
+                } elseif ($angka >= 1000000) {
+                    return number_format($angka / 1000000, 1) . 'M';
+                } elseif ($angka >= 1000) {
+                    return number_format($angka / 1000, 0) . 'K';
+                } else {
+                    return $angka;
+                }
+            }
+        @endphp
 
     </section>
 
