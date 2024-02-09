@@ -36,7 +36,7 @@
                with font-awesome or any other icon font library -->
                 <li class="nav-header">HOME</li>
                 <li class="nav-item">
-                    <a href="/dashboard"
+                    <a href="/administrator"
                         class="nav-link {{ Request::is('dashboard/admin') || Request::is('administrator') ? 'active' : '' }}">
                         <i class="nav-icon fas fa-home"></i>
                         <p>Dashboard</p>
@@ -46,16 +46,16 @@
                 <li class="nav-header">TRANSACTION</li>
 
                 <li class="nav-item">
-                    <a href="/dashboard/manajemen-event"
-                        class="nav-link {{ Request::is('dashboard/manajemen-event*') ? 'active' : '' }}">
+                    <a href="/administrator/wd-request"
+                        class="nav-link {{ Request::is('administrator/wd-request*') ? 'active' : '' }}">
                         <i class="nav-icon fas fa-wallet"></i>
                         <p>Withdraw Request</p>
                     </a>
                 </li>
 
                 <li class="nav-item">
-                    <a href="/dashboard/manajemen-event"
-                        class="nav-link {{ Request::is('dashboard/manajemen-event*') ? 'active' : '' }}">
+                    <a href="/administrator/wd-request"
+                        class="nav-link {{ Request::is('administrator/xxx*') ? 'active' : '' }}">
                         <i class="nav-icon fas fa-check-square"></i>
                         <p>Check Transaction</p>
                     </a>

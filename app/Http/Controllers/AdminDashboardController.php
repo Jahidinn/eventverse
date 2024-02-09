@@ -59,4 +59,9 @@ class AdminDashboardController extends Controller
 			'totalArticle' => $totalArticle,
 		]);
 	}
+
+	public function withdrawRequest(Request $request)
+	{
+		return view('dashboard.admin-dashboard.admin-wd-request', []);
+	}
 }

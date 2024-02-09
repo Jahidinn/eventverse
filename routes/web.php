@@ -69,6 +69,8 @@ Route::middleware(['auth'])->group(function () {
 		// Rute-rute yang akan terkena middleware administrator
 		Route::get('/administrator', [AdminDashboardController::class, 'index']);
 		Route::get('/dashboard/admin', [AdminDashboardController::class, 'index']);
+
+		Route::get('/administrator/wd-request', [AdminDashboardController::class, 'withdrawRequest']);
 	});
 });
 
