@@ -10,6 +10,7 @@ use App\Models\EventVisitor;
 use App\Models\Organisation;
 use App\Models\WithdrawData;
 use Illuminate\Http\Request;
+use Yajra\DataTables\Facades\DataTables;
 
 class AdminDashboardController extends Controller
 {
@@ -63,5 +64,30 @@ class AdminDashboardController extends Controller
 	public function withdrawRequest(Request $request)
 	{
 		return view('dashboard.admin-dashboard.admin-wd-request', []);
+	}
+
+	public function withdrawRequestData(Request $request)
+	{
+
+		$dataWdRequest = WithdrawData::with(['event', 'user'])
+			->where('event_id', 'LIKE', '%' . $request->status . '%')
+			->orderByRaw('id DESC')
+			->get();
+
+		return DataTables::of($dataWdRequest)
+			->addIndexColumn()
+			->addColumn('admin_wd_user', function ($dataWdRequest) {
+				return view('dashboard.admin-dashboard.components.wd-request-user')->with(['data' => $dataWdRequest]);
+			})
+			->addColumn('admin_wd_amount', function ($dataWdRequest) {
+				return view('dashboard.admin-dashboard.components.wd-request-amount')->with(['data' => $dataWdRequest]);
+			})
+			->addColumn('admin_wd_status', function ($dataWdRequest) {
+				return view('dashboard.admin-dashboard.components.wd-request-status')->with(['data' => $dataWdRequest]);
+			})
+			->addColumn('admin_wd_action', function ($dataWdRequest) {
+				return view('dashboard.admin-dashboard.components.wd-request-action')->with(['data' => $dataWdRequest]);
+			})
+			->make(true);
 	}
 }

@@ -124,6 +124,8 @@
         });
     </script>
 
+    @stack('js-admin-wd-request')
+
 </body>
 
 </html>
