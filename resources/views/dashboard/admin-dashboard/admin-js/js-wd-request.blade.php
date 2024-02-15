@@ -41,4 +41,59 @@
             dataPeserta.column(2).search($(this).val()).draw();
         });
     })
+
+    $('body').on('click', '.admin-cancel-wd', function(e) {
+        e.preventDefault();
+        const id = $(this).data('id');
+
+        Swal.fire({
+            title: '<small><b>Yakin TOLAK proses penarikan?</b></small>',
+            // icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Ya, Tolak!',
+            cancelButtonText: 'Batal',
+            html: '<input type="text" id="alasanTolak" class="swal2-input" placeholder="Catatan ...">',
+            preConfirm: () => {
+                // Mendapatkan nilai alasan tolak dari input formulir
+                const alasanTolak = document.getElementById('alasanTolak').value;
+                // Tindakan yang akan diambil jika pengguna mengonfirmasi penolakan
+                if (!alasanTolak) {
+                    Swal.showValidationMessage('Catatan harus diisi');
+                }
+                return {
+                    alasanTolak: alasanTolak
+                };
+            }
+        }).then((result) => {
+            if (result.isConfirmed) {
+                const alasanTolak = result.value.alasanTolak;
+                // Tindakan yang akan diambil jika mengonfirmasi tolak
+
+                $.ajax({
+                    url: '/administrator/wd-request/tolak',
+                    type: 'POST',
+                    data: {
+                        id: id,
+                        catatan: alasanTolak,
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                            alertify.success('<i class="fas fa-check"></i> ' + response
+                                .success);
+                            $('#data-peserta').DataTable().ajax.reload(null, false);
+
+                        } else {
+                            Swal.fire('', response.error, 'error');
+                        }
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        // Menangani kesalahan Ajax dan menampilkan pesan dengan SweetAlert2
+                        Swal.fire('Error!',
+                            'Terjadi kesalahan saat memproses permintaan: ' +
+                            textStatus, 'error');
+                    }
+                });
+            }
+        });
+    })
 </script>

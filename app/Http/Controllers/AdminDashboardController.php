@@ -90,4 +90,19 @@ class AdminDashboardController extends Controller
 			})
 			->make(true);
 	}
+
+	public function acceptWithdraw(Request $request)
+	{
+		$witdhdrawDataCheck = WithdrawData::where('id', $request->id)->exists();
+		$witdhdrawData = WithdrawData::find($request->id);
+
+		//Jika Tidak ada ID
+		if (!$witdhdrawDataCheck) {
+			return response()->json(['error' => 'Masukan ID dengan benar!']);
+		}
+
+		//Jika ID ada
+		$witdhdrawData->update(['status' => 'Gagal', 'catatan' => $request->catatan]);
+		return response()->json(['success' => 'Berhasil dibatalkan!']);
+	}
 }
