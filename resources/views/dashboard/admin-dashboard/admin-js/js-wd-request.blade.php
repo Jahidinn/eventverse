@@ -1,7 +1,8 @@
 <script>
     $(document).ready(function(e) {
 
-        var dataPeserta = $('#table-wd-request').DataTable({
+        //Datatable request penarikan
+        var dataRequestPenarikan = $('#table-wd-request').DataTable({
             "dom": 'rtip',
             "bInfo": false,
             language: {
@@ -37,11 +38,18 @@
             }]
         });
 
-        $('#search-transaction').keyup(function() {
-            dataPeserta.column(2).search($(this).val()).draw();
+        //Pencarian data
+        $('#search-request').keyup(function() {
+            dataRequestPenarikan.search($(this).val()).draw();
         });
+
+        //Filter berdasarkan option status
+        $('body').on('change', '#status-filter', function(e) {
+            dataRequestPenarikan.columns(2).search($(this).val()).draw();
+        })
     })
 
+    // Proses menolak request penarikan
     $('body').on('click', '.admin-cancel-wd', function(e) {
         e.preventDefault();
         const id = $(this).data('id');

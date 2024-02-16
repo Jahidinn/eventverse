@@ -11,6 +11,7 @@
 
             $('.download-participant-data').attr('data-id', id);
 
+            // Ajax datatable untuk menampilkan data peserta
             var dataPeserta = $('#data-peserta').DataTable({
                 "dom": 'rtip',
                 "bInfo": false,
@@ -48,6 +49,7 @@
                 }]
             });
 
+            //Proses pencarian data
             $('#search-participant').keyup(function() {
                 dataPeserta.search($(this).val()).draw();
 
@@ -59,6 +61,7 @@
                 }
             });
 
+            //Fungsi filter berdasarkan status
             $('#get-filter').on('click', function(e) {
                 var status = $('#filter-value').val();
                 $('#filterModal').modal('hide')
@@ -73,6 +76,7 @@
 
             })
 
+            //
             dataPeserta.on("draw", function() {
                 updateTotal = dataPeserta.rows({
                     search: 'applied'
@@ -80,9 +84,9 @@
                 $('.jumlah-peserta').text(updateTotal);
             });
         })
-
     })
 
+    // SELECT 2
     $(document).on('select2:open', () => {
         document.querySelector('.select2-search__field').focus();
         $('.select2-search__field').attr("placeholder", "Cari ... ");
@@ -94,12 +98,14 @@
     });
 
 
+    //Fungsi kembali
     $('body').on('click', '.kembali', function(e) {
         e.preventDefault();
         $('.daftar-peserta').attr('hidden', true)
         $('.daftar-event').attr('hidden', false)
     })
 
+    //Fungsi proses detail transaksi
     $('body').on('click', '.detail-transaksi', function(e) {
         e.preventDefault();
         var id = $(this).data("id");
@@ -143,9 +149,11 @@
             }
         });
 
+        //Show modal
         $('#detailTransaksiModal').modal('show');
     })
 
+    //Format number
     function numberWithCommas(number) {
         return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     }

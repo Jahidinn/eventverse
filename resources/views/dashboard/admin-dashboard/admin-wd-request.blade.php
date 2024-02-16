@@ -13,16 +13,20 @@
         <div class="form-group">
             <button class="btn btn-secondary btn-sm mb-3"><b><i class="fas fa-history"></i> Withdraw history</b></button>
             <select class="form-control" id="status-filter">
-                <option>Semua data</option>
-                <option>Proses</option>
-                <option>Sukses</option>
-                <option>Gagal</option>
-                <option>Batal</option>
+                <option value="">Semua data</option>
+                <option value="Proses">Proses</option>
+                <option value="Sukses">Sukses</option>
+                <option value="Gagal">Gagal</option>
+                <option value="Batal">Batal</option>
             </select>
         </div>
 
         <div class="card">
             <div class="card-body">
+                <div class="form-group">
+                    <input type="text" class="form-control" id="search-request" placeholder="Cari data">
+                </div>
+
                 <div class="table-responsive">
                     <table class="table w-100" id="table-wd-request">
                         <thead class="bg-secondary">
