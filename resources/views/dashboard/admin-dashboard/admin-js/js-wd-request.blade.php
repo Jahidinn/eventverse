@@ -52,7 +52,8 @@
             showCancelButton: true,
             confirmButtonText: 'Ya, Tolak!',
             cancelButtonText: 'Batal',
-            html: '<input type="text" id="alasanTolak" class="swal2-input" placeholder="Catatan ...">',
+            confirmButtonColor: '#dc3545',
+            html: '<input type="text" id="alasanTolak" class="swal2-input w-100 m-1" style="display: block;" placeholder="Catatan ...">',
             preConfirm: () => {
                 // Mendapatkan nilai alasan tolak dari input formulir
                 const alasanTolak = document.getElementById('alasanTolak').value;
@@ -67,8 +68,8 @@
         }).then((result) => {
             if (result.isConfirmed) {
                 const alasanTolak = result.value.alasanTolak;
-                // Tindakan yang akan diambil jika mengonfirmasi tolak
 
+                // Tindakan yang akan diambil jika mengonfirmasi tolak
                 $.ajax({
                     url: '/administrator/wd-request/tolak',
                     type: 'POST',
@@ -80,7 +81,7 @@
                         if (response.success) {
                             alertify.success('<i class="fas fa-check"></i> ' + response
                                 .success);
-                            $('#data-peserta').DataTable().ajax.reload(null, false);
+                            $('#table-wd-request').DataTable().ajax.reload(null, false);
 
                         } else {
                             Swal.fire('', response.error, 'error');
@@ -95,5 +96,48 @@
                 });
             }
         });
+    })
+
+    // Proses Terima request penarikan
+    $('body').on('click', '.admin-proses-wd', function(e) {
+        e.preventDefault();
+        const id = $(this).data('id');
+
+        Swal.fire({
+            html: '<b>TERIMA request proses penarikan?</b>',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Ya, Terima!',
+            cancelButtonText: 'Batal',
+        }).then((result) => {
+            if (result.isConfirmed) {
+
+                // Tindakan yang akan diambil jika mengonfirmasi tolak
+                $.ajax({
+                    url: '/administrator/wd-request/accept',
+                    type: 'POST',
+                    data: {
+                        id: id,
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                            alertify.success('<i class="fas fa-check"></i> ' + response
+                                .success);
+                            $('#table-wd-request').DataTable().ajax.reload(null, false);
+
+                        } else {
+                            Swal.fire('', response.error, 'error');
+                        }
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        // Menangani kesalahan Ajax dan menampilkan pesan dengan SweetAlert2
+                        Swal.fire('Error!',
+                            'Terjadi kesalahan saat memproses permintaan: ' +
+                            textStatus, 'error');
+                    }
+                });
+            }
+        });
+
     })
 </script>
