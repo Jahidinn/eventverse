@@ -120,6 +120,20 @@ class TransactionController extends Controller
 				return response()->json(['error' => 'Max registrasi tiket ini cuma 1x, cek lagi email atau nomer hp ya!']);
 			}
 
+			//Jika tidak boleh lebih dari 1 dan sudah ada peserta terdaftar (LOGIN)
+			if ($request->is_login == 1) {
+
+				$cekTransactionUser = Transaction::where('event_id', $request->idEvent)
+					->where('ticket_id', $request->idTicket)
+					->where('is_login', 1)
+					->where('user_login_id', $request->user_login_id)
+					->exists();
+
+				if ($ticketQuantity == 0 && $cekTransactionUser) {
+					return response()->json(['error' => 'Pada tiket ini, 1 akun hanya bisa registrasi 1x ya!']);
+				}
+			}
+
 
 			//Jika event gratis langsung masukan transaksi tanpa pembayaran
 			if ($request->totalPrice == 0 || empty($request->totalPrice)) {
