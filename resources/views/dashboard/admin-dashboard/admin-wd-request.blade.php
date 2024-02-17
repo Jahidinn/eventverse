@@ -50,15 +50,15 @@
 
     {{-- Konten withdraw history --}}
     <section class="content mx-1" id="wd-history-container" hidden>
-        <div class="form-group">
+        <div class="form-group pr-0">
             {{-- Button wd history --}}
             <button class="btn btn-info btn-sm" id="btn-wd-request">
                 <b><i class="fas fa-wallet"></i> Menu withdraw request</b>
             </button>
 
-            <div class="row">
+            <div class="row m-0 p-0">
                 {{-- Pilihan status --}}
-                <div class="col-md-6 mt-2">
+                <div class="col-md-6 mt-2 px-0">
                     <select class="form-control" id="wd-history-status-filter">
                         <option value="">Semua status</option>
                         <option value="Sukses">Sukses</option>
@@ -67,8 +67,8 @@
                     </select>
                 </div>
                 {{-- rentang pilihan tanggal filter --}}
-                <div class="col-md-6 row pr-0 mt-2">
-                    <div class="col-5 pr-0">
+                <div class="col-md-6 row px-0 mt-2 m-0">
+                    <div class="col-5 pr-0 start-date-form">
                         <div class="input-form-group date datepicker p-0">
                             <span class="far fa-calendar-alt form-control-feedback"></span>
                             <input type="text" class="form-control" placeholder="start date" id="wd-history-start">
@@ -101,7 +101,7 @@
                 </div>
                 {{-- Tabel data --}}
                 <div class="table-responsive">
-                    <table class="table w-100" id="table-wd-history">
+                    <table class="table table-striped w-100" id="table-wd-history">
                         <thead class="bg-secondary">
                             <tr>
                                 <th scope="col">user</th>
@@ -117,6 +117,9 @@
         </div>
 
     </section>
+
+    {{-- Modal detail --}}
+    @include('dashboard.admin-dashboard.components.wd-modal-detail')
 
     {{-- Push javascript --}}
     @push('js-admin-wd-request')

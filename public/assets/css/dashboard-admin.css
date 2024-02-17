@@ -127,14 +127,26 @@
     line-height: 2.375rem;
     text-align: center;
     pointer-events: none;
-    color: #aaa;
+    color: #c7c5c5;
 }
 
-@media only screen and (max-width: 800px) {
+table.dataTable tbody tr:hover {
+	background-color:#eaeaea !important;
+ }
+
+button{
+	z-index: 100 !important;
+	position: relative !important;
+ }
+
+@media only screen and (max-width: 769px) {
 	.title-manage-event{
 		font-size: 13px;
 	}
 	.data-pendaftar{
 		font-size: 13px;
+	}
+	.start-date-form{
+		padding-left: 0 !important;
 	}
 }

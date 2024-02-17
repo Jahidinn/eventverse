@@ -56,12 +56,71 @@
             dataRequestPenarikan.search($(this).val()).draw();
         });
 
-        //Filter berdasarkan option status
+        //Filter berdasarkan option status (tidak dipakai)
         $('body').on('change', '#status-filter', function(e) {
             dataRequestPenarikan.columns(2).search($(this).val()).draw();
         });
 
+        // Menangani event klik pada dataRequestPenarikan
+        dataRequestPenarikan.on('click', function(e) {
+            //Panggil function
+            handleRowClick(dataRequestPenarikan, e);
+        });
     })
+
+    // Fungsi untuk menangani event klik pada dataRequestPenarikan dan dataHistory
+    function handleRowClick(dataTable, e) {
+        if (!$(e.target).hasClass('admin-proses-wd') && !$(e.target).hasClass('admin-cancel-wd')) {
+            let data = dataTable.row(e.target.closest('tr')).data();
+
+            //Status
+            var status = getStatusBadge(data['status']);
+
+            //Tampilkan data
+            $('#wd-user').text(data['user']['username'])
+            $('#wd-event').text(data['event']['title'])
+            $('#wd-event').attr('href', '/' + data['event']['slug'])
+            $('#wd-amount').text('Rp ' + formatRibuan(data['amount']))
+            $('#wd-rekening').text(data['rekening'])
+            $('#wd-bank').text(data['bank'])
+            $('#wd-date').text(moment(data['updated_at']).format('D MMM Y'))
+            $('#wd-status').html(status)
+
+            $('#detailWithdrawModal').modal('show');
+        }
+    }
+
+    // Fungsi untuk memformat badge status
+    function getStatusBadge(status) {
+        switch (status) {
+            case 'Proses':
+                return `<span class="badge badge-warning"><i class="fas fa-clock"></i> ${status}</span>`;
+            case 'Sukses':
+                return `<span class="badge badge-success"><i class="fas fa-check-circle"></i> ${status}</span>`;
+            default:
+                return `<span class="badge badge-danger"><i class="fas fa-times-circle"></i> ${status}</span>`;
+        }
+    }
+
+    //Format ribuan
+    function formatRibuan(number) {
+        return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+    }
+
+    //Copy rekening
+    $('body').on('click', '#copy-rekening', function() {
+        var textToCopy = $('#wd-rekening').text();
+        copyToClipboard(textToCopy);
+    })
+
+    // Fungsi copy rekening
+    function copyToClipboard(textToCopy) {
+        navigator.clipboard.writeText(textToCopy).then(function() {
+            alertify.success('Copied successfully!');
+        }).catch(function(err) {
+            console.error('Tidak dapat menyalin teks: ', err);
+        });
+    }
 
     // Function menampilkan data history
     function withdrawHistory(status, startDate, endDate) {
@@ -111,11 +170,21 @@
         $('#search-history').keyup(function() {
             dataHistoryPenarikan.search($(this).val()).draw();
         });
+
+        // Menangani event klik pada dataHistory
+        dataHistoryPenarikan.on('click', 'tr', function(e) {
+            var rowData = dataHistoryPenarikan.row(this).data();
+
+            if (rowData) {
+                //Memanggil function handleRowClick
+                handleRowClick(dataHistoryPenarikan, e);
+            }
+        });
+
     }
 
     // ketika tombol tampilkan atau filter di klik
     $('body').on('click', '#wd-history-filter', function(e) {
-        e.preventDefault();
 
         // MEngambil data form
         var status = $('#wd-history-status-filter').val();
