@@ -114,6 +114,22 @@
 	display: flex !important;
  }
 
+ .input-form-group input[type="text"], .input-form-group input[type="number"] {
+    padding-left: 2.375rem;
+}
+
+ .input-form-group .form-control-feedback {
+    position: absolute;
+    z-index: 2;
+    display: block;
+    width: 2.375rem;
+    height: 2.375rem;
+    line-height: 2.375rem;
+    text-align: center;
+    pointer-events: none;
+    color: #aaa;
+}
+
 @media only screen and (max-width: 800px) {
 	.title-manage-event{
 		font-size: 13px;

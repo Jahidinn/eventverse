@@ -1,6 +1,16 @@
 <script>
     $(document).ready(function(e) {
 
+        $('.datepicker').datepicker({
+            format: 'yyyy-mm-dd',
+            autoclose: true,
+            todayHighlight: true,
+            defaultDate: new Date(),
+        });
+
+        var today = new Date();
+        $(".datepicker").datepicker("setDate", today);
+
         //Datatable request penarikan
         var dataRequestPenarikan = $('#table-wd-request').DataTable({
             "dom": 'rtip',
@@ -10,6 +20,9 @@
                     'previous': '<i class="fas fa-angle-double-left"></i>',
                     'next': '<i class="fas fa-angle-double-right"></i>'
                 }
+            },
+            "oLanguage": {
+                "sEmptyTable": "Tidak ada request penarikan!"
             },
             processing: true,
             serverside: true,
@@ -46,7 +59,105 @@
         //Filter berdasarkan option status
         $('body').on('change', '#status-filter', function(e) {
             dataRequestPenarikan.columns(2).search($(this).val()).draw();
-        })
+        });
+
+    })
+
+    // Function menampilkan data history
+    function withdrawHistory(status, startDate, endDate) {
+        //Datatable request penarikan
+        var dataHistoryPenarikan = $('#table-wd-history').DataTable({
+            "dom": 'rtip',
+            "bInfo": false,
+            language: {
+                'paginate': {
+                    'previous': '<i class="fas fa-angle-double-left"></i>',
+                    'next': '<i class="fas fa-angle-double-right"></i>'
+                }
+            },
+            "oLanguage": {
+                "sEmptyTable": "Tidak ada request penarikan!"
+            },
+            processing: true,
+            serverside: true,
+            ordering: false,
+            destroy: true,
+            ajax: {
+                'type': 'GET',
+                'url': '/administrator/wd-history/get-data',
+                'data': {
+                    status: status,
+                    start_date: startDate,
+                    end_date: endDate,
+                },
+            },
+
+            columns: [{
+                data: 'admin_wd_user',
+                name: 'admin_wd_user'
+            }, {
+                data: 'admin_wd_amount',
+                name: 'admin_wd_amount'
+            }, {
+                data: 'admin_wd_date',
+                name: 'admin_wd_date'
+            }, {
+                data: 'admin_wd_status',
+                name: 'admin_wd_status'
+            }]
+        });
+
+        //Pencarian data
+        $('#search-history').keyup(function() {
+            dataHistoryPenarikan.search($(this).val()).draw();
+        });
+    }
+
+    // ketika tombol tampilkan atau filter di klik
+    $('body').on('click', '#wd-history-filter', function(e) {
+        e.preventDefault();
+
+        // MEngambil data form
+        var status = $('#wd-history-status-filter').val();
+        var startDate = $('#wd-history-start').val();
+        var endDate = $('#wd-history-end').val();
+
+        // Panggil function menampilkan data history
+        withdrawHistory(status, startDate, endDate);
+    })
+
+
+    //Ketika tombol history di klik
+    $('body').on('click', '#btn-wd-history', function(e) {
+        e.preventDefault();
+
+        //Hiden WD request dan tampilkan WD history
+        $('#wd-request-container').attr('hidden', true);
+        $('#wd-history-container').attr('hidden', false);
+
+        $('#wd-title').html('Withdraw History');
+
+        // Mengambil data form
+        var status = $('#wd-history-status-filter').val();
+        var startDate = $('#wd-history-start').val();
+        var endDate = $('#wd-history-end').val();
+
+        // Panggil function menampilkan data history
+        withdrawHistory(status, startDate, endDate);
+
+    })
+
+    //Ketika tombol withdraw di klik
+    $('body').on('click', '#btn-wd-request', function(e) {
+        e.preventDefault();
+
+        //Hiden WD history dan tampilkan WD request
+        $('#wd-request-container').attr('hidden', false);
+        $('#wd-history-container').attr('hidden', true);
+
+        $('#table-wd-request').DataTable().ajax.reload();
+
+        $('#wd-title').html('Withdraw Request');
     })
 
     // Proses menolak request penarikan

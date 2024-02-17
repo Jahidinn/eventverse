@@ -70,7 +70,8 @@ class AdminDashboardController extends Controller
 	{
 
 		$dataWdRequest = WithdrawData::with(['event', 'user'])
-			->where('event_id', 'LIKE', '%' . $request->status . '%')
+			->where('status', 'LIKE', '%' . $request->status . '%')
+			->where('status', 'Proses')
 			->orderByRaw('id DESC')
 			->get();
 
@@ -121,5 +122,35 @@ class AdminDashboardController extends Controller
 		# Jika ID ada
 		$witdhdrawData->update(['status' => 'Sukses']);
 		return response()->json(['success' => 'Proses pencairan berhasil diterima!']);
+	}
+
+	public function withdrawHistoryData(Request $request)
+	{
+		$startDate = $request->start_date;
+		$endDate = Carbon::parse($request->end_date)->endOfDay();
+
+		$dataWdRequest = WithdrawData::with(['event', 'user'])
+			->where('status', 'LIKE', '%' . $request->status . '%')
+			->where('status', '!=', 'Proses')
+			->where('updated_at', '>=', $startDate)
+			->where('updated_at', '<=', $endDate)
+			->orderByRaw('id DESC')
+			->get();
+
+		return DataTables::of($dataWdRequest)
+			->addIndexColumn()
+			->addColumn('admin_wd_user', function ($dataWdRequest) {
+				return view('dashboard.admin-dashboard.components.wd-request-user')->with(['data' => $dataWdRequest]);
+			})
+			->addColumn('admin_wd_amount', function ($dataWdRequest) {
+				return view('dashboard.admin-dashboard.components.wd-request-amount')->with(['data' => $dataWdRequest]);
+			})
+			->addColumn('admin_wd_date', function ($dataWdRequest) {
+				return view('dashboard.admin-dashboard.components.wd-request-date')->with(['data' => $dataWdRequest]);
+			})
+			->addColumn('admin_wd_status', function ($dataWdRequest) {
+				return view('dashboard.admin-dashboard.components.wd-request-status')->with(['data' => $dataWdRequest]);
+			})
+			->make(true);
 	}
 }

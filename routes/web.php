@@ -72,6 +72,7 @@ Route::middleware(['auth'])->group(function () {
 
 		Route::get('/administrator/wd-request', [AdminDashboardController::class, 'withdrawRequest']);
 		Route::get('/administrator/wd-request/get-data', [AdminDashboardController::class, 'withdrawRequestData']);
+		Route::get('/administrator/wd-history/get-data', [AdminDashboardController::class, 'withdrawHistoryData']);
 		Route::post('/administrator/wd-request/tolak', [AdminDashboardController::class, 'tolakWithdraw']);
 		Route::post('/administrator/wd-request/accept', [AdminDashboardController::class, 'accepWithdraw']);
 	});
