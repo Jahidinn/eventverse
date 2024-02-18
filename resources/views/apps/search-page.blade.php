@@ -3,16 +3,31 @@
 @section('content')
     {{-- Form Pencarian --}}
 
+    <div class="header-wave">
+        <!--Content before waves-->
+        <div class="inner-header-search flex">
+            <div class="wave-content w-100">
+                <h1>Cari event favoritmu! 🤩</h1>
+            </div>
+
+        </div>
+
+        <!--Waves end-->
+
+    </div>
+
     <form class="form-serch" method="get" action="" id="search-filter-form">
         @csrf
-        <section class="why-us  pt-3 pb-4 px-2">
+        <section class="why-us  pt-4 pb-4 px-2">
             <div class="container px-0" data-aos="fade-up" date-aos-delay="200">
-                <div class="d-flex flex-column justify-content-center py-5">
+                <div class="d-flex flex-column justify-content-center py-5 ">
+
                     <div class="form-search">
                         <input type="search" name="key" placeholder="Cari event kesukaan kamu ..."
                             value="{{ request('key') }}">
                         <button class="button" type="submit">Cari</button>
                     </div>
+
                     @if (request('catName') || request('location') || request('city') || request('date'))
                         <div class="form-search mt-2">
                             <h6><span class="badge badge-secondary">FILTER</span>

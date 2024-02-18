@@ -2,7 +2,7 @@
 
 @section('content')
     {{-- banner --}}
-    <section class="banner">
+    {{-- <section class="banner">
         <div class="wrapper">
             <div class="banner-carousel">
                 <div class="box-image">
@@ -14,17 +14,54 @@
                 <div class="box-image"> <img src="{{ asset('assets/img/service-details-4.jpg') }}" alt="Third slide"></div>
             </div>
         </div>
-    </section>
+    </section> --}}
+
+    <div class="header-wave">
+        <!--Content before waves-->
+        <div class="inner-header flex">
+            <div class="wave-content w-100">
+                <div class="">
+                    <h1><span class="text_1">Buat event cuma 1x klik? bisa dong!</span><span class="text_2">Cari event
+                            favoritmu di sini!</span>
+                    </h1>
+                </div>
+                <div class="pt-2">
+                    <a href="/event/create" class="btn btn-success rounded-0">Buat event</a>
+                    <a href="/search" class="btn btn-info rounded-0"><i class="fas fa-search"></i> Cari event</a>
+                </div>
+            </div>
+
+        </div>
+
+        <!--Waves Container-->
+        <div>
+            <svg class="waves" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                viewBox="0 24 150 28" preserveAspectRatio="none" shape-rendering="auto">
+                <defs>
+                    <path id="gentle-wave" d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z" />
+                </defs>
+                <g class="parallax">
+                    <use xlink:href="#gentle-wave" x="48" y="0" fill="rgba(255,255,255,0.7" />
+                    <use xlink:href="#gentle-wave" x="48" y="3" fill="rgba(255,255,255,0.5)" />
+                    <use xlink:href="#gentle-wave" x="48" y="5" fill="rgba(255,255,255,0.3)" />
+                    <use xlink:href="#gentle-wave" x="48" y="7" fill="#fff" />
+                </g>
+            </svg>
+        </div>
+        <!--Waves end-->
+
+    </div>
+    <!--Header ends-->
 
 
     {{-- Form Pencarian --}}
-    <section class="why-us  pt-4 pb-4 px-2">
-        <div class="container px-0" data-aos="fade-up" date-aos-delay="200">
+    <section class="why-us pt-4 pb-4 px-2">
+        <div class="container px-0 my-shadow2" data-aos="fade-up" date-aos-delay="200">
             <div class="d-flex flex-column justify-content-center py-5">
                 <form class="form-search" method="get" action="/search">
                     @csrf
                     <input type="search" name="key" placeholder="Cari event kesukaan kamu ...">
-                    <button class="button" type="submit">Cari</button>
+                    <button class="button btn-success" type="submit">Cari</button>
                 </form>
             </div>
         </div>
@@ -71,11 +108,11 @@
     </section>
 
     {{-- Penawaran --}}
-    <section class="event-terbaru-setion section-bg pt-4 p-0" style="background-color: #1e4356;">
+    <section class="event-terbaru-setion pt-4 p-0 bg-eventconnect">
         <div class="container evnt-terbaru pt-0 mt-0 text-white text-center">
             <div class="py-5">
-                <h6>Belum punya event di eventconnect.id?</h6> <button class="btn btn-success"><small><strong><i
-                                class="fa fa-calendar-plus"></i> BUAT EVENT</strong></small></button>
+                <h6>Jaidikan event kamu lebih keren disini !!!</h6> <button class="btn btn-success">
+                    <small><strong>Buat event SEKARANG</strong> <i class="fas fa-rocket"></i></small></button>
             </div>
         </div>
     </section>
