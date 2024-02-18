@@ -2,6 +2,9 @@
 @extends('layouts.main')
 
 @section('content')
+    <div class="bg-eventconnect header-hight">
+
+    </div>
     <div class="container pt-4 pb-3 px-0">
         <!-- Stack the columns on mobile by making one full-width and the other half-width -->
         <div class="row m-0 p-0">
@@ -44,6 +47,12 @@
                             <table class="table table-striped">
                                 <tbody>
 
+                                    @if (count($orgEvent) <= 0)
+                                        <div class="alert alert-warning" role="alert">
+                                            Belum ada event!
+                                        </div>
+                                    @endif
+
                                     @foreach ($orgEvent as $event)
                                         <tr>
                                             <td style="width: 50px;">
@@ -67,6 +76,12 @@
                         <div id="org-member" class="tab-content p-2 mt-3">
                             <table class="table table-striped">
                                 <tbody>
+
+                                    @if (count($orgMember) <= 0)
+                                        <div class="alert alert-warning" role="alert">
+                                            Belum ada member!
+                                        </div>
+                                    @endif
 
                                     @foreach ($orgMember as $member)
                                         <tr>

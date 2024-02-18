@@ -9,19 +9,39 @@
         </script>
     @endif
 
+    <div class="bg-eventconnect header-hight">
 
+    </div>
     <div class="container pt-4 pb-3 px-0 ">
         <!-- Stack the columns on mobile by making one full-width and the other half-width -->
         <div class="row m-0 p-0">
             <div class="col-md-8 m-0 p-1">
 
                 <div class="card shadow mb-3 mx-1">
+
+                    @php
+                        if ($detailEvent->image == '' || $detailEvent->image == null) {
+                            //Jika gambar kosong
+                            $img = 'def-no-img.png';
+                        } else {
+                            $imgPath = 'storage/event-images/' . $detailEvent->image;
+
+                            // Memeriksa apakah file ada
+                            if (file_exists(public_path($imgPath))) {
+                                $img = $detailEvent->image;
+                            } else {
+                                // Jika file tidak ada, ganti dengan default
+                                $img = 'def-no-img.png';
+                            }
+                        }
+                    @endphp
+
                     <div class="view-image-event position-relative">
-                        <img src="{{ asset('storage/event-images/' . $detailEvent->image) }}" class="card-img-top"
-                            alt="...">
+                        <img src="{{ asset('storage/event-images/' . $img) }}" class="card-img-top" alt="...">
                         <button class="btn btn-dark rounded-0 position-absolute" data-toggle="modal"
                             data-target="#fullImageModal"><i class="fas fa-expand"></i></button>
                     </div>
+
                     <div class="card-body">
                         <h5 class="card-title mt-3 mb-0">{{ $detailEvent->title }}</h5>
                         @php
@@ -113,7 +133,7 @@
                             <h5 class="card-title">Tiket pendaftaran</h5>
                             @foreach ($ticketData as $ticket)
                                 <div class="card shadow-sm ticket-card mt-3 rounded-0" id="ticket-example">
-                                    <div class="card-header bg-dark text-white rounded-0">
+                                    <div class="card-header text-white rounded-0 bg-ticket">
                                         <small><strong>{{ $ticket->ticket_name }}</strong></small>
                                     </div>
 
@@ -268,7 +288,7 @@
     {{-- Event terbaru --}}
     <section class="event-terbaru-section section-bg pt-4 p-0 pb-4" style="background-color: #EFF8FD ">
         <div class="section-title pb-0">
-            <h3 class="mt-0">Coba event lain</h3>
+            <h4 class="mt-0">Event menarik lainya</h4>
         </div>
 
         <div class="container-fluid event-terbaru pt-0 mt-0">
@@ -307,8 +327,7 @@
                     </button>
                 </div>
                 <div class="modal-body p-1" style="width: 100%; height:100%">
-                    <img src="{{ asset('storage/event-images/' . $detailEvent->image) }}" class="card-img-top"
-                        alt="...">
+                    <img src="{{ asset('storage/event-images/' . $img) }}" class="card-img-top" alt="...">
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>

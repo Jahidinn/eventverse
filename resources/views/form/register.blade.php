@@ -32,7 +32,7 @@
                                 <label class="form-control-label" for="email">Email</label>
                                 <input type="email" class="form-control @error('email') is-invalid @enderror"
                                     name="email" required value="{{ old('email') }}" id="email"
-                                    placeholder="contoh@email.com">
+                                    placeholder="example@email.com">
                                 @error('email')
                                     <small class="invalid-veedback text-danger mt-0 pt-0">{{ $message }}</small>
                                 @enderror

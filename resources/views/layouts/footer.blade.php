@@ -4,11 +4,12 @@
         <div class="row">
             <div class="col-lg-6">
                 <h4>Subscribe</h4>
-                <p>Mau update berita terbaru dari kami? jangan lupa subscribe ya</p>
+                <p>Subscribe biar nggak ketinggalan update event terbaru ya!</p>
             </div>
             <div class="col-lg-6">
                 <form action="" method="post">
-                    <input type="email" name="email"><input type="submit" id="email" value="Subscribe">
+                    <input type="email" name="email">
+                    <input type="submit" id="email" value="Subscribe">
                 </form>
             </div>
         </div>
@@ -71,7 +72,7 @@
 
 <div class="containe bg-copyright pb-4">
     <div class="copyright">2018 - {{ date('Y') }}
-        &copy; Copyright <strong><span>mediapresasi.com</span></strong>. All Rights Reserved
+        &copy; Copyright <strong><span>www.eventconnect.id</span></strong>. All Rights Reserved
     </div>
     <!-- All the links in the footer should remain intact. -->
     <!-- You can delete the links only if you purchased the pro version. -->

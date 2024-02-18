@@ -9,7 +9,7 @@
 
   // Toggle .header-scrolled class to #header when page is scrolled
   $(window).scroll(function () {
-    if ($(this).scrollTop() > 100) {
+    if ($(this).scrollTop() > 10) {
       $("#header").addClass("header-scrolled");
       $(".mobile-nav-toggle").addClass("mobile-nav-toggle-scrolled");
     } else {

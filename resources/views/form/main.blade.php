@@ -444,7 +444,7 @@
 									<i class="fas fa-trash-alt"></i> Delete
 								</button>
 								<div class="card ticket-card rounded-0 mt-1">
-									<div class="card-header bg-dark text-white rounded-0">
+									<div class="card-header bg-ticket text-white rounded-0">
                                         <small>
                                             <strong>${ticketName}</strong>
                                         </small>

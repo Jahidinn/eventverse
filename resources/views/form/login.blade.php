@@ -45,7 +45,7 @@
                                 <label class="form-control-label" for="email">Email</label>
                                 <input type="email" class="form-control  @error('email') is-invalid @enderror"
                                     name="email" autofocus required value="{{ old('email') }}"
-                                    placeholder="contoh@email.com" id="email">
+                                    placeholder="example@email.com" id="email">
 
                                 @error('email')
                                     <small class="invalid-veedback text-danger mt-0 pt-0">{{ $message }}</small>

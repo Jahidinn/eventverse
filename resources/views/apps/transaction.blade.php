@@ -1,6 +1,9 @@
 @extends('layouts.main')
 
 @section('content')
+    <div class="bg-eventconnect header-hight">
+
+    </div>
     <section class="pt-5">
         <div class="container mx-auto text-center mb-3 px-2">
             <div class="alert alert-primary" role="alert">
@@ -132,7 +135,7 @@
                         </div>
                     </div>
 
-                    <button type="submit" id="checkout-button" class="btn btn-success w-100 mt-2">Proses
+                    <button type="submit" id="checkout-button" class="btn btn-success w-100 mt-3 rounded-0">Proses
                         pembayaran</button>
                 </div>
             </div>

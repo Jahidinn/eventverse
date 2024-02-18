@@ -11,6 +11,7 @@
             <!-- <li><a href="portfolio.html">Portfolio</a></li> -->
             <li><a href="/event/create">Buat event</a></li>
             <li><a href="/blog">Blog</a></li>
+            <li><a href="/price">biaya</a></li>
 
             <li class="drop-down"><a href="">Layanan</a>
                 <ul>
@@ -22,7 +23,6 @@
                 </ul>
             </li>
 
-            <li><a href="/price">biaya</a></li>
 
             @if (Auth::check())
                 <li style="position: relative;top: -7px; padding: 1; margin: 0; "><a href="/dashboard"

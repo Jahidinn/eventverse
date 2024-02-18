@@ -10,8 +10,8 @@
             <div class="row m-1">
                 <div class="col-lg-3 col-md-2"></div>
 
-                <div class="col-lg-12 formevent-title mb-2 text-white py-1 mt-4 shadow-sm">
-                    BUAT EVENT
+                <div class="col-lg-12 bg-dark py-2 text-center bg-eventconnect mb-2 text-white py-1 mt-4 shadow-sm">
+                    <b>BUAT EVENT</b>
                 </div>
 
                 <div class="col-lg-12 col-md-12 formevent-box">
@@ -163,7 +163,7 @@
                                     </div>
 
                                     <div class="card ticket-card mt-3 rounded-0" id="ticket-example">
-                                        <div class="card-header bg-dark text-white rounded-0">
+                                        <div class="card-header bg-ticket text-white rounded-0">
                                             <small>
                                                 <strong>Contoh Tiket Pendaftaran</strong>
                                             </small>
@@ -244,8 +244,8 @@
                         </div><!-- container -->
                     </div>
                     <div>
-                        <button type="submit" class="btn btn-success w-50 mb-3" id="submit"><i
-                                class="fas fa-check-square"></i>
+                        <button type="submit" class="btn btn-success w-100 mb-3" id="submit"><i
+                                class="fas fa-check-circle"></i>
                             POSTING EVENT
                         </button>
                     </div>

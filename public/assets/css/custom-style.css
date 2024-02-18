@@ -272,16 +272,21 @@ button.slick-disabled {
 	background: none;
 	color: #222;
 	display: inline-block;
-	border: 3px #1e4356;
+	border: 3px #1b90ca;
 	border-bottom-style: solid;
 	cursor: pointer;
 	background: none;
 }
 
+.bg-ticket{
+	background-color: #4F709C !important;
+}
+
 .tabs button.current{
-	border: 3px #1e4356;
+	border-bottom: 3px solid;
+	border-image: linear-gradient(to right, rgba(84, 58, 183, 1) 0%, rgba(0, 172, 193, 1) 100%);
 	border-bottom-style: solid;
-	background: #1e4356;
+	background: linear-gradient(60deg, rgb(58, 93, 183) 0%, rgba(0,172,193,1) 100%);
 	color: #ffffff;
 }
 
@@ -613,7 +618,7 @@ button.slick-disabled {
     height:30vh;
   }
   .inner-header {
-	height:200px;
+	height:230px;
   }
   .inner-header-search {
 	height:180px;

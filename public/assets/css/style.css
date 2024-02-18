@@ -68,6 +68,10 @@ h1, h2, h3, h4, h5, h6, .font-primary {
   background: none;
 }
 
+.header-hight{
+	height: 70px;
+}
+
 #header.header-transparent {
   background: none;
 }
@@ -2053,7 +2057,7 @@ section {
 #footer .footer-newsletter form {
   margin-top: 30px;
   background: #fff;
-  padding: 6px 10px;
+  padding: 6px 15px;
   position: relative;
   border-radius: 50px;
 }
@@ -2062,6 +2066,11 @@ section {
   border: 0;
   padding: 4px;
   width: calc(100% - 100px);
+}
+
+#footer .footer-newsletter form input[type="email"]:focus {
+  border: 0;
+  outline: none;
 }
 
 #footer .footer-newsletter form input[type="submit"] {
@@ -2074,7 +2083,7 @@ section {
   font-size: 16px;
   padding: 0 20px;
   margin: 3px;
-  background: #68A4C4;
+  background: linear-gradient(60deg, rgb(58, 183, 150) 0%, rgb(0, 193, 64) 100%);
   color: #fff;
   transition: 0.3s;
   border-radius: 50px;
@@ -2087,7 +2096,7 @@ section {
 #footer .footer-top {
   background: rgb(0, 132, 193);
   border-top: 1px solid rgb(112, 162, 201);
-  border-bottom: 1px solid #fff;
+  border-bottom: 1px solid #b3e6ff;
   padding: 60px 0 30px 0;
 }
 

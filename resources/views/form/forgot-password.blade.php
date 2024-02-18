@@ -42,7 +42,7 @@
                                     <!-- Error Message -->
                                 </div>
                                 <div class="col-lg-12 login-btm login-button mt-2">
-                                    <button type="submit" class="btn btn-outline-primary">Reset password</button>
+                                    <button type="submit" class="btn btn-eventconnect text-white">Reset password</button>
                                 </div>
                             </div>
                         </form>

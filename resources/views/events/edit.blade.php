@@ -11,8 +11,8 @@
             <div class="row m-1">
                 <div class="col-lg-3 col-md-2"></div>
 
-                <div class="col-lg-12 formevent-title mb-2 text-white py-1 mt-4 shadow-sm">
-                    <i class="fas fa-pencil-alt"></i> EDIT EVENT
+                <div class="col-lg-12 bg-eventconnect py-2 mb-2 text-center text-white py-1 mt-4 shadow-sm">
+                    <b><i class="fas fa-pencil-alt"></i> EDIT EVENT</b>
                 </div>
 
                 <div class="col-lg-12 col-md-12 formevent-box">
