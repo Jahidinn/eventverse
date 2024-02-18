@@ -78,8 +78,26 @@
                 <div class="col-md-4 mt-0">
                     <a href="/{{ $terbaru->slug }}">
                         <div class="card profile-card-5 shadow">
+
+                            @php
+                                if ($terbaru->image == '' || $terbaru->image == null) {
+                                    $imgTerbaru = 'def-no-img.png';
+                                } else {
+                                    $imgPath = 'storage/event-images/' . $terbaru->image;
+
+                                    // Memeriksa apakah file ada
+                                    if (file_exists(public_path($imgPath))) {
+                                        $imgTerbaru = $terbaru->image;
+                                    } else {
+                                        $imgTerbaru = 'def-no-img.png';
+                                        // Jika file tidak ada, ganti dengan default
+                                    }
+                                }
+
+                            @endphp
+
                             <div class="card-img-block rounded">
-                                <img class="card-img-top" src="{{ asset('storage/event-images/' . $terbaru->image) }}"
+                                <img class="card-img-top" src="{{ asset('storage/event-images/' . $imgTerbaru) }}"
                                     alt="Card image cap">
                             </div>
                             <div class="card-body pt-0">
@@ -129,8 +147,26 @@
                 <div class="col-md-4 mt-0">
                     <a href="/{{ $populer->slug }}">
                         <div class="card profile-card-5 shadow">
+
+                            @php
+                                if ($populer->image == '' || $populer->image == null) {
+                                    //Jika gambar kosong
+                                    $imgPopuler = 'def-no-img.png';
+                                } else {
+                                    $imgPath = 'storage/event-images/' . $populer->image;
+
+                                    // Memeriksa apakah file ada
+                                    if (file_exists(public_path($imgPath))) {
+                                        $imgPopuler = $populer->image;
+                                    } else {
+                                        // Jika file tidak ada, ganti dengan default
+                                        $imgPopuler = 'def-no-img.png';
+                                    }
+                                }
+                            @endphp
+
                             <div class="card-img-block rounded">
-                                <img class="card-img-top" src="{{ asset('storage/event-images/' . $populer->image) }}"
+                                <img class="card-img-top" src="{{ asset('storage/event-images/' . $imgPopuler) }}"
                                     alt="Card image cap">
                             </div>
                             <div class="card-body pt-0">
@@ -169,10 +205,29 @@
                 <div class="col-md-4 mt-0">
                     <a href="/{{ $pilihan->slug }}">
                         <div class="card profile-card-5 shadow">
+
+                            @php
+                                if ($pilihan->image == '' || $pilihan->image == null) {
+                                    //Jika gambar kosong
+                                    $imgPilihan = 'def-no-img.png';
+                                } else {
+                                    $imgPath = 'storage/event-images/' . $pilihan->image;
+
+                                    // Memeriksa apakah file ada
+                                    if (file_exists(public_path($imgPath))) {
+                                        $imgPilihan = $pilihan->image;
+                                    } else {
+                                        // Jika file tidak ada, ganti dengan default
+                                        $imgPilihan = 'def-no-img.png';
+                                    }
+                                }
+                            @endphp
+
                             <div class="card-img-block rounded">
-                                <img class="card-img-top" src="{{ asset('storage/event-images/' . $pilihan->image) }}"
+                                <img class="card-img-top" src="{{ asset('storage/event-images/' . $imgPilihan) }}"
                                     alt="Card image cap">
                             </div>
+
                             <div class="card-body pt-0">
                                 <h5 class="card-title pb-0 mb-0">{{ $pilihan->title }}</h5>
                                 <small class="location"><i class="fas fa-map-marker-alt mr-2"></i>

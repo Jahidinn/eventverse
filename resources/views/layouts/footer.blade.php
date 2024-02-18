@@ -1,3 +1,4 @@
+{{-- <div class="footer-newsletter" style="background: rgb(58, 108, 183)"> --}}
 <div class="footer-newsletter">
     <div class="container">
         <div class="row">
@@ -68,7 +69,7 @@
     </div>
 </div>
 
-<div class="container">
+<div class="containe bg-copyright pb-4">
     <div class="copyright">2018 - {{ date('Y') }}
         &copy; Copyright <strong><span>mediapresasi.com</span></strong>. All Rights Reserved
     </div>

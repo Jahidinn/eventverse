@@ -73,7 +73,7 @@
 
 
     <!-- ======= Footer ======= -->
-    <footer id="footer">
+    <footer id="footer" class="pb-0">
         @include('layouts.footer')
     </footer>
 

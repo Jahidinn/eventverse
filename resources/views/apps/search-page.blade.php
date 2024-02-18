@@ -239,12 +239,12 @@
     </section>
 
     {{-- Penawaran --}}
-    <section class="event-terbaru-setion section-bg pt-4 p-0" style="background-color: #1e4356;">
+    {{-- <section class="event-terbaru-setion section-bg pt-4 p-0" style="background-color: #1e4356;">
         <div class="container evnt-terbaru pt-0 mt-0 text-white text-center">
             <div class="py-5">
                 <h6>Belum punya event di eventconnect.id?</h6> <button class="btn btn-success"><small><strong><i
                                 class="fa fa-calendar-plus"></i> BUAT EVENT</strong></small></button>
             </div>
         </div>
-    </section>
+    </section> --}}
 @endsection
