@@ -75,6 +75,8 @@ Route::middleware(['auth'])->group(function () {
 		Route::get('/administrator/wd-history/get-data', [AdminDashboardController::class, 'withdrawHistoryData']);
 		Route::post('/administrator/wd-request/tolak', [AdminDashboardController::class, 'tolakWithdraw']);
 		Route::post('/administrator/wd-request/accept', [AdminDashboardController::class, 'accepWithdraw']);
+
+		Route::get('/administrator/transaction-check', [AdminDashboardController::class, 'adminTransactionCheck']);
 	});
 });
 

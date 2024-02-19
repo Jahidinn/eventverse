@@ -153,4 +153,11 @@ class AdminDashboardController extends Controller
 			})
 			->make(true);
 	}
+
+
+	# Transaction Check
+	public function adminTransactionCheck()
+	{
+		return view('dashboard.admin-dashboard.admin-transaction-check', []);
+	}
 }

@@ -54,10 +54,10 @@
                 </li>
 
                 <li class="nav-item">
-                    <a href="/administrator/wd-request"
-                        class="nav-link {{ Request::is('administrator/xxx*') ? 'active' : '' }}">
+                    <a href="/administrator/transaction-check"
+                        class="nav-link {{ Request::is('administrator/transaction-check*') ? 'active' : '' }}">
                         <i class="nav-icon fas fa-check-square"></i>
-                        <p>Check Transaction</p>
+                        <p>Transaction check</p>
                     </a>
                 </li>
 
