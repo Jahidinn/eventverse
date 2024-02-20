@@ -126,6 +126,7 @@
     </script>
 
     @stack('js-admin-wd-request')
+    @stack('js-admin-transaction-check')
 
 </body>
 

@@ -10,6 +10,7 @@ use App\Models\EventVisitor;
 use App\Models\Organisation;
 use App\Models\WithdrawData;
 use Illuminate\Http\Request;
+use Svg\Tag\Rect;
 use Yajra\DataTables\Facades\DataTables;
 
 class AdminDashboardController extends Controller
@@ -159,5 +160,27 @@ class AdminDashboardController extends Controller
 	public function adminTransactionCheck()
 	{
 		return view('dashboard.admin-dashboard.admin-transaction-check', []);
+	}
+
+	public function adminGetEvent(Request $request)
+	{
+		# cek event yang ada request penarikan dana
+		$dataWdRequest = WithdrawData::with(['event', 'user'])
+			->where('status', 'Proses')
+			->orderByRaw('id DESC')
+			->get();
+
+		return DataTables::of($dataWdRequest)
+			->addIndexColumn()
+			->addColumn('check_event', function ($dataWdRequest) {
+				return view('dashboard.admin-dashboard.components.check-event')->with(['data' => $dataWdRequest]);
+			})
+			->addColumn('check_amount', function ($dataWdRequest) {
+				return view('dashboard.admin-dashboard.components.wd-request-amount')->with(['data' => $dataWdRequest]);
+			})
+			->addColumn('check_action', function ($dataWdRequest) {
+				return view('dashboard.admin-dashboard.components.check-action')->with(['data' => $dataWdRequest]);
+			})
+			->make(true);
 	}
 }

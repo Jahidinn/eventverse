@@ -77,6 +77,7 @@ Route::middleware(['auth'])->group(function () {
 		Route::post('/administrator/wd-request/accept', [AdminDashboardController::class, 'accepWithdraw']);
 
 		Route::get('/administrator/transaction-check', [AdminDashboardController::class, 'adminTransactionCheck']);
+		Route::get('/administrator/transaction-check/get-event', [AdminDashboardController::class, 'adminGetEvent']);
 	});
 });
 
