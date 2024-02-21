@@ -14,8 +14,10 @@
 
         </div>
 
-        <div class="card">
+        {{-- List event yang ada request penarikanya --}}
+        <div class="card" id="event-list-container">
             <div class="card-body">
+                {{-- Form pencarian --}}
                 <div class="form-group">
                     <input type="text" class="form-control" id="check-search-event" placeholder="Cari event">
                 </div>
@@ -25,7 +27,7 @@
                         <thead class="bg-secondary">
                             <tr>
                                 <th scope="col">Event</th>
-                                <th scope="col">Pemasukan</th>
+                                <th scope="col">Penarikan</th>
                                 <th scope="col" style="width: 170px;">Action</th>
                             </tr>
                         </thead>
@@ -34,7 +36,66 @@
                 </div>
             </div>
         </div>
+
+        {{-- List transaksi --}}
+        <div class="card" id="transaction-list-container" hidden>
+            <div class="card-body">
+                <span id="transaction-event-title">
+                    -
+                </span>
+                <hr>
+
+                {{-- Tombol kembali --}}
+                <button class="btn btn-secondary mb-2" id="back-check-transaction"><i class="fas fa-angle-left"></i>
+                    Kembali
+                </button>
+
+                <div class="form-group">
+                    <input type="text" class="form-control" id="check-search-transaction" placeholder="Cari transaksi">
+                </div>
+                {{-- Tabel data --}}
+                <div class="table-responsive">
+                    <table class="table w-100" id="table-transaction">
+                        <thead class="bg-secondary">
+                            <tr>
+                                <th scope="col">ID</th>
+                                <th scope="col">Email</th>
+                                <th scope="col">Amount</th>
+                                <th scope="col" style="width: 170px;">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
     </section>
+
+    <!-- Modal detail transaksi -->
+    <div class="modal fade" id="transactionDetailModal" tabindex="-1" aria-labelledby="transactionDetailModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="transactionDetailModalLabel">Detail transaksi</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    ...
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-success"><i class="fas fa-check-circle"></i> Transaksi
+                        sukses
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     {{-- Push javascript --}}
     @push('js-admin-transaction-check')

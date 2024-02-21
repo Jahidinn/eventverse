@@ -183,4 +183,21 @@ class AdminDashboardController extends Controller
 			})
 			->make(true);
 	}
+
+	public function adminGetTransaction(Request $request)
+	{
+		$transaction = Transaction::where('event_id', $request->id)
+			->orderByRaw('id DESC')
+			->get();
+
+		return DataTables::of($transaction)
+			->addIndexColumn()
+			->addColumn('check_amount', function ($transaction) {
+				return view('dashboard.admin-dashboard.components.check-process-amount')->with(['data' => $transaction]);
+			})
+			->addColumn('check_action', function ($transaction) {
+				return view('dashboard.admin-dashboard.components.check-process-action')->with(['data' => $transaction]);
+			})
+			->make(true);
+	}
 }
