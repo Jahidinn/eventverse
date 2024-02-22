@@ -186,7 +186,9 @@ class AdminDashboardController extends Controller
 
 	public function adminGetTransaction(Request $request)
 	{
-		$transaction = Transaction::where('event_id', $request->id)
+		$transaction = Transaction::with(['event', 'ticket'])
+			->where('event_id', $request->id)
+			->where('status', 'Paid')
 			->orderByRaw('id DESC')
 			->get();
 

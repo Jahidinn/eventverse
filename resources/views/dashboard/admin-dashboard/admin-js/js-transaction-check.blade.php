@@ -97,17 +97,15 @@
         });
     }
 
-    $('body').on('click', '.btn-transaction-check', function(e) {
+    // Ketika tombol cek transaksi di klik menampilkan list transaksi
+    $('body').on('click', '.btn-transaction-check', function() {
+
         const id = $(this).data('id');
         const event = $(this).data('event');
 
         $('#transaction-event-title').text(event);
         tableTransaction(id)
 
-    })
-
-    // Ketika tombol cek transaksi di klik menampilkan list transaksi
-    $('body').on('click', '.btn-transaction-check', function() {
         $('#event-list-container').attr('hidden', true)
         $('#transaction-list-container').attr('hidden', false)
 
@@ -127,11 +125,28 @@
         if ($(e.target).hasClass('btn-process-check')) {
             let data = dataTable.row(e.target.closest('tr')).data();
 
-            //Tampilkan data
-            //$('#wd-event').attr('href', '/' + data['event']['slug'])
-            //$('#wd-amount').text('Rp ' + formatRibuan(data['amount']))
+            // Tampilkan data detail transaksi pada modal
+            $('#check-transaction-id').text(data['transaction_id'])
+            $('#check-event').attr('href', '/' + data['event']['slug'])
+            $('#check-email').text(data['email'])
+            $('#check-phone').text(data['phone'])
+            $('#check-amount').text('Rp ' + formatRibuan(data['total_price']))
+            $('#check-payment-method').text(data['payment_type'])
+            $('#check-status').text(data['status'])
+            $('#event-id').val(data['id'])
 
             $('#transactionDetailModal').modal('show');
         }
     }
+
+    //Format ribuan
+    function formatRibuan(number) {
+        return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+    }
+
+    //Submit proses check transaksi
+    $('body').on('click', '#submit-check-event', function() {
+        const transaction = $('#event-id').val();
+        console.log(transaction);
+    })
 </script>

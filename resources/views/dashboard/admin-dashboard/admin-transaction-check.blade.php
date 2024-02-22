@@ -85,12 +85,79 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    ...
+
+                    {{-- Detail transaksi --}}
+                    <div class="row mb-1">
+                        <div class="col-6">
+                            Transaction ID
+                            <span class="float-right">:</span>
+                        </div>
+                        <div class="col-6">
+                            <b id="check-transaction-id">-</b>
+                        </div>
+                    </div>
+                    <div class="row mb-1">
+                        <div class="col-6">
+                            Event
+                            <span class="float-right">:</span>
+                        </div>
+                        <div class="col-6">
+                            <a target="_blank" href="" id="check-event" class="text-decoration-none">Lihat event</a>
+                        </div>
+                    </div>
+                    <div class="row mb-1">
+                        <div class="col-6">
+                            Email
+                            <span class="float-right">:</span>
+                        </div>
+                        <div class="col-6">
+                            <span id="check-email">-</span>
+                        </div>
+                    </div>
+                    <div class="row mb-1">
+                        <div class="col-6">
+                            Phone
+                            <span class="float-right">:</span>
+                        </div>
+                        <div class="col-6">
+                            <span id="check-phone">-</span>
+                        </div>
+                    </div>
+                    <div class="row mb-1">
+                        <div class="col-6">
+                            Amount
+                            <span class="float-right">:</span>
+                        </div>
+                        <div class="col-6">
+                            <b><span id="check-amount">-</span></b>
+                        </div>
+                    </div>
+                    <div class="row mb-1">
+                        <div class="col-6">
+                            Metode pembayaran
+                            <span class="float-right">:</span>
+                        </div>
+                        <div class="col-6">
+                            <span id="check-payment-method"></span>
+                        </div>
+                    </div>
+                    <div class="row mb-1">
+                        <div class="col-6">
+                            Status
+                            <span class="float-right">:</span>
+                        </div>
+                        <div class="col-6">
+                            <span id="check-status">-</span>
+                        </div>
+                    </div>
+                    {{-- Detail transaksi --}}
+
                 </div>
                 <div class="modal-footer">
+                    <input type="hidden" id="event-id">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-success"><i class="fas fa-check-circle"></i> Transaksi
-                        sukses
+                    <button type="button" class="btn btn-success" id="submit-check-event">
+                        <i class="fas fa-check-circle"></i> Transaksi sukses
                     </button>
                 </div>
             </div>
