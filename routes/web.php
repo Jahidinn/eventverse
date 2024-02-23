@@ -79,6 +79,7 @@ Route::middleware(['auth'])->group(function () {
 		Route::get('/administrator/transaction-check', [AdminDashboardController::class, 'adminTransactionCheck']);
 		Route::get('/administrator/transaction-check/get-event', [AdminDashboardController::class, 'adminGetEvent']);
 		Route::get('/administrator/transaction-check/get-transaction', [AdminDashboardController::class, 'adminGetTransaction']);
+		Route::post('/administrator/transaction-check/check', [AdminDashboardController::class, 'checktTransaction']);
 	});
 });
 

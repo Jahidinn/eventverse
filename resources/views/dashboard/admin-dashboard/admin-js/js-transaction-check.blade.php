@@ -147,6 +147,43 @@
     //Submit proses check transaksi
     $('body').on('click', '#submit-check-event', function() {
         const transaction = $('#event-id').val();
-        console.log(transaction);
+
+        //Lakukan ajax menyimpan data check
+        Swal.fire({
+            html: '<b>Yakin data sudah di cek?</b>',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Ya, yakin!',
+            cancelButtonText: 'Batal',
+        }).then((result) => {
+            if (result.isConfirmed) {
+
+                // Tindakan yang akan diambil jika mengonfirmasi tolak
+                $.ajax({
+                    url: '/administrator/transaction-check/check',
+                    type: 'POST',
+                    data: {
+                        id: transaction,
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                            alertify.success('<i class="fas fa-check"></i> ' + response
+                                .success);
+                            $('#transactionDetailModal').modal('hide');
+                            $('#table-transaction').DataTable().ajax.reload(null, false);
+
+                        } else {
+                            Swal.fire('', response.error, 'error');
+                        }
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        // Menangani kesalahan Ajax dan menampilkan pesan dengan SweetAlert2
+                        Swal.fire('Error!',
+                            'Terjadi kesalahan saat memproses permintaan: ' +
+                            textStatus, 'error');
+                    }
+                });
+            }
+        });
     })
 </script>

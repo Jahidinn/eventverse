@@ -202,4 +202,23 @@ class AdminDashboardController extends Controller
 			})
 			->make(true);
 	}
+
+	public function checktTransaction(Request $request)
+	{
+		$timestamp = Carbon::now()->timestamp;
+		$tanggalCheckin = Carbon::createFromTimestamp($timestamp)->format('Y-m-d H:i:s');
+
+		# Cek data
+		$transactionDataCheck = Transaction::where('id', $request->id)->exists();
+		$transactionData = Transaction::find($request->id);
+
+		# Jika Tidak ada ID
+		if (!$transactionDataCheck || $transactionData->admin_check != null || !empty($transactionData->admin_check)) {
+			return response()->json(['error' => 'Masukan ID dengan benar!']);
+		}
+
+		# Jika ID ada
+		$transactionData->update(['admin_check' => $tanggalCheckin]);
+		return response()->json(['success' => 'Transaction checked!']);
+	}
 }
