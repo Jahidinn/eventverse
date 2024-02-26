@@ -4,7 +4,7 @@
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title>Transactional Email</title>
+    <title>Informasi penarikan!</title>
     <style media="all" type="text/css">
         /* -------------------------------------
     GLOBAL RESETS
@@ -237,10 +237,8 @@
 
         @media only screen and (max-width: 640px) {
 
-            .main p,
-            .main td,
-            .main span {
-                font-size: 16px !important;
+            .main p {
+                font-size: 11px !important;
             }
 
             .wrapper {
@@ -322,68 +320,47 @@
                 <div class="content">
 
                     <!-- START CENTERED WHITE CONTAINER -->
-                    <span class="preheader">Eventconnect.id transaction</span>
+                    <span class="preheader">Eventconnect.id withdraw</span>
                     <table role="presentation" border="0" cellpadding="0" cellspacing="0" class="main">
 
                         <!-- START MAIN CONTENT AREA -->
                         <tr>
                             <td class="wrapper">
-                                <h3>Halo, {{ $transaction['name'] }}!</h3>
+                                <h3>Halo, {{ $withdraw->user->name }}!</h3>
+
                                 <div style="font-size: 13px;">
-                                    <p style="font-size: 13px;">Terimakasih sudah melakukan pendaftaran/pembelian tiket
-                                        event di
-                                        <a style="text-decoration: none"
-                                            href="http://eventconnect.id"><b>eventconnect.id</b></a>, berikut kami
-                                        kirimkan detail transaksi dan link invoicenya ya!
+                                    <p style="font-size: 12px;">
+                                        Berita baik nih! Penarikan dana kamu sebesar <b>Rp
+                                            {{ number_format($withdraw->amount, 0, ',', '.') }}</b> baru aja berhasil!
+                                        💸
+                                        Uang sudah meluncur ke rekeningmu!.
                                     </p>
-                                    <span>Detail transaksi : <b>{{ $ticket->ticket_name }}
-                                            ({{ $event->title }})</b></span><br>
+                                    <span>Detail transaksi :</span><br><br>
 
-                                    <span>Quantity : <b>{{ $transaction->quantity }}</b></span><br>
+                                    <span>Jumlah :
+                                        <b>Rp {{ number_format($withdraw->amount, 0, ',', '.') }}</b>
+                                    </span>
+                                    <br>
+                                    <span>No Rekening : <b>{{ $withdraw->rekening }}</b></span><br>
 
-                                    <span>Total biaya :
-                                        <b>Rp {{ number_format($transaction['total_price'], 0, ',', '.') }}</b></span>
-                                    @if ($transaction->status == 'Paid')
-                                        <span style="color: #00762d">(Sukses!)</span>
+                                    <span>Status : </span>
+                                    @if ($withdraw->status == 'Sukses')
+                                        <span style="color: #00762d"><b>BERHASIL!</b></span>
                                     @else
-                                        <span style="color: rgb(167, 17, 17)">(Pending/gagal!)</span>
+                                        <span style="color: rgb(167, 17, 17)"><b>GAGAL!</b>
+                                            ({{ $withdraw->catatan }})</span>
                                     @endif
 
                                     <br>
 
-                                    <span>Kode transaksi : <b>#{{ $transaction['transaction_id'] }}</b></span>
-                                </div>
-                                <div style="text-align: left; margin-top:15px"> {!! QrCode::size(130)->generate($transaction['transaction_id']) !!}</div>
-
-                                {{-- <div style="text-align: center">
-                                    <img style="text-align: center;" src="data:image/png;base64,{{ $qrcode }}">
-                                </div> --}}
-
-                                <table role="presentation" border="0" cellpadding="0" cellspacing="0"
-                                    class="btn btn-primary" style="margin-top:20px;">
-                                    <tbody>
-                                        <tr>
-                                            <td align="left">
-                                                <table role="presentation" border="0" cellpadding="0"
-                                                    cellspacing="0">
-                                                    <tbody>
-                                                        <tr>
-                                                            <td>
-                                                                <a href="{{ config('app.url') . '/event/redirect-invoice/' . $transaction['id'] }}"
-                                                                    target="_blank">Lihat invoice</a>
-                                                            </td>
-                                                        </tr>
-                                                    </tbody>
-                                                </table>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                                <div style="text-align: left">
-                                    <small style="color: rgb(167, 17, 17)">Jika status pending/gagal tunggu beberapa
-                                        saat dan refresh invoice</small>
                                 </div>
 
+                                <br>
+                                <p style="font-size: 12px;">Jika <b>kamu</b> memiliki pertanyaan atau kekhawatiran lebih
+                                    lanjut, jangan ragu
+                                    untuk
+                                    menghubungi tim dukungan kami di <b>info@eventconnect.id</b> atau melalui layanan
+                                    pelanggan kami di <b>0896 123 94600</b>.</p>
                                 <p>Have a nice day!</p>
                             </td>
                         </tr>

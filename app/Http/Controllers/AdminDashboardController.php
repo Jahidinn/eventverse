@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\WithdrawEmail;
+use Svg\Tag\Rect;
 use Carbon\Carbon;
 use App\Models\User;
 use App\Models\Event;
@@ -10,7 +12,7 @@ use App\Models\EventVisitor;
 use App\Models\Organisation;
 use App\Models\WithdrawData;
 use Illuminate\Http\Request;
-use Svg\Tag\Rect;
+use Illuminate\Support\Facades\Mail;
 use Yajra\DataTables\Facades\DataTables;
 
 class AdminDashboardController extends Controller
@@ -122,6 +124,9 @@ class AdminDashboardController extends Controller
 
 		# Jika ID ada
 		$witdhdrawData->update(['status' => 'Sukses']);
+		# Kirim email
+		$this->sendEmail($request->id);
+		# Response
 		return response()->json(['success' => 'Proses pencairan berhasil diterima!']);
 	}
 
@@ -153,6 +158,16 @@ class AdminDashboardController extends Controller
 				return view('dashboard.admin-dashboard.components.wd-request-status')->with(['data' => $dataWdRequest]);
 			})
 			->make(true);
+	}
+
+	function sendEmail($id)
+	{
+		#Fungsi kirim email ketika sukses ataupun gagal
+		$witdhdrawData = WithdrawData::with(['event', 'user'])->where('id', $id)->first();
+
+		Mail::to($witdhdrawData->user->email)->send(new WithdrawEmail($witdhdrawData));
+
+		return response()->json('Sukses kirim email');
 	}
 
 
