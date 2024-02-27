@@ -38,7 +38,7 @@
                                 <th scope="col">user</th>
                                 <th scope="col">Amount</th>
                                 <th scope="col">Status</th>
-                                <th scope="col" style="min-width: 170px;">Action</th>
+                                <th scope="col" style="min-width: 190px;">Action</th>
                             </tr>
                         </thead>
                         <tbody></tbody>

@@ -1,9 +1,9 @@
 @if ($data->status == 'Proses')
     {{-- Jika proses --}}
-    <button class="btn btn-success btn-sm admin-proses-wd" data-id="{{ $data->id }}">
+    <button class="btn btn-success btn-sm admin-proses-wd proses-{{ $data->id }}" data-id="{{ $data->id }}">
         <i class="fas fa-check-circle"></i> Terima
     </button>
-    <button class="btn btn-danger btn-sm admin-cancel-wd" data-id="{{ $data->id }}">
+    <button class="btn btn-danger btn-sm admin-cancel-wd cancel-{{ $data->id }}" data-id="{{ $data->id }}">
         <i class="fas fa-times-circle"></i> Tolak
     </button>
 @elseif($data->status == 'Sukses')

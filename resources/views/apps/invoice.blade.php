@@ -1,6 +1,10 @@
 @extends('layouts.main')
 
 @section('content')
+    <div class="bg-eventconnect header-hight">
+
+    </div>
+
     <section class="pt-2" id="invoice_page" hidden>
         <div class="container mx-auto text-center mb-3 px-2">
             <div class="alert alert-primary" role="alert">

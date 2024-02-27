@@ -257,6 +257,11 @@
             if (result.isConfirmed) {
                 const alasanTolak = result.value.alasanTolak;
 
+                // Loading
+                $('.cancel-' + id).html('<i class="fas fa-spinner fa-spin"></i> processing');
+                $('.cancel-' + id).attr('disabled', true);
+                $('.proses-' + id).attr('disabled', true);
+
                 // Tindakan yang akan diambil jika mengonfirmasi tolak
                 $.ajax({
                     url: '/administrator/wd-request/tolak',
@@ -270,6 +275,7 @@
                             alertify.success('<i class="fas fa-check"></i> ' + response
                                 .success);
                             $('#table-wd-request').DataTable().ajax.reload(null, false);
+
 
                         } else {
                             Swal.fire('', response.error, 'error');
@@ -299,6 +305,11 @@
             cancelButtonText: 'Batal',
         }).then((result) => {
             if (result.isConfirmed) {
+
+                // Loading
+                $('.proses-' + id).html('<i class="fas fa-spinner fa-spin"></i> processing');
+                $('.proses-' + id).attr('disabled', true);
+                $('.cancel-' + id).attr('disabled', true);
 
                 // Tindakan yang akan diambil jika mengonfirmasi tolak
                 $.ajax({
