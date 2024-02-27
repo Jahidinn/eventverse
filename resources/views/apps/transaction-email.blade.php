@@ -237,10 +237,8 @@
 
         @media only screen and (max-width: 640px) {
 
-            .main p,
-            .main td,
-            .main span {
-                font-size: 16px !important;
+            .main p {
+                font-size: 12px !important;
             }
 
             .wrapper {
@@ -329,7 +327,7 @@
                         <tr>
                             <td class="wrapper">
                                 <h3>Halo, {{ $transaction['name'] }}!</h3>
-                                <div style="font-size: 13px;">
+                                <div style="font-size: 12px;">
                                     <p style="font-size: 13px;">Terimakasih sudah melakukan pendaftaran/pembelian tiket
                                         event di
                                         <a style="text-decoration: none"

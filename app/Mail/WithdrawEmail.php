@@ -27,8 +27,14 @@ class WithdrawEmail extends Mailable
 	 */
 	public function envelope(): Envelope
 	{
+		if ($this->witdhdrawData == 'Sukses') {
+			$subject = 'Woohoo! Penarikan Dana Berhasil';
+		} else {
+			$subject = 'Yahh! Penarikan Dana GAGAL';
+		}
+
 		return new Envelope(
-			subject: 'Woohoo! Penarikan Dana Berhasil',
+			subject: $subject,
 		);
 	}
 

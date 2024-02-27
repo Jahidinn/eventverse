@@ -108,6 +108,9 @@ class AdminDashboardController extends Controller
 
 		# Jika ID ada
 		$witdhdrawData->update(['status' => 'Gagal', 'catatan' => $request->catatan]);
+		# Kirim email
+		$this->sendEmail($request->id);
+		# Response
 		return response()->json(['success' => 'Berhasil dibatalkan!']);
 	}
 

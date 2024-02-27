@@ -329,12 +329,23 @@
                                 <h3>Halo, {{ $withdraw->user->name }}!</h3>
 
                                 <div style="font-size: 13px;">
-                                    <p style="font-size: 12px;">
-                                        Berita baik nih! Penarikan dana kamu sebesar <b>Rp
-                                            {{ number_format($withdraw->amount, 0, ',', '.') }}</b> baru aja berhasil!
-                                        💸
-                                        Uang sudah meluncur ke rekeningmu!.
-                                    </p>
+                                    {{-- Ketika penarikan berhasil --}}
+                                    @if ($withdraw->status == 'Sukses')
+                                        <p style="font-size: 12px;">
+                                            Berita baik nih! Penarikan dana kamu sebesar <b>Rp
+                                                {{ number_format($withdraw->amount, 0, ',', '.') }}</b> baru aja
+                                            berhasil!
+                                            💸
+                                            Uang sudah meluncur ke rekeningmu!.
+                                        </p>
+                                        {{-- Ketika penarikan gagal --}}
+                                    @else
+                                        <p style="font-size: 12px;">
+                                            Sayang sekali nih! Penarikan dana kamu sebesar <b>Rp
+                                                {{ number_format($withdraw->amount, 0, ',', '.') }}</b> gagal di tarik!
+                                        </p>
+                                    @endif
+
                                     <span>Detail transaksi :</span><br><br>
 
                                     <span>Jumlah :
@@ -347,8 +358,9 @@
                                     @if ($withdraw->status == 'Sukses')
                                         <span style="color: #00762d"><b>BERHASIL!</b></span>
                                     @else
-                                        <span style="color: rgb(167, 17, 17)"><b>GAGAL!</b>
-                                            ({{ $withdraw->catatan }})</span>
+                                        <span style="color: rgb(167, 17, 17)"><b>GAGAL!</b></span><br>
+                                        <span> Catatan : <b
+                                                style="color: rgb(167, 17, 17)">{{ $withdraw->catatan }}</b></span><br>
                                     @endif
 
                                     <br>
@@ -357,9 +369,9 @@
 
                                 <br>
                                 <p style="font-size: 12px;">Jika <b>kamu</b> memiliki pertanyaan atau kekhawatiran lebih
-                                    lanjut, jangan ragu
-                                    untuk
-                                    menghubungi tim dukungan kami di <b>info@eventconnect.id</b> atau melalui layanan
+                                    lanjut, jangan ragu untuk menghubungi tim dukungan kami di <a
+                                        href="mailto:info@eventconnect.id"><b>info@eventconnect.id</b></a> atau melalui
+                                    layanan
                                     pelanggan kami di <b>0896 123 94600</b>.</p>
                                 <p>Have a nice day!</p>
                             </td>
