@@ -239,4 +239,12 @@ class AdminDashboardController extends Controller
 		$transactionData->update(['admin_check' => $tanggalCheckin]);
 		return response()->json(['success' => 'Transaction checked!']);
 	}
+
+
+
+	# ARTICLE
+	public function article()
+	{
+		return view('dashboard.admin-dashboard.admin-article', []);
+	}
 }

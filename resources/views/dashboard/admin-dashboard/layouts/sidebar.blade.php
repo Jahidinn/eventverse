@@ -61,6 +61,22 @@
                     </a>
                 </li>
 
+                <li class="nav-header">ARTIKEL</li>
+                <li class="nav-item">
+                    <a href="/administrator/article"
+                        class="nav-link {{ Request::is('administrator/article*') ? 'active' : '' }}">
+                        <i class="nav-icon fas fa-blog"></i>
+                        <p>Manajemen Blog</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/administrator/article-categories"
+                        class="nav-link {{ Request::is('administrator/article-category*') ? 'active' : '' }}">
+                        <i class="nav-icon far fa-list-alt"></i>
+                        <p>Blog Category</p>
+                    </a>
+                </li>
+
                 <li class="nav-header">PROFIL</li>
                 <li class="nav-item">
                     <a href="/dashboard/my-profile"
