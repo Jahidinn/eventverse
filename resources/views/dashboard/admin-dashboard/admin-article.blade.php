@@ -69,23 +69,60 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <div class="modal-body">
-                    <div class="form-group">
-                        <label for="blog-title">Title</label>
-                        <input type="email" class="form-control" id="blog-title" placeholder="Example title">
+                <form action="">
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="blog-title">Title</label>
+                            <input type="email" class="form-control" id="blog-title" name="blog-title"
+                                placeholder="Example title">
+                        </div>
+                        <div class="form-group">
+                            <select class="form-control" id="blog-category" name="blog-category">
+                                <option>Pilih kategori</option>
+                                <option>Panduan</option>
+                                <option>Teknologi</option>
+                                <option>Event</option>
+                                <option>Umum</option>
+                                <option>Tips & Trik</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="blog-image">Image</label>
+                            <div class="input-group">
+                                <div class="custom-file">
+                                    <input type="file" class="custom-file-input" id="blog-image" name="blog-image">
+                                    <label class="custom-file-label" for="blog-image">Choose file</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group p-0">
+                            <label for="blog-title">Body</label>
+                            <input id="blog-body" type="hidden" name="blog-body" required>
+                            <trix-editor input="blog-body"></trix-editor>
+                        </div>
+                        <div class="form-group">
+                            <select class="form-control" id="blog-article-id" name="blog-article-id">
+                                <option>Pilih jenis artikel</option>
+                                <option value="1">Umum</option>
+                                <option value="2">Panduan eventconnect.id</option>
+                                <option value="3">Bantuan teknis</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="blog-tag" name="blog-tag" placeholder="#Tag">
+                        </div>
                     </div>
-                    ...
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-primary"><i class="fas fa-check-circle"></i> Publish</button>
-                </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary"><i class="fas fa-check-circle"></i> Publish</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
 
     {{-- Push javascript --}}
     @push('js-admin-transaction-check')
-        @include('dashboard.admin-dashboard.admin-js.js-transaction-check')
+        {{-- Tambahkan javascript --}}
     @endpush
 @endsection
