@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminDashboardController;
+use App\Http\Controllers\ArticleController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PDFController;
@@ -11,6 +12,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\OrganizationController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\UserProfileController;
+use GuzzleHttp\Promise\Create;
 
 /*
 |--------------------------------------------------------------------------
@@ -82,6 +84,10 @@ Route::middleware(['auth'])->group(function () {
 		Route::post('/administrator/transaction-check/check', [AdminDashboardController::class, 'checktTransaction']);
 
 		Route::get('/administrator/article', [AdminDashboardController::class, 'article']);
+		// Route simpandata artikel
+
+		Route::post('/administrator/article/post', [ArticleController::class, 'create']);
+		Route::get('/administrator/article/get', [ArticleController::class, 'getArticle']);
 	});
 });
 

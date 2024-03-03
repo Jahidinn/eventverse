@@ -34,24 +34,7 @@
                                 <th scope="col" style="width: 170px;">Action</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            <tr>
-                                <td>Lorem ipsum dolor sit amet consectetur adipisicing elit. Non nostrum amet maiores.
-                                    Facilis doloribus nam aliquam repudiandae</td>
-                                <td>
-                                    <button class="btn btn-info"><i class="fas fa-pencil-alt"></i></button>
-                                    <button class="btn btn-outline-danger"><i class="fas fa-trash-alt"></i></button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Lorem ipsum dolor sit amet consectetur adipisicing elit. Non nostrum amet maiores.
-                                    Facilis doloribus nam aliquam repudiandae</td>
-                                <td>
-                                    <button class="btn btn-info"><i class="fas fa-pencil-alt"></i></button>
-                                    <button class="btn btn-outline-danger"><i class="fas fa-trash-alt"></i></button>
-                                </td>
-                            </tr>
-                        </tbody>
+                        <tbody></tbody>
                     </table>
                 </div>
             </div>
@@ -69,52 +52,58 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <form action="">
+                <form method="POST" id="form-add-article">
+                    @csrf
                     <div class="modal-body">
                         <div class="form-group">
                             <label for="blog-title">Title</label>
-                            <input type="email" class="form-control" id="blog-title" name="blog-title"
-                                placeholder="Example title">
+                            <input type="text" class="form-control" id="blog-title" name="blog_title"
+                                placeholder="Example title" required>
+                            <input type="hidden" class="form-control" id="slug" name="slug" placeholder="Slug">
                         </div>
                         <div class="form-group">
-                            <select class="form-control" id="blog-category" name="blog-category">
-                                <option>Pilih kategori</option>
-                                <option>Panduan</option>
-                                <option>Teknologi</option>
-                                <option>Event</option>
-                                <option>Umum</option>
-                                <option>Tips & Trik</option>
+                            <select class="form-control" id="blog-category" name="blog_category" required>
+                                <option value="">Pilih kategori</option>
+                                <option value="1">Panduan</option>
+                                <option value="2">Teknologi</option>
+                                <option value="3">Event</option>
+                                <option value="4">Umum</option>
+                                <option value="5">Tips & Trik</option>
                             </select>
                         </div>
                         <div class="form-group">
                             <label for="blog-image">Image</label>
                             <div class="input-group">
                                 <div class="custom-file">
-                                    <input type="file" class="custom-file-input" id="blog-image" name="blog-image">
+                                    <input type="file" class="custom-file-input" id="blog-image" name="blog_image">
                                     <label class="custom-file-label" for="blog-image">Choose file</label>
                                 </div>
                             </div>
                         </div>
                         <div class="form-group p-0">
-                            <label for="blog-title">Body</label>
-                            <input id="blog-body" type="hidden" name="blog-body" required>
+                            <label for="blog-body">Body</label>
+                            <input id="blog-body" type="hidden" name="blog_body" required>
                             <trix-editor input="blog-body"></trix-editor>
                         </div>
                         <div class="form-group">
-                            <select class="form-control" id="blog-article-id" name="blog-article-id">
-                                <option>Pilih jenis artikel</option>
+                            <label for="blog-title">Jenis artiikel</label>
+                            <select class="form-control" id="blog-article-id" name="blog_article_id" required>
+                                <option value="">Pilih jenis artikel</option>
                                 <option value="1">Umum</option>
                                 <option value="2">Panduan eventconnect.id</option>
                                 <option value="3">Bantuan teknis</option>
                             </select>
                         </div>
                         <div class="form-group">
-                            <input type="text" class="form-control" id="blog-tag" name="blog-tag" placeholder="#Tag">
+                            <input type="text" class="form-control" id="blog-tag" name="blog_tag" placeholder="#Tag"
+                                required>
                         </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                        <button type="submit" class="btn btn-primary"><i class="fas fa-check-circle"></i> Publish</button>
+                        <button type="submit" class="btn btn-primary" id="btn-submit-article"><i
+                                class="fas fa-check-circle"></i>
+                            Publish</button>
                     </div>
                 </form>
             </div>
@@ -123,6 +112,6 @@
 
     {{-- Push javascript --}}
     @push('js-admin-transaction-check')
-        {{-- Tambahkan javascript --}}
+        <script src="{{ asset('assets/js/administrator/admin-article.js') }}"></script>
     @endpush
 @endsection
