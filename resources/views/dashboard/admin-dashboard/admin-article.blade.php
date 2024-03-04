@@ -110,6 +110,77 @@
         </div>
     </div>
 
+    <!-- Modal edit artikel -->
+    <div class="modal fade" id="editArticleModal" tabindex="-1" aria-labelledby="editArticleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editArticleModalLabel">Edit artikel</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form method="POST" id="form-edit-article">
+                    @csrf
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="blog-title-edit">Title</label>
+                            <input type="text" class="form-control" id="blog-title-edit" name="blog_title_edit"
+                                placeholder="Example title" required>
+                            <input type="hidden" id="slug-edit" name="slug_edit">
+                            <input type="hidden" id="img-edit" name="img_edit">
+                        </div>
+                        <div class="form-group">
+                            <select class="form-control" id="blog-category-edit" name="blog_category_edit" required>
+                                <option value="">Pilih kategori</option>
+                                <option value="1">Panduan</option>
+                                <option value="2">Teknologi</option>
+                                <option value="3">Event</option>
+                                <option value="4">Umum</option>
+                                <option value="5">Tips & Trik</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="blog-image-edit">Image</label>
+                            <div class="input-group">
+                                <div class="custom-file">
+                                    <input type="file" class="custom-file-input" id="blog-image-edit"
+                                        name="blog_image_edit">
+                                    <label class="custom-file-label" for="blog-image-edit">Choose file</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group p-0" id="edit-body-container">
+                            <label for="blog-body-edit">Body</label>
+                            <input id="blog-body-edit" type="hidden" name="blog_body_edit" required>
+                            <trix-editor input="blog-body-edit"></trix-editor>
+                        </div>
+                        <div class="form-group">
+                            <label for="blog-article-id-edit">Jenis artiikel</label>
+                            <select class="form-control" id="blog-article-id-edit" name="blog_article_id_edit" required>
+                                <option value="">Pilih jenis artikel</option>
+                                <option value="1">Umum</option>
+                                <option value="2">Panduan eventconnect.id</option>
+                                <option value="3">Bantuan teknis</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="blog-tag-edit" name="blog_tag_edit"
+                                placeholder="#Tag" required>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary" id="submit-edit-article"><i
+                                class="fas fa-check-circle"></i>
+                            Publish</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
     {{-- Push javascript --}}
     @push('js-admin-transaction-check')
         <script src="{{ asset('assets/js/administrator/admin-article.js') }}"></script>

@@ -37,6 +37,16 @@ $(document).ready(function() {
 	$('#search-request').keyup(function() {
 		dataArticle.search($(this).val()).draw();
 	});
+
+	// Menangani event klik pada dataHistory
+	dataArticle.on('click', 'tr', function(e) {
+		var rowData = dataArticle.row(this).data();
+
+		if (rowData) {
+			//Memanggil function handleRowClick
+			handleRowClick(dataArticle, e);
+		}
+	});
 });
 
 $('body').on('keyup', '#blog-title', function() {
@@ -89,5 +99,40 @@ $(document).on('submit', '#form-add-article', function(e) {
 			$('#btn-submit-article').html('<i class="fas fa-check-circle"></i> Publish');
 		}
 	});
+
+});
+
+// Fungsi untuk menangani event klik row da menampilkan data
+function handleRowClick(dataTable, e) {
+	if ($(e.target).is('.btn-edit-article') || $(e.target).closest('.btn-edit-article').length > 0) {
+		let data = dataTable.row(e.target.closest('tr')).data();
+
+		// Tampilkan data detail transaksi pada modal
+		$('#blog-title-edit').val(data['title'])
+		$('#blog-category-edit').val(data['category_id'])
+		$('#slug-edit').val(data['slug'])
+
+		// Membersihkan konten sebelum memasukkan HTML baru
+		$('#edit-body-container').empty(); // atau $('#edit-body-container').html('');
+		var bodyValue = data['body'];
+
+		// Memasukkan HTML baru
+		$('#edit-body-container').html(`
+			<label for="blog-body-edit">Body</label>
+			<input id="blog-body-edit" type="hidden" name="blog_body_edit" value="${bodyValue}" required>
+			<trix-editor input="blog-body-edit"></trix-editor>
+		`);
+
+		$('#blog-article-id-edit').val(data['article_code']);
+		$('#blog-tag-edit').val(data['tag']);
+
+		$('#editArticleModal').modal('show');
+	}
+}
+
+// Fungsi edit ertikel
+
+$(document).on('click', '.btn-edit-article', function(e) {
+	e.preventDefault();
 
 });

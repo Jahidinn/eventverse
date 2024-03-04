@@ -70,14 +70,14 @@ class ArticleController extends Controller
 
 	public function getArticle()
 	{
-		$transaction = Article::with(['user'])
+		$article = Article::with(['user'])
 			->orderByRaw('id DESC')
 			->get();
 
-		return DataTables::of($transaction)
+		return DataTables::of($article)
 			->addIndexColumn()
-			->addColumn('action', function ($transaction) {
-				return view('dashboard.admin-dashboard.components.article-action')->with(['data' => $transaction]);
+			->addColumn('action', function ($article) {
+				return view('dashboard.admin-dashboard.components.article-action')->with(['data' => $article]);
 			})
 			->make(true);
 	}
