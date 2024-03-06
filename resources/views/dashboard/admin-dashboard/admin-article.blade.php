@@ -121,15 +121,15 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <form method="POST" id="form-edit-article">
+                <form method="POST" id="form-edit-article" enctype="multipart/form-data">
                     @csrf
                     <div class="modal-body">
                         <div class="form-group">
                             <label for="blog-title-edit">Title</label>
                             <input type="text" class="form-control" id="blog-title-edit" name="blog_title_edit"
                                 placeholder="Example title" required>
+                            <input type="hidden" id="blog-id-edit" name="blog_id_edit">
                             <input type="hidden" id="slug-edit" name="slug_edit">
-                            <input type="hidden" id="img-edit" name="img_edit">
                         </div>
                         <div class="form-group">
                             <select class="form-control" id="blog-category-edit" name="blog_category_edit" required>
@@ -141,6 +141,13 @@
                                 <option value="5">Tips & Trik</option>
                             </select>
                         </div>
+
+                        {{-- Tampilkan image --}}
+                        <div id="image-edit-container" class="text-center">
+                            <img id="article-image-edit" alt="" style="width: 150px">
+                        </div>
+                        {{-- Tampilkan image --}}
+
                         <div class="form-group">
                             <label for="blog-image-edit">Image</label>
                             <div class="input-group">
@@ -174,7 +181,7 @@
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
                         <button type="submit" class="btn btn-primary" id="submit-edit-article"><i
                                 class="fas fa-check-circle"></i>
-                            Publish</button>
+                            Edit artikel</button>
                     </div>
                 </form>
             </div>
@@ -182,6 +189,10 @@
     </div>
 
     {{-- Push javascript --}}
+    <script>
+        var imageUrl = "{{ asset('storage/blog-images') }}";
+    </script>
+
     @push('js-admin-transaction-check')
         <script src="{{ asset('assets/js/administrator/admin-article.js') }}"></script>
     @endpush

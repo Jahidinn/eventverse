@@ -108,9 +108,23 @@ function handleRowClick(dataTable, e) {
 		let data = dataTable.row(e.target.closest('tr')).data();
 
 		// Tampilkan data detail transaksi pada modal
+		$('#blog-id-edit').val(data['id'])
 		$('#blog-title-edit').val(data['title'])
 		$('#blog-category-edit').val(data['category_id'])
 		$('#slug-edit').val(data['slug'])
+
+		if (data['input_image'] == '' || data['input_image'] == null) {
+			$('#image-edit-container').attr('hidden', true);
+		} else {
+			$('#image-edit-container').attr('hidden', false);
+			
+		}
+
+		//Image
+		var imageUrlFull = imageUrl +  '/' + data['input_image'];
+        // Set atribut 'src' untuk menampilkan gambar
+        $("#article-image-edit").attr("src", imageUrlFull);
+		
 
 		// Membersihkan konten sebelum memasukkan HTML baru
 		$('#edit-body-container').empty(); // atau $('#edit-body-container').html('');
@@ -130,9 +144,42 @@ function handleRowClick(dataTable, e) {
 	}
 }
 
-// Fungsi edit ertikel
+// Fungsi edit ertikel 
 
-$(document).on('click', '.btn-edit-article', function(e) {
+// handle submit form edit artikel
+$(document).on('submit', '#form-edit-article', function(e) {
 	e.preventDefault();
 
-});
+	data = new FormData(this);
+	$('#submit-edit-article').html('<i class="fas fa-spinner fa-spin"></i> Processing ...');
+	$('#submit-edit-article').attr('disabled', true);
+
+	$.ajax({
+		url: '/administrator/article/edit',
+		type: 'POST',
+		data: data,
+		cache: false,
+		contentType: false,
+		processData: false,
+		dataType: 'json',
+		success: function(response) {
+			if (response.success) {
+				$('#editArticleModal').modal('hide');
+				$('#table-article').DataTable().ajax.reload();
+				alertify.success('<i class="fas fa-check"></i> ' + response.success);
+
+			} else {
+				Swal.fire('', response.error, 'error');
+			}
+			$('#submit-edit-article').html('<i class="fas fa-check-circle"></i> Edit artikel');
+			$('#submit-edit-article').attr('disabled', false);
+		},
+		error: function(jqXHR, textStatus, errorThrown) {
+			// Menangani kesalahan Ajax dan menampilkan pesan dengan SweetAlert2
+			Swal.fire('Error!',
+				'Terjadi kesalahan saat memproses permintaan: ' +
+				textStatus, 'error');
+			$('#btn-submit-article').html('<i class="fas fa-check-circle"></i> Publish');
+		}
+	});
+})
