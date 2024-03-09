@@ -165,7 +165,7 @@ $(document).on('submit', '#form-edit-article', function(e) {
 		success: function(response) {
 			if (response.success) {
 				$('#editArticleModal').modal('hide');
-				$('#table-article').DataTable().ajax.reload();
+				$('#table-article').DataTable().ajax.reload(null, false);
 				alertify.success('<i class="fas fa-check"></i> ' + response.success);
 
 			} else {
@@ -182,4 +182,47 @@ $(document).on('submit', '#form-edit-article', function(e) {
 			$('#btn-submit-article').html('<i class="fas fa-check-circle"></i> Publish');
 		}
 	});
+})
+
+// Fungsi delete artikel
+$('body').on('click', '.btn-delete-article', function() {
+	const id = $(this).data('id');
+
+        //Lakukan ajax menyimpan data check
+        Swal.fire({
+            html: '<b>Hapus artikel?</b>',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Ya, hapus!',
+            cancelButtonText: 'Batal',
+        }).then((result) => {
+            if (result.isConfirmed) {
+
+                // Tindakan yang akan diambil jika mengonfirmasi delete
+                $.ajax({
+                    url: '/administrator/article/delete',
+                    type: 'POST',
+                    data: {
+                        id: id,
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                            alertify.success('<i class="fas fa-check"></i> ' + response
+                                .success);
+                            $('#table-article').DataTable().ajax.reload(null, false);
+							$('#editArticleModal').modal('hide');
+
+                        } else {
+                            Swal.fire('', response.error, 'error');
+                        }
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        // Menangani kesalahan Ajax dan menampilkan pesan dengan SweetAlert2
+                        Swal.fire('Error!',
+                            'Terjadi kesalahan saat memproses permintaan: ' +
+                            textStatus, 'error');
+                    }
+                });
+            }
+        });
 })

@@ -89,6 +89,7 @@ Route::middleware(['auth'])->group(function () {
 		Route::post('/administrator/article/post', [ArticleController::class, 'create']);
 		Route::get('/administrator/article/get', [ArticleController::class, 'getArticle']);
 		Route::post('/administrator/article/edit', [ArticleController::class, 'editArticle']);
+		Route::post('/administrator/article/delete', [ArticleController::class, 'deleteArticle']);
 	});
 });
 

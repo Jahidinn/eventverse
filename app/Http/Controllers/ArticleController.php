@@ -145,4 +145,15 @@ class ArticleController extends Controller
 		$blog_detail->update($data);
 		return response()->json(['success' => 'Article edited!']);
 	}
+
+	# Fungsi delete
+
+	public function deleteArticle(Request $request)
+	{
+		$id_article = $request->id;
+		$data_article = Article::find($id_article);
+
+		$data_article->delete();
+		return response()->json(['success' => 'Article deleted!']);
+	}
 }
