@@ -84,12 +84,19 @@ Route::middleware(['auth'])->group(function () {
 		Route::post('/administrator/transaction-check/check', [AdminDashboardController::class, 'checktTransaction']);
 
 		Route::get('/administrator/article', [AdminDashboardController::class, 'article']);
-		// Route simpandata artikel
+		Route::get('/administrator/blog-category', [AdminDashboardController::class, 'articleCategories']);
 
+		# Artikel
 		Route::post('/administrator/article/post', [ArticleController::class, 'create']);
 		Route::get('/administrator/article/get', [ArticleController::class, 'getArticle']);
 		Route::post('/administrator/article/edit', [ArticleController::class, 'editArticle']);
 		Route::post('/administrator/article/delete', [ArticleController::class, 'deleteArticle']);
+
+		# Kategori artikel/blog
+		Route::get('/administrator/blog-category/get', [ArticleController::class, 'getCategory']);
+		Route::post('/administrator/blog-category/submit', [ArticleController::class, 'submitCategory']);
+		Route::post('/administrator/blog-category/edit', [ArticleController::class, 'editCategory']);
+		Route::post('/administrator/blog-category/delete', [ArticleController::class, 'deleteCategory']);
 	});
 });
 

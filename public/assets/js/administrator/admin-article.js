@@ -207,8 +207,9 @@ $('body').on('click', '.btn-delete-article', function() {
                     },
                     success: function(response) {
                         if (response.success) {
-                            alertify.success('<i class="fas fa-check"></i> ' + response
-                                .success);
+                            var icon = '<i class="fas fa-check"></i> ';
+                            alertify.success(icon + response.success);
+
                             $('#table-article').DataTable().ajax.reload(null, false);
 							$('#editArticleModal').modal('hide');
 
@@ -225,4 +226,185 @@ $('body').on('click', '.btn-delete-article', function() {
                 });
             }
         });
+})
+
+// hidden modal artikel
+$('body').on('hidden.bs.modal', '#editArticleModal', function () {
+	$("#form-edit-article")[0].reset();
+});
+
+$('body').on('hidden.bs.modal', '#articleModal', function () {
+	$("#form-add-article")[0].reset();
+});
+
+// KATEGORI ARTIKEL
+
+$('body').on('keyup', '#category-name', function() {
+	var title = $('#category-name').val();
+	var slug = generateSlug(title);
+
+	//Isikan data slug pada form
+	$('#category-id').val(slug);
+})
+
+// Menampilkan data kategori
+var dataKategori = $('#table-article-category').DataTable({
+	"dom": 'rtip',
+	"bInfo": false,
+	language: {
+		'paginate': {
+			'previous': '<i class="fas fa-angle-double-left"></i>',
+			'next': '<i class="fas fa-angle-double-right"></i>'
+		}
+	},
+	"oLanguage": {
+		"sEmptyTable": "Tidak ada kategori artikel!"
+	},
+	processing: true,
+	serverside: true,
+	ordering: false,
+	destroy: true,
+	ajax: {
+		'type': 'GET',
+		'url': '/administrator/blog-category/get',
+		'data': {
+		},
+	},
+
+	columns: [{
+		data: 'category',
+		name: 'category'
+	}, {
+		data: 'action',
+		name: 'action'
+	}]
+});
+
+//Pencarian data
+$('#check-search-category').keyup(function() {
+	dataKategori.search($(this).val()).draw();
+});
+
+//Klik add kategori
+$('body').on('click', '#add-kategori', function() {
+	$('#articleCategoryModalLabel').text('Buat kategori');
+	$('#btn-submit-kategori').html('<i class="fas fa-check-circle"></i> Buat kategori');
+
+	$('#articleCategoryModal').modal('show');
+})
+
+//handle submit form kategori artikel
+$(document).on('submit', '#form-kategori-artikel', function(e) {
+	e.preventDefault();
+
+	const isEdit = $('#category-edit').val();
+	let url;
+	
+	if (isEdit == 1) {
+		// Jika mode edit
+		url = '/administrator/blog-category/edit';
+	} else {
+		// Jika mode tambah
+		url = '/administrator/blog-category/submit';
+	}
+
+	data = new FormData(this);
+	$('#btn-submit-kategori').html('<i class="fas fa-spinner fa-spin"></i> Processing ...');
+
+	$.ajax({
+		url: url,
+		type: 'POST',
+		data: data,
+		cache: false,
+		contentType: false,
+		processData: false,
+		success: function(response) {
+			if (response.success) {
+				$('#articleCategoryModal').modal('hide');
+				$('#table-article-category').DataTable().ajax.reload();
+				alertify.success('<i class="fas fa-check"></i> ' + response.success);
+
+			} else {
+				Swal.fire('', response.error, 'error');
+			}
+			$('#btn-submit-kategori').html('<i class="fas fa-check-circle"></i> Buat kategori');
+		},
+		error: function(jqXHR, textStatus, errorThrown) {
+			// Menangani kesalahan Ajax dan menampilkan pesan dengan SweetAlert2
+			Swal.fire('Error!',
+				'Terjadi kesalahan saat memproses permintaan: ' +
+				textStatus, 'error');
+			$('#btn-submit-kategori').html('<i class="fas fa-check-circle"></i> Buat kategori');
+		}
+	});
+
+});
+
+// Edit kategori artikel
+$('body').on('click', '.btn-edit-kategori', function() {
+	var rowData = $(this).data('row');
+	var kategori = rowData.category
+	var id = rowData.id;
+	var slug = rowData.category_id;
+
+	$('#articleCategoryModalLabel').text('Edit kategori');
+	$('#btn-submit-kategori').html('<i class="fas fa-check-circle"></i> Edit kategori');
+
+	$('#category-name').val(kategori);
+	$('#category-id').val(slug);
+	$('#category-key').val(id);
+	$('#category-edit').val(1);
+
+	$('#articleCategoryModal').modal('show');
+})
+
+//Modal kategori on hide
+$('body').on('hidden.bs.modal', '#articleCategoryModal', function () {
+	$("#form-kategori-artikel")[0].reset();
+	$('#category-key').val('');
+	$('#category-edit').val(0);
+});
+
+// Fungsi delete kategori artikel
+$('body').on('click', '.btn-delete-kategori', function() {
+	const id = $(this).data('id');
+
+    //Lakukan ajax menyimpan data check
+    Swal.fire({
+            html: '<b>Hapus kategori?</b>',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Ya, hapus!',
+            cancelButtonText: 'Batal',
+        }).then((result) => {
+            if (result.isConfirmed) {
+
+                // Tindakan yang akan diambil jika mengonfirmasi delete
+                $.ajax({
+                    url: '/administrator/blog-category/delete',
+                    type: 'POST',
+                    data: {
+                        id: id,
+                    },
+                    success: function(response) {
+                        if (response.success) {
+							var icon = '<i class="fas fa-check"></i> ';
+                            alertify.success(icon + response.success);
+
+                            $('#table-article-category').DataTable().ajax.reload(null, false);
+							$('#articleCategoryModal').modal('hide');
+
+                        } else {
+                            Swal.fire('', response.error, 'error');
+                        }
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        // Menangani kesalahan Ajax dan menampilkan pesan dengan SweetAlert2
+                        Swal.fire('Error!',
+                            'Terjadi kesalahan saat memproses permintaan: ' +
+                            textStatus, 'error');
+                    }
+                });
+            }
+    });
 })

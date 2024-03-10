@@ -24,7 +24,7 @@
                     alt="User Image">
             </div>
             <div class="info">
-                <a href="#" class="d-block">Jahidin</a>
+                <a href="#" class="d-block">Administrator</a>
             </div>
         </div>
 
@@ -60,6 +60,14 @@
                         <p>Transaction check</p>
                     </a>
                 </li>
+                <li class="nav-header">EVENT</li>
+                <li class="nav-item">
+                    <a href="/administrator/article"
+                        class="nav-link {{ Request::is('administrator/manajemen-event*') ? 'active' : '' }}">
+                        <i class="nav-icon fas fa-list"></i>
+                        <p>Manajemen event</p>
+                    </a>
+                </li>
 
                 <li class="nav-header">ARTIKEL</li>
                 <li class="nav-item">
@@ -70,8 +78,8 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="/administrator/article-categories"
-                        class="nav-link {{ Request::is('administrator/article-category*') ? 'active' : '' }}">
+                    <a href="/administrator/blog-category"
+                        class="nav-link {{ Request::is('administrator/blog-category*') ? 'active' : '' }}">
                         <i class="nav-icon far fa-list-alt"></i>
                         <p>Blog Category</p>
                     </a>

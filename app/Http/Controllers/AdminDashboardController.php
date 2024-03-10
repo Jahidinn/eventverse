@@ -240,11 +240,15 @@ class AdminDashboardController extends Controller
 		return response()->json(['success' => 'Transaction checked!']);
 	}
 
-
-
 	# ARTICLE
 	public function article()
 	{
 		return view('dashboard.admin-dashboard.admin-article', []);
+	}
+
+	#KATEGORI ARTIKEL
+	public function articleCategories()
+	{
+		return view('dashboard.admin-dashboard.admin-article-category', []);
 	}
 }

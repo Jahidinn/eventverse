@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Article;
+use App\Models\ArticleCategory;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -113,6 +114,14 @@ class ArticleController extends Controller
 		$blog_id = $request->blog_id_edit;
 		$blog_detail = Article::find($blog_id);
 
+		# Jika title / slug ada perubahan, maka cek slug
+		if ($blog_detail != $request->slug_edit) {
+			$cek_slug = Article::where('slug', $request->slug_edit)->exists();
+			if ($cek_slug) {
+				return response()->json(['error' => 'Ada title yang sama! Coba ganti judul yang unik!']);
+			}
+		}
+
 		$excerpt = Str::limit(strip_tags($request->blog_body_edit), 50, '...') ?? '';
 
 		# Jika sudah validasi, simpan data di variabel
@@ -155,5 +164,100 @@ class ArticleController extends Controller
 
 		$data_article->delete();
 		return response()->json(['success' => 'Article deleted!']);
+	}
+
+	# KATEGORI ARTIKEL
+	public function submitCategory(Request $request)
+	{
+		$validator = Validator::make($request->all(), [
+			'category_name' => 'required|max:255',
+			'category_id' => 'required|unique:article_categories|max:255',
+		], [
+			'category_name.required' => 'Nama kategori wajib diisi.',
+			'category_id.unique' => 'Kategori sudah ada!',
+		]);
+
+		if ($validator->fails()) {
+			$errors = $validator->errors();
+			$firstError = $errors->first();
+			return response()->json(['error' => $firstError]);
+		}
+
+		$category = $request->category_name;
+		$category_id = $request->category_id;
+
+		$data = [
+			'category' => $category,
+			'category_id' => $category_id,
+		];
+
+		# Insert
+		ArticleCategory::create($data);
+		return response()->json(['success' => 'Kategori ditambahkan!']);
+	}
+
+	public function getCategory()
+	{
+
+		$category = ArticleCategory::orderByRaw('id DESC')
+			->get();
+
+		return DataTables::of($category)
+			->addIndexColumn()
+			->addColumn('action', function ($category) {
+				return view('dashboard.admin-dashboard.components.article-category')->with(['data' => $category]);
+			})
+			->make(true);
+	}
+
+	public function editCategory(Request $request)
+	{
+		$validator = Validator::make($request->all(), [
+			'category_name' => 'required|max:255',
+			'category_id' => 'required|max:255',
+		], [
+			'category_name.required' => 'Nama kategori wajib diisi.',
+		]);
+
+		if ($validator->fails()) {
+			$errors = $validator->errors();
+			$firstError = $errors->first();
+			return response()->json(['error' => $firstError]);
+		}
+
+		$category_name = $request->category_name;
+		$category_id = $request->category_id;
+
+		$category = ArticleCategory::where('id', $request->category_key)->first();
+
+		$data_edit = [
+			'category' => $category_name,
+			'category_id' => $category_id,
+		];
+
+		if ($category->category_id == $category_id) {
+			# Insert
+			$category->update($data_edit);
+			return response()->json(['success' => 'Kategori berhasil di edit!']);
+		} else {
+			$cek_category = ArticleCategory::where('category_id', $category_id)->exists();
+			# Cek slug / id unik
+			if ($cek_category) {
+				return response()->json(['error' => 'Sepertinya kategori sudah ada!']);
+				# code...
+			}
+			$category->update($data_edit);
+			return response()->json(['success' => 'Kategori berhasil di edit!']);
+		}
+	}
+
+	public function deleteCategory(Request $request)
+	{
+
+		$id_kategori = $request->id;
+		$data_kategori = ArticleCategory::find($id_kategori);
+
+		$data_kategori->delete();
+		return response()->json(['success' => 'Category deleted!']);
 	}
 }
