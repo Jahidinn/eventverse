@@ -237,6 +237,7 @@ $('body').on('hidden.bs.modal', '#articleModal', function () {
 	$("#form-add-article")[0].reset();
 });
 
+
 // KATEGORI ARTIKEL
 
 $('body').on('keyup', '#category-name', function() {
@@ -281,7 +282,7 @@ var dataKategori = $('#table-article-category').DataTable({
 });
 
 //Pencarian data
-$('#check-search-category').keyup(function() {
+$('#search-category').keyup(function() {
 	dataKategori.search($(this).val()).draw();
 });
 
@@ -371,40 +372,213 @@ $('body').on('click', '.btn-delete-kategori', function() {
 
     //Lakukan ajax menyimpan data check
     Swal.fire({
-            html: '<b>Hapus kategori?</b>',
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonText: 'Ya, hapus!',
-            cancelButtonText: 'Batal',
-        }).then((result) => {
-            if (result.isConfirmed) {
+        html: '<b>Hapus kategori?</b>',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Ya, hapus!',
+        cancelButtonText: 'Batal',
+    }).then((result) => {
+        if (result.isConfirmed) {
 
-                // Tindakan yang akan diambil jika mengonfirmasi delete
-                $.ajax({
-                    url: '/administrator/blog-category/delete',
-                    type: 'POST',
-                    data: {
-                        id: id,
-                    },
-                    success: function(response) {
-                        if (response.success) {
-							var icon = '<i class="fas fa-check"></i> ';
-                            alertify.success(icon + response.success);
+            // Tindakan yang akan diambil jika mengonfirmasi delete
+            $.ajax({
+                url: '/administrator/blog-category/delete',
+                type: 'POST',
+                data: {
+                    id: id,
+                },
+                success: function(response) {
+                    if (response.success) {
+						var icon = '<i class="fas fa-check"></i> ';
+                        alertify.success(icon + response.success);
 
-                            $('#table-article-category').DataTable().ajax.reload(null, false);
-							$('#articleCategoryModal').modal('hide');
+                        $('#table-article-category').DataTable().ajax.reload(null, false);
+						$('#articleCategoryModal').modal('hide');
 
-                        } else {
-                            Swal.fire('', response.error, 'error');
-                        }
-                    },
-                    error: function(jqXHR, textStatus, errorThrown) {
-                        // Menangani kesalahan Ajax dan menampilkan pesan dengan SweetAlert2
-                        Swal.fire('Error!',
-                            'Terjadi kesalahan saat memproses permintaan: ' +
-                            textStatus, 'error');
+                    } else {
+                        Swal.fire('', response.error, 'error');
                     }
-                });
-            }
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    // Menangani kesalahan Ajax dan menampilkan pesan dengan SweetAlert2
+                    Swal.fire('Error!', 'Terjadi kesalahan saat memproses permintaan: ' + textStatus, 'error');
+                }
+            });
+        }
     });
 })
+
+
+// JENIS ARTIKEL
+
+$('body').on('keyup', '#article-type', function() {
+	var title = $('#article-type').val();
+	var slug = generateSlug(title);
+
+	//Isikan data slug pada form
+	$('#type-slug').val(slug);
+})
+
+
+// Menampilkan jenis artikel
+var dataType = $('#table-article-type').DataTable({
+	"dom": 'rtip',
+	"bInfo": false,
+	language: {
+		'paginate': {
+			'previous': '<i class="fas fa-angle-double-left"></i>',
+			'next': '<i class="fas fa-angle-double-right"></i>'
+		}
+	},
+	"oLanguage": {
+		"sEmptyTable": "Tidak ada jenis artikel!"
+	},
+	processing: true,
+	serverside: true,
+	ordering: false,
+	destroy: true,
+	ajax: {
+		'type': 'GET',
+		'url': '/administrator/blog-type/get',
+		'data': {
+		},
+	},
+
+	columns: [{
+		data: 'type_name',
+		name: 'type_name'
+	}, {
+		data: 'action',
+		name: 'action'
+	}]
+});
+
+//Pencarian data
+$('#search-article-type').keyup(function() {
+	dataType.search($(this).val()).draw();
+});
+
+//Klik add type
+$('body').on('click', '#add-type-article', function() {
+	$('#articleTypeModalLabel').text('Tambah jenis artikel');
+	$('#submit-jenis-artikel').html('<i class="fas fa-check-circle"></i> Tambahkan');
+
+	$('#articleTypeModal').modal('show');
+})
+
+
+//handle submit form jenis artikel
+$(document).on('submit', '#form-jenis-artikel', function(e) {
+	e.preventDefault();
+
+	const isEdit = $('#type-edit').val();
+	let url;
+	
+	if (isEdit == 1) {
+		// Jika mode edit
+		url = '/administrator/blog-type/edit';
+	} else {
+		// Jika mode tambah
+		url = '/administrator/blog-type/submit';
+	}
+
+	data = new FormData(this);
+	$('#submit-jenis-artikel').html('<i class="fas fa-spinner fa-spin"></i> Processing ...');
+
+	$.ajax({
+		url: url,
+		type: 'POST',
+		data: data,
+		cache: false,
+		contentType: false,
+		processData: false,
+		success: function(response) {
+			if (response.success) {
+				$('#articleTypeModal').modal('hide');
+				$('#table-article-type').DataTable().ajax.reload();
+				alertify.success('<i class="fas fa-check"></i> ' + response.success);
+
+			} else {
+				Swal.fire('', response.error, 'error');
+			}
+			$('#submit-jenis-artikel').html('<i class="fas fa-check-circle"></i> Tambahkan');
+		},
+		error: function(jqXHR, textStatus, errorThrown) {
+			// Menangani kesalahan Ajax dan menampilkan pesan dengan SweetAlert2
+			Swal.fire('Error!',
+				'Terjadi kesalahan saat memproses permintaan: ' +
+				textStatus, 'error');
+			$('#submit-jenis-artikel').html('<i class="fas fa-check-circle"></i> Tambahkan');
+		}
+	});
+
+});
+
+
+// Edit jenis artikel
+$('body').on('click', '.edit-jenis-artikel', function() {
+	var rowData = $(this).data('row');
+	var type = rowData.type_name
+	var id = rowData.id;
+	var slug = rowData.type_slug;
+
+	$('#articleTypeModalLabel').text('Edit jenis artikel');
+	$('#submit-jenis-artikel').html('<i class="fas fa-check-circle"></i> Edit');
+
+	$('#article-type').val(type);
+	$('#type-slug').val(slug);
+	$('#type-id').val(id);
+	$('#type-edit').val(1);
+
+	$('#articleTypeModal').modal('show');
+})
+
+//Modal tipe/jenis on hide
+$('body').on('hidden.bs.modal', '#articleTypeModal', function () {
+	$("#form-jenis-artikel")[0].reset();
+	$('#type-id').val('');
+	$('#type-edit').val(0);
+});
+
+// Fungsi delete tipe/jenis artikel
+$('body').on('click', '.delete-jenis-artikel', function() {
+	const id = $(this).data('id');
+
+    //Lakukan ajax menyimpan data check
+    Swal.fire({
+        html: '<b>Hapus jenis artikel?</b>',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Ya, hapus!',
+        cancelButtonText: 'Batal',
+    }).then((result) => {
+        if (result.isConfirmed) {
+
+            // Tindakan yang akan diambil jika mengonfirmasi delete
+            $.ajax({
+                url: '/administrator/blog-type/delete',
+                type: 'POST',
+                data: {
+                    id: id,
+                },
+                success: function(response) {
+                    if (response.success) {
+						var icon = '<i class="fas fa-check"></i> ';
+                        alertify.success(icon + response.success);
+
+						$('#articleTypeModal').modal('hide');
+						$('#table-article-type').DataTable().ajax.reload(null, false);
+
+                    } else {
+                        Swal.fire('', response.error, 'error');
+                    }
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    // Menangani kesalahan Ajax dan menampilkan pesan dengan SweetAlert2
+                    Swal.fire('Error!', 'Terjadi kesalahan saat memproses permintaan: ' + textStatus, 'error');
+                }
+            });
+        }
+    });
+})
+

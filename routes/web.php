@@ -97,6 +97,12 @@ Route::middleware(['auth'])->group(function () {
 		Route::post('/administrator/blog-category/submit', [ArticleController::class, 'submitCategory']);
 		Route::post('/administrator/blog-category/edit', [ArticleController::class, 'editCategory']);
 		Route::post('/administrator/blog-category/delete', [ArticleController::class, 'deleteCategory']);
+
+		# Jenis artikel
+		Route::get('/administrator/blog-type/get', [ArticleController::class, 'getType']);
+		Route::post('/administrator/blog-type/submit', [ArticleController::class, 'submitType']);
+		Route::post('/administrator/blog-type/edit', [ArticleController::class, 'editType']);
+		Route::post('/administrator/blog-type/delete', [ArticleController::class, 'deleteType']);
 	});
 });
 

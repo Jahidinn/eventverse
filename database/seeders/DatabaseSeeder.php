@@ -28,6 +28,7 @@ class DatabaseSeeder extends Seeder
 			'email' => 'Jahidin@gmail.com',
 			'password' => bcrypt('123456'),
 			'no_rekening' => '627277272',
+			'category_id' => 2,
 			'bank' => 'BCA',
 		]);
 

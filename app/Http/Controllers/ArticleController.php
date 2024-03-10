@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Article;
 use App\Models\ArticleCategory;
+use App\Models\ArticleType;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -259,5 +260,97 @@ class ArticleController extends Controller
 
 		$data_kategori->delete();
 		return response()->json(['success' => 'Category deleted!']);
+	}
+
+
+	# Tipe / Jenis artikel
+
+	public function getType()
+	{
+		$type = ArticleType::orderByRaw('id DESC')
+			->get();
+
+		return DataTables::of($type)
+			->addIndexColumn()
+			->addColumn('action', function ($type) {
+				return view('dashboard.admin-dashboard.components.article-type')->with(['data' => $type]);
+			})
+			->make(true);
+	}
+
+	public function submitType(Request $request)
+	{
+		$validator = Validator::make($request->all(), [
+			'article_type' => 'required|max:255',
+			'type_slug' => 'required|unique:article_types|max:255',
+		], [
+			'article_type.required' => 'Jenis artikel wajib diisi.',
+			'type_slug.unique' => 'Jenis artikel sudah ada!',
+		]);
+
+		if ($validator->fails()) {
+			$errors = $validator->errors();
+			$firstError = $errors->first();
+			return response()->json(['error' => $firstError]);
+		}
+
+		$type = $request->article_type;
+		$type_slug = $request->type_slug;
+
+		$data = [
+			'type_name' => $type,
+			'type_slug' => $type_slug,
+		];
+
+		# Insert
+		ArticleType::create($data);
+		return response()->json(['success' => 'jenis artikel ditambahkan!']);
+	}
+
+	public function editType(Request $request)
+	{
+		$validator = Validator::make($request->all(), [
+			'article_type' => 'required|max:255',
+			'type_slug' => 'required|max:255',
+		], [
+			'article_type.required' => 'Jenis artikel wajib diisi.',
+		]);
+
+		if ($validator->fails()) {
+			$errors = $validator->errors();
+			$firstError = $errors->first();
+			return response()->json(['error' => $firstError]);
+		}
+
+		$type = $request->article_type;
+		$type_slug = $request->type_slug;
+
+		$type_article = ArticleType::find($request->type_id);
+
+		$data = [
+			'type_name' => $type,
+			'type_slug' => $type_slug,
+		];
+
+		if ($type_article->type_slug != $type_slug) {
+			# Cek ada slug yang sama atau tidak
+			$check_data = ArticleType::where('type_slug', $type_slug)->exists();
+			if ($check_data) {
+				return response()->json(['error' => 'jenis artikel sudah ada!']);
+			}
+		}
+
+		$type_article->update($data);
+		return response()->json(['success' => 'jenis artikel berhasil di edit!']);
+	}
+
+	public function deleteType(Request $request)
+	{
+
+		$id_type = $request->id;
+		$data_type = ArticleType::find($id_type);
+
+		$data_type->delete();
+		return response()->json(['success' => 'Article type deleted!']);
 	}
 }
