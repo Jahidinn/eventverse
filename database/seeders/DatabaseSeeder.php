@@ -3,6 +3,9 @@
 namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+
+use App\Models\ArticleCategory;
+use App\Models\ArticleType;
 use Carbon\Carbon;
 use App\Models\User;
 use App\Models\Event;
@@ -289,6 +292,36 @@ class DatabaseSeeder extends Seeder
 			]);
 		}
 
+		ArticleType::create([
+			'type_name' => 'Panduan',
+			'type_slug' => 'panduan',
+		]);
+
+		ArticleType::create([
+			'type_name' => 'Eventconnect',
+			'type_slug' => 'eventconnect',
+		]);
+
+		ArticleType::create([
+			'type_name' => 'Umum',
+			'type_slug' => 'umum',
+		]);
+
+		$categoriesData = [
+			['category' => 'Panduan', 'category_id' => 'panduan'],
+			['category' => 'Event', 'category_id' => 'event'],
+			['category' => 'Pendidikan', 'category_id' => 'pendidikan'],
+			['category' => 'Teknologi', 'category_id' => 'teknologi'],
+			['category' => 'Olahraga', 'category_id' => 'olahraga'],
+			['category' => 'Kesehatan', 'category_id' => 'kesehatan'],
+			['category' => 'Bisnis', 'category_id' => 'bisnis'],
+			['category' => 'Hiburan', 'category_id' => 'hiburan'],
+			['category' => 'Sains', 'category_id' => 'sains'],
+			// Tambahkan kategori lainnya sesuai kebutuhan
+		];
+
+		// Tambahkan semua data kategori sekaligus
+		ArticleCategory::insert($categoriesData);
 
 		// Seeder data privinsi dan kota
 		// php artisan migrate:fresh --seed && php artisan laravolt:indonesia:seed

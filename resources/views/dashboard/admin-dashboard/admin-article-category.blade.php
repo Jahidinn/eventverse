@@ -142,7 +142,7 @@
         var imageUrl = "{{ asset('storage/blog-images') }}";
     </script>
 
-    @push('js-admin-transaction-check')
+    @push('js-admin-article')
         <script src="{{ asset('assets/js/administrator/admin-article.js') }}"></script>
     @endpush
 @endsection

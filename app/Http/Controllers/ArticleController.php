@@ -116,7 +116,7 @@ class ArticleController extends Controller
 		$blog_detail = Article::find($blog_id);
 
 		# Jika title / slug ada perubahan, maka cek slug
-		if ($blog_detail != $request->slug_edit) {
+		if ($blog_detail->slug != $request->slug_edit) {
 			$cek_slug = Article::where('slug', $request->slug_edit)->exists();
 			if ($cek_slug) {
 				return response()->json(['error' => 'Ada title yang sama! Coba ganti judul yang unik!']);
@@ -162,6 +162,11 @@ class ArticleController extends Controller
 	{
 		$id_article = $request->id;
 		$data_article = Article::find($id_article);
+
+		// Hapus file gambarnya juga
+		if ($data_article->input_image) {
+			Storage::delete('public/blog-images/' . $data_article->input_image);
+		}
 
 		$data_article->delete();
 		return response()->json(['success' => 'Article deleted!']);

@@ -70,35 +70,14 @@ $(document).on('submit', '#form-add-article', function(e) {
 	e.preventDefault();
 
 	data = new FormData(this);
-	$('#btn-submit-article').html('<i class="fas fa-spinner fa-spin"></i> Processing ...');
 
-	$.ajax({
-		url: '/administrator/article/post',
-		type: 'POST',
-		data: data,
-		cache: false,
-		contentType: false,
-		processData: false,
-		dataType: 'json',
-		success: function(response) {
-			if (response.success) {
-				$('#articleModal').modal('hide');
-				$('#table-article').DataTable().ajax.reload();
-				alertify.success('<i class="fas fa-check"></i> ' + response.success);
+	const url = '/administrator/article/post';
+	const addArticleButton = '#btn-submit-article';
+	const addArticleModal = '#articleModal'
+	const addArticleTable = '#table-article';
+	const addArticleButtonText = '<i class="fas fa-check-circle"></i> Publish';
 
-			} else {
-				Swal.fire('', response.error, 'error');
-			}
-			$('#btn-submit-article').html('<i class="fas fa-check-circle"></i> Publish');
-		},
-		error: function(jqXHR, textStatus, errorThrown) {
-			// Menangani kesalahan Ajax dan menampilkan pesan dengan SweetAlert2
-			Swal.fire('Error!',
-				'Terjadi kesalahan saat memproses permintaan: ' +
-				textStatus, 'error');
-			$('#btn-submit-article').html('<i class="fas fa-check-circle"></i> Publish');
-		}
-	});
+	submitData(addArticleButton, url, addArticleModal, addArticleTable, addArticleButtonText);
 
 });
 
@@ -144,88 +123,34 @@ function handleRowClick(dataTable, e) {
 	}
 }
 
-// Fungsi edit ertikel 
-
 // handle submit form edit artikel
 $(document).on('submit', '#form-edit-article', function(e) {
 	e.preventDefault();
 
 	data = new FormData(this);
-	$('#submit-edit-article').html('<i class="fas fa-spinner fa-spin"></i> Processing ...');
-	$('#submit-edit-article').attr('disabled', true);
 
-	$.ajax({
-		url: '/administrator/article/edit',
-		type: 'POST',
-		data: data,
-		cache: false,
-		contentType: false,
-		processData: false,
-		dataType: 'json',
-		success: function(response) {
-			if (response.success) {
-				$('#editArticleModal').modal('hide');
-				$('#table-article').DataTable().ajax.reload(null, false);
-				alertify.success('<i class="fas fa-check"></i> ' + response.success);
+	const url = '/administrator/article/edit';
+	const editArticleButton = '#submit-edit-article';
+	const editArticleModal = '#editArticleModal'
+	const editArticleTable = '#table-article';
+	const editArticleButtonText = '<i class="fas fa-check-circle"></i> Edit artikel';
 
-			} else {
-				Swal.fire('', response.error, 'error');
-			}
-			$('#submit-edit-article').html('<i class="fas fa-check-circle"></i> Edit artikel');
-			$('#submit-edit-article').attr('disabled', false);
-		},
-		error: function(jqXHR, textStatus, errorThrown) {
-			// Menangani kesalahan Ajax dan menampilkan pesan dengan SweetAlert2
-			Swal.fire('Error!',
-				'Terjadi kesalahan saat memproses permintaan: ' +
-				textStatus, 'error');
-			$('#btn-submit-article').html('<i class="fas fa-check-circle"></i> Publish');
-		}
-	});
+	submitData(editArticleButton, url, editArticleModal, editArticleTable, editArticleButtonText);
+
 })
 
 // Fungsi delete artikel
 $('body').on('click', '.btn-delete-article', function() {
 	const id = $(this).data('id');
 
-        //Lakukan ajax menyimpan data check
-        Swal.fire({
-            html: '<b>Hapus artikel?</b>',
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonText: 'Ya, hapus!',
-            cancelButtonText: 'Batal',
-        }).then((result) => {
-            if (result.isConfirmed) {
+	const textWarning = '<b>Hapus artikel?</b>';
+	const url = '/administrator/article/delete';
+	const modal = '#editArticleModal';
+	const table = '#table-article';
 
-                // Tindakan yang akan diambil jika mengonfirmasi delete
-                $.ajax({
-                    url: '/administrator/article/delete',
-                    type: 'POST',
-                    data: {
-                        id: id,
-                    },
-                    success: function(response) {
-                        if (response.success) {
-                            var icon = '<i class="fas fa-check"></i> ';
-                            alertify.success(icon + response.success);
+	// Panggil function
+	deleteData(id, textWarning, url, modal, table);
 
-                            $('#table-article').DataTable().ajax.reload(null, false);
-							$('#editArticleModal').modal('hide');
-
-                        } else {
-                            Swal.fire('', response.error, 'error');
-                        }
-                    },
-                    error: function(jqXHR, textStatus, errorThrown) {
-                        // Menangani kesalahan Ajax dan menampilkan pesan dengan SweetAlert2
-                        Swal.fire('Error!',
-                            'Terjadi kesalahan saat memproses permintaan: ' +
-                            textStatus, 'error');
-                    }
-                });
-            }
-        });
 })
 
 // hidden modal artikel
@@ -249,37 +174,17 @@ $('body').on('keyup', '#category-name', function() {
 })
 
 // Menampilkan data kategori
-var dataKategori = $('#table-article-category').DataTable({
-	"dom": 'rtip',
-	"bInfo": false,
-	language: {
-		'paginate': {
-			'previous': '<i class="fas fa-angle-double-left"></i>',
-			'next': '<i class="fas fa-angle-double-right"></i>'
-		}
-	},
-	"oLanguage": {
-		"sEmptyTable": "Tidak ada kategori artikel!"
-	},
-	processing: true,
-	serverside: true,
-	ordering: false,
-	destroy: true,
-	ajax: {
-		'type': 'GET',
-		'url': '/administrator/blog-category/get',
-		'data': {
-		},
-	},
+$(document).ready(function() {
+	const categoryTable = '#table-article-category';
+	const categoryUrl = '/administrator/blog-category/get';
+	const categoryColumn = 'category';
+	const categorySearchForm = '#search-category';
+	const categoryNull = "Tidak ada kategori artikel!";
 
-	columns: [{
-		data: 'category',
-		name: 'category'
-	}, {
-		data: 'action',
-		name: 'action'
-	}]
-});
+	// Panggil function
+	dataTable(categoryTable, categoryUrl, categoryColumn, categorySearchForm, categoryNull);
+})
+
 
 //Pencarian data
 $('#search-category').keyup(function() {
@@ -299,6 +204,7 @@ $(document).on('submit', '#form-kategori-artikel', function(e) {
 	e.preventDefault();
 
 	const isEdit = $('#category-edit').val();
+	data = new FormData(this);
 	let url;
 	
 	if (isEdit == 1) {
@@ -309,35 +215,12 @@ $(document).on('submit', '#form-kategori-artikel', function(e) {
 		url = '/administrator/blog-category/submit';
 	}
 
-	data = new FormData(this);
-	$('#btn-submit-kategori').html('<i class="fas fa-spinner fa-spin"></i> Processing ...');
+	const categoryButton = '#btn-submit-kategori'
+	const categoryModal = '#articleCategoryModal'
+	const categoryTable = '#table-article-category';
+	const categoryButtonText = '<i class="fas fa-check-circle"></i> Buat kategori'
 
-	$.ajax({
-		url: url,
-		type: 'POST',
-		data: data,
-		cache: false,
-		contentType: false,
-		processData: false,
-		success: function(response) {
-			if (response.success) {
-				$('#articleCategoryModal').modal('hide');
-				$('#table-article-category').DataTable().ajax.reload();
-				alertify.success('<i class="fas fa-check"></i> ' + response.success);
-
-			} else {
-				Swal.fire('', response.error, 'error');
-			}
-			$('#btn-submit-kategori').html('<i class="fas fa-check-circle"></i> Buat kategori');
-		},
-		error: function(jqXHR, textStatus, errorThrown) {
-			// Menangani kesalahan Ajax dan menampilkan pesan dengan SweetAlert2
-			Swal.fire('Error!',
-				'Terjadi kesalahan saat memproses permintaan: ' +
-				textStatus, 'error');
-			$('#btn-submit-kategori').html('<i class="fas fa-check-circle"></i> Buat kategori');
-		}
-	});
+	submitData(categoryButton, url, categoryModal, categoryTable, categoryButtonText);
 
 });
 
@@ -370,42 +253,13 @@ $('body').on('hidden.bs.modal', '#articleCategoryModal', function () {
 $('body').on('click', '.btn-delete-kategori', function() {
 	const id = $(this).data('id');
 
-    //Lakukan ajax menyimpan data check
-    Swal.fire({
-        html: '<b>Hapus kategori?</b>',
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonText: 'Ya, hapus!',
-        cancelButtonText: 'Batal',
-    }).then((result) => {
-        if (result.isConfirmed) {
+	const textWarning = '<b>Hapus kategori?</b>';
+	const url = '/administrator/blog-category/delete';
+	const modal = '#articleCategoryModal';
+	const table = '#table-article-category';
 
-            // Tindakan yang akan diambil jika mengonfirmasi delete
-            $.ajax({
-                url: '/administrator/blog-category/delete',
-                type: 'POST',
-                data: {
-                    id: id,
-                },
-                success: function(response) {
-                    if (response.success) {
-						var icon = '<i class="fas fa-check"></i> ';
-                        alertify.success(icon + response.success);
-
-                        $('#table-article-category').DataTable().ajax.reload(null, false);
-						$('#articleCategoryModal').modal('hide');
-
-                    } else {
-                        Swal.fire('', response.error, 'error');
-                    }
-                },
-                error: function(jqXHR, textStatus, errorThrown) {
-                    // Menangani kesalahan Ajax dan menampilkan pesan dengan SweetAlert2
-                    Swal.fire('Error!', 'Terjadi kesalahan saat memproses permintaan: ' + textStatus, 'error');
-                }
-            });
-        }
-    });
+	// Panggil function
+	deleteData(id, textWarning, url, modal, table);
 })
 
 
@@ -419,44 +273,17 @@ $('body').on('keyup', '#article-type', function() {
 	$('#type-slug').val(slug);
 })
 
-
 // Menampilkan jenis artikel
-var dataType = $('#table-article-type').DataTable({
-	"dom": 'rtip',
-	"bInfo": false,
-	language: {
-		'paginate': {
-			'previous': '<i class="fas fa-angle-double-left"></i>',
-			'next': '<i class="fas fa-angle-double-right"></i>'
-		}
-	},
-	"oLanguage": {
-		"sEmptyTable": "Tidak ada jenis artikel!"
-	},
-	processing: true,
-	serverside: true,
-	ordering: false,
-	destroy: true,
-	ajax: {
-		'type': 'GET',
-		'url': '/administrator/blog-type/get',
-		'data': {
-		},
-	},
+	$(document).ready(function() {
+	const typeTable = '#table-article-type';
+	const typeUrl = '/administrator/blog-type/get';
+	const typeColumn = 'type_name';
+	const typeSearchForm = '#search-article-type';
+	const typeNull = 'Tidak ada jenis artikel';
+	// Panggil function
+	dataTable(typeTable, typeUrl, typeColumn, typeSearchForm, typeNull);
+})
 
-	columns: [{
-		data: 'type_name',
-		name: 'type_name'
-	}, {
-		data: 'action',
-		name: 'action'
-	}]
-});
-
-//Pencarian data
-$('#search-article-type').keyup(function() {
-	dataType.search($(this).val()).draw();
-});
 
 //Klik add type
 $('body').on('click', '#add-type-article', function() {
@@ -472,6 +299,7 @@ $(document).on('submit', '#form-jenis-artikel', function(e) {
 	e.preventDefault();
 
 	const isEdit = $('#type-edit').val();
+	data = new FormData(this);
 	let url;
 	
 	if (isEdit == 1) {
@@ -482,35 +310,12 @@ $(document).on('submit', '#form-jenis-artikel', function(e) {
 		url = '/administrator/blog-type/submit';
 	}
 
-	data = new FormData(this);
-	$('#submit-jenis-artikel').html('<i class="fas fa-spinner fa-spin"></i> Processing ...');
+	const typeButton = '#submit-jenis-artikel';
+	const typeModal = '#articleTypeModal'
+	const typeTable = '#table-article-type';
+	const typeButtonText = '<i class="fas fa-check-circle"></i> Tambahkan';
 
-	$.ajax({
-		url: url,
-		type: 'POST',
-		data: data,
-		cache: false,
-		contentType: false,
-		processData: false,
-		success: function(response) {
-			if (response.success) {
-				$('#articleTypeModal').modal('hide');
-				$('#table-article-type').DataTable().ajax.reload();
-				alertify.success('<i class="fas fa-check"></i> ' + response.success);
-
-			} else {
-				Swal.fire('', response.error, 'error');
-			}
-			$('#submit-jenis-artikel').html('<i class="fas fa-check-circle"></i> Tambahkan');
-		},
-		error: function(jqXHR, textStatus, errorThrown) {
-			// Menangani kesalahan Ajax dan menampilkan pesan dengan SweetAlert2
-			Swal.fire('Error!',
-				'Terjadi kesalahan saat memproses permintaan: ' +
-				textStatus, 'error');
-			$('#submit-jenis-artikel').html('<i class="fas fa-check-circle"></i> Tambahkan');
-		}
-	});
+	submitData(typeButton, url, typeModal, typeTable, typeButtonText);
 
 });
 
@@ -543,10 +348,98 @@ $('body').on('hidden.bs.modal', '#articleTypeModal', function () {
 // Fungsi delete tipe/jenis artikel
 $('body').on('click', '.delete-jenis-artikel', function() {
 	const id = $(this).data('id');
+	const textWarning = '<b>Hapus jenis artikel?</b>';
+	const url = '/administrator/blog-type/delete';
+	const modal = '#articleTypeModal';
+	const table = '#table-article-type';
 
-    //Lakukan ajax menyimpan data check
+	// Panggil function
+	deleteData(id, textWarning, url, modal, table);
+    
+})
+
+// Fungsi Menampilkan DATATABLE untuk jenis artikel, tipe artikel
+function dataTable(table, url, column_0, searchForm, nullData){
+	// Datatable
+	var dataTable = $(table).DataTable({
+		"dom": 'rtip',
+		"bInfo": false,
+		language: {
+			'paginate': {
+				'previous': '<i class="fas fa-angle-double-left"></i>',
+				'next': '<i class="fas fa-angle-double-right"></i>'
+			}
+		},
+		"oLanguage": {
+			"sEmptyTable": nullData
+		},
+		processing: true,
+		serverside: true,
+		ordering: false,
+		destroy: true,
+		ajax: {
+			'type': 'GET',
+			'url': url,
+			'data': {
+			},
+		},
+	
+		columns: [{
+			data: column_0,
+			name: column_0
+		}, {
+			data: 'action',
+			name: 'action'
+		}]
+	});
+	
+	//Pencarian data
+	$(searchForm).keyup(function() {
+		dataTable.search($(this).val()).draw();
+	});
+}
+
+
+// Fungsi SUBMIT untuk artkel, jenis artikel, tipe artikel
+function submitData(button, url, modal, table, buttonText){
+
+	$(button).html('<i class="fas fa-spinner fa-spin"></i> Processing ...');
+	$(button).attr('disabled', true);
+
+	$.ajax({
+		url: url,
+		type: 'POST',
+		data: data,
+		cache: false,
+		contentType: false,
+		processData: false,
+		success: function(response) {
+			if (response.success) {
+				$(modal).modal('hide');
+				$(table).DataTable().ajax.reload();
+				alertify.success('<i class="fas fa-check"></i> ' + response.success);
+
+			} else {
+				Swal.fire('', response.error, 'error');
+			}
+			$(button).html(buttonText);
+			$(button).attr('disabled', false);
+		},
+		error: function(jqXHR, textStatus, errorThrown) {
+			// Menangani kesalahan Ajax dan menampilkan pesan dengan SweetAlert2
+			Swal.fire('Error!', 'Error request: ' + textStatus, 'error');
+			$(button).html(buttonText);
+			$(button).attr('disabled', false);
+		}
+	});
+}
+
+
+// Fungsi DELETE untuk artkel, jenis artikel, tipe artikel
+function deleteData(id, textWarning, url, modal, table) {
+	//Lakukan ajax menyimpan data check
     Swal.fire({
-        html: '<b>Hapus jenis artikel?</b>',
+        html: textWarning,
         icon: 'warning',
         showCancelButton: true,
         confirmButtonText: 'Ya, hapus!',
@@ -556,7 +449,7 @@ $('body').on('click', '.delete-jenis-artikel', function() {
 
             // Tindakan yang akan diambil jika mengonfirmasi delete
             $.ajax({
-                url: '/administrator/blog-type/delete',
+                url: url,
                 type: 'POST',
                 data: {
                     id: id,
@@ -566,8 +459,8 @@ $('body').on('click', '.delete-jenis-artikel', function() {
 						var icon = '<i class="fas fa-check"></i> ';
                         alertify.success(icon + response.success);
 
-						$('#articleTypeModal').modal('hide');
-						$('#table-article-type').DataTable().ajax.reload(null, false);
+						$(modal).modal('hide');
+						$(table).DataTable().ajax.reload(null, false);
 
                     } else {
                         Swal.fire('', response.error, 'error');
@@ -580,5 +473,5 @@ $('body').on('click', '.delete-jenis-artikel', function() {
             });
         }
     });
-})
+}
 

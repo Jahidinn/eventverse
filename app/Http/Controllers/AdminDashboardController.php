@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Mail\WithdrawEmail;
+use App\Models\ArticleCategory;
+use App\Models\ArticleType;
 use Svg\Tag\Rect;
 use Carbon\Carbon;
 use App\Models\User;
@@ -243,7 +245,14 @@ class AdminDashboardController extends Controller
 	# ARTICLE
 	public function article()
 	{
-		return view('dashboard.admin-dashboard.admin-article', []);
+		# Query mengambil data kategori dan jenis artikel 
+		$kategori = ArticleCategory::all();
+		$type = ArticleType::all();
+
+		return view('dashboard.admin-dashboard.admin-article', [
+			'categories' => $kategori,
+			'type' => $type,
+		]);
 	}
 
 	#KATEGORI ARTIKEL

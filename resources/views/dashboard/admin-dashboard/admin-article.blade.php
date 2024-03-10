@@ -52,6 +52,8 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
+
+                {{-- Form tambah artikel --}}
                 <form method="POST" id="form-add-article">
                     @csrf
                     <div class="modal-body">
@@ -61,16 +63,16 @@
                                 placeholder="Example title" required>
                             <input type="hidden" class="form-control" id="slug" name="slug" placeholder="Slug">
                         </div>
+                        {{-- Form kategori artikel --}}
                         <div class="form-group">
                             <select class="form-control" id="blog-category" name="blog_category" required>
                                 <option value="">Pilih kategori</option>
-                                <option value="1">Panduan</option>
-                                <option value="2">Teknologi</option>
-                                <option value="3">Event</option>
-                                <option value="4">Umum</option>
-                                <option value="5">Tips & Trik</option>
+                                @foreach ($categories as $category)
+                                    <option value="{{ $category->id }}">{{ $category->category }}</option>
+                                @endforeach
                             </select>
                         </div>
+                        {{-- Form image --}}
                         <div class="form-group">
                             <label for="blog-image">Image</label>
                             <div class="input-group">
@@ -85,13 +87,14 @@
                             <input id="blog-body" type="hidden" name="blog_body" required>
                             <trix-editor input="blog-body"></trix-editor>
                         </div>
+                        {{-- Form jenis arrtikel --}}
                         <div class="form-group">
                             <label for="blog-title">Jenis artiikel</label>
                             <select class="form-control" id="blog-article-id" name="blog_article_id" required>
                                 <option value="">Pilih jenis artikel</option>
-                                <option value="1">Umum</option>
-                                <option value="2">Panduan eventconnect.id</option>
-                                <option value="3">Bantuan teknis</option>
+                                @foreach ($type as $tipe)
+                                    <option value="{{ $tipe->id }}">{{ $tipe->type_name }}</option>
+                                @endforeach
                             </select>
                         </div>
                         <div class="form-group">
@@ -106,6 +109,7 @@
                             Publish</button>
                     </div>
                 </form>
+                {{-- Form tambah artikel --}}
             </div>
         </div>
     </div>
@@ -121,6 +125,8 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
+
+                {{-- Form edit artikel --}}
                 <form method="POST" id="form-edit-article" enctype="multipart/form-data">
                     @csrf
                     <div class="modal-body">
@@ -131,14 +137,15 @@
                             <input type="hidden" id="blog-id-edit" name="blog_id_edit">
                             <input type="hidden" id="slug-edit" name="slug_edit">
                         </div>
+
+                        {{-- Kategori --}}
                         <div class="form-group">
                             <select class="form-control" id="blog-category-edit" name="blog_category_edit" required>
                                 <option value="">Pilih kategori</option>
-                                <option value="1">Panduan</option>
-                                <option value="2">Teknologi</option>
-                                <option value="3">Event</option>
-                                <option value="4">Umum</option>
-                                <option value="5">Tips & Trik</option>
+                                @foreach ($categories as $category)
+                                    <option value="{{ $category->id }}">{{ $category->category }}</option>
+                                @endforeach
+
                             </select>
                         </div>
 
@@ -158,18 +165,21 @@
                                 </div>
                             </div>
                         </div>
+                        {{-- Body --}}
                         <div class="form-group p-0" id="edit-body-container">
                             <label for="blog-body-edit">Body</label>
                             <input id="blog-body-edit" type="hidden" name="blog_body_edit" required>
                             <trix-editor input="blog-body-edit"></trix-editor>
                         </div>
+
+                        {{-- Jenis artikel --}}
                         <div class="form-group">
                             <label for="blog-article-id-edit">Jenis artiikel</label>
                             <select class="form-control" id="blog-article-id-edit" name="blog_article_id_edit" required>
                                 <option value="">Pilih jenis artikel</option>
-                                <option value="1">Umum</option>
-                                <option value="2">Panduan eventconnect.id</option>
-                                <option value="3">Bantuan teknis</option>
+                                @foreach ($type as $tipe)
+                                    <option value="{{ $tipe->id }}">{{ $tipe->type_name }}</option>
+                                @endforeach
                             </select>
                         </div>
                         <div class="form-group">
@@ -184,6 +194,7 @@
                             Edit artikel</button>
                     </div>
                 </form>
+                {{-- Form edit artikel --}}
             </div>
         </div>
     </div>
@@ -193,7 +204,7 @@
         var imageUrl = "{{ asset('storage/blog-images') }}";
     </script>
 
-    @push('js-admin-transaction-check')
+    @push('js-admin-article')
         <script src="{{ asset('assets/js/administrator/admin-article.js') }}"></script>
     @endpush
 @endsection
