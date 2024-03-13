@@ -79,6 +79,9 @@ class ArticleController extends Controller
 
 		return DataTables::of($article)
 			->addIndexColumn()
+			->addColumn('blog-title', function ($article) {
+				return view('dashboard.admin-dashboard.components.article-title')->with(['data' => $article]);
+			})
 			->addColumn('action', function ($article) {
 				return view('dashboard.admin-dashboard.components.article-action')->with(['data' => $article]);
 			})
@@ -201,6 +204,20 @@ class ArticleController extends Controller
 		ArticleCategory::create($data);
 		return response()->json(['success' => 'Kategori ditambahkan!']);
 	}
+
+	public function viewArticle($slug)
+	{
+		$detail_article = Article::where('slug', $slug)->first();
+
+		if ($detail_article) {
+			// Artikel ditemukan, lakukan logika untuk menampilkan artikel
+			return view('article.page-blog-view', ['article' => $detail_article]);
+		}
+
+		// Artikel tidak ditemukan, kembalikan respons 404 ("Not Found")
+		abort(404);
+	}
+
 
 	public function getCategory()
 	{

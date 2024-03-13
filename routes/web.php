@@ -106,6 +106,9 @@ Route::middleware(['auth'])->group(function () {
 	});
 });
 
+# Tanpa middleware
+Route::get('/blog/{slug}', [ArticleController::class, 'viewArticle']);
+
 
 Route::get('/dashboard/my-profile', [UserProfileController::class, 'index'])->middleware('auth');
 Route::post('/dashboard/edit-profile-image', [UserProfileController::class, 'editImage'])->middleware('auth');
@@ -169,7 +172,6 @@ Route::get('/generate-pdf', [PDFController::class, 'generatePDF']);
 
 Route::get('/{event}', [EventController::class, 'show']);
 Route::get('/event/{event}', [EventController::class, 'show']);
-
 
 
 //Resend email

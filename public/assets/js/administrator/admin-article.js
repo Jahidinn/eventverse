@@ -25,8 +25,8 @@ $(document).ready(function() {
 		},
 
 		columns: [{
-			data: 'title',
-			name: 'title'
+			data: 'blog-title',
+			name: 'blog-title'
 		}, {
 			data: 'action',
 			name: 'action'
