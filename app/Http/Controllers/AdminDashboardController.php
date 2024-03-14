@@ -15,6 +15,7 @@ use App\Models\Organisation;
 use App\Models\WithdrawData;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
+use PhpParser\Node\Expr\FuncCall;
 use Yajra\DataTables\Facades\DataTables;
 
 class AdminDashboardController extends Controller
@@ -259,5 +260,14 @@ class AdminDashboardController extends Controller
 	public function articleCategories()
 	{
 		return view('dashboard.admin-dashboard.admin-article-category', []);
+	}
+
+
+	# EVENT MANAGEMENT BY ADMINISTRATOR
+
+	public function selectedEventManagement()
+	{
+
+		return view('dashboard.admin-dashboard.admin-event-management', []);
 	}
 }

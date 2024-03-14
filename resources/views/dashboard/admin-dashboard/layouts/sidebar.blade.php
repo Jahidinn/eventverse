@@ -60,12 +60,26 @@
                         <p>Transaction check</p>
                     </a>
                 </li>
-                <li class="nav-header">EVENT</li>
+                <li class="nav-header">EVENT MANAGEMENT</li>
                 <li class="nav-item">
-                    <a href="/administrator/article"
-                        class="nav-link {{ Request::is('administrator/manajemen-event*') ? 'active' : '' }}">
+                    <a href="/administrator/event-management/manage"
+                        class="nav-link {{ Request::is('administrator/event-management/manage*') ? 'active' : '' }}">
                         <i class="nav-icon fas fa-list"></i>
-                        <p>Manajemen event</p>
+                        <p>Manage</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/administrator/event-management/selected"
+                        class="nav-link {{ Request::is('administrator/event-management/selected*') ? 'active' : '' }}">
+                        <i class="nav-icon fas fa-clipboard-check"></i>
+                        <p>Event pilihan</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/administrator/event-management/promotion"
+                        class="nav-link {{ Request::is('administrator/event-management/promotion*') ? 'active' : '' }}">
+                        <i class="nav-icon fas fa-ad"></i>
+                        <p>Event promosi</p>
                     </a>
                 </li>
 

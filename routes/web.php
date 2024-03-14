@@ -85,6 +85,7 @@ Route::middleware(['auth'])->group(function () {
 
 		Route::get('/administrator/article', [AdminDashboardController::class, 'article']);
 		Route::get('/administrator/blog-category', [AdminDashboardController::class, 'articleCategories']);
+		Route::get('/administrator/event-management/selected', [AdminDashboardController::class, 'selectedEventManagement']);
 
 		# Artikel
 		Route::post('/administrator/article/post', [ArticleController::class, 'create']);
