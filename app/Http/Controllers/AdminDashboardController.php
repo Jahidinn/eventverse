@@ -322,6 +322,66 @@ class AdminDashboardController extends Controller
 		];
 
 		$event->update($selected);
-		return response()->json(['success' => 'Event not selected!']);
+		return response()->json(['success' => 'Event is no longer promoted!']);
+	}
+
+	public function promotionEventManagement()
+	{
+
+		return view('dashboard.admin-dashboard.admin-promotion-event', []);
+	}
+
+	public function getPromotionEvent()
+	{
+		$selectedEvent = Event::where('promotion', '>', 0)->orderByRaw('updated_at DESC')->get();
+
+		return DataTables::of($selectedEvent)
+			->addIndexColumn()
+			->addColumn('action', function ($selectedEvent) {
+				return view('dashboard.admin-dashboard.components.event-promotion-action')->with(['data' => $selectedEvent]);
+			})
+			->make(true);
+	}
+
+	public function getEventForPromotion()
+	{
+		// Mendapatkan tanggal hari ini
+		$today = Carbon::now()->toDateString();
+
+		// Mendapatkan event yang diposting lebih dari hari ini dan belum dipilih
+		$dataEvent = Event::where('promotion', 0)
+			->whereDate('end_date', '>', $today)
+			->get();
+
+		return DataTables::of($dataEvent)
+			->addIndexColumn()
+			->addColumn('action', function ($dataEvent) {
+				return view('dashboard.admin-dashboard.components.event-promote-action')->with(['data' => $dataEvent]);
+			})
+			->make(true);
+	}
+
+	public function promoteEvent(Request $request)
+	{
+		$event = Event::findOrFail($request->id);
+
+		$promotion = [
+			'promotion' => 1,
+		];
+
+		$event->update($promotion);
+		return response()->json(['success' => 'Event promoted!']);
+	}
+
+	public function unpromoteEvent(Request $request)
+	{
+		$event = Event::findOrFail($request->id);
+
+		$promotion = [
+			'promotion' => 0,
+		];
+
+		$event->update($promotion);
+		return response()->json(['success' => 'Event is no longer promoted!']);
 	}
 }

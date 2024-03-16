@@ -86,18 +86,24 @@ Route::middleware(['auth'])->group(function () {
 		Route::get('/administrator/article', [AdminDashboardController::class, 'article']);
 		Route::get('/administrator/blog-category', [AdminDashboardController::class, 'articleCategories']);
 		Route::get('/administrator/event-management/selected', [AdminDashboardController::class, 'selectedEventManagement']);
-
-		# Artikel
-		Route::post('/administrator/article/post', [ArticleController::class, 'create']);
-		Route::get('/administrator/article/get', [ArticleController::class, 'getArticle']);
-		Route::post('/administrator/article/edit', [ArticleController::class, 'editArticle']);
-		Route::post('/administrator/article/delete', [ArticleController::class, 'deleteArticle']);
+		Route::get('/administrator/event-management/promotion', [AdminDashboardController::class, 'promotionEventManagement']);
 
 		# Management event
 		Route::get('/administrator/event-management/get-selected', [AdminDashboardController::class, 'getSelectedEvent']);
 		Route::get('/administrator/event-management/get-event', [AdminDashboardController::class, 'getDataEvent']);
 		Route::post('/administrator/event-management/select-event', [AdminDashboardController::class, 'selectEvent']);
 		Route::post('/administrator/event-management/unselect-event', [AdminDashboardController::class, 'unselectEvent']);
+
+		Route::get('/administrator/event-management/get-promotion', [AdminDashboardController::class, 'getPromotionEvent']);
+		Route::get('/administrator/event-management/get-event-for-promotion', [AdminDashboardController::class, 'getEventForPromotion']);
+		Route::post('/administrator/event-management/promote-event', [AdminDashboardController::class, 'promoteEvent']);
+		Route::post('/administrator/event-management/unpromote-event', [AdminDashboardController::class, 'unpromoteEvent']);
+
+		# Artikel
+		Route::post('/administrator/article/post', [ArticleController::class, 'create']);
+		Route::get('/administrator/article/get', [ArticleController::class, 'getArticle']);
+		Route::post('/administrator/article/edit', [ArticleController::class, 'editArticle']);
+		Route::post('/administrator/article/delete', [ArticleController::class, 'deleteArticle']);
 
 		# Kategori artikel/blog
 		Route::get('/administrator/blog-category/get', [ArticleController::class, 'getCategory']);
