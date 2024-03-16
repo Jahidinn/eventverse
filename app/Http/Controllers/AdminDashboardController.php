@@ -268,6 +268,60 @@ class AdminDashboardController extends Controller
 	public function selectedEventManagement()
 	{
 
-		return view('dashboard.admin-dashboard.admin-event-management', []);
+		return view('dashboard.admin-dashboard.admin-selected-event', []);
+	}
+
+	public function getSelectedEvent()
+	{
+		$selectedEvent = Event::where('selected_event', '>', 0)->orderByRaw('updated_at DESC')->get();
+
+		return DataTables::of($selectedEvent)
+			->addIndexColumn()
+			->addColumn('action', function ($selectedEvent) {
+				return view('dashboard.admin-dashboard.components.event-selected-action')->with(['data' => $selectedEvent]);
+			})
+			->make(true);
+	}
+
+	public function getDataEvent()
+	{
+		// Mendapatkan tanggal hari ini
+		$today = Carbon::now()->toDateString();
+
+		// Mendapatkan event yang diposting lebih dari hari ini dan belum dipilih
+		$dataEvent = Event::where('selected_event', 0)
+			->whereDate('end_date', '>', $today)
+			->get();
+
+		return DataTables::of($dataEvent)
+			->addIndexColumn()
+			->addColumn('action', function ($dataEvent) {
+				return view('dashboard.admin-dashboard.components.event-select-action')->with(['data' => $dataEvent]);
+			})
+			->make(true);
+	}
+
+	public function selectEvent(Request $request)
+	{
+		$event = Event::findOrFail($request->id);
+
+		$selected = [
+			'selected_event' => 1,
+		];
+
+		$event->update($selected);
+		return response()->json(['success' => 'Event selected!']);
+	}
+
+	public function unselectEvent(Request $request)
+	{
+		$event = Event::findOrFail($request->id);
+
+		$selected = [
+			'selected_event' => 0,
+		];
+
+		$event->update($selected);
+		return response()->json(['success' => 'Event not selected!']);
 	}
 }

@@ -136,6 +136,7 @@
     @stack('js-admin-wd-request')
     @stack('js-admin-transaction-check')
     @stack('js-admin-article')
+    @stack('js-admin-event-management')
 
 </body>
 

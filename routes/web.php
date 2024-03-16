@@ -93,6 +93,12 @@ Route::middleware(['auth'])->group(function () {
 		Route::post('/administrator/article/edit', [ArticleController::class, 'editArticle']);
 		Route::post('/administrator/article/delete', [ArticleController::class, 'deleteArticle']);
 
+		# Management event
+		Route::get('/administrator/event-management/get-selected', [AdminDashboardController::class, 'getSelectedEvent']);
+		Route::get('/administrator/event-management/get-event', [AdminDashboardController::class, 'getDataEvent']);
+		Route::post('/administrator/event-management/select-event', [AdminDashboardController::class, 'selectEvent']);
+		Route::post('/administrator/event-management/unselect-event', [AdminDashboardController::class, 'unselectEvent']);
+
 		# Kategori artikel/blog
 		Route::get('/administrator/blog-category/get', [ArticleController::class, 'getCategory']);
 		Route::post('/administrator/blog-category/submit', [ArticleController::class, 'submitCategory']);
