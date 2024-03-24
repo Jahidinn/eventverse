@@ -375,4 +375,9 @@ class ArticleController extends Controller
 		$data_type->delete();
 		return response()->json(['success' => 'Article type deleted!']);
 	}
+
+	public function pricingInfo()
+	{
+		return view('article.page-pricing', []);
+	}
 }

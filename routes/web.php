@@ -120,6 +120,7 @@ Route::middleware(['auth'])->group(function () {
 });
 
 # Tanpa middleware
+Route::get('/blog/pricing', [ArticleController::class, 'pricingInfo']);
 Route::get('/blog/{slug}', [ArticleController::class, 'viewArticle']);
 
 

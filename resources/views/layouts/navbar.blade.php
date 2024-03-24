@@ -11,7 +11,7 @@
             <!-- <li><a href="portfolio.html">Portfolio</a></li> -->
             <li><a href="/event/create">Buat event</a></li>
             <li><a href="/blog">Blog</a></li>
-            <li><a href="/price">biaya</a></li>
+            <li><a href="/blog/pricing">biaya</a></li>
 
             <li class="drop-down"><a href="">Layanan</a>
                 <ul>
