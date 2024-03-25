@@ -380,4 +380,9 @@ class ArticleController extends Controller
 	{
 		return view('article.page-pricing', []);
 	}
+
+	public function aboutUs()
+	{
+		return view('article.page-about-us', []);
+	}
 }

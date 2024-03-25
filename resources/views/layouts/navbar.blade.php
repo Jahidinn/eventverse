@@ -8,12 +8,12 @@
     <nav class="nav-menu float-right d-none d-lg-block">
         <ul>
             <li class="active"><a href="/">Home</a></li>
-            <!-- <li><a href="portfolio.html">Portfolio</a></li> -->
+            <li><a href="/blog/about-us">Tentang eventconnect</a></li>
             <li><a href="/event/create">Buat event</a></li>
             <li><a href="/blog">Blog</a></li>
             <li><a href="/blog/pricing">biaya</a></li>
 
-            <li class="drop-down"><a href="">Layanan</a>
+            {{-- <li class="drop-down"><a href="">Layanan</a>
                 <ul>
                     <li><a href="#">Layanan</a></li>
                     <li><a href="#">Info kampus</a></li>
@@ -21,7 +21,7 @@
                     <li><a href="#">Beasiswa</a></li>
                     <li><a href="#">lomba</a></li>
                 </ul>
-            </li>
+            </li> --}}
 
 
             @if (Auth::check())
