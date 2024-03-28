@@ -103,6 +103,16 @@
                         <p class="text">Organisasi</p>
                     </a>
                 </li>
+
+                @if (auth()->user()->category_id > 1)
+                    <li class="nav-item">
+                        <a href="/administrator" class="nav-link">
+                            <i class="nav-icon fas fa-user-shield"></i>
+                            <p class="text">Administrator</p>
+                        </a>
+                    </li>
+                @endif
+
                 <li class="nav-item">
                     <a href="#" class="nav-link">
                         <i class="nav-icon fas fa-sign-out-alt text-danger"></i>

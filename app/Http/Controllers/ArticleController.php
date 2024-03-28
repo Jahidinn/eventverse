@@ -385,4 +385,9 @@ class ArticleController extends Controller
 	{
 		return view('article.page-about-us', []);
 	}
+
+	public function guide()
+	{
+		return view('article.page-guide', []);
+	}
 }
