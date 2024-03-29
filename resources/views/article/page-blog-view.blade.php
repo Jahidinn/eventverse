@@ -33,7 +33,23 @@
                         <div>
                             {!! $article->body !!}
                         </div>
+                        <hr>
 
+                        {{-- Fungsi share artikel --}}
+                        <div>
+                            <span class="mb-3">Share on</span><br><br>
+                            <!-- Tombol Facebook -->
+                            <a href="" id="copyButton" class="btn btn-outline-info"><i class="fas fa-link"></i></a>
+
+                            <!-- Tombol WhatsApp -->
+                            <a href="https://api.whatsapp.com/send?text={{ urlencode(url()->current()) }}"
+                                class="btn btn-outline-primary" class="btn btn-outline-success"><i
+                                    class="fab fa-whatsapp"></i></a>
+
+                            <!-- Tombol LinkedIn -->
+                            <a href="https://www.linkedin.com/sharing/share-offsite/?url={{ urlencode(url()->current()) }}"
+                                class="btn btn-outline-primary"><i class="fab fa-linkedin-in"></i></a>
+                        </div>
 
                     </div>
                 </div>
@@ -45,14 +61,15 @@
 
                 <div class="card mx-1 shadow">
                     <div class="card-body text-left">
-                        <h5>Topik lain!</h5>
+                        <h5>Artikel lain!</h5>
                         <hr />
-                        <div class="alert alert-primary" role="alert">
-                            A simple primary alert—check it out! shhssh hshhss hssy
-                        </div>
-                        <div class="alert alert-primary" role="alert">
-                            A simple primary alert—check it out! shhssh
-                        </div>
+                        {{-- Artikel lain --}}
+                        @foreach ($more_articles as $more_article)
+                            <div class="alert alert-secondary" role="alert">
+                                <a
+                                    href="/blog/{{ $more_article->slug }}">{{ strlen($more_article->title) > 62 ? substr($more_article->title, 0, 62) . ' ...' : $more_article->title }}</a>
+                            </div>
+                        @endforeach
 
                     </div>
                 </div>
@@ -64,7 +81,7 @@
                         <h6>Buat eventmu sekarang!</h6>
                         <hr />
                         <a type="button" href="/login" class="btn btn-light">Login</a>
-                        <a type="button" href="/event/create" class="btn btn-dark">Buat!</a>
+                        <a type="button" href="/event/create" class="btn btn-dark">Buat event!</a>
                     </div>
                 </div>
                 <br />
@@ -72,7 +89,6 @@
             </div>
         </div>
     </div>
-
 
 
     <!-- Full Image Modal -->
@@ -87,7 +103,7 @@
                     </button>
                 </div>
                 <div class="modal-body p-1" style="width: 100%; height:100%">
-                    <img src="{{ asset('storage/event-images/' . $article->input_image) }}" class="card-img-top"
+                    <img src="{{ asset('storage/blog-images/' . $article->input_image) }}" class="card-img-top"
                         alt="...">
                 </div>
                 <div class="modal-footer">
@@ -96,4 +112,20 @@
             </div>
         </div>
     </div>
+
+    {{-- Skrip copy link --}}
+    <script>
+        document.getElementById("copyButton").addEventListener("click", function() {
+            var dummy = document.createElement('input'),
+                text = window.location.href;
+
+            document.body.appendChild(dummy);
+            dummy.value = text;
+            dummy.select();
+            document.execCommand('copy');
+            document.body.removeChild(dummy);
+
+            alert("Link has been copied to clipboard: " + text);
+        });
+    </script>
 @endsection

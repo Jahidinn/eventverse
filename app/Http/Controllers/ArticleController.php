@@ -19,10 +19,30 @@ class ArticleController extends Controller
 	{
 		$latestArticles = Article::latest()->first();
 
-		$articles = Article::where('slug', '!=', $latestArticles->slug)->orderBy('id', 'DESC')->paginate(10)->withQueryString();
+		$articles = Article::where('slug', '!=', $latestArticles->slug)
+			->orderBy('id', 'DESC')
+			->paginate(10)
+			->withQueryString();
 
 		return view('article.page-blog-index', [
 			'latestArticle' => $latestArticles,
+			'articles' => $articles,
+		]);
+	}
+
+	public function blogSearch(Request $request)
+	{
+		# Key pencarian
+		$key = $request->key;
+
+		# Query artikel
+		$articles = Article::where('title', 'LIKE', '%' . $key . '%')
+			->orderBy('id', 'DESC')
+			->limit(10)
+			->paginate(10)
+			->withQueryString();
+
+		return view('article.page-blog-search', [
 			'articles' => $articles,
 		]);
 	}
@@ -222,10 +242,18 @@ class ArticleController extends Controller
 	public function viewArticle($slug)
 	{
 		$detail_article = Article::where('slug', $slug)->first();
+		$more_articles = Article::where('article_code', $detail_article->article_code)
+			->where('slug', '!=', $detail_article->slug)
+			->inRandomOrder()
+			->limit(5)
+			->get();
 
 		if ($detail_article) {
 			// Artikel ditemukan, lakukan logika untuk menampilkan artikel
-			return view('article.page-blog-view', ['article' => $detail_article]);
+			return view('article.page-blog-view', [
+				'article' => $detail_article,
+				'more_articles' => $more_articles,
+			]);
 		}
 
 		// Artikel tidak ditemukan, kembalikan respons 404 ("Not Found")
