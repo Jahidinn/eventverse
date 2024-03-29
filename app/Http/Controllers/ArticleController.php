@@ -13,7 +13,21 @@ use Illuminate\Support\Facades\Validator;
 
 class ArticleController extends Controller
 {
-	// function proses validasi dan simpan artikel
+
+	# Main page artikel / blog
+	public function blogMain()
+	{
+		$latestArticles = Article::latest()->first();
+
+		$articles = Article::where('slug', '!=', $latestArticles->slug)->orderBy('id', 'DESC')->paginate(10)->withQueryString();
+
+		return view('article.page-blog-index', [
+			'latestArticle' => $latestArticles,
+			'articles' => $articles,
+		]);
+	}
+
+	# function proses validasi dan simpan artikel
 	public function create(Request $request)
 	{
 		$validator = Validator::make($request->all(), [

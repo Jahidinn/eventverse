@@ -806,3 +806,24 @@ button.slick-disabled {
 	content: "";
 	top: 5px;
   }
+
+.blog-index .jumbotron {
+	height:200px;
+	margin: 0 auto;
+	position: relative;
+	overflow: hidden;
+}
+
+.blog-index .list-article {
+	height:160px;
+	margin: 0 auto;
+	position: relative;
+	overflow: hidden;
+}
+
+.blog-index .jumbotron img , .blog-index .list-article img {
+	width:100%;
+	height:100%;
+	object-fit:cover;
+	object-position: center;
+}

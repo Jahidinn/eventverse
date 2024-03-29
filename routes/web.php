@@ -123,6 +123,7 @@ Route::middleware(['auth'])->group(function () {
 Route::get('/blog/pricing', [ArticleController::class, 'pricingInfo']);
 Route::get('/blog/about-us', [ArticleController::class, 'aboutUs']);
 Route::get('/blog/creator-guide', [ArticleController::class, 'guide']);
+Route::get('/blog', [ArticleController::class, 'blogMain']);
 Route::get('/blog/{slug}', [ArticleController::class, 'viewArticle']);
 
 

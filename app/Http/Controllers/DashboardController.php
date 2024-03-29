@@ -207,7 +207,7 @@ class DashboardController extends Controller
 		$user_id = auth()->user()->id;
 		$search = $request->key;
 
-		$listEvent = Event::where('title', 'like', '%' . $search . '%')->where('user_id', $user_id)->paginate(2)->withQueryString();
+		$listEvent = Event::where('title', 'like', '%' . $search . '%')->where('user_id', $user_id)->paginate(10)->withQueryString();
 
 
 		return view('dashboard.page-transaction-report', [
@@ -240,6 +240,7 @@ class DashboardController extends Controller
 		$totalTiket = Ticket::where('event_id', $event_id)->count();
 
 		//Mengkategorikan dana berdasarkan metode pembayaran
+
 		//Metode BANK TRANSFER (VA)
 		$qty_bank_tf = Transaction::where('event_id', $event_id)
 			->where('status', 'Paid')
