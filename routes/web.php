@@ -32,6 +32,9 @@ Route::post('/login', [AuthController::class, 'autenticate']);
 Route::get('/register', [AuthController::class, 'register'])->name('register')->middleware('guest');
 Route::post('/register', [AuthController::class, 'storeRegister']);
 
+# Subscribe
+Route::post('/subscribe', [HomeController::class, 'subscribe']);
+
 Route::post('/logout', [AuthController::class, 'logout']);
 
 //email verification handle

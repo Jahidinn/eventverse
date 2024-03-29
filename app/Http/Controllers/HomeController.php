@@ -6,6 +6,7 @@ use App\Models\Category;
 use App\Models\Cities;
 use App\Models\Event;
 use App\Models\Provinces;
+use App\Models\Subscriber;
 use App\Models\Ticket;
 use Illuminate\Http\Request;
 
@@ -67,5 +68,25 @@ class HomeController extends Controller
 			'jenisevent' => $jenisevent,
 			'sorts' => $sorts,
 		]);
+	}
+
+	public function subscribe(Request $request)
+	{
+		$email = $request->email;
+
+		$data = [
+			'email' => $email,
+			'is_active' => 1,
+		];
+
+		$cekData = Subscriber::where('email', $email)->exists();
+
+		# Cek sudah subcribe atau belum
+		if ($cekData) {
+			return response()->json(['error' => 'email already subscribed']);
+		}
+
+		Subscriber::create($data);
+		return response()->json(['success' => 'Successful subscription!']);
 	}
 }

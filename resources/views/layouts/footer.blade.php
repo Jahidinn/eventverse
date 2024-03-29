@@ -7,9 +7,10 @@
                 <p>Subscribe biar nggak ketinggalan update event terbaru ya!</p>
             </div>
             <div class="col-lg-6">
-                <form action="" method="post">
+                <form method="post" id="form-subscribe">
+                    @csrf
                     <input type="email" name="email">
-                    <input type="submit" id="email" value="Subscribe">
+                    <input type="submit" id="btn-subscribe" value="Subscribe">
                 </form>
             </div>
         </div>
