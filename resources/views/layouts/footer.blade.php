@@ -24,8 +24,8 @@
             <div class="col-lg-3 col-md-6 footer-links">
                 <h4>Link penting</h4>
                 <ul>
-                    <li><i class="bx bx-chevron-right"></i> <a href="#">Home</a></li>
-                    <li><i class="bx bx-chevron-right"></i> <a href="#">Tentang kami</a></li>
+                    <li><i class="bx bx-chevron-right"></i> <a href="/">Home</a></li>
+                    <li><i class="bx bx-chevron-right"></i> <a href="/blog/about-us">Tentang eventconnec.id</a></li>
                     <li><i class="bx bx-chevron-right"></i> <a href="#">Layanan</a></li>
                     <li><i class="bx bx-chevron-right"></i> <a href="#">Terms of service</a></li>
                     <li><i class="bx bx-chevron-right"></i> <a href="#">Privacy policy</a></li>
@@ -50,15 +50,16 @@
                     Kota Semarang, Pos 50229<br>
                     Indonesia <br><br>
                     <strong>Phone:</strong> +62 821 3355 3002<br>
-                    <strong>Email:</strong> info@mediaprestasi.com<br>
+                    <strong>Email:</strong> info@eventconect.id<br>
                 </p>
 
             </div>
 
             <div class="col-lg-3 col-md-6 footer-info">
-                <h3>Tentang mediaprestasi.com</h3>
-                <p>Mediaprestasi.com merupaan platform pengembangan pemuda Indonesia melalui untuk mempersiapkan
-                    generasi penerus bangsa yang kompeten dibidang akademik dan non-akademik</p>
+                <h3>Tentang eventconnect.id</h3>
+                <p>Eventconnect.id merupaan platform Ticketing Management Sistem yang
+                    menyediakan solusi dalam mendukung penyelenggaraan event. <a href="/blog/about-us"
+                        class="text-success">selengkapnya ...</a></p>
                 <div class="social-links mt-3">
                     <a href="#" class="twitter"><i class="bx bxl-twitter"></i></a>
                     <a href="#" class="facebook"><i class="bx bxl-facebook"></i></a>

@@ -215,11 +215,19 @@ class EventController extends Controller
 			$event->increment('visitor');
 		}
 
+		# Event rekomendasi
+		$recomendedEvent = Event::where('status', 1)
+			->where('slug', '!=', $event->slug)
+			->inRandomOrder()
+			->limit(8)
+			->get();
+
 		return view('events.show', [
 			'detailEvent' => $event,
 			'ticketData' => Ticket::where('event_id', $event->id)->get(),
 			'ticketTransaction' => Transaction::where('event_id', $event->id)->where('status', '!=', 'Expired')->get(),
-			'dateNow' => Carbon::now()->format('Y-m-d')
+			'dateNow' => Carbon::now()->format('Y-m-d'),
+			'recomendedEvents' => $recomendedEvent
 		]);
 	}
 

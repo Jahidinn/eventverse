@@ -36,14 +36,19 @@
                         }
                     @endphp
 
+                    {{-- Gambar / Poster --}}
                     <div class="view-image-event position-relative">
                         <img src="{{ asset('storage/event-images/' . $img) }}" class="card-img-top" alt="...">
                         <button class="btn btn-dark rounded-0 position-absolute" data-toggle="modal"
                             data-target="#fullImageModal"><i class="fas fa-expand"></i></button>
                     </div>
 
+                    {{-- Detal event --}}
                     <div class="card-body">
+
+                        {{-- Title / judul --}}
                         <h5 class="card-title mt-3 mb-0">{{ $detailEvent->title }}</h5>
+
                         @php
                             if ($detailEvent->organizer == 'org') {
                                 $penyelenggara = $detailEvent->org->org_name ?? '';
@@ -51,7 +56,12 @@
                             } elseif ($detailEvent->organizer == 'individual') {
                                 $penyelenggara = $detailEvent->individual->name ?? '';
                                 $link = '/user' . '/' . $detailEvent->individual->username;
-                            } elseif ($detailEvent->organizer == null || $detailEvent->organizer_id == null || $detailEvent->organizer == '' || $detailEvent->organizer_id == '') {
+                            } elseif (
+                                $detailEvent->organizer == null ||
+                                $detailEvent->organizer_id == null ||
+                                $detailEvent->organizer == '' ||
+                                $detailEvent->organizer_id == ''
+                            ) {
                                 $penyelenggara = '';
                                 $link = '';
                             } else {
@@ -60,6 +70,8 @@
                             }
 
                         @endphp
+
+                        {{-- Nama Penyelenggara --}}
                         <a href="{{ $link }}" class=" mt-2 badge badge-info">
                             <i
                                 class="fas fa-user-circle mr-1"></i>{{ strlen($penyelenggara) > 40 ? substr($penyelenggara, 0, 40) . ' ...' : $penyelenggara }}
@@ -67,12 +79,16 @@
                         <hr>
 
                         <div class="row">
+
+                            {{-- Lokasi event --}}
                             <div class="col-md-4 row mt-1">
                                 <div class="col-auto pr-0"><i class="fas fa-map-marker-alt mr-2"></i></div>
                                 <div class="col p-0 pr-1">
                                     <small>{{ $detailEvent->location_jenis == 'Online' ? 'Online' : $detailEvent->location_detail . ', ' . $detailEvent->location_city . ',  ' . $detailEvent->province->name }}</small>
                                 </div>
                             </div>
+
+                            {{-- Tanggal event --}}
                             <div class="col-md-4 row mt-1">
                                 <div class="col-auto pr-0">
                                     <i class="fas fa-calendar-alt mr-2"></i>
@@ -83,6 +99,8 @@
                                     </small>
                                 </div>
                             </div>
+
+                            {{-- Kategori event --}}
                             <div class="col-md-4 row mt-1">
                                 <div class="col-auto pr-0"> <i class="fas fa-list mr-2"></i></div>
                                 <div class="col p-0 pr-1"><small>{{ $detailEvent->categories->category }}</small></div>
@@ -91,46 +109,44 @@
 
                         <hr>
 
-                        <p class="card-text"><small class="text-muted">Posted
-                                {{ $detailEvent->created_at->diffForHumans() }}</small></p>
+                        {{-- Informasi event dibuat --}}
+                        <p class="card-text">
+                            <small class="text-muted">Posted
+                                {{ $detailEvent->created_at->diffForHumans() }}
+                            </small>
+                        </p>
+                        <div class="float-right">
+                            <button href="" class="btn btn-outline-info me-2 copyButton">
+                                <i class="fas fa-link"></i>
+                            </button>
+                            <button href="" class="btn btn-secondary" data-toggle="modal" data-target="#shareModal">
+                                <i class="fas fa-share"></i>
+                            </button>
+                        </div>
+
+
                     </div>
                 </div>
 
                 <div class="card mb-3 mx-1 shadow">
                     <div class="card-body p-3">
+
+                        {{-- Pilihan TAB --}}
                         <div class="col-md-12 row tabs mb-4">
                             <div class="col px-0">
-                                <button class="tab-link current w-100 m-0 py-2" data-tab="tab-1">Deskripsi event</button>
+                                <button class="tab-link current w-100 m-0 py-2" data-tab="show-tiket">Tiket
+                                    Pendaftaran</button>
                             </div>
                             <div class="col p-0">
-                                <button class="tab-link w-100 py-2" data-tab="tab-2">Tiket</button>
-                            </div>
-                        </div>
-
-                        {{-- Tab deskripsi --}}
-                        <div id="tab-1" class="tab-content current p-0">
-                            <div>
-                                <h5 class="card-title">Deskripsi</h5>
-                                <p class="card-text">
-                                <article>
-                                    {!! $detailEvent->description !!}
-                                </article>
-                                </p>
-                            </div>
-                            <div class="mt-4">
-                                <h5 class="card-title">Syarat & ketentuan</h5>
-                                <p class="card-text">
-                                <article>
-                                    {!! $detailEvent->terms !!}
-                                </article>
-                                </p>
-                                <p class="card-text"><small class="text-muted"></small></p>
+                                <button class="tab-link w-100 py-2" data-tab="show-deskripsi">Deskripsi</button>
                             </div>
                         </div>
 
                         {{-- Tab ticket event --}}
-                        <div id="tab-2" class="tab-content p-0">
+                        <div id="show-tiket" class="tab-content current p-0">
                             <h5 class="card-title">Tiket pendaftaran</h5>
+
+                            {{-- Looping tiket --}}
                             @foreach ($ticketData as $ticket)
                                 <div class="card shadow-sm ticket-card mt-3 rounded-0" id="ticket-example">
                                     <div class="card-header text-white rounded-0 bg-ticket">
@@ -159,6 +175,7 @@
                                                 </span>
                                             </small>
                                         </p>
+
                                         <hr class="dashed">
                                         <div class="row">
                                             <div class="col">
@@ -202,12 +219,34 @@
                             @endforeach
 
                         </div>
+
+                        {{-- Tab deskripsi --}}
+                        <div id="show-deskripsi" class="tab-content p-0">
+                            <div>
+                                <h5 class="card-title">Deskripsi</h5>
+                                <p class="card-text">
+                                <article>
+                                    {!! $detailEvent->description !!}
+                                </article>
+                                </p>
+                            </div>
+                            <div class="mt-4">
+                                <h5 class="card-title">Syarat & ketentuan</h5>
+                                <p class="card-text">
+                                <article>
+                                    {!! $detailEvent->terms !!}
+                                </article>
+                                </p>
+                                <p class="card-text"><small class="text-muted"></small></p>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <div class="col-12 col-md-4 m-0 p-1 ">
 
+            {{-- Info penyelenggara organisasi --}}
+            <div class="col-12 col-md-4 m-0 p-1 ">
                 <div class="card mx-1 shadow">
                     <div class="card-body text-left">
                         <h5>Info penyelenggara</h5>
@@ -216,7 +255,9 @@
                         @if ($detailEvent->organizer == 'org' && $detailEvent->organizer_id)
                             {{-- Jika penyelenggar organisasi --}}
                             @php
-                                $detailEvent->org->org_image ? ($logo = $detailEvent->org->org_image) : ($logo = 'default-user.jpg');
+                                $detailEvent->org->org_image
+                                    ? ($logo = $detailEvent->org->org_image)
+                                    : ($logo = 'default-user.jpg');
                             @endphp
 
                             <div id="org-info-logo-container">
@@ -234,7 +275,9 @@
                             {{-- Jika penyelenggar individual --}}
 
                             @php
-                                $detailEvent->individual->profile_picture ? ($logo = $detailEvent->individual->profile_picture) : ($logo = 'default-user.jpg');
+                                $detailEvent->individual->profile_picture
+                                    ? ($logo = $detailEvent->individual->profile_picture)
+                                    : ($logo = 'default-user.jpg');
                             @endphp
 
                             <div id="org-info-logo-container">
@@ -276,8 +319,8 @@
                         <h6>Bingung? Panduan buat event 👇</h6>
                         <hr />
                         <div class="ratio ratio-16x9">
-                            <iframe src="https://www.youtube.com/embed/FJwe5Ju9-Zw" title="YouTube video"
-                                allowfullscreen></iframe>
+                            <iframe src="https://www.youtube.com/embed/EerjWLzp71c?si=BfKTWYhylwVrjeL7"
+                                title="YouTube video" allowfullscreen></iframe>
                         </div>
                     </div>
                 </div>
@@ -292,22 +335,88 @@
         </div>
 
         <div class="container-fluid event-terbaru pt-0 mt-0">
-            @foreach (range(1, 15) as $count)
+            @foreach ($recomendedEvents as $moreEvent)
                 <div class="col-md-4 mt-0">
                     <div class="card profile-card-5 shadow">
+
+                        @php
+                            if ($moreEvent->image == '' || $moreEvent->image == null) {
+                                //Jika gambar kosong
+                                $imgmoreEvent = 'def-no-img.png';
+                            } else {
+                                $imgPath = 'storage/event-images/' . $moreEvent->image;
+
+                                // Memeriksa apakah file ada
+                                if (file_exists(public_path($imgPath))) {
+                                    $imgmoreEvent = $moreEvent->image;
+                                } else {
+                                    // Jika file tidak ada, ganti dengan default
+                                    $imgmoreEvent = 'def-no-img.png';
+                                }
+                            }
+                        @endphp
+
+                        {{-- Gambar / poster --}}
                         <div class="card-img-block">
-                            <img class="card-img-top" src="https://images.unsplash.com/photo-1517832207067-4db24a2ae47c"
+                            <img class="card-img-top" src="{{ asset('storage/event-images/' . $imgmoreEvent) }}"
                                 alt="Card image cap">
                         </div>
+
+                        {{-- Info lain --}}
                         <div class="card-body pt-0">
-                            <h5 class="card-title pb-0 mb-0">Florence Garza</h5>
-                            <small>{{ $count }} Oktober 2021 -20 Okt 2023</small>
-                            <hr>
-                            <p class="card-text">
-                            <div class="alert alert-info" role="alert"><strong>Rp 200.000</strong></div>
-                            </p>
-                            <hr>
-                            <small>{{ $count }} Universitas Indonesia</small>
+
+                            {{-- Title / Judul --}}
+                            @php
+                                if (strlen($moreEvent->title) > 50) {
+                                    $title_moreEvent = substr($moreEvent->title, 0, 50) . ' ...';
+                                } else {
+                                    $title_moreEvent = $moreEvent->title;
+                                }
+                            @endphp
+                            <div style="height: 45px">
+                                <h5 class="card-title pb-0 mb-0">{{ $title_moreEvent }}</h5>
+                            </div>
+
+                            <hr class="mb-1 mt-1">
+
+                            {{-- Lokasi --}}
+                            <small class="location">
+                                <i class="fas fa-map-marker-alt mr-2"></i>
+                                {{ $moreEvent->location_jenis == 'Offline' ? ucwords(strtolower($moreEvent->location_city)) : $moreEvent->location_jenis }}</small>
+                            <br>
+
+                            {{-- Tanggal event --}}
+                            <small>
+                                <i class="fas fa-clock mr-2"></i>
+                                {{ $moreEvent->start_date->format('dd-mm-Y') == $moreEvent->end_date->format('dd-mm-Y') ? $moreEvent->end_date->format('d M Y') : $moreEvent->start_date->format('d M Y') . ' - ' . $moreEvent->end_date->format('d M Y') }}</small>
+                            <hr class="mb-1 mt-1">
+
+                            {{-- Harga --}}
+                            <div class="alert alert-info mt-3" role="alert">
+                                <small>
+                                    <strong><i class="fas fa-tag"></i>
+                                        {{ $moreEvent->ticket->first()->ticket_price == 0 ? 'GRATIS!' : ' Rp ' . number_format($moreEvent->ticket->first()->ticket_price, 0, ',', '.') }}</strong>
+                                </small>
+                            </div>
+
+                            <hr class="mb-1 mt-1">
+
+                            {{-- Penyelenggara --}}
+                            @php
+                                if ($moreEvent->organizer == 'org') {
+                                    $penyelenggara_moreEvent = $moreEvent->org->org_name ?? '';
+                                } elseif ($moreEvent->organizer == 'individual') {
+                                    $penyelenggara_moreEvent = $moreEvent->individual->name ?? '';
+                                } else {
+                                    $penyelenggara_moreEvent = '';
+                                }
+                            @endphp
+
+                            <div class="text-center">
+                                <small class="event-user">
+                                    {{ $penyelenggara_moreEvent }}
+                                </small>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -335,4 +444,53 @@
             </div>
         </div>
     </div>
+
+    {{-- Modal share link event --}}
+    <div class="modal fade" id="shareModal" tabindex="-1" aria-labelledby="shareModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="shareModalLabel">Share event</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body text-center">
+                    <button class="btn btn-secondary copyButton">
+                        <i class="fas fa-link"></i> Copy link
+                    </button>
+                    <!-- Tombol WhatsApp -->
+                    <a href="https://api.whatsapp.com/send?text={{ urlencode(url()->current()) }}"
+                        class="btn btn-success"><i class="fab fa-whatsapp"></i></a>
+
+                    <!-- Tombol LinkedIn -->
+                    <a href="https://www.linkedin.com/sharing/share-offsite/?url={{ urlencode(url()->current()) }}"
+                        class="btn btn-primary"><i class="fab fa-linkedin-in"></i></a>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    {{-- <button type="button" class="btn btn-primary">Save changes</button> --}}
+                </div>
+            </div>
+        </div>
+    </div>
+    {{-- Modal share link event --}}
+
+    {{-- Skrip copy link --}}
+    <script>
+        document.querySelectorAll('.copyButton').forEach(button => {
+            button.addEventListener('click', function() {
+                var dummy = document.createElement('input'),
+                    text = window.location.href;
+
+                document.body.appendChild(dummy);
+                dummy.value = text;
+                dummy.select();
+                document.execCommand('copy');
+                document.body.removeChild(dummy);
+
+                alert("Link has been copied to clipboard");
+            });
+        });
+    </script>
 @endsection

@@ -43,7 +43,7 @@
 
                             <!-- Tombol WhatsApp -->
                             <a href="https://api.whatsapp.com/send?text={{ urlencode(url()->current()) }}"
-                                class="btn btn-outline-primary" class="btn btn-outline-success"><i
+                                class="btn btn-outline-success" class="btn btn-outline-success"><i
                                     class="fab fa-whatsapp"></i></a>
 
                             <!-- Tombol LinkedIn -->

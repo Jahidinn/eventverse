@@ -101,22 +101,59 @@
                                     alt="Card image cap">
                             </div>
                             <div class="card-body pt-0">
-                                <h5 class="card-title pb-0 mb-0">{{ $terbaru->title }}</h5>
+
+                                {{-- Title / Judul --}}
+                                @php
+                                    if (strlen($terbaru->title) > 50) {
+                                        $title_terbaru = substr($terbaru->title, 0, 50) . ' ...';
+                                    } else {
+                                        $title_terbaru = $terbaru->title;
+                                    }
+                                @endphp
+
+                                <div style="height: 45px">
+                                    <h5 class="card-title pb-0 mb-0">{{ $title_terbaru }}</h5>
+                                </div>
+
+                                <hr class="mb-1 mt-1">
+
+                                {{-- LOKASI --}}
                                 <small class="location"><i class="fas fa-map-marker-alt mr-2"></i>
                                     {{ $terbaru->location_jenis == 'Offline' ? ucwords(strtolower($terbaru->location_city)) : $terbaru->location_jenis }}</small>
+                                <br>
+
+                                {{-- TANGGAL EVENT --}}
+                                <small>
+                                    <i class="fas fa-clock mr-2"></i>
+                                    {{ $terbaru->start_date->format('dd-mm-Y') == $terbaru->end_date->format('dd-mm-Y') ? $terbaru->end_date->format('d M Y') : $terbaru->start_date->format('d M Y') . ' - ' . $terbaru->end_date->format('d M Y') }}</small>
                                 <hr class="mb-1 mt-1">
-                                <small>{{ $terbaru->start_date->format('dd-mm-Y') == $terbaru->end_date->format('dd-mm-Y') ? $terbaru->end_date->format('d M Y') : $terbaru->start_date->format('d M Y') . ' - ' . $terbaru->end_date->format('d M Y') }}</small>
-                                <p class="card-text">
-                                <div class="alert alert-info" role="alert">
+
+                                {{-- PRICE --}}
+                                <div class="alert alert-info mt-3" role="alert">
                                     <small>
                                         <strong><i class="fas fa-tag"></i>
                                             {{ $terbaru->ticket->first()->ticket_price == 0 ? 'GRATIS!' : ' Rp ' . number_format($terbaru->ticket->first()->ticket_price, 0, ',', '.') }}</strong>
                                     </small>
                                 </div>
-                                </p>
-                                <hr>
-                                <small class="event-user"><i class="fas fa-user-circle mr-1"></i>
-                                    {{ $terbaru->penyelenggara->name }}</small>
+
+                                <hr class="mb-1 mt-1">
+
+                                {{-- ORGANISASI --}}
+                                @php
+                                    if ($terbaru->organizer == 'org') {
+                                        $penyelenggara = $terbaru->org->org_name ?? '';
+                                    } elseif ($terbaru->organizer == 'individual') {
+                                        $penyelenggara = $terbaru->individual->name ?? '';
+                                    } else {
+                                        $penyelenggara = '';
+                                    }
+
+                                @endphp
+
+                                <div class="text-center">
+                                    <small class="event-user text-secondary">
+                                        {{ $penyelenggara }}</small>
+                                </div>
                             </div>
                         </div>
                     </a>
@@ -169,23 +206,62 @@
                                 <img class="card-img-top" src="{{ asset('storage/event-images/' . $imgPopuler) }}"
                                     alt="Card image cap">
                             </div>
+
+                            {{-- INFO LAIN --}}
                             <div class="card-body pt-0">
-                                <h5 class="card-title pb-0 mb-0">{{ $populer->title }}</h5>
-                                <small class="location"><i class="fas fa-map-marker-alt mr-2"></i>
-                                    {{ $populer->location_jenis == 'Offline' ? ucwords(strtolower($populer->location_city)) : $populer->location_jenis }}</small>
+
+                                {{-- Title / Judul --}}
+                                @php
+                                    if (strlen($populer->title) > 50) {
+                                        $title_populer = substr($populer->title, 0, 50) . ' ...';
+                                    } else {
+                                        $title_populer = $populer->title;
+                                    }
+                                @endphp
+                                <div style="height: 45px">
+                                    <h5 class="card-title pb-0 mb-0">{{ $title_populer }}</h5>
+                                </div>
+
                                 <hr class="mb-1 mt-1">
-                                <small>{{ $populer->start_date->format('dd-mm-Y') == $populer->end_date->format('dd-mm-Y') ? $populer->end_date->format('d M Y') : $populer->start_date->format('d M Y') . ' - ' . $populer->end_date->format('d M Y') }}</small>
-                                <p class="card-text">
-                                <div class="alert alert-info" role="alert">
+
+                                {{-- Lokasi --}}
+                                <small class="location">
+                                    <i class="fas fa-map-marker-alt mr-2"></i>
+                                    {{ $populer->location_jenis == 'Offline' ? ucwords(strtolower($populer->location_city)) : $populer->location_jenis }}</small>
+                                <br>
+
+                                {{-- Tanggal event --}}
+                                <small>
+                                    <i class="fas fa-clock mr-2"></i>
+                                    {{ $populer->start_date->format('dd-mm-Y') == $populer->end_date->format('dd-mm-Y') ? $populer->end_date->format('d M Y') : $populer->start_date->format('d M Y') . ' - ' . $populer->end_date->format('d M Y') }}</small>
+                                <hr class="mb-1 mt-1">
+
+                                {{-- Harga --}}
+                                <div class="alert alert-info mt-3" role="alert">
                                     <small>
                                         <strong><i class="fas fa-tag"></i>
                                             {{ $populer->ticket->first()->ticket_price == 0 ? 'GRATIS!' : ' Rp ' . number_format($populer->ticket->first()->ticket_price, 0, ',', '.') }}</strong>
                                     </small>
                                 </div>
-                                </p>
-                                <hr>
-                                <small class="event-user"><i class="fas fa-user-circle mr-1"></i>
-                                    {{ $populer->penyelenggara->name }}</small>
+
+                                <hr class="mb-1 mt-1">
+
+                                {{-- Penyelenggara --}}
+                                @php
+                                    if ($populer->organizer == 'org') {
+                                        $penyelenggara_populer = $populer->org->org_name ?? '';
+                                    } elseif ($populer->organizer == 'individual') {
+                                        $penyelenggara_populer = $populer->individual->name ?? '';
+                                    } else {
+                                        $penyelenggara_populer = '';
+                                    }
+                                @endphp
+
+                                <div class="text-center">
+                                    <small class="event-user">
+                                        {{ $penyelenggara_populer }}
+                                    </small>
+                                </div>
                             </div>
                         </div>
                     </a>
@@ -228,23 +304,61 @@
                                     alt="Card image cap">
                             </div>
 
+                            {{-- Isi data --}}
                             <div class="card-body pt-0">
-                                <h5 class="card-title pb-0 mb-0">{{ $pilihan->title }}</h5>
-                                <small class="location"><i class="fas fa-map-marker-alt mr-2"></i>
-                                    {{ $pilihan->location_jenis == 'Offline' ? ucwords(strtolower($pilihan->location_city)) : $pilihan->location_jenis }}</small>
+
+                                {{-- Title / judul --}}
+                                @php
+                                    if (strlen($pilihan->title) > 50) {
+                                        $title_pilihan = substr($pilihan->title, 0, 50) . ' ...';
+                                    } else {
+                                        $title_pilihan = $pilihan->title;
+                                    }
+                                @endphp
+
+                                <div style="height: 45px">
+                                    <h5 class="card-title pb-0 mb-0">{{ $title_pilihan }}</h5>
+                                </div>
+
                                 <hr class="mb-1 mt-1">
-                                <small>{{ $pilihan->start_date->format('dd-mm-Y') == $pilihan->end_date->format('dd-mm-Y') ? $pilihan->end_date->format('d M Y') : $pilihan->start_date->format('d M Y') . ' - ' . $pilihan->end_date->format('d M Y') }}</small>
-                                <p class="card-text">
-                                <div class="alert alert-info" role="alert">
+
+                                {{-- Lokasi --}}
+                                <small class="location">
+                                    <i class="fas fa-map-marker-alt mr-2"></i>
+                                    {{ $pilihan->location_jenis == 'Offline' ? ucwords(strtolower($pilihan->location_city)) : $pilihan->location_jenis }}</small>
+                                <br>
+                                {{-- Tanggal event --}}
+                                <small>
+                                    <i class="fas fa-clock mr-2"></i>
+                                    {{ $pilihan->start_date->format('dd-mm-Y') == $pilihan->end_date->format('dd-mm-Y') ? $pilihan->end_date->format('d M Y') : $pilihan->start_date->format('d M Y') . ' - ' . $pilihan->end_date->format('d M Y') }}</small>
+
+
+                                {{-- Harga tiket --}}
+                                <div class="alert alert-info mt-3" role="alert">
                                     <small>
                                         <strong><i class="fas fa-tag"></i>
                                             {{ $pilihan->ticket->first()->ticket_price == 0 ? 'GRATIS!' : ' Rp ' . number_format($pilihan->ticket->first()->ticket_price, 0, ',', '.') }}</strong>
                                     </small>
                                 </div>
-                                </p>
-                                <hr>
-                                <small class="event-user"><i class="fas fa-user-circle mr-1"></i>
-                                    {{ $pilihan->penyelenggara->name }}</small>
+
+                                <hr class="mt-1 mb-1">
+
+                                {{-- Penyelenggara --}}
+                                @php
+                                    if ($pilihan->organizer == 'org') {
+                                        $penyelenggara_pilihan = $pilihan->org->org_name ?? '';
+                                    } elseif ($pilihan->organizer == 'individual') {
+                                        $penyelenggara_pilihan = $pilihan->individual->name ?? '';
+                                    } else {
+                                        $penyelenggara_pilihan = '';
+                                    }
+                                @endphp
+                                <div class="text-center">
+                                    <small class="event-user">
+                                        {{ $penyelenggara_pilihan }}
+                                    </small>
+                                </div>
+
                             </div>
                         </div>
                     </a>
@@ -256,41 +370,40 @@
 
     <!-- ======= Why Us Section ======= -->
     <section class="why-us section-bg px-2" data-aos="fade-up" date-aos-delay="200">
-        <div class="container">
-
-            <div class="row">
-                <div class="col-lg-6 video-box">
-                    <img src="{{ asset('assets/img/service-details-1.jpg') }}" class="img-fluid" alt="">
-                    <a href="https://www.youtube.com/watch?v=jDDaplaOz7Q" class="venobox play-btn mb-4"
-                        data-vbtype="video" data-autoplay="true"></a>
-                </div>
-
-                <div class="col-lg-6 d-flex flex-column justify-content-center px-2 py-4">
-
-                    <div class="icon-box">
-                        <span class="ml-4"><strong>APA ITU EVENTCONNECT.ID?</strong></span>
-                        <p class="description ml-4">Eventconnect.id merupakan platform sharing, ticketing dan manajemen
-                            event <strong>Baca selengkapnya ...</strong></p>
-                    </div>
-
-                    <div class="icon-box">
-                        <span class="ml-4"><strong>KENAPA HARUS EVENTCONNECT.ID?</strong></span>
-                        <p class="description ml-4 mb-0 mt-2 pb-0 "><i class="fa fa-check text-success"></i> Posting/buat
-                            event lebih mudah!</p>
-                        <p class="description ml-4 mb-0 pb-0"><i class="fa fa-check text-success"></i> Manajemen event
-                            lebih
-                            teratur</p>
-                        <p class="description ml-4 mb-0 pb-0 pr-0 mr-0"><i class="fa fa-check text-success"></i> Sistem
-                            pendaftaran dan ticketing terogranisir</p>
-                        <p class="description ml-4 mb-0 pb-0"><i class="fa fa-check text-success"></i> Pemayaran lebih
-                            mudah dan aman</p>
-                        <p class="description ml-4 mb-0 pb-0"><i class="fa fa-check text-success"></i> Meminimalisir
-                            penipuan event</p>
-                    </div>
-
-                </div>
+        <div class="container p-4">
+            <div class="text-center">
+                <h5>Kenapa eventconect.id?</h5>
+            </div>
+            <hr>
+            <div class="mb-3">
+                <ul>
+                    <li class="mb-1">Event kamu bisa jadi lebih <b class="text-success">keren & profesional</b>!</li>
+                    <li class="mb-1">Manajemen sistem pendaftaran, ticketing, dan report data event yang lebih baik.</li>
+                    <li class="mb-1">Tidak perlu urusin data peserta, kita yang urus!</li>
+                    <li class="mb-1">Tidak perlu urus masalaah pembayaran, kita yang urus!</li>
+                    <li class="mb-1">Meningkatkan <b class="text-success">kepercayaan</b> peserta!</li>
+                    <li class="mb-1">Yang pasti kamu bisa menggunkanan platform eventconect.id kapanpun dan <span
+                            class="text-success"><b>GRATIS!</b></span>
+                    </li>
+                </ul>
+            </div>
+            <hr>
+            <div class="text-center">
+                <h5>Siapa eventconect.id?</h5>
+            </div>
+            <hr>
+            <div class="text-center">
+                <p><b>Eventconnect.id</b> merupakan platform Ticketing Management Sistem dibawah naungan <b>PT Konektivitas
+                        Tanpa Batas</b> dan yang bekerja sama dengan <b>ILB media</b> (IG @Info.lomba.beasiswa) yang
+                    menyediakan solusi
+                    teknologi dalam mendukung penyelenggaraan event mulai dari distribusi dan manajemen tiket pendaftaran,
+                    hingga penyediaan
+                    report/laporan event.
+                </p>
+                <a href="/blog/about-us" class="btn btn-info rounded-0">Baca selengkapnya ...</a>
             </div>
 
         </div>
-    </section><!-- End Why Us Section -->
+    </section>
+    <!-- End Why Us Section -->
 @endsection
