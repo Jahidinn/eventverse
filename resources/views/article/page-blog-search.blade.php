@@ -17,7 +17,7 @@
         <!-- Blog entries-->
         <div class="col-lg-12 blog-index">
 
-            <form action="" method="GET">
+            <form action=""	 method="GET">
                 <div class="input-group mb-3">
                     <input type="search" class="form-control rounded-0" placeholder="Cari artikel ..."
                         aria-label="Cari artikel" name="key" value="{{ request('key') }}">
