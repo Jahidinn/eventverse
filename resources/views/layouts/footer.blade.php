@@ -44,7 +44,7 @@
             </div>
 
             <div class="col-lg-3 col-md-6 footer-contact">
-                <h4>Kontak kami</h4>
+                <h4>Contact</h4>
                 <p>
                     Kawasan UNNES Sekaran <br>
                     Kota Semarang, Pos 50229<br>
@@ -56,7 +56,7 @@
             </div>
 
             <div class="col-lg-3 col-md-6 footer-info">
-                <h3>Tentang eventconnect.id</h3>
+                <h3>About eventconnect.id</h3>
                 <p>Eventconnect.id merupaan platform Ticketing Management Sistem yang
                     menyediakan solusi dalam mendukung penyelenggaraan event. <a href="/blog/about-us"
                         class="text-success">selengkapnya ...</a></p>
