@@ -60,7 +60,9 @@
         {{-- notifikasi sukses reset --}}
         @if (Session::has('status'))
             <script type="text/javascript">
-                alertify.alert("Sukses!", "{{ session()->get('status') }}");
+                alertify.alert("Sukses!", "{{ session()->get('status') }}", function() {
+                    window.location.href = "/login"; // Ganti URL dengan URL tujuan pengalihan
+                });
             </script>
         @endif
     @endsection
