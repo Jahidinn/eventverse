@@ -58,8 +58,8 @@
                         </div>
                     </div>
                 </div>
-                <input type="text" id="confirm_is_login">
-                <input type="text" id="confirm_user_login_id">
+                <input type="hidden" id="confirm_is_login">
+                <input type="hidden" id="confirm_user_login_id">
 
                 <input type="hidden" id="id_event">
                 <input type="hidden" id="email_transaction">
