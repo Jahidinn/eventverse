@@ -42,7 +42,7 @@ Route::get('/email/verify/{id}/{hash}', [AuthController::class, 'emailVerify'])-
 
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
-Route::get('/home', [HomeController::class, 'index'])->name('home');
+Route::get('/home', [HomeController::class, 'index']);
 Route::get('/search', [HomeController::class, 'searchEvent']);
 
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard')->middleware('auth');
