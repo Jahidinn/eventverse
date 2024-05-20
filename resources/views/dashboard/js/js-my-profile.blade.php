@@ -127,7 +127,6 @@
 
     $('body').on('click', '.edit-my-password', function(e) {
         e.preventDefault();
-        data = new FormData(this);
 
         $('#editPasswordModal').modal('show');
 

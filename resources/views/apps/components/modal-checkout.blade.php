@@ -10,27 +10,27 @@
             </div>
             <div class="modal-body">
                 <div class="col-md-12 row mb-1 p-0 m-0 ">
-                    <div class="col-6 m-0 p-1 text-secondary">Nama</div>
-                    <div class="col-6 m-0 p-1" id="confirm_nama">Null</div>
+                    <div class="col-4 m-0 p-1 text-secondary">Nama</div>
+                    <div class="col-8 m-0 p-1" id="confirm_nama">Null</div>
                 </div>
                 <div class="col-md-12 row mb-1 m-0 p-0">
-                    <div class="col-6 m-0 p-1 text-secondary">Email</div>
-                    <div class="col-6 m-0 p-1" id="confirm_email">Null</div>
+                    <div class="col-4 m-0 p-1 text-secondary">Email</div>
+                    <div class="col-8 m-0 p-1" id="confirm_email">Null</div>
                 </div>
                 <div class="col-md-12 row mb-2 m-0 p-0">
-                    <div class="col-6 m-0 p-1 text-secondary">No Hp</div>
-                    <div class="col-6 m-0 p-1" id="confirm_nomerhp">Null</div>
+                    <div class="col-4 m-0 p-1 text-secondary">No Hp</div>
+                    <div class="col-8 m-0 p-1" id="confirm_nomerhp">Null</div>
                 </div>
                 <div class="col-md-12 row mb-2 m-0 p-0">
-                    <div class="col-md-6 m-0 p-1">
-                        <div class="alert alert-primary" role="alert">
+                    <div class="col-md-4 m-0 p-1">
+                        <div class="alert alert-secondary" role="alert">
                             <span id="confirm_event_title">Null</span>
                             <hr class="my-2">
                             <small><i class="fas fa-user-circle"></i> <span
                                     id="confirm_penyelenggara">Null</span></small>
                         </div>
                     </div>
-                    <div class="col-md-6 m-0 p-1">
+                    <div class="col-md-8 m-0 p-1">
                         <div class="alert alert-primary" role="alert">
                             <span id="confirm_ticket">Null</span>
                             <span class="btn btn-secondary btn-sm p-0 px-2">
