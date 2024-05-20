@@ -9,17 +9,17 @@
                 </button>
             </div>
             <div class="modal-body">
-                <div class="col-md-12 row mb-1 p-0 m-0 ">
-                    <div class="col-4 m-0 p-1 text-secondary">Nama</div>
-                    <div class="col-8 m-0 p-1" id="confirm_nama">Null</div>
+                <div class="col-md-12 row mb-0 p-0 m-0 ">
+                    <div class="col-4 m-0 p-1 text-secondary"><small>Nama</small></div>
+                    <div class="col-8 m-0 p-1"><b>: <span id="confirm_nama">Null</span></b></div>
                 </div>
-                <div class="col-md-12 row mb-1 m-0 p-0">
-                    <div class="col-4 m-0 p-1 text-secondary">Email</div>
-                    <div class="col-8 m-0 p-1" id="confirm_email">Null</div>
+                <div class="col-md-12 row mb-0 m-0 p-0">
+                    <div class="col-4 m-0 p-1 text-secondary"><small>Email</small></div>
+                    <div class="col-8 m-0 p-1"><b>: <span id="confirm_email">Null</span></b></div>
                 </div>
                 <div class="col-md-12 row mb-2 m-0 p-0">
-                    <div class="col-4 m-0 p-1 text-secondary">No Hp</div>
-                    <div class="col-8 m-0 p-1" id="confirm_nomerhp">Null</div>
+                    <div class="col-4 m-0 p-1 text-secondary"><small>No Hp</small></div>
+                    <div class="col-8 m-0 p-1"><b>: <span id="confirm_nomerhp">Null</span></b></div>
                 </div>
                 <div class="col-md-12 row mb-2 m-0 p-0">
                     <div class="col-md-4 m-0 p-1">
@@ -33,8 +33,9 @@
                     <div class="col-md-8 m-0 p-1">
                         <div class="alert alert-success" role="alert">
                             <span id="confirm_ticket">Null</span>
-                            <span class="btn btn-secondary btn-sm p-0 px-2">
-                                <span id="confirm_jumlah_tiket">2</span>X</span>
+                            <b> (
+                                <span id="confirm_jumlah_tiket">2</span>x)
+                            </b>
                             <hr class="mb-1">
                             <div class="row">
                                 <div class="col-6"><small>Tiket/pendaftaran</small></div>
