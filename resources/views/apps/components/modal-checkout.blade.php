@@ -10,16 +10,16 @@
             </div>
             <div class="modal-body">
                 <div class="col-md-12 row mb-0 p-0 m-0 ">
-                    <div class="col-4 m-0 p-1 text-secondary"><small>Nama</small></div>
-                    <div class="col-8 m-0 p-1"><b>: <span id="confirm_nama">Null</span></b></div>
+                    <div class="col-3 m-0 p-1 text-secondary"><small>Nama</small></div>
+                    <div class="col-9 m-0 p-1"><small><b>: <span id="confirm_nama">Null</span></b></small></div>
                 </div>
                 <div class="col-md-12 row mb-0 m-0 p-0">
-                    <div class="col-4 m-0 p-1 text-secondary"><small>Email</small></div>
-                    <div class="col-8 m-0 p-1"><b>: <span id="confirm_email">Null</span></b></div>
+                    <div class="col-3 m-0 p-1 text-secondary"><small>Email</small></div>
+                    <div class="col-9 m-0 p-1"><small><b>: <span id="confirm_email">Null</span></b></small></div>
                 </div>
                 <div class="col-md-12 row mb-2 m-0 p-0">
-                    <div class="col-4 m-0 p-1 text-secondary"><small>No Hp</small></div>
-                    <div class="col-8 m-0 p-1"><b>: <span id="confirm_nomerhp">Null</span></b></div>
+                    <div class="col-3 m-0 p-1 text-secondary"><small>No Hp</small></div>
+                    <div class="col-9 m-0 p-1"><small><b>: <span id="confirm_nomerhp">Null</span></b></small></div>
                 </div>
                 <div class="col-md-12 row mb-2 m-0 p-0">
                     <div class="col-md-4 m-0 p-1">
@@ -33,8 +33,7 @@
                     <div class="col-md-8 m-0 p-1">
                         <div class="alert alert-success" role="alert">
                             <span id="confirm_ticket">Null</span>
-                            <b> (
-                                <span id="confirm_jumlah_tiket">2</span>x)
+                            <b> (<span id="confirm_jumlah_tiket">2</span>X)
                             </b>
                             <hr class="mb-1">
                             <div class="row">
