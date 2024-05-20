@@ -23,7 +23,7 @@
                 </div>
                 <div class="col-md-12 row mb-2 m-0 p-0">
                     <div class="col-md-4 m-0 p-1">
-                        <div class="alert alert-secondary" role="alert">
+                        <div class="alert alert-primary" role="alert">
                             <span id="confirm_event_title">Null</span>
                             <hr class="my-2">
                             <small><i class="fas fa-user-circle"></i> <span
@@ -31,7 +31,7 @@
                         </div>
                     </div>
                     <div class="col-md-8 m-0 p-1">
-                        <div class="alert alert-primary" role="alert">
+                        <div class="alert alert-success" role="alert">
                             <span id="confirm_ticket">Null</span>
                             <span class="btn btn-secondary btn-sm p-0 px-2">
                                 <span id="confirm_jumlah_tiket">2</span>X</span>
