@@ -432,4 +432,8 @@ class ArticleController extends Controller
 	{
 		return view('article.page-guide', []);
 	}
+	public function terms()
+	{
+		return view('article.page-terms-and-condition', []);
+	}
 }
