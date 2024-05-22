@@ -434,6 +434,8 @@ class ArticleController extends Controller
 	}
 	public function terms()
 	{
+		# Dari database kirim artikel
+
 		return view('article.page-terms-and-condition', []);
 	}
 }

@@ -10,14 +10,15 @@ use App\Models\Ticket;
 use App\Models\Category;
 use App\Models\Provinces;
 use App\Models\CustomForm;
+use App\Models\Transaction;
 use App\Models\EventVisitor;
 use App\Models\Organisation;
-use App\Models\OrganisationMember;
-use App\Models\Transaction;
 use Illuminate\Http\Request;
+use App\Models\OrganisationMember;
 use Illuminate\Support\Facades\Storage;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Facades\Validator;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 class EventController extends Controller
 {
@@ -222,12 +223,16 @@ class EventController extends Controller
 			->limit(8)
 			->get();
 
+		$url = 'eventconnect.id/' . $event->slug;
+		$qrcode = QrCode::size(200)->generate($url);
+
 		return view('events.show', [
 			'detailEvent' => $event,
 			'ticketData' => Ticket::where('event_id', $event->id)->get(),
 			'ticketTransaction' => Transaction::where('event_id', $event->id)->where('status', '!=', 'Expired')->get(),
 			'dateNow' => Carbon::now()->format('Y-m-d'),
-			'recomendedEvents' => $recomendedEvent
+			'recomendedEvents' => $recomendedEvent,
+			'qrlink' => $qrcode,
 		]);
 	}
 

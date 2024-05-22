@@ -116,6 +116,10 @@
                             </small>
                         </p>
                         <div class="float-right">
+                            <button href="" class="btn btn-outline-info me-2" data-toggle="modal"
+                                data-target="#shareQrModal">
+                                <i class="fas fa-qrcode"></i>
+                            </button>
                             <button href="" class="btn btn-outline-info me-2 copyButton">
                                 <i class="fas fa-link"></i>
                             </button>
@@ -468,13 +472,38 @@
                         class="btn btn-primary"><i class="fab fa-linkedin-in"></i></a>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                     {{-- <button type="button" class="btn btn-primary">Save changes</button> --}}
                 </div>
             </div>
         </div>
     </div>
     {{-- Modal share link event --}}
+
+    {{-- Modal share QR CODE link event --}}
+    <div class="modal fade" id="shareQrModal" tabindex="-1" aria-labelledby="shareQrModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="shareQrModalLabel">QR Code</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body text-center">
+                    {!! $qrlink !!}
+                    <div class="mt-2">
+                        <a href="/{{ $detailEvent->slug }}">eventconnect.id/{{ $detailEvent->slug }}</a>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    {{-- <button type="button" class="btn btn-primary">Save changes</button> --}}
+                </div>
+            </div>
+        </div>
+    </div>
+    {{-- Modal share QRCODE link event --}}
 
     {{-- Skrip copy link --}}
     <script>
@@ -489,7 +518,7 @@
                 document.execCommand('copy');
                 document.body.removeChild(dummy);
 
-                alert("Link has been copied to clipboard");
+                alertify.success('<i class="fas fa-copy"></i> copied to clipboard');
             });
         });
     </script>

@@ -28,8 +28,12 @@
                 </div>
 
                 {{-- Tab ticket event --}}
-                <div class="mt-4">
+                <div id="show-tiket" class="tab-content current p-0">
                     <h6 class="card-title"><b>Syarat & ketentuan untuk penyelenggara</b></h6>
+
+
+                    {{-- Dari database --}}
+
                     <p>
                     <article>
                         hggftf
@@ -40,15 +44,19 @@
 
                 {{-- Tab deskripsi --}}
                 <div id="show-deskripsi" class="tab-content p-0">
-                    <div>
-                        <h6 class="card-title"><b>Syarat & ketentuan untuk peserta</b></h6>
-                        <p class="card-text">
-                        <article>
-                            hggftft
-                        </article>
-                        </p>
-                    </div>
+
+                    {{-- Dari database --}}
+
+
+                    <h6 class="card-title"><b>Syarat & ketentuan untuk peserta</b></h6>
+                    <p class="card-text">
+                    <article>
+                        hggftft
+                    </article>
+                    </p>
+
                 </div>
+
             </div>
         </div>
     </section>
