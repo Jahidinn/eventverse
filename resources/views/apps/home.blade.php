@@ -376,7 +376,7 @@
             </div>
             <hr>
             <div class="mb-3">
-                <ul>
+                <ul class="text-article">
                     <li class="mb-1">Event kamu bisa jadi lebih <b class="text-success">keren & profesional</b>!</li>
                     <li class="mb-1">Manajemen sistem pendaftaran, ticketing, dan report data event yang lebih baik.</li>
                     <li class="mb-1">Tidak perlu urusin data peserta, kita yang urus!</li>
@@ -393,7 +393,8 @@
             </div>
             <hr>
             <div class="text-center">
-                <p><b>Eventconnect.id</b> merupakan platform Ticketing Management Sistem dibawah naungan <b>PT Konektivitas
+                <p class="text-article">
+                    <b>Eventconnect.id</b> merupakan platform Ticketing Management Sistem dibawah naungan <b>PT Konektivitas
                         Tanpa Batas</b> dan yang bekerja sama dengan <b>ILB media</b> (IG @Info.lomba.beasiswa) yang
                     menyediakan solusi
                     teknologi dalam mendukung penyelenggaraan event mulai dari distribusi dan manajemen tiket pendaftaran,
