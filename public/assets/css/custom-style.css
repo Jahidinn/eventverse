@@ -507,13 +507,6 @@ button.slick-disabled {
 	}
 
 	
-.text-article{
-	font-size: 14px;
-}
-
-.text-blog{
-	font-size: 13px;
-}
 
 	
 }
@@ -649,6 +642,14 @@ button.slick-disabled {
   .header-wave h1 {
     font-size:17px;
   }
+
+  .text-article{
+	font-size: 14px;
+}
+
+.text-blog{
+	font-size: 13px;
+}
   
   @keyframes text2 {	
 	60%, 90% {
