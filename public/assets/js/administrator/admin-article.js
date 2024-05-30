@@ -57,6 +57,14 @@ $('body').on('keyup', '#blog-title', function() {
 	$('#slug').val(slug);
 })
 
+$('body').on('keyup', '#blog-title-edit', function() {
+	var title = $('#blog-title-edit').val();
+	var slug = generateSlug(title);
+
+	//Isikan data slug pada form
+	$('#slug-edit').val(slug);
+})
+
 
 //Function geretate slug
 function generateSlug(text) {

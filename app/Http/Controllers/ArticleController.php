@@ -436,6 +436,14 @@ class ArticleController extends Controller
 	{
 		# Dari database kirim artikel
 
-		return view('article.page-terms-and-condition', []);
+		$tosGeneral = Article::where('slug', 'terms-and-condition-general')->first();
+		$tosCreator = Article::where('slug', 'terms-and-condition-creator')->first();
+		$tosUser = Article::where('slug', 'terms-and-condition-user')->first();
+
+		return view('article.page-terms-and-condition', [
+			'tosGeneral' => $tosGeneral,
+			'tosCreator' => $tosCreator,
+			'tosUser' => $tosUser,
+		]);
 	}
 }

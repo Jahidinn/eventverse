@@ -15,7 +15,13 @@
 
     <section class="container mt-0 pt-5 px-1">
         <div class="card mb-3 mx-1 shadow">
-            <div class="card-body p-3">
+            <div class="card-body p-4">
+
+                <div class="mt-2">
+                    <article class="text-article">
+                        {!! $tosGeneral->body !!}
+                    </article>
+                </div>
 
                 {{-- Pilihan TAB --}}
                 <div class="col-md-12 row tabs mb-4">
@@ -29,16 +35,17 @@
 
                 {{-- Tab ticket event --}}
                 <div id="show-tiket" class="tab-content current p-0">
-                    <h6 class="card-title"><b>Syarat & ketentuan untuk penyelenggara</b></h6>
+                    <h6 class="card-title"><i>Syarat & ketentuan untuk penyelenggara</i>
+                    </h6>
 
 
                     {{-- Dari database --}}
-
                     <p>
-                    <article>
-                        hggftf
+                    <article class="text-article">
+                        {!! $tosCreator->body !!}
                     </article>
                     </p>
+
                     <p class="card-text"><small class="text-muted"></small></p>
                 </div>
 
@@ -48,10 +55,13 @@
                     {{-- Dari database --}}
 
 
-                    <h6 class="card-title"><b>Syarat & ketentuan untuk peserta</b></h6>
+                    <h6 class="card-title">
+                        <i>Syarat & ketentuan untuk peserta</i>
+                    </h6>
                     <p class="card-text">
-                    <article>
-                        hggftft
+
+                    <article class="text-article">
+                        {!! $tosUser->body !!}
                     </article>
                     </p>
 

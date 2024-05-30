@@ -41,6 +41,10 @@
                         <i class="nav-icon fas fa-home"></i>
                         <p>Dashboard</p>
                     </a>
+                    <a href="/dashboard" class="nav-link">
+                        <i class="nav-icon fas fa-lock-open"></i>
+                        <p>General admin page</p>
+                    </a>
                 </li>
 
                 <li class="nav-header">TRANSACTION</li>
