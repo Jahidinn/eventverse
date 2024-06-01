@@ -81,15 +81,15 @@
 
                             @php
                                 if ($terbaru->image == '' || $terbaru->image == null) {
-                                    $imgTerbaru = 'def-no-img.png';
+                                    $imgTerbaru = 'assets/default-img/event-images/def-img.png';
                                 } else {
                                     $imgPath = 'storage/event-images/' . $terbaru->image;
 
                                     // Memeriksa apakah file ada
                                     if (file_exists(public_path($imgPath))) {
-                                        $imgTerbaru = $terbaru->image;
+                                        $imgTerbaru = 'storage/event-images/' . $terbaru->image;
                                     } else {
-                                        $imgTerbaru = 'def-no-img.png';
+                                        $imgTerbaru = 'assets/default-img/event-images/def-img.png';
                                         // Jika file tidak ada, ganti dengan default
                                     }
                                 }
@@ -97,8 +97,7 @@
                             @endphp
 
                             <div class="card-img-block rounded">
-                                <img class="card-img-top" src="{{ asset('storage/event-images/' . $imgTerbaru) }}"
-                                    alt="Card image cap">
+                                <img class="card-img-top" src="{{ asset($imgTerbaru) }}" alt="Card image cap">
                             </div>
                             <div class="card-body pt-0">
 
@@ -188,23 +187,22 @@
                             @php
                                 if ($populer->image == '' || $populer->image == null) {
                                     //Jika gambar kosong
-                                    $imgPopuler = 'def-no-img.png';
+                                    $imgPopuler = 'assets/default-img/event-images/def-img.png';
                                 } else {
                                     $imgPath = 'storage/event-images/' . $populer->image;
 
                                     // Memeriksa apakah file ada
                                     if (file_exists(public_path($imgPath))) {
-                                        $imgPopuler = $populer->image;
+                                        $imgPopuler = 'storage/event-images/' . $populer->image;
                                     } else {
                                         // Jika file tidak ada, ganti dengan default
-                                        $imgPopuler = 'def-no-img.png';
+                                        $imgPopuler = 'assets/default-img/event-images/def-img.png';
                                     }
                                 }
                             @endphp
 
                             <div class="card-img-block rounded">
-                                <img class="card-img-top" src="{{ asset('storage/event-images/' . $imgPopuler) }}"
-                                    alt="Card image cap">
+                                <img class="card-img-top" src="{{ asset($imgPopuler) }}" alt="Card image cap">
                             </div>
 
                             {{-- INFO LAIN --}}
@@ -285,23 +283,22 @@
                             @php
                                 if ($pilihan->image == '' || $pilihan->image == null) {
                                     //Jika gambar kosong
-                                    $imgPilihan = 'def-no-img.png';
+                                    $imgPilihan = 'assets/default-img/event-images/def-img.png';
                                 } else {
                                     $imgPath = 'storage/event-images/' . $pilihan->image;
 
                                     // Memeriksa apakah file ada
                                     if (file_exists(public_path($imgPath))) {
-                                        $imgPilihan = $pilihan->image;
+                                        $imgPilihan = 'storage/event-images/' . $pilihan->image;
                                     } else {
                                         // Jika file tidak ada, ganti dengan default
-                                        $imgPilihan = 'def-no-img.png';
+                                        $imgPilihan = 'assets/default-img/event-images/def-img.png';
                                     }
                                 }
                             @endphp
 
                             <div class="card-img-block rounded">
-                                <img class="card-img-top" src="{{ asset('storage/event-images/' . $imgPilihan) }}"
-                                    alt="Card image cap">
+                                <img class="card-img-top" src="{{ asset($imgPilihan) }}" alt="Card image cap">
                             </div>
 
                             {{-- Isi data --}}

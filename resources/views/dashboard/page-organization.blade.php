@@ -4,7 +4,7 @@
     <!-- Content Header (Page header) -->
     <section class="content-header pb-0">
         <div class="alert alert-dark bg-dashboard text-white" role="alert">
-            <strong>ORGANISASI</strong>
+            <strong>ORGANISASI KAMU</strong>
         </div>
     </section>
 

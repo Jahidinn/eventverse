@@ -9,21 +9,28 @@
     <!-- Sidebar -->
     <div class="sidebar">
         <!-- Sidebar user (optional) -->
-        <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+        <div class="user-panel ml-2 mt-3 pb-3 mb-3 d-flex ">
             @php
                 if (!auth()->user()->profile_picture || auth()->user()->profile_picture == '') {
-                    $photo = 'default-user.jpg';
+                    $photo = 'assets/default-img/profile-images/default-user.jpg';
                 } else {
-                    $photo = auth()->user()->profile_picture;
+                    $photo = 'storage/profile-images/' . auth()->user()->profile_picture;
+
+                    // Cek file ada atau tidak
+                    if (file_exists(public_path($photo))) {
+                        $photo = 'storage/profile-images/' . auth()->user()->profile_picture;
+                    } else {
+                        // Jika file tidak ada, ganti dengan default
+                        $photo = 'assets/default-img/profile-images/default-user.jpg';
+                    }
                 }
 
             @endphp
 
             <div class="image">
-                <img src="{{ asset('storage/profile-images') . '/' . $photo }}" class="img-circle elevation-2"
-                    alt="User Image">
+                <img src="{{ asset($photo) }}" class="img-circle elevation-2" alt="User Image">
             </div>
-            <div class="info">
+            <div class="info mt-1">
                 <a href="#" class="d-block">{{ auth()->user()->name }}</a>
             </div>
         </div>

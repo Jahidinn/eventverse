@@ -1,3 +1,24 @@
+/* Sidebar CSS */
+.main-sidebar {
+    overflow-y: auto; /* Membuat sidebar dapat discroll */
+    max-height: calc(100vh - 60px); /* Mengatur tinggi maksimum sidebar, disesuaikan dengan tinggi header jika ada */
+}
+
+/* Sidebar Content CSS */
+.sidebar {
+    padding-bottom: 50px; /* Menambahkan ruang di bagian bawah sidebar agar konten tidak menutupi bagian bawah saat discroll */
+}
+
+/* Untuk browser berbasis WebKit */
+.main-sidebar::-webkit-scrollbar {
+    display: none; /* Menyembunyikan scrollbar pada browser berbasis WebKit */
+}
+
+/* Untuk browser selain WebKit (misalnya Firefox) */
+.main-sidebar {
+    scrollbar-width: none; /* Menyembunyikan scrollbar pada browser selain WebKit */
+}
+
 .form-control-label {
     font-size: 10px;
     color: #6c6c6c;

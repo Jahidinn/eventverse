@@ -18,14 +18,21 @@
                     <div class="mb-2 img-container">
                         @php
                             if (!auth()->user()->profile_picture || auth()->user()->profile_picture == '') {
-                                $photo = 'default-user.jpg';
+                                $photo = 'assets/default-img/profile-images/default-user.jpg';
                             } else {
-                                $photo = auth()->user()->profile_picture;
+                                $photo = 'storage/profile-images/' . auth()->user()->profile_picture;
+
+                                // Cek file ada atau tidak
+                                if (file_exists(public_path($photo))) {
+                                    $photo = 'storage/profile-images/' . auth()->user()->profile_picture;
+                                } else {
+                                    // Jika file tidak ada, ganti dengan default
+                                    $photo = 'assets/default-img/profile-images/default-user.jpg';
+                                }
                             }
 
                         @endphp
-                        <img src="{{ asset('storage/profile-images') . '/' . $photo }}" alt="..."
-                            id="profile-image-edit">
+                        <img src="{{ asset($photo) }}" alt="..." id="profile-image-edit">
                     </div>
 
                     <label for="profile-file-upload-edit" class="shadow">

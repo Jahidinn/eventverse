@@ -22,23 +22,23 @@
                     @php
                         if ($detailEvent->image == '' || $detailEvent->image == null) {
                             //Jika gambar kosong
-                            $img = 'def-no-img.png';
+                            $img = 'assets/default-img/event-images/def-no-img.png';
                         } else {
                             $imgPath = 'storage/event-images/' . $detailEvent->image;
 
                             // Memeriksa apakah file ada
                             if (file_exists(public_path($imgPath))) {
-                                $img = $detailEvent->image;
+                                $img = 'storage/event-images/' . $detailEvent->image;
                             } else {
                                 // Jika file tidak ada, ganti dengan default
-                                $img = 'def-no-img.png';
+                                $img = 'assets/default-img/event-images/def-no-img.png';
                             }
                         }
                     @endphp
 
                     {{-- Gambar / Poster --}}
                     <div class="view-image-event position-relative">
-                        <img src="{{ asset('storage/event-images/' . $img) }}" class="card-img-top" alt="...">
+                        <img src="{{ asset($img) }}" class="card-img-top" alt="...">
                         <button class="btn btn-dark rounded-0 position-absolute" data-toggle="modal"
                             data-target="#fullImageModal"><i class="fas fa-expand"></i></button>
                     </div>
@@ -229,7 +229,7 @@
                             <div>
                                 <h5 class="card-title">Deskripsi</h5>
                                 <p class="card-text">
-                                <article>
+                                <article class="text-article">
                                     {!! $detailEvent->description !!}
                                 </article>
                                 </p>
@@ -237,7 +237,7 @@
                             <div class="mt-4">
                                 <h5 class="card-title">Syarat & ketentuan</h5>
                                 <p class="card-text">
-                                <article>
+                                <article class="text-article">
                                     {!! $detailEvent->terms !!}
                                 </article>
                                 </p>
@@ -259,16 +259,27 @@
                         @if ($detailEvent->organizer == 'org' && $detailEvent->organizer_id)
                             {{-- Jika penyelenggar organisasi --}}
                             @php
-                                $detailEvent->org->org_image
-                                    ? ($logo = $detailEvent->org->org_image)
-                                    : ($logo = 'default-user.jpg');
+                                if ($detailEvent->org->org_image == '' || $detailEvent->org->org_image == null) {
+                                    $logo = 'assets/default-img/org-images/default-user.jpg';
+                                } else {
+                                    $logo = 'storage/organization-images/' . $detailEvent->org->org_image;
+
+                                    // Cek file ada atau tidak
+                                    if (file_exists(public_path($logo))) {
+                                        $logo = 'storage/organization-images/' . $detailEvent->org->org_image;
+                                    } else {
+                                        // Jika file tidak ada, ganti dengan default
+                                        $logo = 'assets/default-img/org-images/default-user.jpg';
+                                    }
+                                }
                             @endphp
 
                             <div id="org-info-logo-container">
-                                <img src="{{ asset('storage/organization-images') . '/' . $logo }}" class="org-info-logo">
+                                <img src="{{ asset($logo) }}" class="org-info-logo">
                             </div>
 
-                            <a class="mt-3 badge badge-info text-left" href="/organisasi/{{ $detailEvent->org->org_id }}">
+                            <a class="mt-3 badge badge-info text-left"
+                                href="/organisasi/{{ $detailEvent->org->org_id }}">
                                 <b>{{ strlen($detailEvent->org->org_name) > 40 ? substr($detailEvent->org->org_name, 0, 40) . ' ...' : $detailEvent->org->org_name }}</b>
                             </a>
                             <p class="card-text mt-1 mb-1"><small class="text-muted">Organisasi</small></p>
@@ -276,16 +287,31 @@
                             <p class="mb-1">{{ $detailEvent->org->org_contact }}</p>
                             <p class="mb-1">{{ $detailEvent->org->org_institution }}</p>
                         @elseif($detailEvent->organizer == 'individual' && $detailEvent->organizer_id)
-                            {{-- Jika penyelenggar individual --}}
+                            {{-- Jika penyelenggara individual --}}
 
                             @php
-                                $detailEvent->individual->profile_picture
-                                    ? ($logo = $detailEvent->individual->profile_picture)
-                                    : ($logo = 'default-user.jpg');
+                                if (
+                                    $detailEvent->individual->profile_picture == '' ||
+                                    $detailEvent->individual->profile_picture == null
+                                ) {
+                                    $logo = 'assets/default-img/profile-images/default-user.jpg';
+                                } else {
+                                    $logo = 'storage/profile-images/' . $detailEvent->individual->profile_picture;
+
+                                    // Cek file ada atau tidak
+                                    if (file_exists(public_path($logo))) {
+                                        $logo = 'storage/profile-images/' . $detailEvent->individual->profile_picture;
+                                    } else {
+                                        // Jika file tidak ada, ganti dengan default
+                                        $logo = 'assets/default-img/profile-images/default-user.jpg';
+                                    }
+                                }
+
                             @endphp
 
+
                             <div id="org-info-logo-container">
-                                <img src="{{ asset('storage/profile-images') . '/' . $logo }}" class="org-info-logo">
+                                <img src="{{ asset($logo) }}" class="org-info-logo">
                             </div>
 
                             <a class="badge badge-info mt-3"
@@ -346,24 +372,23 @@
                         @php
                             if ($moreEvent->image == '' || $moreEvent->image == null) {
                                 //Jika gambar kosong
-                                $imgmoreEvent = 'def-no-img.png';
+                                $imgmoreEvent = 'assets/default-img/event-images/def-img.png';
                             } else {
                                 $imgPath = 'storage/event-images/' . $moreEvent->image;
 
                                 // Memeriksa apakah file ada
                                 if (file_exists(public_path($imgPath))) {
-                                    $imgmoreEvent = $moreEvent->image;
+                                    $imgmoreEvent = 'storage/event-images/' . $moreEvent->image;
                                 } else {
                                     // Jika file tidak ada, ganti dengan default
-                                    $imgmoreEvent = 'def-no-img.png';
+                                    $imgmoreEvent = 'assets/default-img/event-images/def-img.png';
                                 }
                             }
                         @endphp
 
                         {{-- Gambar / poster --}}
                         <div class="card-img-block">
-                            <img class="card-img-top" src="{{ asset('storage/event-images/' . $imgmoreEvent) }}"
-                                alt="Card image cap">
+                            <img class="card-img-top" src="{{ asset($imgmoreEvent) }}" alt="Card image cap">
                         </div>
 
                         {{-- Info lain --}}
@@ -440,7 +465,7 @@
                     </button>
                 </div>
                 <div class="modal-body p-1" style="width: 100%; height:100%">
-                    <img src="{{ asset('storage/event-images/' . $img) }}" class="card-img-top" alt="...">
+                    <img src="{{ asset($img) }}" class="card-img-top" alt="...">
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
