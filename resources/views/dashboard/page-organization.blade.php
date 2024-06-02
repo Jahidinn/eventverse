@@ -125,7 +125,7 @@
 
                                 <div class="org_logo_container org-info-logo-container">
                                     <img src="{{ asset('storage/organization-images') . '/' . 'logo.png' }}"
-                                        class="img-circle" alt="User Image" id="org-info-logo">
+                                        class="img-circle" alt="No image" id="org-info-logo">
                                 </div>
 
                                 <b class="org-info-name">Nama Organisasi</b><br>
@@ -211,8 +211,8 @@
                             </div>
                             <div class="col-4 text-center">
                                 <div class="org_logo_container">
-                                    <img src="{{ asset('storage/organization-images') . '/' . 'logo.png' }}"
-                                        class="img-circle" alt="User Image" id="org_logo">
+                                    <img src="{{ asset('assets/default-img/org-images/logo.png') }}" class="img-circle"
+                                        alt="LOGO" id="org_logo">
                                 </div>
                             </div>
                         </div>
@@ -291,7 +291,7 @@
                             <div class="col-4 text-center">
                                 <div class="org_logo_container">
                                     <img src="{{ asset('storage/organization-images') . '/' . 'logo.png' }}"
-                                        class="img-circle" alt="User Image" id="org_logo_edit">
+                                        class="img-circle" alt="No image" id="org_logo_edit">
                                 </div>
                             </div>
                         </div>

@@ -45,7 +45,7 @@
                                 <div class="p-2">
                                     <div class="myevent-container-img">
                                         <img class="card-img-top" src="{{ asset('storage/event-images/' . $event->image) }}"
-                                            alt="Card image cap">
+                                            alt="Image">
                                     </div>
                                 </div>
 

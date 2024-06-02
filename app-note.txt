@@ -1,0 +1,9 @@
+belum 1-06-2024
+	- Image list event dashboard
+	- image edit event
+	- image organisasi
+	- halaman pencariaan
+
+- Uji coba midtrans kondisi real bkan sandbox
+- Buat youtube tutorial
+- Buat event untuk uji coba system

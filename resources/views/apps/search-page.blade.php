@@ -192,8 +192,25 @@
                     <a href="/{{ $terbaru->slug }}">
                         <div class="card profile-card-5 shadow">
                             <div class="card-img-block rounded">
-                                <img class="card-img-top" src="{{ asset('storage/event-images/' . $terbaru->image) }}"
-                                    alt="Card image cap">
+
+                                @php
+                                    if ($terbaru->image == '' || $terbaru->image == null) {
+                                        //Jika gambar kosong
+                                        $image = 'assets/default-img/event-images/def-img.png';
+                                    } else {
+                                        $imgPath = 'storage/event-images/' . $terbaru->image;
+
+                                        // Memeriksa apakah file ada
+                                        if (file_exists(public_path($imgPath))) {
+                                            $image = 'storage/event-images/' . $terbaru->image;
+                                        } else {
+                                            // Jika file tidak ada, ganti dengan default
+                                            $image = 'assets/default-img/event-images/def-no-img.png';
+                                        }
+                                    }
+                                @endphp
+
+                                <img class="card-img-top" src="{{ asset($image) }}" alt="Image">
                             </div>
                             <div class="card-body pt-0">
                                 <h5 class="card-title pb-0 mb-0">{{ $terbaru->title }}</h5>
