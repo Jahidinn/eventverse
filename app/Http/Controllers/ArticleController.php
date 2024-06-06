@@ -446,4 +446,15 @@ class ArticleController extends Controller
 			'tosUser' => $tosUser,
 		]);
 	}
+
+	public function privacyPolicy()
+	{
+		# Dari database kirim artikel
+
+		$privacyPolicy = Article::where('slug', 'privacy-policy')->first();
+
+		return view('article.page-privacy-policy', [
+			'privacy_policy' => $privacyPolicy,
+		]);
+	}
 }
