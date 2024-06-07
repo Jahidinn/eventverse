@@ -29,7 +29,7 @@
                     <li><i class="bx bx-chevron-right"></i> <a href="/blog/terms-and-condition">Terms and condition</a>
                     </li>
                     <li><i class="bx bx-chevron-right"></i> <a href="/blog/privacy-policy">Privacy policy</a></li>
-                    <li><i class="bx bx-chevron-right"></i> <a href="#">FAQ</a></li>
+                    <li><i class="bx bx-chevron-right"></i> <a href="/blog/faq">FAQ</a></li>
                 </ul>
             </div>
 

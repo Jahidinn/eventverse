@@ -457,4 +457,10 @@ class ArticleController extends Controller
 			'privacy_policy' => $privacyPolicy,
 		]);
 	}
+
+	public function faq()
+	{
+		# Halaman FAQ
+		return view('article.page-faq', []);
+	}
 }
