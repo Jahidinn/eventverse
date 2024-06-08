@@ -17,9 +17,12 @@ class ArticleController extends Controller
 	# Main page artikel / blog
 	public function blogMain()
 	{
-		$latestArticles = Article::latest()->first();
+		# 1 Artikel terbaru
+		$latestArticles = Article::where('article_code', '!=', 2)->latest()->first();
 
+		# Query mengambil data artikel
 		$articles = Article::where('slug', '!=', $latestArticles->slug)
+			->where('article_code', '!=', 2)
 			->orderBy('id', 'DESC')
 			->paginate(10)
 			->withQueryString();
@@ -37,6 +40,7 @@ class ArticleController extends Controller
 
 		# Query artikel
 		$articles = Article::where('title', 'LIKE', '%' . $key . '%')
+			->where('article_code', '!=', 2)
 			->orderBy('id', 'DESC')
 			->limit(10)
 			->paginate(10)

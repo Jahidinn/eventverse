@@ -26,35 +26,35 @@
                             disini</a>, kamu bisa membuat event atas nama individu atau organisasi. jika atas nama
                         organisasi kamu bisa menambahkan data organisasi di profil.
                     </p>
-                    <img class="w-100" src="{{ asset('storage/blog-images/ev') }}/1.png" alt="">
-                    <img class="w-100 mt-2" src="{{ asset('storage/blog-images/ev') }}/2.png" alt="">
+                    <img class="w-100" src="{{ asset('assets/default-img/blog-images/ev') }}/1.png" alt="">
+                    <img class="w-100 mt-2" src="{{ asset('assets/default-img/blog-images/ev') }}/2.png" alt="">
                 </li>
                 <li class="event">
                     <h3>Buat event</h3>
                     <p>Selanjutnya kamu tinggal posting event kamu di link <a href="/event/create">create event</a>, masukan
                         poster/banner, deskripsi lengkap, tiket pendaftaran, serta data formulir pendaftaran untuk peserta
                     </p>
-                    <img class="w-100 mt-2" src="{{ asset('storage/blog-images/ev') }}/3.png" alt="">
+                    <img class="w-100 mt-2" src="{{ asset('assets/default-img/blog-images/ev') }}/3.png" alt="">
                 </li>
                 <li class="event">
                     <h3>Manage event</h3>
                     <p>Tanpa ribet mengurus report data peserta kamu bisa langsung memantau perkembangan event, data
                         peserta, pembayaran, pemasukan dan sebagainya di halaman dashboard!</p>
-                    <img class="w-100 mt-2" src="{{ asset('storage/blog-images/ev') }}/4.png" alt="">
+                    <img class="w-100 mt-2" src="{{ asset('assets/default-img/blog-images/ev') }}/4.png" alt="">
                 </li>
                 <li class="event">
                     <h3>Share</h3>
                     <p>Share link event yang kamu buat biar makin banyak peserta!</p>
-                    <img class="w-100 mt-2" src="{{ asset('storage/blog-images/ev') }}/5.png" alt="">
+                    <img class="w-100 mt-2" src="{{ asset('assets/default-img/blog-images/ev') }}/5.png" alt="">
                 </li>
 
                 <li class="event">
                     <h3>Report data</h3>
                     <p>Selain kamu bisa pantau perkembangan event, di akhir event kamu juga bisa download report data
                         peserta dalam bentuk file excel dan mencairkan dana event</p>
-                    <img class="w-100 mt-2" src="{{ asset('storage/blog-images/ev') }}/6.png" alt="">
-                    <img class="w-100 mt-3" src="{{ asset('storage/blog-images/ev') }}/7.png" alt="">
-                    <img class="w-100 mt-3" src="{{ asset('storage/blog-images/ev') }}/8.png" alt="">
+                    <img class="w-100 mt-2" src="{{ asset('assets/default-img/blog-images/ev') }}/6.png" alt="">
+                    <img class="w-100 mt-3" src="{{ asset('assets/default-img/blog-images/ev') }}/7.png" alt="">
+                    <img class="w-100 mt-3" src="{{ asset('assets/default-img/blog-images/ev') }}/8.png" alt="">
                 </li>
                 <li class="event">
                     <h3>Done!</h3>
