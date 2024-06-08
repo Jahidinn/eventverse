@@ -29,7 +29,8 @@
                             Konektivitas Tanpa Batas. Kami bekerja sama dengan ILB media (@Info.lomba.beasiswa) untuk
                             menyediakan solusi
                             teknologi dalam mendukung penyelenggaraan event, mulai dari distribusi dan manajemen tiket
-                            pendaftaran hingga penyediaan laporan event.
+                            pendaftaran hingga penyediaan laporan event, info selengkapnya <a href="/blog/about-us">About
+                                eventconnect</a>.
                         </p>
                     </div>
 
@@ -49,11 +50,12 @@
                     <div class="collapse" id="faq-2">
                         <hr class="m-2 mt-3">
                         <p>
-                            Kami menyediakan berbagai layanan terkait manajemen tiket pendaftaran event, distribusi tiket,
+                            Eventconnect.id menyediakan berbagai layanan terkait manajemen tiket pendaftaran event,
+                            distribusi tiket,
                             dan
-                            penyediaan laporan event. Ini mencakup pendaftaran peserta, pembelian tiket, verifikasi
-                            pembayaran,
-                            serta pencetakan dan penggunaan tiket digital.
+                            manajemen event lainya. Ini mencakup pendaftaran peserta, pembelian tiket, verifikasi
+                            pembayaran, serta pencetakan dan penggunaan tiket digital, <a href="/blog/about-us">More
+                                info</a>.
                         </p>
                     </div>
                 </div>
@@ -65,11 +67,16 @@
         <div class="card mb-3 mx-1 shadow-sm">
             <div class="card-body px-4 py-3">
                 <div class="text-article mt-0">
-                    <p class="mb-2"><b>Bagaimana cara menggunakan Eventconnect.id sebagai penyelenggara event?</b></p>
-                    <hr class="m-2">
-                    <p>Anda dapat mendaftarkan event Anda di platform kami dan mengatur detailnya, termasuk jenis tiket yang
-                        akan dijual, harga tiket, jumlah tiket yang tersedia, dan informasi lainnya. Setelah itu, Anda dapat
-                        mempromosikan event Anda dan mengelola penjualan tiket melalui dashboard kami.</p>
+                    <a class="btn w-100 text-left" data-toggle="collapse" href="#faq-3" role="button">
+                        <b>Bagaimana cara menggunakan Eventconnect.id sebagai penyelenggara event?</b>
+                    </a>
+                    <div class="collapse" id="faq-3">
+                        <hr class="m-2 mt-3">
+                        <p>Kamu dapat mendaftarkan event Anda di platform kami dan mengatur detailnya, termasuk jenis tiket
+                            yang akan dijual, harga tiket, jumlah tiket yang tersedia, dan informasi lainnya. Setelah itu,
+                            kamu bisa mempromosikan event kamu dan mengelola penjualan tiket melalui dashboard kami, <a
+                                href="/blog/creator-guide">Baca panduan</a>.</p>
+                    </div>
                 </div>
 
             </div>
@@ -79,24 +86,144 @@
         <div class="card mb-3 mx-1 shadow-sm">
             <div class="card-body px-4 py-3">
                 <div class="text-article mt-0">
-                    <p class="mb-2"><b>Apakah Eventconnect.id menyediakan layanan pembayaran online?</b></p>
-                    <hr class="m-2">
-                    <p>Ya, kami menyediakan integrasi dengan berbagai metode pembayaran online untuk memudahkan pembelian
-                        tiket bagi peserta event.</p>
+                    <a class="btn w-100 text-left" data-toggle="collapse" href="#faq-4" role="button">
+                        <b>Apakah Eventconnect.id menyediakan layanan pembayaran online?</b>
+                    </a>
+                    <div class="collapse" id="faq-4">
+                        <hr class="m-2 mt-3">
+                        <p>Ya, kami menyediakan integrasi dengan berbagai metode pembayaran online seperti transfer bank,
+                            virtual account (VA), e-wallet, QRIS, dan metode pembayaran lain untuk memudahkan
+                            pembelian tiket bagi peserta event.</p>
+                    </div>
                 </div>
 
             </div>
         </div>
 
-        {{-- FAQ 4 --}}
+        {{-- FAQ 5 --}}
         <div class="card mb-3 mx-1 shadow-sm">
             <div class="card-body px-4 py-3">
                 <div class="text-article mt-0">
-                    <p class="mb-2"><b>Bagaimana cara mendapatkan laporan atau analisis setelah event selesai?</b></p>
-                    <hr class="m-2">
-                    <p>Setelah event selesai, Anda dapat mengakses laporan lengkap melalui dashboard kami. Laporan tersebut
-                        mencakup data penjualan tiket, kehadiran peserta, dan informasi lainnya yang relevan untuk membantu
-                        Anda mengevaluasi kesuksesan event Anda.</p>
+                    <a class="btn w-100 text-left" data-toggle="collapse" href="#faq-5" role="button">
+                        <b>Bagaimana cara mendapatkan laporan atau analisis setelah event selesai?</b>
+                    </a>
+                    <div class="collapse" id="faq-5">
+                        <hr class="m-2 mt-3">
+                        <p>Setelah event selesai, Anda dapat mengakses laporan lengkap dengan mudah melalui dashboard kami.
+                            Laporan
+                            tersebut mencakup data penjualan tiket, kehadiran peserta,report data peserta, report data
+                            pembayaran, pencairan dana dan informasi lainnya yang relevan untuk
+                            membantu Anda mengevaluasi kesuksesan event Anda.</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        {{-- FAQ 6 --}}
+        <div class="card mb-3 mx-1 shadow-sm">
+            <div class="card-body px-4 py-3">
+                <div class="text-article mt-0">
+                    <a class="btn w-100 text-left" data-toggle="collapse" href="#faq-6" role="button">
+                        <b>Apakah Eventconnect.id memiliki dukungan pelanggan?</b>
+                    </a>
+                    <div class="collapse" id="faq-6">
+                        <hr class="m-2 mt-3">
+                        <p>Ya, kami menyediakan dukungan pelanggan melalui berbagai saluran komunikasi seperti email dan
+                            chat. Tim kami siap membantu Anda dengan pertanyaan atau masalah apa pun yang Anda hadapi dalam
+                            menggunakan platform kami, <a href="/blog/contact-us">Hubungi kami</a>.</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        {{-- FAQ 7 --}}
+        <div class="card mb-3 mx-1 shadow-sm">
+            <div class="card-body px-4 py-3">
+                <div class="text-article mt-0">
+                    <a class="btn w-100 text-left" data-toggle="collapse" href="#faq-7" role="button">
+                        <b>Bagaimana keamanan data peserta yang menggunakan Eventconnect.id?</b>
+                    </a>
+                    <div class="collapse" id="faq-7">
+                        <hr class="m-2 mt-3">
+                        <p>Kami mengutamakan keamanan data peserta dan mengikuti praktik terbaik dalam pengelolaan data
+                            pribadi. Kami menggunakan enkripsi data dan memiliki <a href="/blog/privacy-policy">kebijakan
+                                privasi</a> yang ketat untuk
+                            melindungi informasi pribadi peserta.</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        {{-- FAQ 8 --}}
+        <div class="card mb-3 mx-1 shadow-sm">
+            <div class="card-body px-4 py-3">
+                <div class="text-article mt-0">
+                    <a class="btn w-100 text-left" data-toggle="collapse" href="#faq-8" role="button">
+                        <b>Apakah Eventconnect.id menyediakan integrasi dengan platform lain seperti media sosial atau
+                            aplikasi lainnya?</b>
+                    </a>
+                    <div class="collapse" id="faq-8">
+                        <hr class="m-2 mt-3">
+                        <p>Ya, kami menyediakan integrasi dengan berbagai platform termasuk media sosial seperti instagram
+                            untuk membantu
+                            Anda mempromosikan event Anda secara lebih luas dan meningkatkan visibilitasnya. akun yang kami
+                            kelola : <a href="http://instagram.com/eventconnect.id">Eventconnect</a> dan <a
+                                href="http://instagram.com/info.lomba.beasiswa">ILB MEdia</a></p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        {{-- FAQ 9 --}}
+        <div class="card mb-3 mx-1 shadow-sm">
+            <div class="card-body px-4 py-3">
+                <div class="text-article mt-0">
+                    <a class="btn w-100 text-left" data-toggle="collapse" href="#faq-9" role="button">
+                        <b>Apakah ada biaya atau komisi yang dikenakan oleh Eventconnect.id?</b>
+                    </a>
+                    <div class="collapse" id="faq-9">
+                        <hr class="m-2 mt-3">
+                        <p>Kami mengenakan biaya atau komisi sesuai dengan layanan yang Anda gunakan. Detail tarif dan
+                            biaya akan dijelaskan saat Anda mendaftar dan menggunakan platform kami, atau bisa di akses
+                            melalui halaman <a href="/blog/pricing">Biaya</a>.</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        {{-- FAQ 10 --}}
+        <div class="card mb-3 mx-1 shadow-sm">
+            <div class="card-body px-4 py-3">
+                <div class="text-article mt-0">
+                    <a class="btn w-100 text-left" data-toggle="collapse" href="#faq-10" role="button">
+                        <b>Bagaimana cara saya memulai menggunakan Eventconnect.id untuk event saya?</b>
+                    </a>
+                    <div class="collapse" id="faq-10">
+                        <hr class="m-2 mt-3">
+                        <p>Anda dapat mulai dengan mendaftar di situs web kami dan mengikuti langkah-langkah pendaftaran
+                            event. Tim kami juga siap membantu Anda dalam proses ini jika diperlukan, <a
+                                href="/register">Daftar sekarang!</a>.</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        {{--  --}}
+        <div class="card mb-3 mx-1 shadow-sm">
+            <div class="card-body px-4 py-3">
+                <div class="text-article mt-0">
+                    <b class="text-info">Hubungi kami</b>
+                    <hr class="m-2 mt-3">
+                    <p>Apakah Kamu memiliki pertanyaan, masukan, atau hanya ingin menyapa kami? Jangan ragu untuk mengirim
+                        pesan kepada tim kami menggunakan formulir di bawah ini. Kami berusaha untuk merespons setiap pesan
+                        secepat mungkin!</p>
+                    <a class="btn btn-success btn-sm" href="/blog/contact-us">Hubungi sekarang!</a>
                 </div>
 
             </div>
