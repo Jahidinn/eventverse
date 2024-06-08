@@ -1,7 +1,6 @@
 <script>
     // For example trigger on button clicked, or any time you need
 
-
     $(document).ready(function() {
 
         $('.tabs button').click(function() {
@@ -138,6 +137,41 @@
 
                     }
                     $('#btn-subscribe').val('Subscribe');
+                },
+                error: function(xhr, status, error) {
+                    // Tindakan yang diambil jika terjadi kesalahan
+                    console.error(xhr.responseText);
+                }
+            });
+        });
+
+
+        // Menangani formulir contact us
+        $('#form-contact-us').submit(function(event) {
+            // Menghentikan pengiriman formulir secara default
+            event.preventDefault();
+
+            // Membuat objek FormData dan menambahkan data formulir
+            var formData = new FormData(this);
+            $('#btn-send-msg').html('Mengirim pesan ...');
+
+            // Mengirim data menggunakan Ajax
+            $.ajax({
+                url: '/send-message',
+                type: $(this).attr('method'), // Menggunakan metode dari atribut method formulir
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function(response) {
+                    // Tindakan yang diambil setelah permintaan berhasil
+                    if (response.success) {
+                        Swal.fire('', response.success, 'success');
+                        $("#form-contact-us")[0].reset(); // Clear the form
+                    } else {
+                        Swal.fire('', response.error, 'error');
+
+                    }
+                    $('#btn-send-msg').html('Kirim pesan');
                 },
                 error: function(xhr, status, error) {
                     // Tindakan yang diambil jika terjadi kesalahan

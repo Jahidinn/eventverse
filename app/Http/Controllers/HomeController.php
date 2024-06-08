@@ -2,13 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Category;
-use App\Models\Cities;
 use App\Models\Event;
+use App\Models\Cities;
+use App\Models\Ticket;
+use App\Models\Category;
+use App\Models\Message;
 use App\Models\Provinces;
 use App\Models\Subscriber;
-use App\Models\Ticket;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class HomeController extends Controller
 {
@@ -88,5 +90,48 @@ class HomeController extends Controller
 
 		Subscriber::create($data);
 		return response()->json(['success' => 'Successful subscription!']);
+	}
+
+	public function sendMessage(Request $request)
+	{
+		$ipAddress = $request->ip();
+
+		$validator = Validator::make($request->all(), [
+			'email' => 'required|email',
+			'name' => 'required',
+			'subjek' => 'required',
+			'message' => 'required',
+		]);
+
+		if ($validator->fails()) {
+			return response()->json(['error' => $validator->errors()->first()]);
+		}
+
+		$data = [
+			'ip' => $ipAddress,
+			'email' => $request->email,
+			'name' => $request->name,
+			'subjek' => $request->subjek,
+			'message' => $request->message,
+			'is_active' => 1,
+		];
+
+		# hitung pesan
+		$cekData = Message::where('is_reply', 0)
+			->where(function ($query) use ($request, $ipAddress) {
+				$query->where('email', $request->email)
+					->orWhere('ip', $ipAddress);
+			})
+			->get();
+		$jml_pesan = count($cekData);
+
+		# Filter span
+		# tambahkan opsi jika spam maka hapus pesan lama
+		if ($jml_pesan > 5) {
+			return response()->json(['error' => 'Wahh terindikasi spam!']);
+		}
+
+		Message::create($data);
+		return response()->json(['success' => 'Berhasil mengirim pesan!']);
 	}
 }

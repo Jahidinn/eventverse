@@ -34,6 +34,8 @@ Route::post('/register', [AuthController::class, 'storeRegister']);
 
 # Subscribe
 Route::post('/subscribe', [HomeController::class, 'subscribe']);
+# Contact us
+Route::post('/send-message', [HomeController::class, 'sendMessage']);
 
 Route::post('/logout', [AuthController::class, 'logout']);
 
@@ -125,6 +127,7 @@ Route::middleware(['auth'])->group(function () {
 # Tanpa middleware
 Route::get('/blog/pricing', [ArticleController::class, 'pricingInfo']);
 Route::get('/blog/about-us', [ArticleController::class, 'aboutUs']);
+Route::get('/blog/contact-us', [ArticleController::class, 'contactUs']);
 Route::get('/blog/terms-and-condition', [ArticleController::class, 'terms']);
 Route::get('/blog/privacy-policy', [ArticleController::class, 'privacyPolicy']);
 Route::get('/blog/frequently-asked-questions', [ArticleController::class, 'faq']);
