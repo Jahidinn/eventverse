@@ -165,9 +165,6 @@
             var titleEvent = $(this).data('event');
             $('.event_id').val($(this).data('id'));
 
-            $('#ticket_price').attr('readonly', false);
-            $('#price_notification').text('*isi angka 0 jika gratis.');
-
             $('.manajemen-event-box').attr('hidden', true);
             $('.manajemen-ticket-box').attr('hidden', false);
 
@@ -301,6 +298,9 @@
             $('#addEditTicketModalLabel').text('Tambah tiket pendaftaran')
             $('.addEditTicket').attr('id', 'add-ticket-form')
             $('.btn-ticket-submit').attr('id', 'submit-add-ticket')
+
+            $('#ticket_price').attr('readonly', false);
+            $('#price_notification').text('*isi angka 0 jika gratis.');
         });
 
         $('body').on('click', '#submit-add-ticket', function(e) {
