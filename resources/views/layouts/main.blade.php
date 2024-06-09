@@ -9,7 +9,7 @@
     <meta content="" name="descriptison">
     <meta content="" name="keywords">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <script type="text/javascript" src="https://app.sandbox.midtrans.com/snap/snap.js"
+    <script type="text/javascript" src="{{ config('midtrans.snap_url') }}"
         data-client-key="{{ config('midtrans.client_key') }}"></script>
 
     <!-- Favicons -->
