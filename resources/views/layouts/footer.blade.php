@@ -36,22 +36,23 @@
             <div class="col-lg-3 col-md-6 footer-links">
                 <h4>Layanan</h4>
                 <ul>
-                    <li><i class="bx bx-chevron-right"></i> <a href="#">Info kampus</a></li>
-                    <li><i class="bx bx-chevron-right"></i> <a href="#">Blog</a></li>
-                    <li><i class="bx bx-chevron-right"></i> <a href="#">Perpustakaan</a></li>
-                    <li><i class="bx bx-chevron-right"></i> <a href="#">Download</a></li>
-                    <li><i class="bx bx-chevron-right"></i> <a href="#">MP event</a></li>
+                    <li><i class="bx bx-chevron-right"></i> <a href="/event/create">Sharing event</a></li>
+                    <li><i class="bx bx-chevron-right"></i> <a href="/dashboard">Manajemen event</a></li>
+                    <li><i class="bx bx-chevron-right"></i> <a href="/dashboard">Ticketing</a></li>
+                    <li><i class="bx bx-chevron-right"></i> <a href="/blog">Blog</a></li>
+                    <li><i class="bx bx-chevron-right"></i> <a href="/id/event">Event organizer</a></li>
                 </ul>
             </div>
 
             <div class="col-lg-3 col-md-6 footer-contact">
                 <h4>Contact</h4>
                 <p>
-                    Kawasan UNNES Sekaran <br>
-                    Kota Semarang, Pos 50229<br>
+                    Kab tegal dan kawasan perumahan mijen permai/BSB city,
+                    Kota Semarang, Pos 50215
                     Indonesia <br><br>
                     <strong>Phone:</strong> +62 821 3355 3002<br>
                     <strong>Email:</strong> info@eventconect.id<br>
+                    <a href="/blog/contact-us" class="btn btn-info btn-sm">contact us</a>
                 </p>
 
             </div>
