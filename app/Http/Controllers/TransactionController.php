@@ -254,7 +254,7 @@ class TransactionController extends Controller
 		$serverKey = config('midtrans.server_key');
 		$hashed = hash("sha512", $request->order_id . $request->status_code . $request->gross_amount . $serverKey);
 		if ($hashed == $request->signature_key) {
-			if ($request->transaction_status == 'capture' or $request->transaction_status == 'settlement') {
+			if (($request->transaction_status == 'capture' && $request->payment_type == 'credit_card' && $request->fraud_status == 'accept') or $request->transaction_status == 'settlement') {
 				$transaction = Transaction::where('transaction_id', $request->order_id)->first();
 				$transaction->update(['status' => 'Paid']);
 			} elseif ($request->transaction_status == 'pending') {
