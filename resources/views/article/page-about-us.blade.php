@@ -52,7 +52,7 @@
         <h5>Bagaimana caranya?</h5>
         <div>
 
-            <a href="/blog/creator-guide" class="btn btn-success"><i class="fas fa-file-alt"></i> Baca panduan</a>
+            <a href="/creator-guide" class="btn btn-success"><i class="fas fa-file-alt"></i> Baca panduan</a>
         </div>
     </section>
 @endsection

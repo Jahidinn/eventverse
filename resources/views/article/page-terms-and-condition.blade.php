@@ -58,6 +58,7 @@
                     <h6 class="card-title">
                         <i>Syarat & ketentuan untuk peserta</i>
                     </h6>
+
                     <p class="card-text">
 
                     <article class="text-article">

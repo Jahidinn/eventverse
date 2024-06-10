@@ -29,7 +29,7 @@
                             Konektivitas Tanpa Batas. Kami bekerja sama dengan ILB media (@Info.lomba.beasiswa) untuk
                             menyediakan solusi
                             teknologi dalam mendukung penyelenggaraan event, mulai dari distribusi dan manajemen tiket
-                            pendaftaran hingga penyediaan laporan event, info selengkapnya <a href="/blog/about-us">About
+                            pendaftaran hingga penyediaan laporan event, info selengkapnya <a href="/about-us">About
                                 eventconnect</a>.
                         </p>
                     </div>
@@ -54,7 +54,7 @@
                             distribusi tiket,
                             dan
                             manajemen event lainya. Ini mencakup pendaftaran peserta, pembelian tiket, verifikasi
-                            pembayaran, serta pencetakan dan penggunaan tiket digital, <a href="/blog/about-us">More
+                            pembayaran, serta pencetakan dan penggunaan tiket digital, <a href="/about-us">More
                                 info</a>.
                         </p>
                     </div>
@@ -75,7 +75,7 @@
                         <p>Kamu dapat mendaftarkan event Anda di platform kami dan mengatur detailnya, termasuk jenis tiket
                             yang akan dijual, harga tiket, jumlah tiket yang tersedia, dan informasi lainnya. Setelah itu,
                             kamu bisa mempromosikan event kamu dan mengelola penjualan tiket melalui dashboard kami, <a
-                                href="/blog/creator-guide">Baca panduan</a>.</p>
+                                href="/creator-guide">Baca panduan</a>.</p>
                     </div>
                 </div>
 
@@ -131,7 +131,7 @@
                         <hr class="m-2 mt-3">
                         <p>Ya, kami menyediakan dukungan pelanggan melalui berbagai saluran komunikasi seperti email dan
                             chat. Tim kami siap membantu Anda dengan pertanyaan atau masalah apa pun yang Anda hadapi dalam
-                            menggunakan platform kami, <a href="/blog/contact-us">Hubungi kami</a>.</p>
+                            menggunakan platform kami, <a href="/contact-us">Hubungi kami</a>.</p>
                     </div>
                 </div>
 
@@ -148,7 +148,7 @@
                     <div class="collapse" id="faq-7">
                         <hr class="m-2 mt-3">
                         <p>Kami mengutamakan keamanan data peserta dan mengikuti praktik terbaik dalam pengelolaan data
-                            pribadi. Kami menggunakan enkripsi data dan memiliki <a href="/blog/privacy-policy">kebijakan
+                            pribadi. Kami menggunakan enkripsi data dan memiliki <a href="/privacy-policy">kebijakan
                                 privasi</a> yang ketat untuk
                             melindungi informasi pribadi peserta.</p>
                     </div>
@@ -189,7 +189,7 @@
                         <hr class="m-2 mt-3">
                         <p>Kami mengenakan biaya atau komisi sesuai dengan layanan yang Anda gunakan. Detail tarif dan
                             biaya akan dijelaskan saat Anda mendaftar dan menggunakan platform kami, atau bisa di akses
-                            melalui halaman <a href="/blog/pricing">Biaya</a>.</p>
+                            melalui halaman <a href="/pricing">Biaya</a>.</p>
                     </div>
                 </div>
 
@@ -223,7 +223,7 @@
                     <p>Apakah Kamu memiliki pertanyaan, masukan, atau hanya ingin menyapa kami? Jangan ragu untuk mengirim
                         pesan kepada tim kami menggunakan formulir di bawah ini. Kami berusaha untuk merespons setiap pesan
                         secepat mungkin!</p>
-                    <a class="btn btn-success btn-sm" href="/blog/contact-us">Hubungi sekarang!</a>
+                    <a class="btn btn-success btn-sm" href="/contact-us">Hubungi sekarang!</a>
                 </div>
 
             </div>

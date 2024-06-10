@@ -398,7 +398,7 @@
                     hingga penyediaan
                     report/laporan event.
                 </p>
-                <a href="/blog/about-us" class="btn btn-info rounded-0">Baca selengkapnya ...</a>
+                <a href="/about-us" class="btn btn-info rounded-0">Baca selengkapnya ...</a>
             </div>
 
         </div>

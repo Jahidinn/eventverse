@@ -96,7 +96,7 @@
             </div>
         </div>
         <div class="mt-4">
-            Kenapa harus eventconnect? <a href="/blog/about-us" class="text-info"> <b>Cek selengkapnya ...</b></a>
+            Kenapa harus eventconnect? <a href="/about-us" class="text-info"> <b>Cek selengkapnya ...</b></a>
         </div>
     </section>
 @endsection

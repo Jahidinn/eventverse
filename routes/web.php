@@ -125,6 +125,16 @@ Route::middleware(['auth'])->group(function () {
 });
 
 # Tanpa middleware
+
+Route::get('/pricing', [ArticleController::class, 'pricingInfo']);
+Route::get('/about-us', [ArticleController::class, 'aboutUs']);
+Route::get('/contact-us', [ArticleController::class, 'contactUs']);
+Route::get('/terms-and-condition', [ArticleController::class, 'terms']);
+Route::get('/privacy-policy', [ArticleController::class, 'privacyPolicy']);
+Route::get('/frequently-asked-questions', [ArticleController::class, 'faq']);
+Route::get('/faq', [ArticleController::class, 'faq']);
+Route::get('/creator-guide', [ArticleController::class, 'guide']);
+
 Route::get('/blog/pricing', [ArticleController::class, 'pricingInfo']);
 Route::get('/blog/about-us', [ArticleController::class, 'aboutUs']);
 Route::get('/blog/contact-us', [ArticleController::class, 'contactUs']);
