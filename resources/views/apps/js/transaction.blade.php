@@ -107,6 +107,11 @@
             $('#pay-button').attr('disabled', false);
         });
 
+        // peringatan meninggalkan halaman saat transaksi
+        window.onbeforeunload = function() {
+            return "Apakah Anda yakin ingin meninggalkan halaman ini?";
+        };
+
         $('body').on('click', '.transaction-cancel-button', function(e) {
             e.preventDefault();
             let idTransaction = $('#id_event').val()

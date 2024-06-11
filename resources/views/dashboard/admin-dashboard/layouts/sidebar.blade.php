@@ -46,11 +46,14 @@
                     <a href="/administrator"
                         class="nav-link {{ Request::is('dashboard/admin') || Request::is('administrator') ? 'active' : '' }}">
                         <i class="nav-icon fas fa-home"></i>
-                        <p>Dashboard</p>
+                        <p>Admin Dashboard</p>
                     </a>
+                </li>
+
+                <li class="nav-item">
                     <a href="/dashboard" class="nav-link">
                         <i class="nav-icon fas fa-lock-open"></i>
-                        <p>General admin page</p>
+                        <p>User Dashboard</p>
                     </a>
                 </li>
 

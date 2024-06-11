@@ -118,7 +118,7 @@
                         <div class="float-right">
                             <button href="" class="btn btn-outline-info me-2" data-toggle="modal"
                                 data-target="#shareQrModal">
-                                <i class="fas fa-qrcode"></i>
+                                <i class="fas fa-qrcode"></i> <b>QR</b>
                             </button>
                             <button href="" class="btn btn-outline-info me-2 copyButton">
                                 <i class="fas fa-link"></i>

@@ -294,7 +294,7 @@
 
                                     <div class="event-no-org mt-2">
                                         <small class="text-danger">Kamu belum ikut organisasi apapun guys</small><br>
-                                        <a href="/dashboard/my-organization" class="btn btn-sm btn-success"><i
+                                        <a href="/dashboard/organization" class="btn btn-sm btn-success"><i
                                                 class="fas fa-plus"></i> Ikut
                                             organisasi</a>
                                     </div>
