@@ -220,4 +220,4 @@ Route::post('/email/verification-notification', [AuthController::class, 'resendE
 Route::get('/auth/forgot-password', [AuthController::class, 'forgotPasswordView'])->middleware('guest')->name('password.request');
 Route::post('/auth/forgot-password', [AuthController::class, 'forgotPassword'])->middleware('guest')->name('password.email');
 Route::get('/auth/reset-password/{token}', [AuthController::class, 'resetPasswordView'])->middleware('guest')->name('password.reset');
-Route::post('/auth/reset-password', [AuthController::class, 'resetPassword'])->middleware('guest')->name('password.update');
+Route::post('/auth/send-reset-password', [AuthController::class, 'resetPassword'])->middleware('guest')->name('password.update');

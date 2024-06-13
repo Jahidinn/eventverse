@@ -23,7 +23,7 @@
                 <div class="col-lg-12 login-form">
                     <div class="col-lg-12 login-form">
 
-                        <form action="/auth/reset-password/" method="POST">
+                        <form action="/auth/send-reset-password" method="POST">
                             @csrf
 
                             <input type="hidden" name="token" value="{{ $token }}">
