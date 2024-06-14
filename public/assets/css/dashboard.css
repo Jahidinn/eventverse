@@ -52,8 +52,34 @@
 	object-position: top !important; 
 }
 
+.main-sidebar{
+	background-color: #3468C0 !important;
+	color: #fff !important;
+}
+
+.sidebar .nav .active{
+	background-color: #6391e0 !important;
+	color: #FFF !important;
+}
+
+.brand-link {
+    border-bottom: 1px solid #a8c9e5 !important;
+}
+
+.user-panel {
+    border-bottom: 1px solid #90a4b5 !important;
+	align-items: center;
+	text-align: center;
+}
+
+.user-panel {
+    border-bottom: 1px solid #a8c9e5 !important;
+	align-items: center;
+	text-align: center;
+}
+
 .bg-dashboard{
-	background-color: #1e4356 !important;
+	background-color: #3468C0 !important;
 }
 .myevent-container-img img {
 	width:100%;

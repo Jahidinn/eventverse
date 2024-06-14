@@ -594,7 +594,7 @@ class DashboardController extends Controller
 			->getFill()
 			->setFillType(Fill::FILL_SOLID)
 			->getStartColor()
-			->setARGB('d9d9d9');
+			->setARGB('4F81BD');
 
 		$sheet->getStyle('B5:' . chr(65 + $lastColumn) . 5)
 			->getFill()
@@ -633,6 +633,19 @@ class DashboardController extends Controller
 			->setBorderStyle(Border::BORDER_MEDIUM)
 			->setColor(new Color('000000'));
 
+		# styling background baris konten
+		foreach (range(5, $lastRow) as $row) {
+			if ($row % 2 == 0) { // Check if row number is even
+				$sheet->getStyle('B' . $row . ':' . chr(65 + $lastColumn) . $row)
+					->getFill()
+					->setFillType(Fill::FILL_SOLID)
+					->getStartColor()
+					->setARGB('ebeded'); // Set background color
+			}
+		}
+
+
+
 		// Mengatur lebar kolom otomatis sesuai dengan panjang karakter
 		foreach ($sheet->getColumnIterator() as $column) {
 			$columnIndex = $column->getColumnIndex();
@@ -658,6 +671,16 @@ class DashboardController extends Controller
 				if ($row->getRowIndex() == 2 || $row->getRowIndex() == 5) {
 					$sheet->getStyle($cell->getCoordinate())->getFont()->setBold(true);
 					$sheet->getStyle($cell->getCoordinate())->getFont()->setSize(12);
+				}
+				if ($row->getRowIndex() == 3 || $row->getRowIndex() == 4) {
+					$sheet->getStyle($cell->getCoordinate())->getFont()->setBold(true);
+					$sheet->getStyle($cell->getCoordinate())->getFont()->setSize(11);
+					$sheet->getStyle($cell->getCoordinate())->getFont()->getColor()->setRGB('FFFFFF');
+
+					$sheet->getStyle($cell->getCoordinate())->getFill()
+						->setFillType(Fill::FILL_SOLID)
+						->getStartColor()
+						->setARGB('808080'); // Set background color
 				}
 			}
 		}

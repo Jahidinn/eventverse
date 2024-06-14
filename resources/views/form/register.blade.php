@@ -41,7 +41,7 @@
                             <div class="form-group">
                                 <label class="form-control-label" for="password">Password</label>
                                 <input type="password" class="form-control  @error('password') is-invalid @enderror"
-                                    name="password" required id="password">
+                                    name="password" required id="password" placeholder="*****">
                                 @error('password')
                                     <small class="invalid-veedback text-danger mt-0 pt-0">{{ $message }}</small>
                                 @enderror
@@ -50,7 +50,7 @@
                             <div class="form-group">
                                 <label class="form-control-label" for="confirmPassword">Confirm Password</label>
                                 <input type="password" class="form-control  @error('confirmPassword') is-invalid @enderror"
-                                    name="confirmPassword" required id="confirmPassword">
+                                    name="confirmPassword" required id="confirmPassword" placeholder="*****">
                                 @error('confirmPassword')
                                     <small class="invalid-veedback text-danger mt-0 pt-0">{{ $message }}</small>
                                 @enderror
