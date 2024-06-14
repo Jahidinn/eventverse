@@ -9,7 +9,7 @@
     <!-- Sidebar -->
     <div class="sidebar">
         <!-- Sidebar user (optional) -->
-        <div class="user-panel ml-2 mt-3 pb-3 mb-3 d-flex ">
+        <div class="user-panel mx-0 mt-3 pb-3 mb-3 d-flex ">
             @php
                 if (!auth()->user()->profile_picture || auth()->user()->profile_picture == '') {
                     $photo = 'assets/default-img/profile-images/default-user.jpg';
@@ -41,7 +41,7 @@
                 data-accordion="false">
                 <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
-                <li class="nav-header">PESERTA</li>
+                <li class="nav-header">MENU PESERTA</li>
                 <li class="nav-item">
                     <a href="/dashboard" class="nav-link {{ Request::is('dashboard') ? 'active' : '' }}">
                         <i class="nav-icon fas fa-home"></i>
@@ -92,6 +92,16 @@
                         class="nav-link {{ Request::is('dashboard/event-checkin*') ? 'active' : '' }}">
                         <i class="nav-icon fas fa-check-square"></i>
                         <p>Check in Peserta</p>
+                    </a>
+                </li>
+
+                <li class="nav-header">ARTIKEL</li>
+
+                <li class="nav-item">
+                    <a href="/dashboard/article"
+                        class="nav-link {{ Request::is('dashboard/article*') ? 'active' : '' }}">
+                        <i class="far fa-newspaper"></i>
+                        <p>Manajemen Artikel</p>
                     </a>
                 </li>
 

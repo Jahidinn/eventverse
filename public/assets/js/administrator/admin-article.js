@@ -34,7 +34,7 @@ $(document).ready(function() {
 	});
 
 	//Pencarian data
-	$('#search-request').keyup(function() {
+	$('#check-search-article').keyup(function() {
 		dataArticle.search($(this).val()).draw();
 	});
 
@@ -48,6 +48,7 @@ $(document).ready(function() {
 		}
 	});
 });
+
 
 $('body').on('keyup', '#blog-title', function() {
 	var title = $('#blog-title').val();
@@ -82,7 +83,7 @@ $(document).on('submit', '#form-add-article', function(e) {
 	const url = '/administrator/article/post';
 	const addArticleButton = '#btn-submit-article';
 	const addArticleModal = '#articleModal'
-	const addArticleTable = '#table-article';
+	const addArticleTable = '#table-article, #table-user-article';
 	const addArticleButtonText = '<i class="fas fa-check-circle"></i> Publish';
 
 	submitData(addArticleButton, url, addArticleModal, addArticleTable, addArticleButtonText);
@@ -140,7 +141,7 @@ $(document).on('submit', '#form-edit-article', function(e) {
 	const url = '/administrator/article/edit';
 	const editArticleButton = '#submit-edit-article';
 	const editArticleModal = '#editArticleModal'
-	const editArticleTable = '#table-article';
+	const editArticleTable = '#table-article, #table-user-article';
 	const editArticleButtonText = '<i class="fas fa-check-circle"></i> Edit artikel';
 
 	submitData(editArticleButton, url, editArticleModal, editArticleTable, editArticleButtonText);
@@ -154,7 +155,7 @@ $('body').on('click', '.btn-delete-article', function() {
 	const textWarning = '<b>Hapus artikel?</b>';
 	const url = '/administrator/article/delete';
 	const modal = '#editArticleModal';
-	const table = '#table-article';
+	const table = '#table-article, #table-user-article';
 
 	// Panggil function
 	deleteData(id, textWarning, url, modal, table);
@@ -428,7 +429,7 @@ function submitData(button, url, modal, table, buttonText){
 				alertify.success('<i class="fas fa-check"></i> ' + response.success);
 
 			} else {
-				Swal.fire('', response.error, 'error');
+				Swal.fire('', textStatus, 'error');
 			}
 			$(button).html(buttonText);
 			$(button).attr('disabled', false);

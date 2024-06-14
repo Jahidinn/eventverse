@@ -72,6 +72,12 @@ Route::middleware(['auth'])->group(function () {
 	// Rute-rute yang akan terkena middleware auth
 	// LIST ROUTE ......
 
+	# Artikel
+	Route::post('/administrator/article/post', [ArticleController::class, 'create']);
+	Route::get('/administrator/article/get', [ArticleController::class, 'getArticle']);
+	Route::post('/administrator/article/edit', [ArticleController::class, 'editArticle']);
+	Route::post('/administrator/article/delete', [ArticleController::class, 'deleteArticle']);
+
 	Route::middleware(['admin'])->group(function () {
 		// Rute-rute yang akan terkena middleware administrator
 		Route::get('/administrator', [AdminDashboardController::class, 'index']);
@@ -103,12 +109,6 @@ Route::middleware(['auth'])->group(function () {
 		Route::get('/administrator/event-management/get-event-for-promotion', [AdminDashboardController::class, 'getEventForPromotion']);
 		Route::post('/administrator/event-management/promote-event', [AdminDashboardController::class, 'promoteEvent']);
 		Route::post('/administrator/event-management/unpromote-event', [AdminDashboardController::class, 'unpromoteEvent']);
-
-		# Artikel
-		Route::post('/administrator/article/post', [ArticleController::class, 'create']);
-		Route::get('/administrator/article/get', [ArticleController::class, 'getArticle']);
-		Route::post('/administrator/article/edit', [ArticleController::class, 'editArticle']);
-		Route::post('/administrator/article/delete', [ArticleController::class, 'deleteArticle']);
 
 		# Kategori artikel/blog
 		Route::get('/administrator/blog-category/get', [ArticleController::class, 'getCategory']);
@@ -148,6 +148,8 @@ Route::get('/blog', [ArticleController::class, 'blogMain']);
 Route::get('/blog/search', [ArticleController::class, 'blogSearch']);
 Route::get('/blog/{slug}', [ArticleController::class, 'viewArticle']);
 
+Route::get('/dashboard/article', [DashboardController::class, 'article'])->middleware('auth');
+Route::get('/dashboard/article/get', [DashboardController::class, 'getArticle'])->middleware('auth');
 
 Route::get('/dashboard/my-profile', [UserProfileController::class, 'index'])->middleware('auth');
 Route::post('/dashboard/edit-profile-image', [UserProfileController::class, 'editImage'])->middleware('auth');

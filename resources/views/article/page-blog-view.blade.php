@@ -12,8 +12,24 @@
                 <div class="card shadow mb-3 mx-1">
 
                     <div class="view-image-event position-relative">
-                        <img src="{{ asset('storage/blog-images/' . $article->input_image) }}" class="card-img-top"
-                            alt="...">
+                        @php
+                            if ($article->input_image == '' || $article->input_image == null) {
+                                //Jika gambar kosong
+                                $img = 'assets/default-img/blog-images/default-img.png';
+                            } else {
+                                $imgPath = 'storage/blog-images/' . $article->input_image;
+
+                                // Memeriksa apakah file ada
+                                if (file_exists(public_path($imgPath))) {
+                                    $img = 'storage/blog-images/' . $article->input_image;
+                                } else {
+                                    // Jika file tidak ada, ganti dengan default
+                                    $img = 'assets/default-img/blog-images/default-img.png';
+                                }
+                            }
+                        @endphp
+
+                        <img src="{{ asset($img) }}" class="card-img-top" alt="...">
                         <button class="btn btn-dark rounded-0 position-absolute" data-toggle="modal"
                             data-target="#fullImageModal"><i class="fas fa-expand"></i></button>
                     </div>

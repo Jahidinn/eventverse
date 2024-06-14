@@ -74,6 +74,7 @@ class ArticleController extends Controller
 			'blog_tag.required' => 'Tag blog wajib dipilih.'
 		]);
 
+
 		if ($validator->fails()) {
 			$errors = $validator->errors();
 			$firstError = $errors->first();

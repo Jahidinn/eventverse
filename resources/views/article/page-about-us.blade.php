@@ -15,10 +15,10 @@
 
     <section class="container mt-0 pt-5 px-3">
         <p class="text-article">
-            <b>Eventconnect.id</b> merupakan platform Ticketing Management Service (TMS) dibawah naungan <b>PT Konektivitas
-                Tanpa Batas</b> dan yang bekerja sama dengan <b>ILB media</b> (@Info.lomba.beasiswa) yang menyediakan solusi
-            teknologi dalam mendukung penyelenggaraan event mulai dari distribusi dan manajemen tiket pendaftaran, hingga
-            penyediaan report/laporan event.
+            <b>Eventconnect.id</b> merupakan platform Ticketing Management Service (TMS) didirikan oleh <b>PT Konektivitas
+                Tanpa Batas</b> dan bekerja sama dengan <b>ILB media</b> (@Info.lomba.beasiswa) yang menyediakan solusi
+            teknologi dalam mendukung penyelenggaraan event mulai dari distribusi tiket, manajemen pendaftaran, pembayaran,
+            hingga penyediaan report/laporan akhir event.
         </p>
 
 
@@ -39,10 +39,11 @@
         <div class="mb-3">
             <ul class="text-article">
                 <li class="mb-1">Event kamu bisa jadi lebih keren & profesional! </li>
-                <li class="mb-1">Manajemen sistem pendaftaran, ticketing, dan report data event lebih baik.</li>
+                <li class="mb-1">Manajemen sistem pendaftaran, ticketing, pembayaran, & report data yang lebih baik.</li>
                 <li class="mb-1">Tidak perlu urusin data peserta, kita yang urus!</li>
                 <li class="mb-1">Tidak perlu urus masalaah pembayaran, kita yang urus!</li>
                 <li class="mb-1">Meningkatkan kepercayaan peserta!</li>
+                <li class="mb-1">Buat artikel, pengumuman, dan sebagainya dari menu manajemen artikel FREE!</li>
                 <li class="mb-1">Yang pasti kamu bisa menggunkanan platform eventconect.id kapanpun dan <span
                         class="text-success"><b>GRATIS!</b></span>
                 </li>

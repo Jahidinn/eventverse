@@ -12,6 +12,11 @@
         }
     };
 
+    // peringatan meninggalkan halaman saat transaksi
+    window.onbeforeunload = function() {
+        return "Apakah Anda yakin ingin meninggalkan halaman ini?";
+    };
+
     //cek validasi file
     var inputElement = document.getElementById("tb-file-upload")
     inputElement.addEventListener('change', function() {

@@ -5,11 +5,14 @@ namespace App\Http\Controllers;
 use Carbon\Carbon;
 use App\Models\Event;
 use App\Models\Ticket;
+use App\Models\Article;
 use App\Models\SnapToken;
 use App\Models\CustomForm;
+use App\Models\ArticleType;
 use App\Models\Transaction;
 use App\Models\WithdrawData;
 use Illuminate\Http\Request;
+use App\Models\ArticleCategory;
 use App\Models\TransactionForm;
 use Illuminate\Support\Facades\Redirect;
 use PhpOffice\PhpSpreadsheet\Style\Fill;
@@ -97,7 +100,7 @@ class DashboardController extends Controller
 		$user_id = auth()->user()->id;
 		$search = $request->key;
 
-		$listEvent = Event::where('title', 'like', '%' . $search . '%')->where('user_id', $user_id)->paginate(10)->withQueryString();
+		$listEvent = Event::where('title', 'like', '%' . $search . '%')->where('user_id', $user_id)->orderByRaw('id DESC')->paginate(10)->withQueryString();
 
 		// if ($listEvent->isEmpty()) {
 		// 	// Lakukan pengalihan URL atau tindakan lainnya
@@ -700,5 +703,38 @@ class DashboardController extends Controller
 		// Mengirim file Excel ke browser
 		$writer->save('php://output');
 		//return response()->json(['success' => 'Sukses download']);
+	}
+
+	# ARTICLE
+	public function article()
+	{
+		# Query mengambil data kategori dan jenis artikel 
+		$kategori = ArticleCategory::all();
+		$type = ArticleType::all();
+
+		return view('dashboard.page-article', [
+			'categories' => $kategori,
+			'type' => $type,
+		]);
+	}
+
+	public function getArticle()
+	{
+		$user_id = auth()->user()->id;
+
+		$article = Article::with(['user'])
+			->where('user_id', $user_id)
+			->orderByRaw('id DESC')
+			->get();
+
+		return DataTables::of($article)
+			->addIndexColumn()
+			->addColumn('blog-title', function ($article) {
+				return view('dashboard.admin-dashboard.components.article-title')->with(['data' => $article]);
+			})
+			->addColumn('action', function ($article) {
+				return view('dashboard.admin-dashboard.components.article-action')->with(['data' => $article]);
+			})
+			->make(true);
 	}
 }
