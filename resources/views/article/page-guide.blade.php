@@ -33,15 +33,15 @@
                             Login menggunakan email dan kata sandi yang telah terdaftar
                         </li>
                         <li class="mb-2">
-                            Pengguna akan menerima email verifikasi dan diarahkan untuk mengklik tautan dalam
+                            Pengguna akan menerima bemail verifikasi dan diarahkan untuk mengklik tautan dalam
                             email tersebut untuk mengaktifkan akun yang sudah di daftarkan.
                         </li>
                         <li class="mb-2">
                             Setting profil kamu yaitu termasuk menambahkan foto profil, mengisi biodata, dan
-                            rekening (Untuk bukan event creator bisa kosongkan rekening)
+                            rekening (Jika bukan event creator bisa kosongkan kolom rekening)
                         </li>
                         <li class="mb-2">
-                            Pada menu organisasi kamu bisa membuat organisasi baru, gabung organisasi,
+                            Pada <b>menu organisasi</b> kamu bisa membuat organisasi baru, gabung organisasi,
                             menambahkan anggota, menetapkan peran dan tanggung jawab, serta mengelola event yang
                             diselenggarakan oleh organisasi tersebut.
                         </li>
@@ -95,18 +95,18 @@
                     <h3>Management event</h3>
                     <ol class="pl-4 text-article">
                         <li class="mb-2">
-                            Buka menu manajemen event untuk memperbarui informasi event setelah dipublikasikan,
+                            Buka menu <b>manajemen event</b> untuk memperbarui informasi event setelah dipublikasikan,
                             ini mencakup mengubah detail acara seperti judul, deskripsi, tanggal, waktu, dan lokasi,
                             serta cara memberikan pembaruan kepada peserta yang telah terdaftar.
                         </li>
                         <li class="mb-2">
-                            Pada menu manajemen event juga terdapat menu untuk kelola tiket pendaftaran, Ini termasuk
+                            Pada menu <b>manajemen event</b> juga terdapat menu untuk kelola tiket pendaftaran, Ini termasuk
                             pembuatan tiket baru(berbayar, gratis, dsb), mengatur kuota tiket, serta mengelola pembatalan
                             atau perubahan tiket.
                         </li>
                         <li class="mb-2">
-                            Dalam menu manajemen event juga terdapat menu edit formulir untuk membuat dan menyesuaikan
-                            formulir pendaftaran. kamu bisa menambahkan formulir yang relevan untuk peserta,
+                            Dalam menu <b>manajemen event</b> juga terdapat menu edit formulir untuk membuat dan
+                            menyesuaikan formulir pendaftaran. kamu bisa menambahkan formulir yang relevan untuk peserta,
                             membuat kolom isian wajib, dan mengumpulkan informasi penting dari peserta.
                         </li>
                         <li class="mb-2">
@@ -116,11 +116,11 @@
                         </li>
                         <li class="mb-2">
                             Download Data Peserta: kamu bisa untuk mengunduh data peserta dalam format excel digunakan untuk
-                            analisis lebih lanjut atau keperluan administrasi pada menu data peserta
+                            analisis lebih lanjut atau keperluan administrasi pada <b>menu data peserta</b>
                         </li>
                         <li class="mb-2">
                             Pencairan Dana Event: untuk mencairkan dana yang diperoleh dari penjualan tiket
-                            dan pembayaran lainnya kamu bisa akses ke menu laporan transaksi.
+                            dan pembayaran lainnya kamu bisa akses ke menu <b>laporan transaksi</b>.
                         </li>
                     </ol>
                     <a href="https://youtu.be/CKDndwnmPk0" target="_blank" class="btn btn-danger btn-sm">
@@ -140,9 +140,9 @@
                             Buka menu manajemen artikel untuk mengelola artikel kamu.
                         </li>
                         <li class="mb-2">
-                            Pada menu manajemen artikel kamu bisa menulis artikel, mulai dari menentukan judul yang menarik,
-                            menulis konten informatif, hingga menambahkan gambar atau media lain yang relevan. Selain itu
-                            bisa memperbarui artikel atau menghapus artikel yang kamu buat.
+                            Pada menu <b>manajemen artikel</b> kamu bisa menulis artikel, mulai dari menentukan judul yang
+                            menarik, menulis konten informatif, hingga menambahkan gambar atau media lain yang relevan.
+                            Selain itu bisa memperbarui artikel atau menghapus artikel yang kamu buat.
                         </li>
                     </ol>
                     <a href="https://youtu.be/rquCGbrnzqI" target="_blank" class="btn btn-danger btn-sm">
@@ -169,15 +169,14 @@
                         </li>
                         <li class="mb-2">
                             Registrasi : Setelah memahami detail event registrasi sesuai dengan tiket pendaftaran yang
-                            tersedia, isikan
-                            detail informasi atau formulir yang dibutuhkan untuk event tersebut.
+                            tersedia, isikan detail informasi atau formulir yang dibutuhkan untuk event tersebut.
                         </li>
                         <li class="mb-2">
-                            Pembayaran biaya registrasi: lakukan pembayaran biaya registrasi (jika ada) dengan berbagai
-                            metode pembayaran yang tersedia setelah submit data pendaftaran.
+                            Pembayaran biaya registrasi: lakukan pembayaran biaya registrasi (jika ada) dengan <b>berbagai
+                                metode pembayaran</b> yang tersedia setelah submit data pendaftaran.
                         </li>
                         <li class="mb-2">
-                            Konfirmasi pendaftaran : setelah sukses melakukan pendaftaran kamu akan menerima email
+                            Konfirmasi pendaftaran : setelah sukses melakukan pendaftaran kamu akan <b>menerima email</b>
                             konfirmasi yang berisi status pendaftaran, kode pendaftaran, beserta informasi lainya.
                         </li>
                         <li class="mb-2">
