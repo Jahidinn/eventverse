@@ -148,7 +148,7 @@
 
                         {{-- Tab ticket event --}}
                         <div id="show-tiket" class="tab-content current p-0 text-article">
-                            <h5 class="card-title">Tiket pendaftaran</h5>
+                            <h6 class="card-title">Tiket pendaftaran</h6>
 
                             {{-- Looping tiket --}}
                             @foreach ($ticketData as $ticket)
@@ -227,21 +227,24 @@
                         {{-- Tab deskripsi --}}
                         <div id="show-deskripsi" class="tab-content p-0">
                             <div>
-                                <h5 class="card-title">Deskripsi</h5>
+                                <h6 class="card-title">Deskripsi</h6>
                                 <p class="card-text">
                                 <article class="text-article">
                                     {!! $detailEvent->description !!}
                                 </article>
                                 </p>
                             </div>
+
                             <div class="mt-4">
-                                <h5 class="card-title">Syarat & ketentuan</h5>
+                                <h6 class="card-title">Syarat & ketentuan</h6>
                                 <p class="card-text">
                                 <article class="text-article">
                                     {!! $detailEvent->terms !!}
                                 </article>
                                 </p>
-                                <p class="card-text"><small class="text-muted"></small></p>
+                                <p class="card-text">
+                                    <small class="text-muted"></small>
+                                </p>
                             </div>
                         </div>
                     </div>

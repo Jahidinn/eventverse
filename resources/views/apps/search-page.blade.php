@@ -213,7 +213,16 @@
                                 <img class="card-img-top" src="{{ asset($image) }}" alt="Image">
                             </div>
                             <div class="card-body pt-0">
-                                <h5 class="card-title pb-0 mb-0">{{ $terbaru->title }}</h5>
+
+                                @php
+                                    if (strlen($terbaru->title) > 50) {
+                                        $title_search = substr($terbaru->title, 0, 50) . ' ...';
+                                    } else {
+                                        $title_search = $terbaru->title;
+                                    }
+                                @endphp
+                                <h5 class="card-title pb-0 mb-0">{{ $title_search }}</h5>
+
                                 <small class="location"><i class="fas fa-map-marker-alt mr-2"></i>
                                     {{ $terbaru->location_jenis == 'Offline' ? ucwords(strtolower($terbaru->location_city)) : $terbaru->location_jenis }}</small>
                                 <hr class="mb-1 mt-1">
