@@ -39,7 +39,7 @@
                         </div>
                     </div>
                     <div class="form-group p-0">
-                        <label for="blog-body">Body</label>
+                        <label>Body</label>
                         <input id="blog-body" type="hidden" name="blog_body" required>
                         <trix-editor input="blog-body"></trix-editor>
                     </div>
@@ -53,7 +53,7 @@
                         <div class="form-group">
                             <label for="blog-title">Jenis artiikel</label>
                             <select class="form-control" id="blog-article-id" name="blog_article_id" required>
-                                <option value="3">Pilih jenis artikel</option>
+                                <option value="">Pilih jenis artikel</option>
                                 @foreach ($type as $tipe)
                                     <option value="{{ $tipe->id }}">{{ $tipe->type_name }}</option>
                                 @endforeach
@@ -132,7 +132,7 @@
                     </div>
                     {{-- Body --}}
                     <div class="form-group p-0" id="edit-body-container">
-                        <label for="blog-body-edit">Body</label>
+                        <label>Body</label>
                         <input id="blog-body-edit" type="hidden" name="blog_body_edit" required>
                         <trix-editor input="blog-body-edit"></trix-editor>
                     </div>

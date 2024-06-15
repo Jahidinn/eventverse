@@ -53,12 +53,16 @@
 }
 
 .main-sidebar{
-	background-color: #3468C0 !important;
-	color: #fff !important;
+	background-color: #0384a4 !important;
+	color: #fff !important;	
+}
+
+.sidebar .nav .nav-link{
+	color: #FFF !important;
 }
 
 .sidebar .nav .active{
-	background-color: #6391e0 !important;
+	background-color: #2eb6d8 !important;
 	color: #FFF !important;
 }
 
@@ -79,7 +83,7 @@
 }
 
 .bg-dashboard{
-	background-color: #3468C0 !important;
+	background-color: #006c86 !important;
 }
 .myevent-container-img img {
 	width:100%;

@@ -46,9 +46,6 @@
 
 
     {{-- Push javascript --}}
-    <script>
-        var imageUrl = "{{ asset('storage/blog-images') }}";
-    </script>
 
     @push('js-article')
         <script src="{{ asset('assets/js/dashboard/dash-article.js') }}"></script>
