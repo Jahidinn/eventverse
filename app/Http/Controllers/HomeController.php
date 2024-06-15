@@ -53,7 +53,7 @@ class HomeController extends Controller
 				}
 			})
 			->orderBy('id', $sort)
-			->paginate(2)
+			->paginate(8)
 			->withQueryString();
 
 		$jenisevent = [

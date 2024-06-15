@@ -50,7 +50,7 @@
                     Kab tegal dan kawasan perumahan mijen permai/BSB city,
                     Kota Semarang, Pos 50215
                     Indonesia <br><br>
-                    <strong>Phone:</strong> +62 821 3355 3002<br>
+                    <strong>Phone:</strong> +62 896 123 94600<br>
                     <strong>Email:</strong> info@eventconect.id<br>
                     <a href="/blog/contact-us" class="btn btn-info btn-sm">contact us</a>
                 </p>

@@ -189,7 +189,7 @@
         <div class="container-fluid m-auto row pt-0 mt-0 search-result-box">
             @foreach ($eventTerbaru as $terbaru)
                 <div class="col-md-3 mb-4 card-event-search">
-                    <a href="/{{ $terbaru->slug }}">
+                    <a href="/{{ $terbaru->slug }}" target="_blank">
                         <div class="card profile-card-5 shadow">
                             <div class="card-img-block rounded">
 

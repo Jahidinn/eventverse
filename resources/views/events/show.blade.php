@@ -349,8 +349,15 @@
                         <h6>Bingung? Panduan buat event 👇</h6>
                         <hr />
                         <div class="ratio ratio-16x9">
-                            <iframe src="https://www.youtube.com/embed/EerjWLzp71c?si=BfKTWYhylwVrjeL7"
+                            <iframe src="https://www.youtube.com/embed/7PKrnsQUx90?si=WL3EBF8-dPjSyijf"
                                 title="YouTube video" allowfullscreen></iframe>
+                        </div>
+                        <div class="ratio ratio-16x9 mt-3">
+                            <iframe src="https://www.youtube.com/embed/igdg2VMQjn0?si=8bFsDFrRlrQruHmv"
+                                title="YouTube video" allowfullscreen></iframe>
+                        </div>
+                        <div class="mt-3">
+                            <a href="/creator-guide" class="btn btn-info ">Lihat panduan</a>
                         </div>
                     </div>
                 </div>

@@ -107,8 +107,8 @@ class UserProfileController extends Controller
 			'p_name' => 'required',
 			'p_email' => 'required|email:dns',
 			'p_no_tlp' => 'required|min:9',
-			'p_no_rekening' => 'required',
-			'p_bank' => 'required',
+			// 'p_no_rekening' => '',
+			// 'p_bank' => '',
 		]);
 
 		if ($validasi->fails()) {

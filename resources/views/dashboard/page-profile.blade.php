@@ -129,13 +129,12 @@
                         </div>
                         <div class="form-group">
                             <span class="text-secondary">Nomer rekening</span>
-                            <input type="text" class="form-control shadow-none mt-1" id="p_no_rekening" required
+                            <input type="text" class="form-control shadow-none mt-1" id="p_no_rekening"
                                 name="p_no_rekening">
                         </div>
                         <div class="form-group">
                             <span class="text-secondary">Bank</span>
-                            <input type="text" class="form-control shadow-none mt-1" id="p_bank" required
-                                name="p_bank">
+                            <input type="text" class="form-control shadow-none mt-1" id="p_bank" name="p_bank">
                         </div>
                     </div>
                     <div class="modal-footer">
