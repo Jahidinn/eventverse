@@ -11,7 +11,7 @@
             <li><a href="/about-us">Tentang eventconnect</a></li>
             <li><a href="/event/create">Buat event</a></li>
             <li><a href="/blog">Blog</a></li>
-            <li><a href="/pricing">biaya</a></li>
+            <li><a href="/pricing">Biaya</a></li>
 
             {{-- <li class="drop-down"><a href="">Layanan</a>
                 <ul>
