@@ -15,7 +15,7 @@
 
     <section class="container mt-0 pb-0 pt-5">
         <div class="mb-3">
-            <h4>Biaya transaksi di eventconnect.id</h4>
+            <b>Biaya transaksi di eventconnect.id</b><br>
             <small class="text-danger"><i>Biaya transaksi di bebankan kepada penyelenggara</i></small>
         </div>
         <div class="row text-article">

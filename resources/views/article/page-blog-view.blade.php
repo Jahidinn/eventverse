@@ -46,7 +46,7 @@
                         <p class="card-text"><small class="text-muted">Posted
                                 {{ $article->created_at->diffForHumans() }}</small></p>
                         <hr>
-                        <div>
+                        <div class="text-article">
                             {!! $article->body !!}
                         </div>
                         <hr>

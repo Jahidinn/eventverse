@@ -47,7 +47,7 @@
                     <div class="card-body">
 
                         {{-- Title / judul --}}
-                        <h5 class="card-title mt-3 mb-0">{{ $detailEvent->title }}</h5>
+                        <h6 class="card-title mt-3 mb-0">{{ $detailEvent->title }}</h6>
 
                         @php
                             if ($detailEvent->organizer == 'org') {
@@ -133,10 +133,10 @@
                 </div>
 
                 <div class="card mb-3 mx-1 shadow">
-                    <div class="card-body p-3">
+                    <div class="card-body p-3 p-sm-2 p-md-2 p-lg-3">
 
                         {{-- Pilihan TAB --}}
-                        <div class="col-md-12 row tabs mb-4">
+                        <div class="col-md-12 row tabs mb-4 text-article">
                             <div class="col px-0">
                                 <button class="tab-link current w-100 m-0 py-2" data-tab="show-tiket">Tiket
                                     Pendaftaran</button>
@@ -147,7 +147,7 @@
                         </div>
 
                         {{-- Tab ticket event --}}
-                        <div id="show-tiket" class="tab-content current p-0">
+                        <div id="show-tiket" class="tab-content current p-0 text-article">
                             <h5 class="card-title">Tiket pendaftaran</h5>
 
                             {{-- Looping tiket --}}
@@ -253,7 +253,7 @@
             <div class="col-12 col-md-4 m-0 p-1 ">
                 <div class="card mx-1 shadow">
                     <div class="card-body text-left">
-                        <h5>Info penyelenggara</h5>
+                        <h6>Info penyelenggara</h6>
                         <hr />
 
                         @if ($detailEvent->organizer == 'org' && $detailEvent->organizer_id)
@@ -368,93 +368,95 @@
     {{-- Event terbaru --}}
     <section class="event-terbaru-section section-bg pt-4 p-0 pb-4" style="background-color: #EFF8FD ">
         <div class="section-title pb-0">
-            <h4 class="mt-0">Event menarik lainya</h4>
+            <h2 class="mt-0">Event menarik lainya</h2>
         </div>
 
         <div class="container-fluid event-terbaru pt-0 mt-0">
             @foreach ($recomendedEvents as $moreEvent)
                 <div class="col-md-4 mt-0">
-                    <div class="card profile-card-5 shadow">
+                    <a href="/{{ $moreEvent->slug }}">
+                        <div class="card profile-card-5 shadow">
 
-                        @php
-                            if ($moreEvent->image == '' || $moreEvent->image == null) {
-                                //Jika gambar kosong
-                                $imgmoreEvent = 'assets/default-img/event-images/def-img.png';
-                            } else {
-                                $imgPath = 'storage/event-images/' . $moreEvent->image;
-
-                                // Memeriksa apakah file ada
-                                if (file_exists(public_path($imgPath))) {
-                                    $imgmoreEvent = 'storage/event-images/' . $moreEvent->image;
-                                } else {
-                                    // Jika file tidak ada, ganti dengan default
+                            @php
+                                if ($moreEvent->image == '' || $moreEvent->image == null) {
+                                    //Jika gambar kosong
                                     $imgmoreEvent = 'assets/default-img/event-images/def-img.png';
-                                }
-                            }
-                        @endphp
-
-                        {{-- Gambar / poster --}}
-                        <div class="card-img-block">
-                            <img class="card-img-top" src="{{ asset($imgmoreEvent) }}" alt="Card image cap">
-                        </div>
-
-                        {{-- Info lain --}}
-                        <div class="card-body pt-0">
-
-                            {{-- Title / Judul --}}
-                            @php
-                                if (strlen($moreEvent->title) > 50) {
-                                    $title_moreEvent = substr($moreEvent->title, 0, 50) . ' ...';
                                 } else {
-                                    $title_moreEvent = $moreEvent->title;
+                                    $imgPath = 'storage/event-images/' . $moreEvent->image;
+
+                                    // Memeriksa apakah file ada
+                                    if (file_exists(public_path($imgPath))) {
+                                        $imgmoreEvent = 'storage/event-images/' . $moreEvent->image;
+                                    } else {
+                                        // Jika file tidak ada, ganti dengan default
+                                        $imgmoreEvent = 'assets/default-img/event-images/def-img.png';
+                                    }
                                 }
                             @endphp
-                            <div style="height: 45px">
-                                <h5 class="card-title pb-0 mb-0">{{ $title_moreEvent }}</h5>
+
+                            {{-- Gambar / poster --}}
+                            <div class="card-img-block">
+                                <img class="card-img-top" src="{{ asset($imgmoreEvent) }}" alt="Card image cap">
                             </div>
 
-                            <hr class="mb-1 mt-1">
+                            {{-- Info lain --}}
+                            <div class="card-body pt-0">
 
-                            {{-- Lokasi --}}
-                            <small class="location">
-                                <i class="fas fa-map-marker-alt mr-2"></i>
-                                {{ $moreEvent->location_jenis == 'Offline' ? ucwords(strtolower($moreEvent->location_city)) : $moreEvent->location_jenis }}</small>
-                            <br>
+                                {{-- Title / Judul --}}
+                                @php
+                                    if (strlen($moreEvent->title) > 50) {
+                                        $title_moreEvent = substr($moreEvent->title, 0, 50) . ' ...';
+                                    } else {
+                                        $title_moreEvent = $moreEvent->title;
+                                    }
+                                @endphp
+                                <div style="height: 45px">
+                                    <h5 class="card-title pb-0 mb-0">{{ $title_moreEvent }}</h5>
+                                </div>
 
-                            {{-- Tanggal event --}}
-                            <small>
-                                <i class="fas fa-clock mr-2"></i>
-                                {{ $moreEvent->start_date->format('dd-mm-Y') == $moreEvent->end_date->format('dd-mm-Y') ? $moreEvent->end_date->format('d M Y') : $moreEvent->start_date->format('d M Y') . ' - ' . $moreEvent->end_date->format('d M Y') }}</small>
-                            <hr class="mb-1 mt-1">
+                                <hr class="mb-1 mt-1">
 
-                            {{-- Harga --}}
-                            <div class="alert alert-info mt-3" role="alert">
+                                {{-- Lokasi --}}
+                                <small class="location">
+                                    <i class="fas fa-map-marker-alt mr-2"></i>
+                                    {{ $moreEvent->location_jenis == 'Offline' ? ucwords(strtolower($moreEvent->location_city)) : $moreEvent->location_jenis }}</small>
+                                <br>
+
+                                {{-- Tanggal event --}}
                                 <small>
-                                    <strong><i class="fas fa-tag"></i>
-                                        {{ $moreEvent->ticket->first()->ticket_price == 0 ? 'GRATIS!' : ' Rp ' . number_format($moreEvent->ticket->first()->ticket_price, 0, ',', '.') }}</strong>
-                                </small>
-                            </div>
+                                    <i class="fas fa-clock mr-2"></i>
+                                    {{ $moreEvent->start_date->format('dd-mm-Y') == $moreEvent->end_date->format('dd-mm-Y') ? $moreEvent->end_date->format('d M Y') : $moreEvent->start_date->format('d M Y') . ' - ' . $moreEvent->end_date->format('d M Y') }}</small>
+                                <hr class="mb-1 mt-1">
 
-                            <hr class="mb-1 mt-1">
+                                {{-- Harga --}}
+                                <div class="alert alert-info mt-3" role="alert">
+                                    <small>
+                                        <strong><i class="fas fa-tag"></i>
+                                            {{ $moreEvent->ticket->first()->ticket_price == 0 ? 'GRATIS!' : ' Rp ' . number_format($moreEvent->ticket->first()->ticket_price, 0, ',', '.') }}</strong>
+                                    </small>
+                                </div>
 
-                            {{-- Penyelenggara --}}
-                            @php
-                                if ($moreEvent->organizer == 'org') {
-                                    $penyelenggara_moreEvent = $moreEvent->org->org_name ?? '';
-                                } elseif ($moreEvent->organizer == 'individual') {
-                                    $penyelenggara_moreEvent = $moreEvent->individual->name ?? '';
-                                } else {
-                                    $penyelenggara_moreEvent = '';
-                                }
-                            @endphp
+                                <hr class="mb-1 mt-1">
 
-                            <div class="text-center">
-                                <small class="event-user">
-                                    {{ $penyelenggara_moreEvent }}
-                                </small>
+                                {{-- Penyelenggara --}}
+                                @php
+                                    if ($moreEvent->organizer == 'org') {
+                                        $penyelenggara_moreEvent = $moreEvent->org->org_name ?? '';
+                                    } elseif ($moreEvent->organizer == 'individual') {
+                                        $penyelenggara_moreEvent = $moreEvent->individual->name ?? '';
+                                    } else {
+                                        $penyelenggara_moreEvent = '';
+                                    }
+                                @endphp
+
+                                <div class="text-center">
+                                    <small class="event-user">
+                                        {{ $penyelenggara_moreEvent }}
+                                    </small>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    </a>
                 </div>
             @endforeach
         </div>

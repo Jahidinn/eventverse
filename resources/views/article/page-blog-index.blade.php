@@ -31,9 +31,24 @@
                 <div class="card mb-4">
                     <a href="#!">
                         <div class="jumbotron p-0">
-                            <img class="card-img-top"
-                                src="{{ asset('storage/blog-images') . '/' . $latestArticle->input_image }}"
-                                alt="..." />
+                            @php
+                                if ($latestArticle->input_image == '' || $latestArticle->input_image == null) {
+                                    //Jika gambar kosong
+                                    $img = 'assets/default-img/blog-images/default-img.png';
+                                } else {
+                                    $imgPath = 'storage/blog-images/' . $latestArticle->input_image;
+
+                                    // Memeriksa apakah file ada
+                                    if (file_exists(public_path($imgPath))) {
+                                        $img = 'storage/blog-images/' . $latestArticle->input_image;
+                                    } else {
+                                        // Jika file tidak ada, ganti dengan default
+                                        $img = 'assets/default-img/blog-images/default-img.png';
+                                    }
+                                }
+                            @endphp
+
+                            <img class="card-img-top" src="{{ asset($img) }}" alt="..." />
                         </div>
                     </a>
                     <div class="card-body">
@@ -56,9 +71,23 @@
                         <div class="card mb-4">
                             <a href="#!">
                                 <div class="list-article">
-                                    <img class="card-img-top"
-                                        src="{{ asset('storage/blog-images') . '/' . $article->input_image }}"
-                                        alt="..." />
+                                    @php
+                                        if ($article->input_image == '' || $article->input_image == null) {
+                                            //Jika gambar kosong
+                                            $img_article = 'assets/default-img/blog-images/default-img.png';
+                                        } else {
+                                            $img_articlePath = 'storage/blog-images/' . $article->input_image;
+
+                                            // Memeriksa apakah file ada
+                                            if (file_exists(public_path($img_articlePath))) {
+                                                $img_article = 'storage/blog-images/' . $article->input_image;
+                                            } else {
+                                                // Jika file tidak ada, ganti dengan default
+                                                $img_article = 'assets/default-img/blog-images/default-img.png';
+                                            }
+                                        }
+                                    @endphp
+                                    <img class="card-img-top" src="{{ asset($img_article) }}" alt="..." />
                                 </div>
                             </a>
                             <div class="card-body" style="height: 165px">
