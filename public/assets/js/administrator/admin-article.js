@@ -429,7 +429,7 @@ function submitData(button, url, modal, table, buttonText){
 				alertify.success('<i class="fas fa-check"></i> ' + response.success);
 
 			} else {
-				Swal.fire('', textStatus, 'error');
+				Swal.fire('', response.error, 'error');
 			}
 			$(button).html(buttonText);
 			$(button).attr('disabled', false);

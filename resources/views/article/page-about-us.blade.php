@@ -16,7 +16,8 @@
     <section class="container mt-0 pt-5 px-3">
         <p class="text-article">
             <b>Eventconnect.id</b> merupakan platform Ticketing Management Service (TMS) didirikan oleh <b>PT Konektivitas
-                Tanpa Batas</b> dan bekerja sama dengan <b>ILB media</b> (@Info.lomba.beasiswa) yang menyediakan solusi
+                Tanpa Batas</b> dan dikelola oleh <b>ILB media</b> (@Info.lomba.beasiswa) serta menggunakan sistem
+            pembayaran yang terkoneksi dengan midtrans (by gojek). <b>eventconnect.id</b> menyediakan solusi
             teknologi dalam mendukung penyelenggaraan event mulai dari distribusi tiket, manajemen pendaftaran, pembayaran,
             hingga penyediaan report/laporan akhir event.
         </p>
@@ -52,8 +53,8 @@
         <p class="mt-3">Jadikan event kamu lebih keren dengan <b>eventconnect.id</b> sob!</p>
         <h5>Bagaimana caranya?</h5>
         <div>
-
             <a href="/creator-guide" class="btn btn-success"><i class="fas fa-file-alt"></i> Baca panduan</a>
+            <a href="/faq" class="btn btn-info"><i class="fas fa-file-alt"></i> Frequently Asked Question</a>
         </div>
     </section>
 @endsection

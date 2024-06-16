@@ -16,7 +16,7 @@ class HomeController extends Controller
 {
 	public function index()
 	{
-		$eventTerbaru = Event::with('penyelenggara', 'ticket')->orderBy('created_at', 'DESC')->limit(20)->get();
+		$eventTerbaru = Event::with('penyelenggara', 'ticket')->orderBy('created_at', 'DESC')->limit(10)->get();
 		$eventPopuler = Event::with('penyelenggara', 'ticket')->orderBy('visitor', 'DESC')->limit(10)->get();
 		$eventPilihan = Event::with('penyelenggara', 'ticket')->where('selected_event', 1)->orderBy('id', 'DESC')->limit(8)->get();
 
@@ -26,7 +26,7 @@ class HomeController extends Controller
 			'eventPilihan' => $eventPilihan,
 		]);
 	}
-
+	
 	public function searchEvent(Request $request)
 	{
 		if ($request->sort == 'Terlama') {

@@ -63,6 +63,26 @@
             </div>
         </div>
 
+        {{-- FAQ 2.1 --}}
+        <div class="card mb-3 mx-1 shadow-sm">
+            <div class="card-body px-4 py-3">
+                <div class="text-article mt-0">
+                    <a class="btn w-100 text-left" data-toggle="collapse" href="#faq-2-1" role="button">
+                        <b>Apakah eventconnect.id dapat dipercaya?</b>
+                    </a>
+
+                    <div class="collapse" id="faq-2">
+                        <hr class="m-2 mt-3">
+                        <p>Ya, evntconnect.id dibawah naungan perusahaan yang berbadan hukum dan dikelola oleh ILB media
+                            (@info.lomba.beasiswa) serta menggunakan sistem pembayaran midtrans by gojek jadi tidak perlu
+                            diragukan keamananannya.</a>.
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
         {{-- FAQ 3 --}}
         <div class="card mb-3 mx-1 shadow-sm">
             <div class="card-body px-4 py-3">

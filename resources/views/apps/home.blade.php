@@ -393,10 +393,9 @@
             <div class="text-center">
                 <p class="text-article">
                     <b>Eventconnect.id</b> merupakan platform Ticketing Management Sistem yang didirikan oleh <b>PT
-                        Konektivitas Tanpa Batas</b> dan bekerja sama dengan <b>ILB media</b> (IG @Info.lomba.beasiswa) yang
+                        Konektivitas Tanpa Batas</b> dan dikelola oleh <b>ILB media</b> (IG @Info.lomba.beasiswa) yang
                     menyediakan solusi teknologi dalam mendukung penyelenggaraan event mulai dari distribusi tiket,
-                    manajemen pendaftaran, pembayaran,
-                    hingga penyediaan report/laporan akhir event.
+                    manajemen pendaftaran, pembayaran, hingga penyediaan report/laporan akhir event.
                 </p>
                 <a href="/about-us" class="btn btn-info rounded-0">Baca selengkapnya ...</a>
             </div>
