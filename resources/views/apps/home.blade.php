@@ -375,10 +375,13 @@
             <div class="mb-3">
                 <ul class="text-article">
                     <li class="mb-1">Event kamu bisa jadi lebih <b class="text-success">keren & profesional</b>!</li>
-                    <li class="mb-1">Manajemen sistem pendaftaran, ticketing, pembayaran, & data yang lebih baik.</li>
+                    <li class="mb-1">Manajemen sistem pendaftaran, ticketing, pembayaran, & data yang simpel.</li>
                     <li class="mb-1">Tidak perlu urusin data peserta, kita yang urus!</li>
                     <li class="mb-1">Tidak perlu urus masalaah pembayaran, kita yang urus!</li>
-                    <li class="mb-1">Meningkatkan <b class="text-success">kepercayaan</b> peserta!</li>
+                    <li class="mb-1">Tersedia berbagai metode pemayaran buat peserta.</li>
+                    <li class="mb-1">Short link event sesuai keinginan.</li>
+                    <li class="mb-1">Menghindari pennipuan dan meningkatkan <b class="text-success">kepercayaan</b>
+                        peserta!</li>
                     <li class="mb-1">Buat artikel, pengumuman, dan sebagainya dari menu manajemen artikel FREE!</li>
                     <li class="mb-1">Yang pasti kamu bisa menggunkanan platform eventconect.id kapanpun dan <span
                             class="text-success"><b>GRATIS!</b></span>

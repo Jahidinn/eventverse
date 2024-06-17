@@ -27,20 +27,25 @@
         <h5 class="mt-4 mb-3">Apa yang bisa dilakukan platform eventconnect.id?</h5>
         <div class="text-article">
             <ul>
-                <li class="mb-1">Melakukan distribusi informasi event sekaligus tiket pendaftaran</li>
-                <li class="mb-1">Manajemen sistem pembayaran yang beragam bagi peserta dan penyelenggara event.</li>
+                <li class="mb-1">Fitur distribusi informasi event dan tiket pendaftaran.</li>
+                <li class="mb-1">Manajemen event, tiket, formulir, dan organisasi.</li>
+                <li class="mb-1">Menyediakan sistem pembayaran yang beragam bagi peserta dan penyelenggara event.</li>
                 <li class="mb-1">Menyediakan report dokumen laporan penyelenggaraan event.</li>
                 <li class="mb-1">Fitur checkin peserta event.</li>
-                <li class="mb-1">an masih banyak fitur lainya, <a href="/dashboard">Lihat fitur</a></li>
+                <li class="mb-1">Short link event sesuai keinginan.</li>
+                <li class="mb-1">Fitur share ke erbagai sosial media.</li>
+                <li class="mb-1">Sharing artikel</li>
+                <li class="mb-1">dan masih banyak fitur lainya, <a href="/dashboard">Lihat fitur</a></li>
             </ul>
         </div>
 
         {{-- Alasan menggunakan eventconnect.id --}}
-        <h5 class="mt-4">Kenapa harus eventconnect.id?</h5>
+        <h5 class="mt-4">Kenapa harus kolaborasi dengan eventconnect.id?</h5>
         <div class="mb-3">
             <ul class="text-article">
                 <li class="mb-1">Event kamu bisa jadi lebih keren & profesional! </li>
-                <li class="mb-1">Manajemen sistem pendaftaran, ticketing, pembayaran, & report data yang lebih baik.</li>
+                <li class="mb-1">Manajemen sistem pendaftaran, ticketing, pembayaran, & report data yang lebih efisien.
+                </li>
                 <li class="mb-1">Tidak perlu urusin data peserta, kita yang urus!</li>
                 <li class="mb-1">Tidak perlu urus masalaah pembayaran, kita yang urus!</li>
                 <li class="mb-1">Meningkatkan kepercayaan peserta!</li>
@@ -51,10 +56,10 @@
             </ul>
         </div>
         <p class="mt-3">Jadikan event kamu lebih keren dengan <b>eventconnect.id</b> sob!</p>
-        <h5>Bagaimana caranya?</h5>
+        <h5>Gimana caranya?</h5>
         <div>
             <a href="/creator-guide" class="btn btn-success"><i class="fas fa-file-alt"></i> Baca panduan</a>
-            <a href="/faq" class="btn btn-info"><i class="fas fa-file-alt"></i> Frequently Asked Question</a>
+            <a href="/faq" class="btn btn-info"><i class="fas fa-file-alt"></i> Faq</a>
         </div>
     </section>
 @endsection
