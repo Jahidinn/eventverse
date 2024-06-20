@@ -42,7 +42,7 @@
     {{-- Modal ikut organisasi --}}
     <div class="modal fade" id="followOrganisasiModal" tabindex="-1" aria-labelledby="followOrganisasiModalLabel"
         aria-hidden="true">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="followOrganisasiModalLabel">Ikut organisasi</h5>
@@ -219,12 +219,13 @@
                         <div class="form-group">
                             <span class="text-secondary">Nama organisasi</span>
                             <input type="text" class="form-control shadow-none mt-1" id="org_name" required
-                                name="org_name">
+                                name="org_name" placeholder="Ex : organisasi kreatif">
                         </div>
                         <div class="form-group">
                             <span class="text-secondary">Institusi</span>
                             <input type="text" class="form-control shadow-none mt-1" id="org_institution" required
-                                name="org_institution">
+                                name="org_institution" placeholder="Ex : Pemkot Semarang">
+                            <small class="text-danger">Jika tidak ada institusi isi sama dengan nama organisasi</small>
                         </div>
                         <div class="form-group">
                             <span class="text-secondary">Alamat</span>
@@ -304,6 +305,7 @@
                             <span class="text-secondary">Institusi</span>
                             <input type="text" class="form-control shadow-none mt-1" id="org_institution_edit"
                                 required name="org_institution_edit">
+                            <small class="text-danger">Jika tidak ada institusi isi sama dengan nama organisasi</small>
                         </div>
                         <div class="form-group">
                             <span class="text-secondary">Alamat</span>
