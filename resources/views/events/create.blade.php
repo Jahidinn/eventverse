@@ -137,13 +137,13 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="bg-secondary text-white text-center py-1 mb-2 mt-4">
+                                <div class="bg-secondary text-white text-center py-1 mb-2 mt-4" hidden>
                                     <strong><small>SYARAT & KETENTUAN</small></strong>
                                 </div>
-                                <div class="card">
+                                <div class="card" hidden>
                                     <div class="card-body">
                                         <div class="form-group p-0">
-                                            <input id="terms" type="hidden" name="terms" required>
+                                            <input id="terms" type="hidden" value="-" name="terms" required>
                                             <trix-editor input="terms" required></trix-editor>
                                             {{-- @error('body')
 											<div class="invalid-veedback text-danger">{{ $message }}</div>

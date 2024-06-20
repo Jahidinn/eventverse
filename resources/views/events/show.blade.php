@@ -234,8 +234,9 @@
                                 </article>
                                 </p>
                             </div>
+                            <hr>
 
-                            <div class="mt-4">
+                            <div class="mt-4" hidden>
                                 <h6 class="card-title">Syarat & ketentuan</h6>
                                 <p class="card-text">
                                 <article class="text-article">
