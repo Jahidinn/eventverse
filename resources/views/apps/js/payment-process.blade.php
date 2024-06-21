@@ -59,7 +59,7 @@
                     }).then((result) => {
                         /* Read more about isConfirmed, isDenied below */
                         if (result.isConfirmed) {
-                            location.reload();
+                            //location.reload();
                         }
                     });
                 }

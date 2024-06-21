@@ -165,8 +165,8 @@
     <section class="event-terbaru-setion pt-4 p-0 bg-eventconnect">
         <div class="container evnt-terbaru pt-0 mt-0 text-white text-center">
             <div class="py-5">
-                <h6>Jaidikan event kamu lebih keren disini !!!</h6> <button class="btn btn-success">
-                    <small><strong>Buat event SEKARANG</strong> <i class="fas fa-rocket"></i></small></button>
+                <h6>Jaidikan event kamu lebih keren disini !!!</h6> <a class="btn btn-success" href="/event/create">
+                    <small><strong>Buat event SEKARANG</strong> <i class="fas fa-rocket"></i></small></a>
             </div>
         </div>
     </section>
