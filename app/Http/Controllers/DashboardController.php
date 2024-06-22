@@ -103,7 +103,7 @@ class DashboardController extends Controller
 		$listEvent = Event::where('title', 'like', '%' . $search . '%')
 			->where('user_id', $user_id)
 			->orderByRaw('id DESC')
-			->paginate(10)
+			->paginate(5)
 			->withQueryString();
 
 		// if ($listEvent->isEmpty()) {
@@ -154,7 +154,7 @@ class DashboardController extends Controller
 		$dataEvent = Event::where('title', 'like', '%' . $search . '%')
 			->where('user_id', $user_id)
 			->orderByRaw('id DESC')
-			->paginate(2)
+			->paginate(5)
 			->withQueryString();
 
 		return view('dashboard.page-participant', [
@@ -224,7 +224,7 @@ class DashboardController extends Controller
 		$listEvent = Event::where('title', 'like', '%' . $search . '%')
 			->where('user_id', $user_id)
 			->orderByRaw('id DESC')
-			->paginate(10)
+			->paginate(5)
 			->withQueryString();
 
 
@@ -346,7 +346,8 @@ class DashboardController extends Controller
 
 		$dataEvent = Event::where('title', 'like', '%' . $search . '%')
 			->where('user_id', $user_id)
-			->paginate(2)
+			->orderByRaw('id DESC')
+			->paginate(5)
 			->withQueryString();
 
 		return view('dashboard.page-checkin-event', [
