@@ -100,7 +100,11 @@ class DashboardController extends Controller
 		$user_id = auth()->user()->id;
 		$search = $request->key;
 
-		$listEvent = Event::where('title', 'like', '%' . $search . '%')->where('user_id', $user_id)->orderByRaw('id DESC')->paginate(10)->withQueryString();
+		$listEvent = Event::where('title', 'like', '%' . $search . '%')
+			->where('user_id', $user_id)
+			->orderByRaw('id DESC')
+			->paginate(10)
+			->withQueryString();
 
 		// if ($listEvent->isEmpty()) {
 		// 	// Lakukan pengalihan URL atau tindakan lainnya
@@ -118,7 +122,13 @@ class DashboardController extends Controller
 		if (!auth()->user()) {
 			return response()->json(['error' => 'Gagal!']);
 		}
-		$transaction = Transaction::with(['event', 'ticket'])->where('is_login', 1)->where('user_login_id', $request->user_id)->orderByRaw('id DESC')->get();
+
+		$transaction = Transaction::with(['event', 'ticket'])
+			->where('is_login', 1)
+			->where('user_login_id', $request->user_id)
+			->orderByRaw('id DESC')
+			->get();
+
 		return DataTables::of($transaction)
 			->addIndexColumn()
 			->addColumn('event', function ($transaction) {
@@ -143,6 +153,7 @@ class DashboardController extends Controller
 
 		$dataEvent = Event::where('title', 'like', '%' . $search . '%')
 			->where('user_id', $user_id)
+			->orderByRaw('id DESC')
 			->paginate(2)
 			->withQueryString();
 
@@ -210,7 +221,11 @@ class DashboardController extends Controller
 		$user_id = auth()->user()->id;
 		$search = $request->key;
 
-		$listEvent = Event::where('title', 'like', '%' . $search . '%')->where('user_id', $user_id)->paginate(10)->withQueryString();
+		$listEvent = Event::where('title', 'like', '%' . $search . '%')
+			->where('user_id', $user_id)
+			->orderByRaw('id DESC')
+			->paginate(10)
+			->withQueryString();
 
 
 		return view('dashboard.page-transaction-report', [
