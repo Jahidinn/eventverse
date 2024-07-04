@@ -68,7 +68,7 @@
             $('#get-filter').on('click', function(e) {
                 var status = $('#filter-value').val();
                 $('#filterModal').modal('hide')
-                dataPeserta.column(4).search(status).draw();
+                dataPeserta.column(5).search(status).draw();
 
                 if (status == '') {
                     var totalPesertaLabel = $(this).val();
