@@ -51,7 +51,7 @@
 
                                 @php
                                     $participant = \App\Models\Transaction::where('event_id', $event->id)
-                                        // ->where('status', '!=', 'Expired')
+                                        ->whereNotIn('status', ['Expired', 'Unpaid', 'Pending'])
                                         ->get()
                                         ->count();
                                 @endphp
@@ -89,15 +89,11 @@
             </div>
             <div class="card-body px-3 daftar-peserta" hidden>
 
-                <div class="input-group mb-3">
-                    <input type="text" class="form-control shadow-none" placeholder="Cari data peserta"
-                        aria-label="Cari data peserta" id="search-participant" aria-describedby="button-addon2">
-                    <div class="input-group-append">
-                        <button class="btn btn-outline-info shadow-none" type="button" id="button-addon2"
-                            data-toggle="modal" data-target="#filterModal"><i class="fas fa-filter"></i> Filter</button>
-                    </div>
+                <div class="mb-2">
+                    <button class="btn btn-secondary kembali"><i class="fas fa-chevron-circle-left"></i> Kembali</button>
+                    <button class="btn btn-success download-participant-data"><i class="fas fa-file-excel"></i> Download
+                        data</button>
                 </div>
-
                 <div class="card mt-1 bg-card-blue shadow-none border-0">
                     <div class="col-md-12 card-body px-3 pb-2 pt-2">
                         <span class="title-daftar-peserta text-info"></span>
@@ -109,11 +105,14 @@
                         </span>
                     </div>
                 </div>
-
-                <div class="mb-2">
-                    <button class="btn btn-secondary kembali"><i class="fas fa-chevron-circle-left"></i> Kembali</button>
-                    <button class="btn btn-success download-participant-data"><i class="fas fa-file-excel"></i> Download
-                        data</button>
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control shadow-none" placeholder="Cari data peserta"
+                        aria-label="Cari data peserta" id="search-participant" aria-describedby="button-addon2">
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-info shadow-none" type="button" id="button-addon2"
+                            data-toggle="modal" data-target="#filterModal"><i class="fas fa-filter"></i> Filter
+                            Data</button>
+                    </div>
                 </div>
                 <small class="text-danger">* Klik header tabel untuk mengelompokan data sesuai header yang di pilih</small>
 
@@ -122,10 +121,11 @@
                     <table class="table table-striped w-100" id="data-peserta">
                         <thead class="bg-info">
                             <tr>
-                                <th scope="col">No</th>
-                                <th scope="col" style="min-width: 150px">Nama peserta</th>
+                                <th scope="col" style="max-width: 50px:">No</th>
+                                <th scope="col" style="min-width: 150px">Name</th>
                                 <th scope="col" style="min-width: 150px">Email</th>
                                 <th scope="col" style="min-width: 150px">ID</th>
+                                <th scope="col" style="min-width: 150px">Regist Date</th>
                                 <th scope="col" style="min-width: 90px">Status</th>
                                 <th scope="col" style="min-width: 100px">Detail</th>
                             </tr>

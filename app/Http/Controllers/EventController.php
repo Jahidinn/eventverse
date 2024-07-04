@@ -229,7 +229,7 @@ class EventController extends Controller
 		return view('events.show', [
 			'detailEvent' => $event,
 			'ticketData' => Ticket::where('event_id', $event->id)->get(),
-			'ticketTransaction' => Transaction::where('event_id', $event->id)->where('status', '!=', 'Expired')->get(),
+			'ticketTransaction' => Transaction::where('event_id', $event->id)->whereNotIn('status', ['Expired', 'Unpaid'])->get(),
 			'dateNow' => Carbon::now()->format('Y-m-d'),
 			'recomendedEvents' => $recomendedEvent,
 			'qrlink' => $qrcode,

@@ -41,6 +41,9 @@
                     data: 'transaction_id',
                     name: 'transaction_id'
                 }, {
+                    data: 'transaction_date',
+                    name: 'transaction_date'
+                }, {
                     data: 'transaction_status',
                     name: 'transaction_status'
                 }, {

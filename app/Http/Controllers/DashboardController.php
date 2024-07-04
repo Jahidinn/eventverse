@@ -178,6 +178,9 @@ class DashboardController extends Controller
 			->addColumn('transaction_status', function ($dataParticipant) {
 				return view('dashboard.components.column-status')->with(['data' => $dataParticipant]);
 			})
+			->addColumn('transaction_date', function ($dataParticipant) {
+				return $dataParticipant->created_at->format('d M Y');
+			})
 			->addColumn('transaction_action', function ($dataParticipant) {
 				return view('dashboard.components.column-action-participant')->with(['data' => $dataParticipant]);
 			})
