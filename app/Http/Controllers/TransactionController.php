@@ -94,7 +94,7 @@ class TransactionController extends Controller
 
 			//Keamanan beli tiket dari sisi backend
 			$ticketQuota = Ticket::where('event_id', $request->idEvent)->where('id', $request->idTicket)->first();
-			$ticketUsed = count(Transaction::where('event_id', $request->idEvent)->where('status', '!=', 'Expired')->where('ticket_id', $request->idTicket)->get());
+			$ticketUsed = count(Transaction::where('event_id', $request->idEvent)->where('status', '==', 'Paid')->where('ticket_id', $request->idTicket)->get());
 			$ticketAvailable = $ticketQuota->ticket_quota - $ticketUsed;
 			$today = Carbon::now()->format('Y-m-d');
 
