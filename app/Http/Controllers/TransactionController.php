@@ -32,7 +32,7 @@ class TransactionController extends Controller
 		$customForms = CustomForm::where('event_id', $request->event)->get();
 		$today = Carbon::now()->format('Y-m-d');
 
-		$ticketUsed = count(Transaction::where('event_id', $request->event)->where('status', '!=', 'Expired')->where('ticket_id', $request->ticket)->get());
+		$ticketUsed = count(Transaction::where('event_id', $request->event)->where('status', '==', 'Paid')->where('ticket_id', $request->ticket)->get());
 		$ticketAvailable = $detailTicket->ticket_quota - $ticketUsed;
 
 		if (!$detailEvent || !$detailTicket || !$customForms) {
