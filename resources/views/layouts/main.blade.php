@@ -106,6 +106,7 @@
 
     @stack('transaction-scripts')
     @stack('transaction-invoice')
+    @stack('js-download')
 </body>
 
 </html>

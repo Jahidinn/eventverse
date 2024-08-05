@@ -9,6 +9,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\DownloadController;
 use App\Http\Controllers\OrganizationController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\UserProfileController;
@@ -210,6 +211,11 @@ Route::get('/generate-pdf', [PDFController::class, 'generatePDF']);
 
 Route::get('/{event}', [EventController::class, 'show']);
 Route::get('/event/{event}', [EventController::class, 'show']);
+
+# download file
+Route::get('/download/sertifikat', [DownloadController::class, 'index']);
+Route::get('/download/check-file', [DownloadController::class, 'checkFile']);
+Route::get('/download-file/download', [DownloadController::class, 'downloadFile']);
 
 
 # Resend email
