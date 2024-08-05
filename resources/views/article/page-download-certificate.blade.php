@@ -15,7 +15,7 @@
 
     <section class="container mt-0 pt-5 px-3">
         <p class="text-article">
-            Download sertifikat <b>Lomba Cerpen Nasional 2024</b>
+            Download sertifikat <b>Lomba POSTER Nasional 2024</b>
         </p>
 
         {{-- Yang bisa dilakukan eventconnect.id --}}
