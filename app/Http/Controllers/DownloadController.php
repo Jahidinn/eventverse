@@ -14,7 +14,8 @@ class DownloadController extends Controller
 	public function checkFile(Request $request)
 	{
 		$jenis = $request->jenis;
-		$id = $request->id . '.pdf';
+		$id = str_replace('#', '', $request->id);
+		$id = $id . '.pdf';
 
 		$exists = Storage::disk('public')->exists('certificate/' . $jenis . '/' . $id);
 		return response()->json(['exists' => $exists, 'jenis' => $jenis, 'id' => $id]);
