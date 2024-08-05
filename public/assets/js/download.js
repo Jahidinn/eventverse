@@ -1,5 +1,6 @@
 $(document).ready(function() {
-	$('#download-sertifikat').click(function() {
+	$('#download-sertifikat').click(function(e) {
+		e.preventDefault()
 		var jenis = $('#sertifikat-type').val();
 		var id = $('#sertifikat-id').val();
 		$.ajax({
