@@ -82,6 +82,30 @@ class DashboardController extends Controller
 		]);
 	}
 
+	# detail transaksi (formulir)
+	public function detailTransaction(Request $request)
+	{
+		$transaction_id = $request->transaction;
+		$event_id = $request->event;
+
+		$detail_event = Event::where('id', $event_id)->first();
+		$detail_transaksi = Transaction::where('id', $transaction_id)->first();
+
+		$data_form = CustomForm::where('event_id', $event_id)->get();
+
+		foreach ($data_form as $form) {
+			$form_value = TransactionForm::where('transaction_id', $transaction_id)->where('form_id', $form->id)->first();
+
+			$data[] = [
+				'form_id' => $form->id ?? '',
+				'form_name' => $form->form_name ?? '',
+				'form_value' => $form_value->form_value ?? '',
+			];
+		}
+
+		return response()->json(['data' => $data, 'event' => $detail_event, 'trx' => $detail_transaksi]);
+	}
+
 	public function deleteMyevent(Request $request)
 	{
 		//Proses delete

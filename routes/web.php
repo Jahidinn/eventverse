@@ -80,6 +80,9 @@ Route::middleware(['auth'])->group(function () {
 	Route::get('/dashboard/get-customform', [DashboardController::class, 'getCustomformParticipant']);
 	Route::post('/dashboard/delete-myevent', [DashboardController::class, 'deleteMyevent']);
 
+	# Detail mytransaction
+	Route::get('/dashboard/get-detail-transaction', [DashboardController::class, 'detailTransaction']);
+
 	Route::get('/dashboard/participant-data', [DashboardController::class, 'participant']);
 	Route::get('/dashboard/get-participant', [DashboardController::class, 'getParticipant']);
 	Route::get('/dashboard/participant-download-excel/{id}', [DashboardController::class, 'downloadExcel']);

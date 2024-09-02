@@ -170,4 +170,47 @@
             }
         })
     })
+
+    $('body').on('click', '.info-myevent', function(e) {
+        e.preventDefault();
+        var transaction_id = $(this).data('id');
+        var event_id = $(this).data('event');
+        $('#detail-trx-container').empty();
+        $('.detail-trx-title').html('...')
+        $('.detail-trx-status').html('...')
+
+        $.ajax({
+            url: '/dashboard/get-detail-transaction',
+            data: {
+                transaction: transaction_id,
+                event: event_id,
+            },
+            type: 'GET',
+            dataType: 'json',
+            success: function(response) {
+                // Proses data yang diterima dari server
+                const data = response.data;
+
+                $('.detail-trx-title').html(response.event.title)
+                $('.detail-trx-status').html(response.trx.status)
+
+                data.forEach(function(item) {
+                    const form = `
+					<div class="form-group">
+                        <label>${item.form_name}</label>
+                        <input type="text" class="form-control" value="${item.form_value}" disabled/>
+					</div>
+                `;
+                    $('#detail-trx-container').append(form);
+                });
+
+            },
+            error: function(xhr, status, error) {
+                // Tangani kesalahan jika request gagal
+                $('#result').html('Error: ' + error);
+            }
+        });
+
+        $('#detailModal').modal('show');
+    })
 </script>

@@ -88,13 +88,33 @@
                                 @endif
                                 <br>
 
+                                @php
+
+                                    $tanggalHariIni = date('Y-m-d');
+
+                                @endphp
+
                                 <div class="mt-2">
                                     {{-- button action --}}
                                     @if ($myevent->status == 'Paid')
                                         {{-- IF PAID --}}
-                                        <button type="button" class="btn btn-info btn-sm rounded-0 detail-myevent"
+                                        <button type="button" class="btn btn-outline-info btn-sm rounded-0 info-myevent"
+                                            data-id="{{ $myevent->id }}" data-event="{{ $myevent->event->id }}">
+                                            <i class="fas fa-list"></i> Detail
+                                        </button>
+                                        @if ($myevent->event->end_date < $tanggalHariIni)
+                                            <button type="button" class="btn btn-info btn-sm rounded-0" disabled>
+                                                <i class="fas fa-edit"></i> Edit
+                                            </button>
+                                        @else
+                                            <button type="button" class="btn btn-info btn-sm rounded-0 edit-myevent"
+                                                data-id="{{ $myevent->id }}">
+                                                <i class="fas fa-edit"></i> Edit
+                                            </button>
+                                        @endif
+                                        <button type="button" class="btn btn-success btn-sm rounded-0 detail-myevent"
                                             data-id="{{ $myevent->id }}">
-                                            <i class="fas fa-list"></i> Lihat detail
+                                            <i class="far fa-file-alt"></i> Inv
                                         </button>
                                     @elseif($myevent->status == 'Unpaid')
                                         {{-- IF UNPAID --}}
@@ -157,10 +177,41 @@
                 </div>
                 {{-- Pagination --}}
 
-
             </div>
         </div>
     </section>
+
+    {{-- modal detail form pendaftaran --}}
+    <!-- Modal -->
+    <div class="modal fade" id="detailModal" tabindex="-1" aria-labelledby="detailModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="detailModalLabel">Detail <b>Transaksi</b></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="card">
+                        <div class="card-header">
+                            Detail event
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title text-info detail-trx-title">...</h5>
+                            <p class="card-text">Status pembayaran <b class="text-success detail-trx-status">...</b>
+                            </p>
+                        </div>
+                    </div>
+                    <div id="detail-trx-container">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- Modal konfirmasi checkout -->
     @include('apps.components.modal-checkout')
