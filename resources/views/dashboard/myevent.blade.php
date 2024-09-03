@@ -108,7 +108,7 @@
                                             </button>
                                         @else
                                             <button type="button" class="btn btn-info btn-sm rounded-0 edit-myevent"
-                                                data-id="{{ $myevent->id }}">
+                                                data-id="{{ $myevent->id }}" data-event="{{ $myevent->event->id }}">
                                                 <i class="fas fa-edit"></i> Edit
                                             </button>
                                         @endif
@@ -194,8 +194,8 @@
                 </div>
                 <div class="modal-body">
                     <div class="card">
-                        <div class="card-header">
-                            Detail event
+                        <div class="card-header bg-secondary">
+                            Event
                         </div>
                         <div class="card-body">
                             <h5 class="card-title text-info detail-trx-title">...</h5>
@@ -204,6 +204,37 @@
                         </div>
                     </div>
                     <div id="detail-trx-container">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {{-- modal edit form pendaftaran --}}
+    <!-- Modal -->
+    <div class="modal fade" id="editFormModal" tabindex="-1" aria-labelledby="editFormModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editFormModalLabel">Edit <b>form pendaftaran</b></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="card">
+                        <div class="card-header bg-secondary">
+                            Event
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title text-info edit-trx-title">...</h5>
+                            </p>
+                        </div>
+                    </div>
+                    <div id="edit-trx-container">
                     </div>
                 </div>
                 <div class="modal-footer">

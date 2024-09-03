@@ -306,6 +306,10 @@
 	width: 90px !important;
 }
 
+.swal2-container {
+	z-index: 11000 !important; /* Harus lebih tinggi dari Bootstrap modal */
+}
+
 @media only screen and (max-width: 800px) {
 	.title-manage-event{
 		font-size: 13px;

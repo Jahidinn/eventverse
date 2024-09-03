@@ -213,4 +213,138 @@
 
         $('#detailModal').modal('show');
     })
+
+    // EDIT form pendaftaran
+    $('body').on('click', '.edit-myevent', function(e) {
+        e.preventDefault();
+
+        var transaction_id = $(this).data('id');
+        var event_id = $(this).data('event');
+
+        $('#edit-trx-container').empty();
+        $('.edit-trx-title').html('...')
+        $('.edit-trx-status').html('...')
+
+        $.ajax({
+            url: '/dashboard/get-detail-transaction',
+            data: {
+                transaction: transaction_id,
+                event: event_id,
+            },
+            type: 'GET',
+            dataType: 'json',
+            success: function(response) {
+                // Proses data yang diterima dari server
+                const data = response.data;
+
+                $('.edit-trx-title').html(response.event.title)
+                $('.edit-trx-status').html(response.trx.status)
+
+                data.forEach(function(item) {
+                    const form = `
+					<div class="form-group">
+						<label>${item.form_name}</label>
+
+						<div class="input-group">
+							<input type="text" class="form-control form-value-${item.form_id}" value="${item.form_value}" disabled/>
+							<div class="input-group-append">
+								<button class="btn btn-outline-info edit-trx-form btn-form-${item.form_id}" type="button" data-formid="${item.form_id}" data-form_name="${item.form_name}" data-value_id="${item.form_value_id}" data-trx_id="${transaction_id}">
+									<i class="fas fa-edit"></i> Edit
+								</button>
+							</div>
+						</div>
+					</div>
+                `;
+                    $('#edit-trx-container').append(form);
+                });
+
+            },
+            error: function(xhr, status, error) {
+                // Tangani kesalahan jika request gagal
+                $('#result').html('Error: ' + error);
+            }
+        });
+
+        $('#editFormModal').modal('show');
+    })
+
+    $('#editFormModal').on('shown.bs.modal', function() {
+        $(document).off('focusin.modal');
+    });
+
+    $('body').on('click', '.edit-trx-form', function(e) {
+        e.preventDefault();
+
+        var form_id = $(this).data('formid');
+        var value_id = $(this).attr('data-value_id');
+        var trx_id = $(this).data('trx_id');
+        var form_name = $(this).data('form_name');
+        var form_value = $('.form-value-' + form_id).val();
+
+        Swal.fire({
+            title: `<small><b>Edit ${form_name}</b></small>`,
+            html: `
+                    <form id="swal-form">
+                        <input type="hidden" id="trx_id" name="trx_id" class="form-control w-100" value="${trx_id}">
+                        <input type="hidden" id="form_id" name="form_id" class="form-control w-100" value="${form_id}">
+                        <input type="hidden" id="value_id" name="value_id" class="form-control w-100" value="${value_id}"><br/>
+                        <input type="text" id="form_val" name="form_val" class="form-control w-100" value="${form_value}"><br/>
+                    </form>
+                `,
+            showCancelButton: true,
+            confirmButtonText: '<i class="fas fa-check-circle"></i> simpan',
+            confirmButtonColor: '#28a745',
+            reverseButtons: true,
+            preConfirm: () => {
+                const value_id = Swal.getPopup().querySelector('#value_id').value;
+                const form_id = Swal.getPopup().querySelector('#form_id').value;
+                const trx_id = Swal.getPopup().querySelector('#trx_id').value;
+                const value = Swal.getPopup().querySelector('#form_val').value;
+
+                if (!value || !trx_id || !form_id) {
+                    Swal.showValidationMessage(`Silahkan lengkapi form dulu ya!`);
+                }
+                return {
+                    value_id: value_id,
+                    form_id: form_id,
+                    trx_id: trx_id,
+                    value: value,
+                }
+            }
+        }).then((result) => {
+            if (result.isConfirmed) {
+                const formData = result.value;
+
+                $.ajax({
+                    url: '/dashboard/edit-form-transaction',
+                    data: {
+                        value_id: formData.value_id,
+                        form_id: formData.form_id,
+                        trx_id: formData.trx_id,
+                        value: formData.value,
+                    },
+                    type: 'POST',
+                    dataType: 'json',
+                    success: function(response) {
+                        // Proses data yang diterima dari server
+                        const status = response.success;
+                        const data = response.data;
+
+                        if (status) {
+                            Swal.fire('', status, 'success')
+                            $('.form-value-' + form_id).val(formData.value);
+                            $('.btn-form-' + form_id).attr('data-value_id', data.id);
+                        }
+
+                    },
+                    error: function(xhr, status, error) {
+                        // Tangani kesalahan jika request gagal
+                        Swal.fire('', error, 'error')
+                        $('#result').html('Error: ' + error);
+                    }
+                });
+            }
+        });
+
+    })
 </script>

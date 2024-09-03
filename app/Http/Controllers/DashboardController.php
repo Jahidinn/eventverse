@@ -100,11 +100,48 @@ class DashboardController extends Controller
 				'form_id' => $form->id ?? '',
 				'form_name' => $form->form_name ?? '',
 				'form_value' => $form_value->form_value ?? '',
+				'form_value_id' => $form_value->id ?? '',
 			];
 		}
 
 		return response()->json(['data' => $data, 'event' => $detail_event, 'trx' => $detail_transaksi]);
 	}
+
+	# EDIT FORM TRANSAKSI
+	public function editFormTransaction(Request $request)
+	{
+		$value_id = $request->value_id;
+		$form_id = $request->form_id;
+		$trx_id = $request->trx_id;
+		$value_id = $request->value_id;
+		$value = $request->value;
+
+		$form = TransactionForm::find($value_id);
+
+		if ($form) {
+
+			$data = [
+				'form_value' => $value
+			];
+
+			$form->update($data);
+			$result = $form;
+			# code...
+		} else {
+			$data = [
+				'form_id' => $form_id,
+				'transaction_id' => $trx_id,
+				'form_value' => $value,
+			];
+
+			$result = TransactionForm::create($data);
+			# code...
+		}
+
+
+		return response()->json(['success' => 'Berhasil edit data!', 'data' => $result]);
+	}
+
 
 	public function deleteMyevent(Request $request)
 	{

@@ -82,6 +82,7 @@ Route::middleware(['auth'])->group(function () {
 
 	# Detail mytransaction
 	Route::get('/dashboard/get-detail-transaction', [DashboardController::class, 'detailTransaction']);
+	Route::post('/dashboard/edit-form-transaction', [DashboardController::class, 'editFormTransaction']);
 
 	Route::get('/dashboard/participant-data', [DashboardController::class, 'participant']);
 	Route::get('/dashboard/get-participant', [DashboardController::class, 'getParticipant']);
