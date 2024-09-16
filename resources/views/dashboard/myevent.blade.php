@@ -4,7 +4,7 @@
     <!-- Content Header (Page header) -->
     <section class="content-header pb-0">
         <div class="alert alert-dark bg-dashboard text-white" role="alert">
-            <strong>MY EVENT</strong> (Peserta)
+            <strong>IKUT EVENT</strong> (Peserta)
         </div>
     </section>
 
@@ -18,8 +18,8 @@
             </div>
 
             <div class="card-body px-3">
-                <a href="/search"><button class="btn btn-success mb-2 shadow-none">Jelajah event <i
-                            class="far fa-paper-plane"></i></button></a>
+                <a href="/search"><button class="btn btn-success mb-2 rounded-0 shadow-none">Jelajah event <i
+                            class="fas fa-paper-plane"></i></button></a>
                 <form action="" method="GET" {{ $myevents->isEmpty() ? 'hidden' : '' }}>
                     <div class="p-0 form-inline mb-4">
                         <input class="form-control col shadow-none mr-1" id="search-myevent" name="key" type="text"

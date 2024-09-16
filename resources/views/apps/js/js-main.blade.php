@@ -88,29 +88,34 @@
             var event_id = $(this).data('event_id');
             var label_button = $(this).data('label_button');
 
-            if (!userAuthLogin) {
-                Swal.fire({
-                    title: "",
-                    html: "Kamu belum login nih! <strong>login</strong> dulu? atau " +
-                        label_button + " <strong>tanpa login?</strong>",
-                    showDenyButton: true,
-                    showCancelButton: true,
-                    confirmButtonText: "Login",
-                    denyButtonText: `Tanpa login`,
-                    denyButtonColor: "#0dcaf0",
-                }).then((result) => {
-                    /* Read more about isConfirmed, isDenied below */
-                    if (result.isConfirmed) {
-                        window.location.href = '/login';
-                    } else if (result.isDenied) {
-                        window.location.href = '/event/checkout?event=' + event_id +
-                            '&ticket=' + ticket_id;
-                    }
-                });
-            } else {
-                window.location.href = '/event/checkout?event=' + event_id +
-                    '&ticket=' + ticket_id;
-            }
+
+            // PERUBAHAN, PEMBELI HARUS LOGIN
+            window.location.href = '/event/checkout?event=' + event_id +
+                '&ticket=' + ticket_id;
+
+            // if (!userAuthLogin) {
+            //     Swal.fire({
+            //         title: "",
+            //         html: "Kamu belum login nih! <strong>login</strong> dulu? atau " +
+            //             label_button + " <strong>tanpa login?</strong>",
+            //         showDenyButton: true,
+            //         showCancelButton: true,
+            //         confirmButtonText: "Login",
+            //         denyButtonText: `Tanpa login`,
+            //         denyButtonColor: "#0dcaf0",
+            //     }).then((result) => {
+            //         /* Read more about isConfirmed, isDenied below */
+            //         if (result.isConfirmed) {
+            //             window.location.href = '/login';
+            //         } else if (result.isDenied) {
+            //             window.location.href = '/event/checkout?event=' + event_id +
+            //                 '&ticket=' + ticket_id;
+            //         }
+            //     });
+            // } else {
+            //     window.location.href = '/event/checkout?event=' + event_id +
+            //         '&ticket=' + ticket_id;
+            // }
         });
 
         $('#form-subscribe').submit(function(event) {

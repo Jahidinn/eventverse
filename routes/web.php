@@ -203,15 +203,18 @@ Route::get('/blog/{slug}', [ArticleController::class, 'viewArticle']);
 Route::get('/organisasi/{organisasi}', [OrganizationController::class, 'detailOrganisasi']);
 Route::get('/user/{username}', [UserProfileController::class, 'userPublicInfo']);
 
-# Checkout
-Route::get('/event/checkout', [TransactionController::class, 'checkoutPreview']);
-Route::get('/event/invoice/{id}', [TransactionController::class, 'invoice']);
-Route::post('/event/checkout-proccess', [TransactionController::class, 'transaction']);
-Route::post('/event/continue-transaction', [TransactionController::class, 'continueTransaction']);
-Route::post('/event/transaction-delete', [TransactionController::class, 'deleteTransaction']);
-Route::get('/event/send-email/{transaction_code}', [TransactionController::class, 'sendEmail']);
-Route::get('/event/redirect-invoice/{id}', [TransactionController::class, 'redirectInvoice']);
-Route::get('/generate-pdf', [PDFController::class, 'generatePDF']);
+# SEMENTARA HARUS LOGIN UNTUK MENDAFTAR
+Route::middleware(['auth'])->group(function () {
+	# Checkout
+	Route::get('/event/checkout', [TransactionController::class, 'checkoutPreview']);
+	Route::get('/event/invoice/{id}', [TransactionController::class, 'invoice']);
+	Route::post('/event/checkout-proccess', [TransactionController::class, 'transaction']);
+	Route::post('/event/continue-transaction', [TransactionController::class, 'continueTransaction']);
+	Route::post('/event/transaction-delete', [TransactionController::class, 'deleteTransaction']);
+	Route::get('/event/send-email/{transaction_code}', [TransactionController::class, 'sendEmail']);
+	Route::get('/event/redirect-invoice/{id}', [TransactionController::class, 'redirectInvoice']);
+	Route::get('/generate-pdf', [PDFController::class, 'generatePDF']);
+});
 
 Route::get('/{event}', [EventController::class, 'show']);
 Route::get('/event/{event}', [EventController::class, 'show']);
