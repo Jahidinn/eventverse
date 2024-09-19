@@ -84,6 +84,9 @@
                         </div>
                     </div>
                     <div class="alert alert-warning mt-2" role="alert">
+                        Formulir yang tidak bertanda * dapat di edit kapanpun selama periode pendaftaran
+                    </div>
+                    <div class="alert alert-warning mt-2" role="alert">
                         Pastikan formulir sudah terisi dengan benar guys!
                     </div>
                 </div>
