@@ -146,7 +146,7 @@ class DashboardController extends Controller
 	public function deleteMyevent(Request $request)
 	{
 		//Proses delete
-		$deleteTransaction = Transaction::where('id', $request->id)->where('status', 'Unpaid')->delete();
+		$deleteTransaction = Transaction::where('id', $request->id)->whereIn('status', ['Unpaid', 'Pending'])->delete();
 		//Delete snap token dan data custom form
 		if ($deleteTransaction) {
 			SnapToken::where('transaction_id', $request->id)->delete();

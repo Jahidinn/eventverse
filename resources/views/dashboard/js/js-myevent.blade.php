@@ -131,7 +131,7 @@
                 var id = $(this).data("id");
                 $.ajax({
                     type: "POST",
-                    url: '/dashboard/delete-myevent/',
+                    url: "{{ url('/dashboard/delete-myevent') }}",
                     data: {
                         id: id,
                     },
