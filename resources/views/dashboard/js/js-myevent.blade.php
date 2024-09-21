@@ -130,8 +130,7 @@
             if (result.isConfirmed) {
                 var id = $(this).data("id");
                 $.ajax({
-                    type: 'POST',
-                    method: 'POST',
+                    type: "POST",
                     url: '/dashboard/delete-myevent/',
                     data: {
                         id: id,
