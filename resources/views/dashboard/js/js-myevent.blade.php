@@ -130,11 +130,12 @@
             if (result.isConfirmed) {
                 var id = $(this).data("id");
                 $.ajax({
+                    type: 'POST',
+                    method: 'POST',
                     url: '/dashboard/delete-myevent/',
                     data: {
                         id: id,
                     },
-                    type: 'POST',
                     success: function(response) {
                         Swal.fire('', response.success, 'success').then(
                             function() {
