@@ -99,7 +99,7 @@
                                         {{-- IF PAID --}}
                                         <button type="button" class="btn btn-outline-info btn-sm rounded-0 info-myevent"
                                             data-id="{{ $myevent->id }}" data-event="{{ $myevent->event->id }}">
-                                            <i class="fas fa-list"></i> Detail
+                                            <i class="fas fa-list"></i>
                                         </button>
                                         @if ($myevent->event->end_date < $tanggalHariIni)
                                             <button type="button" class="btn btn-info btn-sm rounded-0" disabled>
