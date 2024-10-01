@@ -11,13 +11,12 @@
     <!-- Main content -->
     <section class="content">
         <!-- Default box -->
-        <div class="card">
+        <div class="card ">
             <div class="card-header">
                 <h3 class="card-title">Ikut event apapun yang kamu mau! </h3>
-
             </div>
 
-            <div class="card-body px-3">
+            <div class="card-body px-2">
                 <a href="/search"><button class="btn btn-success mb-2 rounded-0 shadow-none">Jelajah event <i
                             class="fas fa-paper-plane"></i></button></a>
                 <form action="" method="GET" {{ $myevents->isEmpty() ? 'hidden' : '' }}>
