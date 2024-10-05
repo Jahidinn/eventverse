@@ -131,7 +131,12 @@
                                 <div class="alert alert-info mt-3" role="alert">
                                     <small>
                                         <strong><i class="fas fa-tag"></i>
-                                            {{ $terbaru->ticket->first()->ticket_price == 0 ? 'GRATIS!' : ' Rp ' . number_format($terbaru->ticket->first()->ticket_price, 0, ',', '.') }}</strong>
+                                            @if ($terbaru->ticket->isNotEmpty() && $terbaru->ticket->first()->ticket_price !== null)
+                                                {{ $terbaru->ticket->first()->ticket_price == 0 ? 'GRATIS!' : 'Rp ' . number_format($terbaru->ticket->first()->ticket_price, 0, ',', '.') }}
+                                            @else
+                                                <span>Tidak tersedia</span>
+                                            @endif
+                                        </strong>
                                     </small>
                                 </div>
 
