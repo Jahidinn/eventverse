@@ -34,7 +34,7 @@
                 {{-- Looping data my event --}}
                 @foreach ($myevents as $myevent)
                     <div class="card mt-2 ">
-                        <div class="col-md-12 row card-body px-3 pb-3">
+                        <div class="col-md-12 row card-body pl-3 pb-3 mr-0 pr-0">
 
                             {{-- Poster / Image --}}
                             <div class="p-2">

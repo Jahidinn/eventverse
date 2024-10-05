@@ -26,8 +26,6 @@ use GuzzleHttp\Promise\Create;
 |
 */
 
-Route::redirect('/ec-esai2024', '/ec-esai24');
-
 Route::get('/login', [AuthController::class, 'login'])->name('login')->middleware('guest');
 Route::post('/login', [AuthController::class, 'autenticate']);
 Route::get('/register', [AuthController::class, 'register'])->name('register')->middleware('guest');
@@ -46,6 +44,7 @@ Route::get('/email/verify/{id}/{hash}', [AuthController::class, 'emailVerify'])-
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/home', [HomeController::class, 'index']);
 Route::get('/search', [HomeController::class, 'searchEvent']);
+Route::redirect('/ec-esai2024', '/ec-esai24');
 
 Route::middleware(['auth'])->group(function () {
 	// Rute-rute yang akan terkena middleware auth
