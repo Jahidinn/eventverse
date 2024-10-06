@@ -175,7 +175,11 @@
                                                 </span>
                                                 <span class="alert alert-success py-1 px-2 ms-1 ml-1">
                                                     Kuota :
-                                                    <strong>{{ $ticketQuota }}</strong>
+                                                    @if ($ticketStart > $tanggalSekarang)
+                                                        <strong>0</strong>
+                                                    @else
+                                                        <strong>{{ $ticketQuota }}</strong>
+                                                    @endif
                                                 </span>
                                             </small>
                                         </p>
