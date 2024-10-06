@@ -45,6 +45,7 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/home', [HomeController::class, 'index']);
 Route::get('/search', [HomeController::class, 'searchEvent']);
 Route::redirect('/ec-esai2024', '/ec-esai24');
+Route::redirect('/EC-ESAI2024', '/ec-esai24');
 
 Route::middleware(['auth'])->group(function () {
 	// Rute-rute yang akan terkena middleware auth
