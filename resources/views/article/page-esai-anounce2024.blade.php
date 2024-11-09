@@ -91,7 +91,7 @@
             Teruslah berkarya, teruslah menulis, dan jangan pernah berhenti berbagi ide! Terima kasih atas partisipasi kamu
             dalam Lomba Esai Nasional Eventconnect 2024. Sampai jumpa di lomba berikutnya!
         </p>
-        <p>Sebagai bahan motivasi yuk cek nilai kamu!! <button class="btn btn-success" id="redirect-score">Cek
+        <p>Sebagai bahan evaluasi yuk cek nilai kamu!! <button class="btn btn-success" id="redirect-score">Cek
                 point disini</button></p>
 
         <div class="mb-2">
