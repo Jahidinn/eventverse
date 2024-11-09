@@ -11,6 +11,7 @@ use App\Http\Controllers\EventController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DownloadController;
 use App\Http\Controllers\OrganizationController;
+use App\Http\Controllers\ScoreController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\UserProfileController;
 use GuzzleHttp\Promise\Create;
@@ -25,6 +26,12 @@ use GuzzleHttp\Promise\Create;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
+
+# LOMBAESAI
+# 
+Route::get('/essay-announcement-2024', [ScoreController::class, 'index']);
+Route::get('/essay-announcement-2024/score', [ScoreController::class, 'score']);
+Route::get('/essay-announcement-2024/check-score', [ScoreController::class, 'getData']);
 
 Route::get('/login', [AuthController::class, 'login'])->name('login')->middleware('guest');
 Route::post('/login', [AuthController::class, 'autenticate']);
