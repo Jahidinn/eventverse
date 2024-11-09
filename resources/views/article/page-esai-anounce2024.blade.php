@@ -29,7 +29,7 @@
         <div class="mt-2">
             <h5>Daftar Juara</h5>
         </div>
-        <div class="table-responsive">
+        <div class="table-responsive text-article">
             <table class="table table-bordered table-striped">
                 <thead class="bg-secondary text-white">
                     <tr>
@@ -51,10 +51,10 @@
                 </tbody>
             </table>
         </div>
-        <div class="mt-2">
+        <div class="mt-4">
             <h5>Daftar 10 esai terbaik</h5>
         </div>
-        <div class="table-responsive">
+        <div class="table-responsive text-article">
             <table class="table table-bordered table-striped">
                 <thead class="bg-secondary text-white">
                     <tr>
@@ -74,7 +74,7 @@
                 </tbody>
             </table>
         </div>
-        <div class="mb-2">
+        <div class="mb-2 mt-3">
             <i class="text-danger">* Peserta akan mendapatkan sertifikat penghargaan untuk kategori 10 esai terbaik</i>
         </div>
 
@@ -100,7 +100,7 @@
         <p class="mb-0 mt-4">
             Salam,
         </p>
-        <h4 class="m-0 p-0">Tim Eventconnect</h4>
+        <h5 class="m-0 p-0">Tim Eventconnect</h5>
 
     </section>
 
