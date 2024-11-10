@@ -38,7 +38,7 @@
 
                 <button type="submit" id="download-sertifikat" class="btn btn-primary"><i class="fas fa-download"></i>
                     Download
-                    Seritikat</button>
+                    Serifikat</button>
         </div>
         </form>
 
