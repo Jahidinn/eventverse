@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class ScoreController extends Controller
 {
@@ -3058,5 +3059,31 @@ class ScoreController extends Controller
 
 		// Mengembalikan hasil sebagai JSON
 		return response()->json($firstResult);
+	}
+
+	public function certificate()
+	{
+		return view('article.page-download-certificate-esai', []);
+	}
+
+	public function checkFile(Request $request)
+	{
+		$jenis = $request->jenis;
+		$id = str_replace('#', '', $request->id);
+		$id = $id . '.pdf';
+
+		$exists = Storage::disk('public')->exists('certificate/esai/' . $jenis . '/' . $id);
+		return response()->json(['exists' => $exists, 'jenis' => $jenis, 'id' => $id]);
+	}
+
+	public function downloadFile(Request $request)
+	{
+		$jenis = $request->jenis;
+		$id = $request->id;
+
+		if (Storage::disk('public')->exists('certificate/esai/' . $jenis . '/' . $id)) {
+			return response()->download(storage_path('/app/public/certificate/esai/' . $jenis . '/' . $id));
+		}
+		return abort(404);
 	}
 }

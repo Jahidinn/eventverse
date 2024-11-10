@@ -28,10 +28,14 @@ use GuzzleHttp\Promise\Create;
 */
 
 # LOMBAESAI
-# 
 Route::get('/essay-announcement-2024', [ScoreController::class, 'index']);
 Route::get('/essay-announcement-2024/score', [ScoreController::class, 'score']);
 Route::get('/essay-announcement-2024/check-score', [ScoreController::class, 'getData']);
+
+# DOWNLOAD SERTIFIKAT
+Route::get('/essay-announcement-2024/certificate', [ScoreController::class, 'certificate']);
+Route::get('/essay-announcement-2024/check-file', [ScoreController::class, 'checkFile']);
+Route::get('/essay-announcement-2024/download', [ScoreController::class, 'downloadFile']);
 
 Route::get('/login', [AuthController::class, 'login'])->name('login')->middleware('guest');
 Route::post('/login', [AuthController::class, 'autenticate']);
