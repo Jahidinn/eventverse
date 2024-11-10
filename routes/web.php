@@ -36,6 +36,7 @@ Route::get('/essay-announcement-2024/check-score', [ScoreController::class, 'get
 Route::get('/essay-announcement-2024/certificate', [ScoreController::class, 'certificate']);
 Route::get('/essay-announcement-2024/check-file', [ScoreController::class, 'checkFile']);
 Route::get('/essay-announcement-2024/download', [ScoreController::class, 'downloadFile']);
+Route::redirect('/certificate-change-request', 'https://docs.google.com/spreadsheets/d/1B2IsxtTm92lD42ukBoQCzwUurHfN7ILrmsJ456csaOg/edit?usp=sharing', 301);
 
 Route::get('/login', [AuthController::class, 'login'])->name('login')->middleware('guest');
 Route::post('/login', [AuthController::class, 'autenticate']);
