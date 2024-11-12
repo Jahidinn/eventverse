@@ -27,7 +27,9 @@
                         <option value="participant1">SERTIFIKAT PESERTA 1</option>
                         <option value="participant2">SERTIFIKAT PESERTA 2</option>
                         <option value="participant3">SERTIFIKAT PESERTA 3</option>
-                        <option value="best10">SERTIFIKAT 10 TERBAIK</option>
+                        <option value="best10">10 TERBAIK (PESERTA 1)</option>
+                        <option value="best10_2">10 TERBAIK (PESERTA 2)</option>
+                        <option value="best10_3">10 TERBAIK (PESERTA 3)</option>
                         <option value="best5">SERTIFIKAT JUARA</option>
                     </select>
                 </div>
