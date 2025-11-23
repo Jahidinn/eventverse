@@ -19,6 +19,106 @@
     scrollbar-width: none; /* Menyembunyikan scrollbar pada browser selain WebKit */
 }
 
+.content-wrapper {
+    background-color: #f4f6fa !important;
+    font-size: 13.5px !important;
+}
+
+.navbar-nav .nav-link{
+    font-size: 14px !important;
+    font-weight: 600 !important;
+    color: rgb(108, 158, 193) !important;
+	
+}
+
+.nav-header{
+    font-size: 13px !important;
+    font-weight: 600 !important;
+    color: rgb(108, 158, 193) !important;
+}
+.main-sidebar {
+    box-shadow: none !important;
+    background-color: #101e35 !important;
+    border-right: 1px solid #dadada !important;
+    /* background-color: #3076a5 !important; */
+    /* background: linear-gradient(to right, #2e76a7, #539ccc) !important; */
+}
+
+.main-sidebar .nav .nav-link {
+    color: #bdbdbd !important;
+    font-size: 13px !important;
+    /* font-family: 'Source Sans Pro', 'Inter', sans-serif, !important; */
+    /* color: #d0e6f8 !important; */
+	  display: flex;
+    align-items: center;     /* Vertikal tengah */
+    /* justify-content: center; */
+}
+
+.main-sidebar .nav .nav-link.active {
+    background-color: #23416e !important;
+    /* background-image: linear-gradient(to right, #83d4ff, #c5fff3) !important; */
+    color: #c0c0c0 !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+}
+
+.main-sidebar .nav-link.active .nav-icon{
+    background: #6fb6fd60 !important;
+    /* font-size:16px !important; */
+    border: 0px solid #92b6d887 !important;
+}
+
+.nav-icon-custom {
+    width: 24px !important;
+    height: 24px !important;
+    font-size:16px !important;
+    display:flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    /* background-color: rgba(25, 102, 173, 0.58) !important; */
+    background-color: #1c365c !important;
+    box-shadow: none !important;
+}
+
+/* Sembunyikan text nav-header ketika sidebar collapse */
+.sidebar-mini.sidebar-collapse .main-sidebar .nav-header i,
+.sidebar-mini.sidebar-collapse .main-sidebar .nav-header span {
+    display: none;
+}
+
+/* Tampilkan kembali saat sidebar collapse + hover */
+.sidebar-mini.sidebar-collapse .main-sidebar:hover .nav-header i,
+.sidebar-mini.sidebar-collapse .main-sidebar:hover .nav-header span {
+    display: inline;
+}
+
+/* Default: normal terlihat, kecil hilang */
+.logo-normal { display: inline; }
+.logo-collapsed { display: none; }
+
+/* Sidebar collapse: normal hilang, kecil tampil */
+.sidebar-mini.sidebar-collapse .brand-link .logo-normal {
+    display: none;
+}
+.sidebar-mini.sidebar-collapse .brand-link .logo-collapsed {
+    display: inline;
+}
+
+/* Sidebar collapse + hover: kembali ke logo normal */
+.sidebar-mini.sidebar-collapse .main-sidebar:hover .brand-link .logo-normal {
+    display: inline;
+}
+.sidebar-mini.sidebar-collapse .main-sidebar:hover .brand-link .logo-collapsed {
+    display: none;
+}
+
+/* Matikan animasi hide brand-text hanya untuk logo */
+.sidebar-mini.sidebar-collapse .brand-link span img{
+    opacity: 1 !important;
+    width: auto !important;
+    display: inline !important;
+}
+
 .form-control-label {
     font-size: 10px;
     color: #6c6c6c;
@@ -33,6 +133,9 @@
 	margin: 0 auto;
 	position: relative;
 	overflow: hidden;
+}
+.user-panel {
+    font-size: 13px !important;
 }
 
 .user-panel .image {
@@ -52,7 +155,7 @@
 	object-position: top !important; 
 }
 
-.main-sidebar{
+/* .main-sidebar{
 	background-color: #0384a4 !important;
 	color: #fff !important;	
 }
@@ -64,7 +167,7 @@
 .sidebar .nav .active{
 	background-color: #2eb6d8 !important;
 	color: #FFF !important;
-}
+} */
 
 .brand-link {
     border-bottom: 1px solid #a8c9e5 !important;
@@ -83,7 +186,7 @@
 }
 
 .bg-dashboard{
-	background-color: #006c86 !important;
+	background-color: #24406c !important;
 }
 .myevent-container-img img {
 	width:100%;

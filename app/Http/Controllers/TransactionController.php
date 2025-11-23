@@ -164,17 +164,34 @@ class TransactionController extends Controller
 
 			$transaction = Transaction::create($data);
 
+			// dd($transaction, $request->customForm);
 			// insert custom form data
-			if ($transaction || $request->customForm) {
-				foreach ($request->customForm as $key => $customForm) {
+			// if ($transaction || $request->customForm) {
+			// 	foreach ($request->customForm as $key => $customForm) {
+			// 		$dataForm[] = [
+			// 			"transaction_id" => $transaction->id,
+			// 			"form_id" => $key,
+			// 			"form_value" => $customForm
+			// 		];
+			// 	}
+			// 	TransactionForm::insert($dataForm);
+			// }
+			if ($transaction && !empty($request->customForm)) {
+				$dataForm = [];
+
+				foreach ($request->customForm ?? [] as $key => $customForm) {
 					$dataForm[] = [
 						"transaction_id" => $transaction->id,
 						"form_id" => $key,
 						"form_value" => $customForm
 					];
 				}
-				TransactionForm::insert($dataForm);
+
+				if (!empty($dataForm)) {
+					TransactionForm::insert($dataForm);
+				}
 			}
+
 
 			// Set your Merchant Server Key
 			Config::$serverKey = config('midtrans.server_key');

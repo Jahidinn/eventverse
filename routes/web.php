@@ -190,6 +190,10 @@ Route::middleware(['auth'])->group(function () {
 	});
 });
 
+Route::get('/check-url', function () {
+    return config('app.url');
+});
+
 # Tanpa middleware
 
 Route::get('/pricing', [ArticleController::class, 'pricingInfo']);
