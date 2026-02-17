@@ -374,7 +374,7 @@
     <section class="why-us section-bg px-2" data-aos="fade-up" date-aos-delay="200">
         <div class="container p-4">
             <div class="text-center">
-                <h5>Kenapa eventconect.id?</h5>
+                <h5>Kenapa eventhub?</h5>
             </div>
             <hr>
             <div class="mb-3">
@@ -395,12 +395,12 @@
             </div>
             <hr>
             <div class="text-center">
-                <h5>Siapa eventconect.id?</h5>
+                <h5>Apa itu platform eventhub.web.id?</h5>
             </div>
             <hr>
             <div class="text-center">
                 <p class="text-article">
-                    <b>Eventconnect.id</b> merupakan platform Ticketing Management Sistem yang didirikan oleh <b>PT
+                    <b>Eventhub.web.id</b> merupakan platform Ticketing Management Sistem yang didirikan oleh <b>PT
                         Konektivitas Tanpa Batas</b> dan dikelola oleh <b>ILB media</b> (IG @Info.lomba.beasiswa) yang
                     menyediakan solusi teknologi dalam mendukung penyelenggaraan event mulai dari distribusi tiket,
                     manajemen pendaftaran, pembayaran, hingga penyediaan report/laporan akhir event.

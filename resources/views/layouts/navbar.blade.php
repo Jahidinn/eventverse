@@ -2,7 +2,7 @@
     <div class="logo float-left">
         <!--  <h1 class="text-light"><a href="index.html"><span>Mediaprestasi</span></a></h1> -->
         <!-- Uncomment below if you prefer to use an image logo -->
-        <a href="/"><img src="/assets/img/logo.png" alt="" class="img-fluid"></a>
+        <a href="/"><img src="/assets/img/eh3.png" alt="" class="img-fluid"></a>
     </div>
 
     <nav class="nav-menu float-right d-none d-lg-block">
