@@ -15,17 +15,17 @@
 
     <section class="container mt-0 pb-0 pt-5">
         <div class="mb-3">
-            <b>Biaya transaksi di eventconnect.id</b><br>
+            <b>Biaya transaksi di eventhub.web.id</b><br>
             <small class="text-danger"><i>Biaya transaksi di bebankan kepada penyelenggara</i></small>
         </div>
         <div class="row text-article">
             <div class="col-md-8 mb-3">
                 <div class="card mb-3">
                     <div class="card-header">
-                        QRIS, GoPay, GoPay Later, ShopeePay, LinkAja
+                        QRIS, Gopay, Shopeepay, Linkaja <span class="text-success">(Rekomendasi)</span>
                     </div>
                     <div class="card-body">
-                        <b>3% x Total Penjualan</b>
+                        <b>3% (per transaksi)</b>
                     </div>
                 </div>
                 <div class="card mb-3">
@@ -72,41 +72,34 @@
             <div class="card-body text-article">
                 <p>
                     <i>Sebuah lembaga pendidikan <b>Smart Education</b>, membuat event “Lomba Karya Tulis Ilmiah (LKTIN)”
-                        dengan harga tiket pendaftaran <b>Rp 100.000.</b></i>
+                        dengan harga tiket pendaftaran <b>Rp 50.000.</b></i>
                 </p>
                 <p>
-                    <b>Case 1: </b><br>
-                    Melani membeli 5 tiket menggunakan ShopeePay, maka: Melani akan membayar sebesar Rp 500.000, Smart
-                    Education sebagai penyelenggara akan dikenakan biaya sebesar <b>3% x Total penjualan = Rp 15.000</b>
-                    Maka, jumlah uang yang didapat oleh Smart Educations adalah sebesar Rp 485.000
+                    <b>Contoh 1: </b><br>
+                    Melani membeli 2 tiket event menggunakan QRIS, maka: melani akan membayar sebesar Rp 100.000, Smart
+                    Education sebagai penyelenggara akan dikenakan biaya sebesar <b>3% x Total per transaksi (100.000 x 3% = Rp. 3.000)</b>
+                    Maka jumlah uang yang didapat oleh penyelenggara dari transaksi melani adalah sebesar Rp 97.000
                 </p>
 
                 <p>
-                    <b>Case 2:</b><br>
-                    Melani membeli 5 tiket pendaftaran menggunakan Virtual Account (VA) dan akan membayar sebesar Rp
-                    500.000, Reza membeli 5 tiket menggunakan GoPay dan akan membayar sebesar Rp500.000
+                    <b>Contoh 2:</b><br>
+                    Jika ada 10 pendaftar event artinya membeli 10 tiket pendaftaran, jika pembayaran menggunakan Gopay/Shopeepay maka jumlah yang di bayarkan oleh peserta sebesar Rp
+                    500.000
                 </p>
-                <p>Smart Education akan dikenakan biaya sebesar:</p>
-                <p>Tiket Melani, pembayaran menggunakan Virtual Account (VA)<br>
-                    = (1,5% x Total Penjualan) + (4.500 x jumlah tiket)<br>
-                    = (1,5% x Rp 500.000) + (4.500 x 5) <br>
-                    = Rp7.500 + 22.500<br>
-                    = Rp30.000</p>
-                <p>
-                    Tiket Reza, pembayaran menggunakan GoPay <br>
-                    = 3% x Total Penjualan <br>
-                    = 3% x Rp 500.000 <br>
+                <p>Perhitungannya biaya transaksi sebagai berikut :</p>
+                <p>Biaya transaksi : 3%<br>
+                    = Total transaksi x 3%<br>
+                    = 500.000 x 3% <br>
                     = Rp15.000</p>
 
-                <p>Biaya admin yang dikenakan untuk pembelian tiket pendaftaran Melani, dan Reza adalah: <br>
-                    Rp30.000 + Rp15.000 = Rp45.000 <br>
-                    Maka, jumlah uang yang bisa di withdraw oleh Smart Education adalah sebesar: <b>Rp 1.000.000 - Rp 45.000
-                        = Rp 955.000</b>
+                <p>Biaya admin yang dikenakan dari 10 pendaftar tersebut adalah: Rp15.000<br>
+                    Maka, jumlah uang yang bisa di withdraw oleh penyelenggara event adalah sebesar: <b>Rp 500.000 - Rp 15.000
+                        = Rp 485.000</b>
                 </p>
             </div>
         </div>
         <div class="mt-4 text-article">
-            Kenapa harus eventconnect? <a href="/about-us" class="text-info"> <b>Cek selengkapnya ...</b></a>
+            Kenapa harus eventhub? <a href="/about-us" class="text-info"> <b>Cek selengkapnya ...</b></a>
         </div>
     </section>
 @endsection

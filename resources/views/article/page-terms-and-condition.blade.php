@@ -19,7 +19,9 @@
 
                 <div class="mt-2">
                     <article class="text-article">
-                        {!! $tosGeneral->body !!}
+                        <h6>Generat terms & condition</h6>
+                        <p>On progress</p>
+                        {{-- {!! $tosGeneral->body !!} --}}
                     </article>
                 </div>
 
@@ -42,7 +44,7 @@
                     {{-- Dari database --}}
                     <p>
                     <article class="text-article">
-                        {!! $tosCreator->body !!}
+                        {{-- {!! $tosCreator->body !!} --}}
                     </article>
                     </p>
 
@@ -62,7 +64,7 @@
                     <p class="card-text">
 
                     <article class="text-article">
-                        {!! $tosUser->body !!}
+                        {{-- {!! $tosUser->body !!} --}}
                     </article>
                     </p>
 

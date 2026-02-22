@@ -7,7 +7,7 @@
         <!--Content before waves-->
         <div class="inner-header-search flex">
             <div class="wave-content w-100">
-                <h1>Welcome to eventconnect.id BLOG!</h1>
+                <h1>Welcome to eventhub ARTICLE!</h1>
             </div>
         </div>
         <!--Waves end-->

@@ -15,7 +15,7 @@
 
     <section class="container mt-0 pt-4 px-3">
         <div class="alert alert-success" role="alert">
-            <span>Panduan <b>event creator</b> dan <b>pengguna</b> eventconnect.id</span>
+            <span>Panduan <b>event creator</b> dan <b>pengguna</b> eventhub.web.id</span>
         </div>
         <hr>
         <div id="content">
@@ -25,15 +25,15 @@
                     <h3>Registrasi</h3>
                     <ol class="pl-4 text-article">
                         <li class="mb-2">
-                            Untuk event creator pastikan kamu punya akun di eventconnect, jika belum punya
-                            bisa <a href="">Registrasi disini</a>, kamu bisa membuat event atas nama individu atau
+                            Untuk event creator pastikan kamu punya akun di eventhub, jika belum punya
+                            bisa <a href="/register"><b>registrasi disini</b></a>, kamu bisa membuat event atas nama individu atau
                             organisasi. jika atas nama organisasi kamu bisa menambahkan data organisasi di profil.
                         </li>
                         <li class="mb-2">
-                            Login menggunakan email dan kata sandi yang telah terdaftar
+                            Login menggunakan email dan password yang telah terdaftar
                         </li>
                         <li class="mb-2">
-                            Pengguna akan menerima bemail verifikasi dan diarahkan untuk mengklik tautan dalam
+                            Pengguna akan menerima email verifikasi dan diarahkan untuk mengklik tautan dalam
                             email tersebut untuk mengaktifkan akun yang sudah di daftarkan.
                         </li>
                         <li class="mb-2">
@@ -47,7 +47,7 @@
                         </li>
                     </ol>
                     <a href="https://youtu.be/7PKrnsQUx90" target="_blank" class="btn btn-danger btn-sm">
-                        <i class="far fa-play-circle"></i> Video panduan
+                        <i class="far fa-play-circle"></i> Lihat video tutorial
                     </a>
 
                     {{-- <img class="w-100" src="{{ asset('assets/default-img/blog-images/ev') }}/1.png" alt="">
@@ -57,11 +57,11 @@
                     <h3>Create event</h3>
                     <ol class="pl-4 text-article">
                         <li class="mb-2">
-                            Masuk ke Akun kamu: Langkah pertama untuk memulai adalah masuk ke akun Eventconnect.id kamu,
-                            login dengan email dan kata sandi yang telah terdaftar.
+                            Masuk ke Akun kamu: Langkah pertama untuk memulai adalah masuk ke akun eventhub.web.id kamu,
+                            login dengan email dan password yang telah terdaftar.
                         </li>
                         <li class="mb-2">
-                            Navigasi ke Dashboard: Setelah berhasil login, kamu akan diarahkan ke dashboard utama. Di sini,
+                            Navigasi ke Dashboard: setelah berhasil login, kamu akan diarahkan ke dashboard utama. Di sini,
                             kamu dapat melihat menu <b>manajemen event</b> untuk membuat event baru
                         </li>
                         <li class="mb-2">
@@ -71,7 +71,7 @@
                             peserta.
                         </li>
                         <li class="mb-2">
-                            Atur <b>Tiket pendaftaran</b> seperti deskripsi tiket pendaftaran, berbayar atau gratis,
+                            Atur <b>tiket pendaftaran</b> seperti deskripsi tiket pendaftaran, berbayar atau gratis,
                             serta batasan jumlah peserta. Selain itu buat juga <b>formulir</b> yang diperlukan untuk
                             pendaftaran event.
                         </li>
@@ -86,7 +86,7 @@
                         </li>
                     </ol>
                     <a href="https://youtu.be/igdg2VMQjn0" target="_blank" class="btn btn-danger btn-sm">
-                        <i class="far fa-play-circle"></i> Video panduan
+                        <i class="far fa-play-circle"></i> Lihat video tutorial
                     </a>
 
                     {{-- <img class="w-100 mt-2" src="{{ asset('assets/default-img/blog-images/ev') }}/3.png" alt=""> --}}
@@ -100,8 +100,8 @@
                             serta cara memberikan pembaruan kepada peserta yang telah terdaftar.
                         </li>
                         <li class="mb-2">
-                            Pada menu <b>manajemen event</b> juga terdapat menu untuk kelola tiket pendaftaran, Ini termasuk
-                            pembuatan tiket baru(berbayar, gratis, dsb), mengatur kuota tiket, serta mengelola pembatalan
+                            Pada menu <b>manajemen event</b> juga terdapat menu untuk kelola tiket pendaftaran, menu ini bisa
+                            membuat tiket baru(berbayar, gratis, dsb), mengatur kuota tiket, serta mengelola pembatalan
                             atau perubahan tiket.
                         </li>
                         <li class="mb-2">
@@ -119,20 +119,20 @@
                             analisis lebih lanjut atau keperluan administrasi pada <b>menu data peserta</b>
                         </li>
                         <li class="mb-2">
-                            Pencairan Dana Event: untuk mencairkan dana yang diperoleh dari penjualan tiket
+                            Pencairan dana event: untuk mencairkan dana yang diperoleh dari penjualan tiket
                             dan pembayaran lainnya kamu bisa akses ke menu <b>laporan transaksi</b>.
                         </li>
                     </ol>
                     <a href="https://youtu.be/CKDndwnmPk0" target="_blank" class="btn btn-danger btn-sm">
-                        <i class="far fa-play-circle"></i> Video panduan
+                        <i class="far fa-play-circle"></i> Lihat video tutorial
                     </a>
                     {{-- <img class="w-100 mt-2" src="{{ asset('assets/default-img/blog-images/ev') }}/4.png" alt=""> --}}
                 </li>
                 <li class="event">
                     <h3>Manajemen artikel</h3>
                     <span class="text-article mb-3">
-                        Eventconnect.id tidak hanya menyediakan platform untuk mengelola acara, tetapi juga memungkinkan
-                        pengguna untuk membuat dan mengelola artikel untuk berbagai keperluan seperti pengumuman, berita,
+                        Tidak hanya menyediakan platform untuk mengelola event, tetapi eventhub.web.id juga memungkinkan
+                        user menulis dan mengelola artikel untuk berbagai keperluan seperti pengumuman, berita,
                         dan seagainya.
                     </span>
                     <ol class="pl-4 text-article">
@@ -146,29 +146,29 @@
                         </li>
                     </ol>
                     <a href="https://youtu.be/rquCGbrnzqI" target="_blank" class="btn btn-danger btn-sm">
-                        <i class="far fa-play-circle"></i> Video panduan
+                        <i class="far fa-play-circle"></i> Lihat video tutorial
                     </a>
                     {{-- <img class="w-100 mt-2" src="{{ asset('assets/default-img/blog-images/ev') }}/5.png" alt=""> --}}
                 </li>
 
                 <li class="event">
-                    <h3>Mendaftar event</h3>
+                    <h3>Mendaftar event (peserta)</h3>
                     <ol class="pl-4 text-article">
                         <li class="mb-2">
-                            Untuk registrasi atau membeli tiket event di eventconnect.id tidak harus punya akun, kamu bisa
+                            Untuk registrasi atau membeli tiket event di eventhub.web.id tidak harus punya akun, kamu bisa
                             registrasi event dengan akun atau tanpa akun.
                         </li>
                         <li class="mb-2">
-                            Menemukan Event: Cari event yang kamu suka di halaman utama atau melalui fitur
-                            pencarian, filter kategori, dan eksplorasi event yang tersedia di eventconnect.id.
+                            Cari event: cari event yang kamu suka di halaman utama atau melalui fitur
+                            pencarian, filter supaya hasilnya relevan dengan yang kamu cari.
                         </li>
                         <li class="mb-2">
-                            Pahami detail event: kamu harus paham tentang informasi penting terkait event, seperti syarat
-                            dan ketentuan, kategori event, jadwal, dan hadiah. Ini memastikan peserta mengetahui semua
+                            Pahami detail event: kamu harus paham tentang informasi penting terkait event, seperti penyelenggara, syarat
+                            dan ketentuan, kategori event, jadwal, dan hadiah. Ini bertujuan untuk memastikan peserta mengetahui semua
                             informasi yang dibutuhkan sebelum mendaftar.
                         </li>
                         <li class="mb-2">
-                            Registrasi : Setelah memahami detail event registrasi sesuai dengan tiket pendaftaran yang
+                            Registrasi : setelah memahami detail event, registrasi event pada tiket pendaftaran yang
                             tersedia, isikan detail informasi atau formulir yang dibutuhkan untuk event tersebut.
                         </li>
                         <li class="mb-2">
@@ -180,12 +180,12 @@
                             konfirmasi yang berisi status pendaftaran, kode pendaftaran, beserta informasi lainya.
                         </li>
                         <li class="mb-2">
-                            Persiapan dan Partisipasi: Untuk event offline persiapkan diri sebelum lomba, termasuk jadwal
+                            Persiapan dan partisipasi: Untuk event offline persiapkan diri sebelum lomba, termasuk jadwal
                             pelaksanaan, persiapan teknis, dan aturan yang harus diikuti selama lomba.
                         </li>
                     </ol>
                     <a href="https://youtu.be/u2ewB5TRY0o" target="_blank" class="btn btn-danger btn-sm">
-                        <i class="far fa-play-circle"></i> Video panduan
+                        <i class="far fa-play-circle"></i> Lihat video tutorial
                     </a>
 
                     {{-- <img class="w-100 mt-2" src="{{ asset('assets/default-img/blog-images/ev') }}/6.png" alt="">
@@ -194,7 +194,7 @@
                 </li>
                 <li class="event">
                     <h3>Done!</h3>
-                    <p class="text-article">Selamat! Kamus sudah bisa menjadi event creator atau peserta di eventconnect.id
+                    <p class="text-article">Selamat! Kamus sudah bisa menjadi event creator atau peserta event di eventhub.web.id
                     </p>
                 </li>
             </ul>

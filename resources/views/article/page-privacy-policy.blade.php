@@ -19,7 +19,7 @@
 
                 <div class="mt-2">
                     <article class="text-article">
-                        {!! $privacy_policy->body !!}
+                        {{-- {!! $privacy_policy->body !!} --}}
                     </article>
                 </div>
 

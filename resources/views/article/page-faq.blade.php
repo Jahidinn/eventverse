@@ -20,17 +20,16 @@
             <div class="card-body px-4 py-3">
                 <div class="text-article mt-0">
                     <a class="btn w-100 text-left" data-toggle="collapse" href="#faq-1" role="button">
-                        <b>Apa itu Eventconnect.id?</b>
+                        <b>Apa itu eventhub.web.id?</b>
                     </a>
                     <div class="collapse" id="faq-1">
                         <hr class="m-2 mt-3">
                         <p>
-                            Eventconnect.id adalah platform Ticketing Management Service (TMS) yang dikelola oleh PT
+                            eventhub adalah platform ticketing management service (TMS) yang dikelola oleh PT
                             Konektivitas Tanpa Batas. Kami bekerja sama dengan ILB media (@Info.lomba.beasiswa) untuk
-                            menyediakan solusi
-                            teknologi dalam mendukung penyelenggaraan event, mulai dari distribusi dan manajemen tiket
-                            pendaftaran hingga penyediaan laporan event, info selengkapnya <a href="/about-us">About
-                                eventconnect</a>.
+                            menyediakan solusi teknologi dalam mendukung penyelenggaraan event, mulai dari distribusi dan manajemen tiket
+                            pendaftaran hingga penyediaan laporan event secara efisien, info selengkapnya <a href="/about-us">about
+                                eventhub</a>.
                         </p>
                     </div>
 
@@ -44,17 +43,14 @@
             <div class="card-body px-4 py-3">
                 <div class="text-article mt-0">
                     <a class="btn w-100 text-left" data-toggle="collapse" href="#faq-2" role="button">
-                        <b>Apa saja layanan yang ditawarkan oleh Eventconnect.id?</b>
+                        <b>Apa saja layanan yang ditawarkan oleh eventhub?</b>
                     </a>
 
                     <div class="collapse" id="faq-2">
                         <hr class="m-2 mt-3">
                         <p>
-                            Eventconnect.id menyediakan berbagai layanan terkait manajemen tiket pendaftaran event,
-                            distribusi tiket,
-                            dan
-                            manajemen event lainya. Ini mencakup pendaftaran peserta, pembelian tiket, verifikasi
-                            pembayaran, serta pencetakan dan penggunaan tiket digital, <a href="/about-us">More
+                            Eventhub menyediakan berbagai layanan terkait manajemen event, ticketing event,
+                            kelola data event, manajemen pendaftaran peserta, pembayaran terverifikasi, dan masih banyak lagi yang membuat eventmu terintegrasi. <a href="/about-us">More
                                 info</a>.
                         </p>
                     </div>
@@ -68,13 +64,13 @@
             <div class="card-body px-4 py-3">
                 <div class="text-article mt-0">
                     <a class="btn w-100 text-left" data-toggle="collapse" href="#faq-2-1" role="button">
-                        <b>Apakah eventconnect.id dapat dipercaya?</b>
+                        <b>Apakah eventhub.web.id dapat dipercaya?</b>
                     </a>
 
                     <div class="collapse" id="faq-2">
                         <hr class="m-2 mt-3">
-                        <p>Ya, evntconnect.id dibawah naungan perusahaan yang berbadan hukum dan dikelola oleh ILB media
-                            (@info.lomba.beasiswa) serta menggunakan sistem pembayaran midtrans by gojek jadi tidak perlu
+                        <p>Ya, eventhub.web.id di kelola organisasi/perusahaan yang berbadan hukum dan dikelola oleh ILB media
+                            (@info.lomba.beasiswa) serta menggunakan sistem pembayaran dari midtrans (by gojek) jadi tidak perlu
                             diragukan keamananannya.</a>.
                         </p>
                     </div>
@@ -88,14 +84,14 @@
             <div class="card-body px-4 py-3">
                 <div class="text-article mt-0">
                     <a class="btn w-100 text-left" data-toggle="collapse" href="#faq-3" role="button">
-                        <b>Bagaimana cara menggunakan Eventconnect.id sebagai penyelenggara event?</b>
+                        <b>Bagaimana cara menggunakan eventhub.web.id sebagai penyelenggara event?</b>
                     </a>
                     <div class="collapse" id="faq-3">
                         <hr class="m-2 mt-3">
-                        <p>Kamu dapat mendaftarkan event Anda di platform kami dan mengatur detailnya, termasuk jenis tiket
+                        <p>Kamu dapat mendaftarkan event di platform kami dan mengatur detailnya, termasuk jenis tiket
                             yang akan dijual, harga tiket, jumlah tiket yang tersedia, dan informasi lainnya. Setelah itu,
                             kamu bisa mempromosikan event kamu dan mengelola penjualan tiket melalui dashboard kami, <a
-                                href="/creator-guide">Baca panduan</a>.</p>
+                                href="/creator-guide">baca panduan</a>.</p>
                     </div>
                 </div>
 
@@ -107,7 +103,7 @@
             <div class="card-body px-4 py-3">
                 <div class="text-article mt-0">
                     <a class="btn w-100 text-left" data-toggle="collapse" href="#faq-4" role="button">
-                        <b>Apakah Eventconnect.id menyediakan layanan pembayaran online?</b>
+                        <b>Apakah eventhub.web.id menyediakan layanan pembayaran online?</b>
                     </a>
                     <div class="collapse" id="faq-4">
                         <hr class="m-2 mt-3">
@@ -129,11 +125,11 @@
                     </a>
                     <div class="collapse" id="faq-5">
                         <hr class="m-2 mt-3">
-                        <p>Setelah event selesai, Anda dapat mengakses laporan lengkap dengan mudah melalui dashboard kami.
+                        <p>Setelah event selesai, Anda dapat mengakses report lengkap dengan mudah melalui dashboard kami.
                             Laporan
-                            tersebut mencakup data penjualan tiket, kehadiran peserta,report data peserta, report data
+                            tersebut mencakup data penjualan tiket, kehadiran peserta, report data peserta, report data
                             pembayaran, pencairan dana dan informasi lainnya yang relevan untuk
-                            membantu Anda mengevaluasi kesuksesan event Anda.</p>
+                            membantu kamu mengevaluasi kesuksesan event Anda.</p>
                     </div>
                 </div>
 
@@ -145,13 +141,13 @@
             <div class="card-body px-4 py-3">
                 <div class="text-article mt-0">
                     <a class="btn w-100 text-left" data-toggle="collapse" href="#faq-6" role="button">
-                        <b>Apakah Eventconnect.id memiliki dukungan pelanggan?</b>
+                        <b>Apakah eventhub.web.id memiliki dukungan pelanggan?</b>
                     </a>
                     <div class="collapse" id="faq-6">
                         <hr class="m-2 mt-3">
                         <p>Ya, kami menyediakan dukungan pelanggan melalui berbagai saluran komunikasi seperti email dan
                             chat. Tim kami siap membantu Anda dengan pertanyaan atau masalah apa pun yang Anda hadapi dalam
-                            menggunakan platform kami, <a href="/contact-us">Hubungi kami</a>.</p>
+                            menggunakan platform kami, <a href="/contact-us">hubungi kami</a>.</p>
                     </div>
                 </div>
 
@@ -163,14 +159,14 @@
             <div class="card-body px-4 py-3">
                 <div class="text-article mt-0">
                     <a class="btn w-100 text-left" data-toggle="collapse" href="#faq-7" role="button">
-                        <b>Bagaimana keamanan data peserta yang menggunakan Eventconnect.id?</b>
+                        <b>Bagaimana keamanan data peserta yang menggunakan platform eventhub?</b>
                     </a>
                     <div class="collapse" id="faq-7">
                         <hr class="m-2 mt-3">
                         <p>Kami mengutamakan keamanan data peserta dan mengikuti praktik terbaik dalam pengelolaan data
                             pribadi. Kami menggunakan enkripsi data dan memiliki <a href="/privacy-policy">kebijakan
                                 privasi</a> yang ketat untuk
-                            melindungi informasi pribadi peserta.</p>
+                            melindungi informasi pribadi peserta ataupun penyelenggara.</p>
                     </div>
                 </div>
 
@@ -182,15 +178,15 @@
             <div class="card-body px-4 py-3">
                 <div class="text-article mt-0">
                     <a class="btn w-100 text-left" data-toggle="collapse" href="#faq-8" role="button">
-                        <b>Apakah Eventconnect.id menyediakan integrasi dengan platform lain seperti media sosial atau
+                        <b>Apakah eventhub menyediakan integrasi dengan platform lain seperti media sosial atau
                             aplikasi lainnya?</b>
                     </a>
                     <div class="collapse" id="faq-8">
                         <hr class="m-2 mt-3">
                         <p>Ya, kami menyediakan integrasi dengan berbagai platform termasuk media sosial seperti instagram
                             untuk membantu
-                            Anda mempromosikan event Anda secara lebih luas dan meningkatkan visibilitasnya. akun yang kami
-                            kelola : <a href="http://instagram.com/eventconnect.id">Eventconnect</a> dan <a
+                            kamu mempromosikan event secara lebih luas dan meningkatkan visibilitasnya. akun yang kami
+                            kelola : <a href="http://instagram.com/eventconnect.id">eventconnect</a> dan <a
                                 href="http://instagram.com/info.lomba.beasiswa">ILB MEdia</a></p>
                     </div>
                 </div>
@@ -203,13 +199,13 @@
             <div class="card-body px-4 py-3">
                 <div class="text-article mt-0">
                     <a class="btn w-100 text-left" data-toggle="collapse" href="#faq-9" role="button">
-                        <b>Apakah ada biaya atau komisi yang dikenakan oleh Eventconnect.id?</b>
+                        <b>Apakah ada biaya atau komisi yang dikenakan oleh eventhub?</b>
                     </a>
                     <div class="collapse" id="faq-9">
                         <hr class="m-2 mt-3">
-                        <p>Kami mengenakan biaya atau komisi sesuai dengan layanan yang Anda gunakan. Detail tarif dan
-                            biaya akan dijelaskan saat Anda mendaftar dan menggunakan platform kami, atau bisa di akses
-                            melalui halaman <a href="/pricing">Biaya</a>.</p>
+                        <p>Kamu bisa menyebarkan event secara gratis, kami hanya mengenakan biaya pada transaksi penjualan tiket atau komisi sesuai dengan layanan yang kamu gunakan. Detail tarif dan
+                            biaya akan dijelaskan saat kamu mendaftar dan menggunakan platform kami, atau bisa di akses
+                            melalui halaman <a href="/pricing">biaya</a>.</p>
                     </div>
                 </div>
 
@@ -221,12 +217,12 @@
             <div class="card-body px-4 py-3">
                 <div class="text-article mt-0">
                     <a class="btn w-100 text-left" data-toggle="collapse" href="#faq-10" role="button">
-                        <b>Bagaimana cara saya memulai menggunakan Eventconnect.id untuk event saya?</b>
+                        <b>Bagaimana cara saya memulai menggunakan eventhub untuk event saya?</b>
                     </a>
                     <div class="collapse" id="faq-10">
                         <hr class="m-2 mt-3">
-                        <p>Anda dapat mulai dengan mendaftar di situs web kami dan mengikuti langkah-langkah pendaftaran
-                            event. Tim kami juga siap membantu Anda dalam proses ini jika diperlukan, <a
+                        <p>Kamu dapat mulai dengan mendaftar di situs web kami dan mengikuti langkah-langkah pendaftaran
+                            event. Tim kami juga siap membantu kamu dalam proses ini jika diperlukan, <a
                                 href="/register">Daftar sekarang!</a>.</p>
                     </div>
                 </div>
@@ -240,7 +236,7 @@
                 <div class="text-article mt-0">
                     <b class="text-info">Hubungi kami</b>
                     <hr class="m-2 mt-3">
-                    <p>Apakah Kamu memiliki pertanyaan, masukan, atau hanya ingin menyapa kami? Jangan ragu untuk mengirim
+                    <p>Apakah kamu memiliki pertanyaan, masukan, atau hanya ingin menyapa kami? Jangan ragu untuk mengirim
                         pesan kepada tim kami menggunakan formulir di bawah ini. Kami berusaha untuk merespons setiap pesan
                         secepat mungkin!</p>
                     <a class="btn btn-success btn-sm" href="/contact-us">Hubungi sekarang!</a>
