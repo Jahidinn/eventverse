@@ -8,11 +8,11 @@
     <script type="text/javascript" src="{{ config('midtrans.snap_url') }}"
         data-client-key="{{ config('midtrans.client_key') }}"></script>
 
-    <title>Dashboard | Eventconnect.id</title>
+    <title>Dashboard | eventhub.web.id</title>
 
     <!-- Favicons -->
-    <link href="{{ asset('assets/img/favicon.png') }}" rel="icon">
-    <link href="{{ asset('assets/img/apple-touch-icon.png') }}" rel="apple-touch-icon">
+    <link href="{{ asset('assets/img/eventhub-icon.png') }}" rel="icon">
+    <link href="{{ asset('assets/img/eventhub-apple-icon.png') }}" rel="apple-touch-icon">
 
     <!-- Google Font: Source Sans Pro -->
     <link rel="stylesheet"
@@ -73,7 +73,7 @@
             <div class="float-right d-none d-sm-block">
                 <b>Version</b> 3.2.0
             </div>
-            <small><strong>Copyright &copy; 2014-2021 <a href="/">Eventconnect.id</a>.</strong> All rights
+            <small><strong>Copyright &copy; 2014-2021 <a href="/">eventhub.web.id</a>.</strong> All rights
                 reserved.</small>
         </footer>
 

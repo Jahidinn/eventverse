@@ -2,8 +2,9 @@
 <aside class="main-sidebar sidebar-dark-primary elevation-4 position-fixed">
     <!-- Brand Logo -->
     <a href="/" class="brand-link">
-        <img src="/assets/img/logo-e.png" alt="AdminLTE Logo" class="brand-image " style="opacity: .8">
-        <span class="brand-text font-weight-light">Eventconnect.id</span>
+        <img src="/assets/img/eventhub-logo.png"
+            alt="Logo"
+            style="height:33px; width:auto; margin-left:8px;">
     </a>
 
     <!-- Sidebar -->
@@ -45,7 +46,7 @@
                 <li class="nav-item">
                     <a href="/administrator"
                         class="nav-link {{ Request::is('dashboard/admin') || Request::is('administrator') ? 'active' : '' }}">
-                        <i class="nav-icon fas fa-home"></i>
+                        <i class="nav-icon nav-icon-custom mr-2 ti ti-layout-grid"></i>
                         <p>Admin Dashboard</p>
                     </a>
                 </li>

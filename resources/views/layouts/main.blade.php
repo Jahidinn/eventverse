@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-    <title>eventconnect.id | your success partner</title>
+    <title>eventhub | your event partner</title>
     <meta content="" name="descriptison">
     <meta content="" name="keywords">
     <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -13,8 +13,8 @@
         data-client-key="{{ config('midtrans.client_key') }}"></script>
 
     <!-- Favicons -->
-    <link href="{{ asset('assets/img/eh-favicon.png') }}" rel="icon">
-    <link href="{{ asset('assets/img/apple-touch-icon.png') }}" rel="apple-touch-icon">
+    <link href="{{ asset('assets/img/eventhub-icon.png') }}" rel="icon">
+    <link href="{{ asset('assets/img/eventhub-apple-icon.png') }}" rel="apple-touch-icon">
 
     <!-- Google Fonts -->
     <link

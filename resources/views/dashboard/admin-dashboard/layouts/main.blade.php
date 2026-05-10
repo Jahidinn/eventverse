@@ -8,11 +8,11 @@
     {{-- <script type="text/javascript" src="https://app.sandbox.midtrans.com/snap/snap.js"
         data-client-key="{{ config('midtrans.client_key') }}"></script> --}}
 
-    <title>Dashboard | Eventconnect.id</title>
+    <title>Dashboard | eventhub.web.id</title>
 
     <!-- Favicons -->
-    <link href="{{ asset('assets/img/favicon.png') }}" rel="icon">
-    <link href="{{ asset('assets/img/apple-touch-icon.png') }}" rel="apple-touch-icon">
+    <link href="{{ asset('assets/img/eventhub-icon.png') }}" rel="icon">
+    <link href="{{ asset('assets/img/eventhub-apple-icon.png') }}" rel="apple-touch-icon">
 
     <!-- Google Font: Source Sans Pro -->
     <link rel="stylesheet"
@@ -20,7 +20,7 @@
 
     <link rel="stylesheet" href="{{ asset('assets/dashboard/plugins/fontawesome-free/css/all.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/dashboard/dist/css/adminlte.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets/css/dashboard-admin.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/dashboard.css') }}">
 
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/dataTables.bootstrap4.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/fixedcolumns/4.3.0/css/fixedColumns.dataTables.min.css">
@@ -77,7 +77,7 @@
             <div class="float-right d-none d-sm-block">
                 <b>Version</b> 3.2.0
             </div>
-            <small><strong>Copyright &copy; 2014-2021 <a href="/">Eventconnect.id</a>.</strong> All rights
+            <small><strong>Copyright &copy; 2014-2021 <a href="/">eventhub.web.id</a>.</strong> All rights
                 reserved.</small>
         </footer>
 
