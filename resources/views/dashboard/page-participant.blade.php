@@ -11,17 +11,17 @@
     <!-- Main content -->
     <section class="content">
         <!-- Default box -->
-        <div class="card bg-secondar">
-            <div class="card-header">
+        {{-- <div class="card bg-secondar"> --}}
+            {{-- <div class="card-header">
                 <h3 class="card-title">Kelola data peserta dengan mudah! </h3>
 
-            </div>
+            </div> --}}
 
-            <div class="card-body px-3 daftar-event text-dark bg-card-blue">
+            <div class=" px-1 daftar-event text-dark bg-card-blue">
                 <form action="" method="GET" {{ $dataEvent->isEmpty() ? 'hidden' : '' }}>
-                    <div class="p-0 form-inline mb-4">
+                    <div class="p-0 form-inline mb-3">
                         <input class="form-control col shadow-none mr-1" id="search-myevent" name="key" type="search"
-                            placeholder="Cari event ..." value="{{ request('key') }}">
+                            placeholder="Search event ..." value="{{ request('key') }}">
                     </div>
                 </form>
 
@@ -34,11 +34,11 @@
 
                 {{-- Looping data my event --}}
                 @foreach ($dataEvent as $event)
-                    <div class="card mt-2">
-                        <div class="col-md-12 row card-body px-3 pb-3">
+                    <div class="card mt-1">
+                        <div class="col-md-12 row card-body px-3 pb-2">
                             <div class="col-9">
                                 {{-- Event --}}
-                                <b class="text-info title-manage-event">
+                                <b class="text-dark-custom title-manage-event">
                                     @php
                                         $title = $event->title;
                                         if (strlen($title) > 44) {
@@ -57,16 +57,16 @@
                                 @endphp
 
                                 <small>
-                                    <b class="text-secondary"><span>{{ $participant }}</span> PENDAFTAR</b>
+                                    <b class="text-secondary">JUMLAH PESERTA : <span class="text-success">{{ $participant }}</span></b>
                                 </small>
 
                                 <hr class="my-3">
 
                                 <div class="mt-2">
-                                    <button type="button" class="btn btn-info btn-sm rounded-0 px-3 detail-peserta"
+                                    <button type="button" class="button-40 btn-sm rounded-0 px-3 detail-peserta"
                                         data-id="{{ $event->id }}" data-participant="{{ $participant }}"
                                         data-title="{{ $event->title }}">
-                                        <i class="fas fa-users"></i> Detail Peserta
+                                        <i class="ti ti-user-share"></i> Detail Peserta
                                     </button>
                                 </div>
                             </div>
@@ -134,7 +134,7 @@
                 </div>
 
             </div>
-        </div>
+        {{-- </div> --}}
     </section>
 
     <!-- Detail peserta transaksi -->

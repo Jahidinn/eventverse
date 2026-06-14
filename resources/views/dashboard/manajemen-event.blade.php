@@ -2,7 +2,7 @@
 
 @section('content')
     <!-- Content Header (Page header) -->
-    <section class="content-header pb-0">
+    <section class="content-header pb-0 ml-1">
         <div class="alert alert-dark bg-dashboard text-white" role="alert">
             <strong>MANAGEMENT EVENT</strong> (Penyelenggara)
         </div>
@@ -12,22 +12,22 @@
     <section class="content">
 
         <!-- Default box -->
-        <div class="card">
-            <div class="card-header">
+        {{-- <div class="card"> --}}
+            {{-- <div class="card-header card-header-custom ">
                 <h3 class="card-title manajemen-event-title">Buat event sesukamu! <i class="fas fa-paper-plane"></i></h3>
-            </div>
+            </div> --}}
 
-            <div class="card-body px-2 pt-3 bg-card-blue">
-                <div class="py-0 manajemen-event-box">
-                    <div class="mb-2">
-                        <a href="/event/create" class="btn btn-success rounded-0"><i class="fas fa-plus-circle"></i> Buat
+            {{-- <div class="card-body px-2 pt-3 bg-card-blue"> --}}
+                <div class="py-0 manajemen-event-box ml-1">
+                    <div class="mb-4 mt-4">
+                        <a href="/event/create" class="button-40 rounded-0"><i class="ti ti-pencil-plus"></i> Buat
                             event</a>
                     </div>
 
                     <form action="" method="GET">
-                        <div class="p-0 form-inline mb-4" {{ $listEvent->isEmpty() ? 'hidden' : '' }}>
+                        <div class="p-0 form-inline mb-2" {{ $listEvent->isEmpty() ? 'hidden' : '' }}>
                             <input class="form-control col shadow-none mr-1" name="key" type="text"
-                                placeholder="Cari event saya ..." value="{{ request('key') }}">
+                                placeholder="Search event ..." value="{{ request('key') }}">
                         </div>
                     </form>
 
@@ -42,7 +42,7 @@
                         <div class="card pb-2">
                             <div class="col-md-12 row card-body px-3 pb-2">
 
-                                <div class="p-2">
+                                <div class="p-1 pl-2">
                                     <div class="myevent-container-img">
                                         <img class="card-img-top" src="{{ asset('storage/event-images/' . $event->image) }}"
                                             alt="Image">
@@ -58,30 +58,29 @@
                                     @endphp
 
                                     <a href="/event/{{ $event->slug }}"
-                                        class="text-info title-manage-event"><b>{{ $title }}</b></a><br>
+                                        class="text-dark-custom title-manage-event"><b>{{ $title }}</b></a><br>
                                     <small class="text-secondary">Crated at :
                                         <span>{{ $event->created_at->format('d-m-Y') }}</span></small><br>
                                     <div class="mt-2">
                                         <a href="/event/{{ $event->slug }}/edit" type="button"
-                                            class="btn btn-info btn-sm rounded-0"><i class="fas fa-edit"></i>
+                                            class="button-40 btn-sm rounded-0"><i class="ti ti-edit"></i>
                                             Edit event</a>
-                                        <button type="button" class="btn btn-danger btn-sm rounded-0 delete-event"
-                                            data-id="{{ $event->id }}"><i class="fas fa-trash-alt"></i></button>
+                                        <button type="button" class="button-40 btn-sm rounded-0 delete-event bg-danger"
+                                            data-id="{{ $event->id }}"><i class="ti ti-trash"></i></button>
                                     </div>
                                 </div>
-
-
                             </div>
+                            
                             <hr class="mx-2 my-2">
                             {{-- Button edit tiket & form --}}
-                            <div class="col-md-12 pb-2 card-body pt-1 pb-2 px-3">
-                                <button type="button" class="btn edit-button btn-sm px-3 edit-ticket-button"
+                            <div class="col-md-12 pb-2 card-body pt-1 pb-2 px-2">
+                                <button type="button" class="button-39 btn-sm px-3 edit-ticket-button"
                                     data-id="{{ $event->id }}" data-event="{{ $event->title }}">
-                                    <i class="fas fa-edit"></i> Edit Tiket
+                                    <i class="ti ti-ticket"></i> Edit tiket
                                 </button>
-                                <button type="button" class="btn btn-sm px-3 edit-button edit-formulir-button"
+                                <button type="button" class="button-39 btn-sm px-3 edit-formulir-button"
                                     data-id="{{ $event->id }}" data-event="{{ $event->title }}">
-                                    <i class="fas fa-edit"></i> Edit Formulir
+                                    <i class="ti ti-file-description"></i> Edit formulir
                                 </button>
                             </div>
                         </div>
@@ -162,8 +161,8 @@
                     </div>
 
                 </div>
-            </div>
-        </div>
+            {{-- </div>
+        </div> --}}
 
         {{-- Modal --}}
 
