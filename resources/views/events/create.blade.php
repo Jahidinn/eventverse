@@ -11,7 +11,7 @@
                 <div class="col-lg-3 col-md-2"></div>
 
                 <div class="col-lg-12 bg-dark py-2 text-center bg-eventconnect mb-2 text-white py-1 mt-4 shadow-sm">
-                    <b>BUAT EVENT</b>
+                    <b>CREATE EVENT</b>
                 </div>
 
                 <div class="col-lg-12 col-md-12 formevent-box">
@@ -32,14 +32,14 @@
                                     <div class="col-md-6">
                                         <div class="form-group event-title">
                                             <input type="text" class="form-control" name="titleEvent" required
-                                                placeholder="Nama Event">
+                                                placeholder="Judul event">
                                         </div>
                                     </div>
                                     <div class="col-md-6 url">
                                         <div class="form-group input-form-group event-title">
-                                            <span class="form-control-feedback url">eventconnect.id/</span>
+                                            <span class="form-control-feedback url">eventhub.web.id/</span>
                                             <input type="text" class="form-control mb-0" name="linkEvent" required
-                                                placeholder="contoh-LINK-2023" id="url-event">
+                                                placeholder="your-eventhub-link" id="url-event">
 
                                             {{-- Peringatan link url / slug --}}
                                             <small class="text-success" id="url-notif-success" hidden><i

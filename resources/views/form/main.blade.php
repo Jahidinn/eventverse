@@ -24,10 +24,10 @@
 
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 
-    <title>eventconnect.id | your success partner</title>
+    <title>eventhub | your event partner</title>
     <!-- Favicons -->
-    <link href="{{ asset('assets/img/favicon.png') }}" rel="icon">
-    <link href="{{ asset('assets/img/apple-touch-icon.png') }}" rel="apple-touch-icon">
+    <link href="{{ asset('assets/img/eventhub-icon.png') }}" rel="icon">
+    <link href="{{ asset('assets/img/eventhub-apple-icon.png') }}" rel="apple-touch-icon">
 
     <link href="{{ asset('assets/css/auth.css') }}" rel="stylesheet">
     <link href="{{ asset('assets/css/formevent.css') }}" rel="stylesheet">
