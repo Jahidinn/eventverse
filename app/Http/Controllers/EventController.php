@@ -98,7 +98,7 @@ class EventController extends Controller
 			'bannerEvent.max' => 'Ukuran maksimum banner adalah 616 KB!',
 			'linkEvent.required' => 'Kolom Link Event wajib diisi!',
 			'linkEvent.unique' => 'Link Event sudah digunakan.',
-			'linkEvent.alpha_dash' => 'Link event kamu di eventhub ya, bukan external link!',
+			'linkEvent.alpha_dash' => 'Isi link eventmu di EventHub ya, bukan external link!',
 			'titleEvent.required' => 'Kolom Judul Event wajib diisi!',
 			'kategoriEvent.required' => 'Kolom Kategori Event wajib diisi!',
 			'descriptionEvent.required' => 'Kolom Deskripsi Event wajib diisi!',
