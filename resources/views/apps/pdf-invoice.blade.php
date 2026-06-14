@@ -242,7 +242,7 @@
         <tr>
             <td>
                 Invoice No:
-                <strong>{{ '#EC/' . $transaction->id . '/' . $transaction->created_at->format('y') }}</strong>
+                <strong>{{ '#EC/' . 1000 + $transaction->id . '/' . $transaction->created_at->format('Y') }}</strong>
             </td>
             <td>
                 {{ $transaction->phone }}
@@ -341,9 +341,9 @@
 
     <div class="footer" style="background-color: #1e4356">
         <div class="footer-info" style="text-align: center">
-            <span>info@eventconnect.id</span> |
+            <span>info@eventhub.web.id</span> |
             <span>0821 3355 3002</span> |
-            <span>www.eventconnect.id</span>
+            <span>www.eventhub.web.id</span>
         </div>
         {{-- <div class="footer-thanks">
             <span>Thank you!</span>

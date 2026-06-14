@@ -44,7 +44,9 @@
         $('body').on('click', '.detail-myevent', function(e) {
             e.preventDefault();
             var id = $(this).data('id');
-            window.location = "/event/redirect-invoice/" + id;
+            const hashids = new Hashids('eventhub-secret', 15);
+            const hashIdTransaction = hashids.encode(id);
+            window.location = "/event/redirect-invoice/" + hashIdTransaction;
         })
 
         $('body').on('click', '.lanjutkan-transaksi', function(e) {

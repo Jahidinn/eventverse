@@ -133,7 +133,7 @@
                             <div class="form-group form-check">
                                 <input type="checkbox" class="form-check-input" id="persetujuan" required>
                                 <label class="form-check-label text-secondary" for="persetujuan">Saya setuju dengan
-                                    <strong>Syarat & Ketentuan</strong> yang berlaku di eventconnect.id</label>
+                                    <strong>Syarat & Ketentuan</strong> yang berlaku di eventhub.web.id</label>
                             </div>
                         </div>
                     </div>

@@ -388,7 +388,7 @@
                     <li class="mb-1">Menghindari pennipuan dan meningkatkan <b class="text-success">kepercayaan</b>
                         peserta!</li>
                     <li class="mb-1">Buat artikel, pengumuman, dan sebagainya dari menu manajemen artikel FREE!</li>
-                    <li class="mb-1">Yang pasti kamu bisa menggunkanan platform eventconect.id kapanpun dan <span
+                    <li class="mb-1">Yang pasti kamu bisa menggunkanan platform eventhub kapanpun dan <span
                             class="text-success"><b>GRATIS!</b></span>
                     </li>
                 </ul>

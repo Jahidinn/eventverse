@@ -11,6 +11,7 @@ use App\Models\Transaction;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
+use Vinkla\Hashids\Facades\Hashids;
 
 class PDFController extends Controller
 {
@@ -25,8 +26,9 @@ class PDFController extends Controller
 		if ($request->url != $url) {
 			return redirect('/');
 		}
+		$id_transaksi = Hashids::decode($request->id_transaksi)[0] ?? abort(404);
 
-		$transaksi = Transaction::find($request->id_transaksi);
+		$transaksi = Transaction::find($id_transaksi);
 		$event = Event::with('penyelenggara')->find($transaksi->event_id);
 		$ticket = Ticket::find($transaksi->ticket_id);
 

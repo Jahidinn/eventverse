@@ -27,7 +27,9 @@
         var url = '{{ env('APP_URL_INVOICE') }}';
 
         var id_transaksi = $(this).data('id_transaksi');
-        window.location.href = '/generate-pdf?id_transaksi=' + id_transaksi + '&url=' + url
+        const hashids = new Hashids('eventhub-secret', 15);
+        const hashIdTransaction = hashids.encode(id_transaksi);
+        window.location.href = '/generate-pdf?id_transaksi=' + hashIdTransaction + '&url=' + url
     })
 
     $('body').on('click', '#lanjutkan-transaksi', function(e) {

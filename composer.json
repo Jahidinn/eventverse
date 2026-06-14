@@ -15,6 +15,7 @@
         "midtrans/midtrans-php": "^2.5",
         "phpoffice/phpspreadsheet": "^1.29",
         "simplesoftwareio/simple-qrcode": "~4",
+        "vinkla/hashids": "^11.0",
         "yajra/laravel-datatables": "10.0"
     },
     "require-dev": {

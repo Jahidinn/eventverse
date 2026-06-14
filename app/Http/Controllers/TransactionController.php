@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use SebastianBergmann\Diff\Diff;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
+use Vinkla\Hashids\Facades\Hashids;
 
 class TransactionController extends Controller
 {
@@ -292,16 +293,18 @@ class TransactionController extends Controller
 		}
 	}
 
-	public function redirectInvoice($id)
+	public function redirectInvoice($hash)
 	{
 		// Render view tanpa langsung redirect
-		return view('apps.redirect-to-invoice', ['invoiceId' => $id]);
+		// $id = Hashids::decode($hash)[0] ?? abort(404);
+		return view('apps.redirect-to-invoice', ['invoiceId' => $hash]);
 		//return redirect('/event/invoice/' . $id);
 	}
 
 
-	public function invoice($id)
+	public function invoice($hash)
 	{
+		$id = Hashids::decode($hash)[0] ?? abort(404);
 		$transaction = Transaction::find($id);
 
 		//jika tidak ada transaksi alihkan halaman (proteksi invoice)

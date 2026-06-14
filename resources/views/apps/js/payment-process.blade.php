@@ -11,8 +11,10 @@
             window.snap.pay($('#transaction').val(), {
                 onSuccess: function(result) {
                     /* You may add your own implementation here */
-                    window.location.href = '/event/invoice/' + idTransaction;
-                    console.log(result);
+                    const hashids = new Hashids('eventhub-secret', 15);
+                    const hashIdTransaction = hashids.encode(idTransaction);
+                    window.location.href = '/event/invoice/' + hashIdTransaction;
+                    // console.log(result);
                 },
                 onPending: function(result) {
                     /* You may add your own implementation here */
@@ -26,11 +28,13 @@
                     }).then((result) => {
                         /* Read more about isConfirmed, isDenied below */
                         if (result.isConfirmed) {
+                            const hashids = new Hashids('eventhub-secret', 15);
+                            const hashIdTransaction = hashids.encode(idTransaction);
                             window.location.href = '/event/invoice/' +
-                                idTransaction;
+                                hashIdTransaction;
                         }
                     });
-                    console.log(result);
+                    // console.log(result);
                 },
                 onError: function(result) {
                     /* You may add your own implementation here */

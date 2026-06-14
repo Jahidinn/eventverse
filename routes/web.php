@@ -225,12 +225,12 @@ Route::get('/user/{username}', [UserProfileController::class, 'userPublicInfo'])
 Route::middleware(['auth'])->group(function () {
 	# Checkout
 	Route::get('/event/checkout', [TransactionController::class, 'checkoutPreview']);
-	Route::get('/event/invoice/{id}', [TransactionController::class, 'invoice']);
+	Route::get('/event/invoice/{hash}', [TransactionController::class, 'invoice']);
 	Route::post('/event/checkout-proccess', [TransactionController::class, 'transaction']);
 	Route::post('/event/continue-transaction', [TransactionController::class, 'continueTransaction']);
 	Route::post('/event/transaction-delete', [TransactionController::class, 'deleteTransaction']);
 	Route::get('/event/send-email/{transaction_code}', [TransactionController::class, 'sendEmail']);
-	Route::get('/event/redirect-invoice/{id}', [TransactionController::class, 'redirectInvoice']);
+	Route::get('/event/redirect-invoice/{hash}', [TransactionController::class, 'redirectInvoice']);
 	Route::get('/generate-pdf', [PDFController::class, 'generatePDF']);
 });
 

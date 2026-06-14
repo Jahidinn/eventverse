@@ -320,7 +320,7 @@
                 <div class="content">
 
                     <!-- START CENTERED WHITE CONTAINER -->
-                    <span class="preheader">Eventconnect.id transaction</span>
+                    <span class="preheader">eventhub transaction</span>
                     <table role="presentation" border="0" cellpadding="0" cellspacing="0" class="main">
 
                         <!-- START MAIN CONTENT AREA -->
@@ -331,7 +331,7 @@
                                     <p style="font-size: 13px;">Terimakasih sudah melakukan pendaftaran/pembelian tiket
                                         event di
                                         <a style="text-decoration: none"
-                                            href="http://eventconnect.id"><b>eventconnect.id</b></a>, berikut kami
+                                            href="http://eventhub.web.id"><b>eventhub.web.id</b></a>, berikut kami
                                         kirimkan detail transaksi dan link invoicenya ya!
                                     </p>
                                     <span>Detail transaksi : <b>{{ $ticket->ticket_name }}
@@ -366,9 +366,15 @@
                                                     cellspacing="0">
                                                     <tbody>
                                                         <tr>
+                                                            @php
+                                                                $hashids = new \Hashids\Hashids('eventhub-secret', 15);
+                                                            @endphp
+
                                                             <td>
-                                                                <a href="{{ config('app.url') . '/event/redirect-invoice/' . $transaction['id'] }}"
-                                                                    target="_blank">Lihat invoice</a>
+                                                                <a href="{{ url('/event/redirect-invoice/' . $hashids->encode($transaction['id'])) }}"
+                                                                    target="_blank">
+                                                                    Lihat invoice
+                                                                </a>
                                                             </td>
                                                         </tr>
                                                     </tbody>

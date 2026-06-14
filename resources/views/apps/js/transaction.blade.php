@@ -55,8 +55,9 @@
                                 // Periksa apakah pengguna mengklik tombol "OK"
                                 if (result.isConfirmed) {
                                     // Alihkan ke halaman yang diinginkan
-                                    window.location.href = '/event/invoice/' +
-                                        response.id;
+                                    const hashids = new Hashids('eventhub-secret', 15);
+                                    const hashIdTransaction = hashids.encode(response.id);
+                                    window.location.href = '/event/invoice/' + hashIdTransaction;
                                 }
                             });
                         } else {
@@ -132,9 +133,16 @@
                 /* Read more about isConfirmed, isDenied below */
                 if (result.isConfirmed) {
                     if (is_login != 0 || user_login_id != 0) {
-                        Swal.fire('Ok!',
-                            'Kamu bisa melanjutkan transaksi di profil dashboard ya!', );
-                        $('#checkoutModal').modal('hide');
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Ok!',
+                            text: 'Kamu bisa melanjutkan transaksi di profil dashboard ya!',
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                $('#checkoutModal').modal('hide');
+                                window.location.href = '/dashboard/myevent';
+                            }
+                        });
                     } else {
 
                         //Hapus jika daftar tapi tidak login (beli sekali selesai)
