@@ -440,7 +440,15 @@
                                 <div class="alert alert-info mt-3" role="alert">
                                     <small>
                                         <strong><i class="fas fa-tag"></i>
-                                            {{ $moreEvent->ticket->first()->ticket_price == 0 ? 'GRATIS!' : ' Rp ' . number_format($moreEvent->ticket->first()->ticket_price, 0, ',', '.') }}</strong>
+                                            @php
+                                                $firstTicket = $moreEvent->ticket->first();
+                                            @endphp
+
+                                            {{ !$firstTicket || $firstTicket->ticket_price == 0
+                                                ? 'GRATIS!'
+                                                : 'Rp ' . number_format($firstTicket->ticket_price, 0, ',', '.') }}
+                                                                                        
+                                        </strong>
                                     </small>
                                 </div>
 
