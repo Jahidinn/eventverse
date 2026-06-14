@@ -405,8 +405,8 @@
                                             src="{{ $message->embed(public_path() . '/assets/img/logo-email.png') }}">
                                     </div>
                                     <span class="apple-link">PT Event Media Nusantara</span>
-                                    <br><a href="http://eventconnect.id"
-                                        style="text-decoration:none">www.eventconnect.id</a> | info@eventconnect.id
+                                    <br><a href="http://eventhub.web.id"
+                                        style="text-decoration:none">www.eventhub.web.id</a> | info@eventhub.web.id
                                 </td>
                             </tr>
                             <tr>
