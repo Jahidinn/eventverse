@@ -92,6 +92,7 @@ class DashboardController extends Controller
 		$detail_transaksi = Transaction::where('id', $transaction_id)->first();
 
 		$data_form = CustomForm::where('event_id', $event_id)->get();
+		$data = [];
 
 		foreach ($data_form as $form) {
 			$form_value = TransactionForm::where('transaction_id', $transaction_id)->where('form_id', $form->id)->first();

@@ -174,3 +174,18 @@ button{
 	}
 }
 
+.ti-sm {
+    font-size: 17px;
+}
+
+.ti-md {
+    font-size: 20px;
+}
+
+.ti-lg {
+    font-size: 24px;
+}
+
+.ti-xl {
+    font-size: 32px;
+}

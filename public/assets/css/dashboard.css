@@ -508,3 +508,32 @@
    
 }
 
+.ti-sm {
+    font-size: 17px;
+}
+
+.ti-md {
+    font-size: 20px;
+}
+
+.ti-lg {
+    font-size: 24px;
+}
+
+.ti-xl {
+    font-size: 32px;
+}
+
+.button-39 {
+	vertical-align: middle;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    height: 36px;
+    box-sizing: border-box;
+}
+
+.button-39 i {
+    line-height: 1;
+}

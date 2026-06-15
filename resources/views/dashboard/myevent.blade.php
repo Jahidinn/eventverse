@@ -11,13 +11,13 @@
     <!-- Main content -->
     <section class="content">
         <!-- Default box -->
-        <div class="card ">
-            <div class="card-header">
+        {{-- <div class="card "> --}}
+            {{-- <div class="card-header">
                 <h3 class="card-title">Ikut event apapun yang kamu mau! </h3>
-            </div>
+            </div> --}}
 
-            <div class="card-body px-2">
-                <a href="/search"><button class="btn btn-success mb-2 rounded-0 shadow-none">Jelajah event <i
+            {{-- <div class="card-body px-2"> --}}
+                <a href="/search"><button class="button-40 mb-2 rounded-0 shadow-none">Jelajah event <i
                             class="fas fa-paper-plane"></i></button></a>
                 <form action="" method="GET" {{ $myevents->isEmpty() ? 'hidden' : '' }}>
                     <div class="p-0 form-inline mb-4">
@@ -97,60 +97,61 @@
                                     {{-- button action --}}
                                     @if ($myevent->status == 'Paid')
                                         {{-- IF PAID --}}
-                                        <button type="button" class="btn btn-outline-info btn-sm rounded-0 info-myevent"
+                                        <button type="button" class="button-39 text-info btn-sm rounded-0 info-myevent"
                                             data-id="{{ $myevent->id }}" data-event="{{ $myevent->event->id }}">
-                                            <i class="fas fa-list"></i>
+                                            <i class="fas fa-list"></i> Detail
                                         </button>
                                         @if ($myevent->event->end_date < $tanggalHariIni)
-                                            <button type="button" class="btn btn-info btn-sm rounded-0" disabled>
-                                                <i class="fas fa-edit"></i> Edit
+                                            <button type="button" class="button-39 btn-sm rounded-0" disabled>
+                                                <i class="fas fa-edit"></i>
                                             </button>
                                         @else
-                                            <button type="button" class="btn btn-info btn-sm rounded-0 edit-myevent"
+                                            <button type="button" class="button-39 btn-sm rounded-0 edit-myevent"
                                                 data-id="{{ $myevent->id }}" data-event="{{ $myevent->event->id }}">
-                                                <i class="fas fa-edit"></i> Edit
+                                                <i class="fas fa-edit"></i>
                                             </button>
                                         @endif
-                                        <button type="button" class="btn btn-success btn-sm rounded-0 detail-myevent"
+                                        <button type="button" class="button-39 btn-sm rounded-0 detail-myevent"
                                             data-id="{{ $myevent->id }}">
                                             <i class="far fa-file-alt"></i> Inv
                                         </button>
                                     @elseif($myevent->status == 'Unpaid')
                                         {{-- IF UNPAID --}}
-                                        <button type="button" class="btn btn-info btn-sm rounded-0 lanjutkan-transaksi"
+                                        <button type="button" class="button-39 btn-sm bg-success rounded-0 lanjutkan-transaksi"
                                             data-id="{{ $myevent->id }}">
-                                            <i class="fas fa-wallet"></i> Bayar
+                                            <i class="ti ti-coin ti-sm"></i> Bayar
                                         </button>
-                                        <button type="button" class="btn btn-info btn-sm rounded-0 detail-myevent"
-                                            data-id="{{ $myevent->id }}"><i class="fas fa-list"></i></button>
-                                        <button type="button" class="btn btn-danger rounded-0 btn-sm" id="delete-myevent"
+                                        <button type="button" class="button-39 btn-sm text-info rounded-0 detail-myevent"
+                                            data-id="{{ $myevent->id }}"><i class="fas fa-list"></i>
+                                        </button>
+                                        <button type="button" class="button-39 text-danger rounded-0 btn-sm" id="delete-myevent"
                                             data-id="{{ $myevent->id }}">
                                             <i class="fas fa-trash-alt"></i>
                                         </button>
                                     @elseif($myevent->status == 'Pending')
                                         {{-- IF PENDING --}}
-                                        <button type="button" class="btn btn-info btn-sm rounded-0 lanjutkan-transaksi"
+                                        <button type="button" class="button-39 bg-success btn-sm p-2 rounded-0 lanjutkan-transaksi"
                                             data-id="{{ $myevent->id }}">
-                                            <i class="fas fa-wallet"></i> Bayar
+                                            <i class="ti ti-coin ti-sm"></i> Bayar
                                         </button>
-                                        <button type="button" class="btn btn-info rounded-0 btn-sm"
+                                        <button type="button" class="button-39 text-info rounded-0 btn-sm"
                                             data-id="{{ $myevent->id }}"><i class="fas fa-list"
                                                 detail-myevent></i></button>
                                     @elseif($myevent->status == 'Expired')
                                         {{-- IF EXPIRED --}}
-                                        <button type="button" class="btn btn-info btn-sm rounded-0 detail-myevent"
+                                        <button type="button" class="button-39 btn-sm text-info rounded-0 detail-myevent"
                                             data-id="{{ $myevent->id }}"><i class="fas fa-list"></i> Lihat detail</button>
-                                        <button type="button" class="btn btn-danger btn-sm rounded-0" disabled
+                                        <button type="button" class="button-39 text-danger btn-sm rounded-0" disabled
                                             data-id="{{ $myevent->id }}">
                                             <i class="fas fa-trash-alt"></i>
                                         </button>
                                     @else
                                         {{-- ELSE --}}
-                                        <button type="button" class="btn btn-info btn-sm rounded-0"
+                                        <button type="button" class="button-39 btn-sm rounded-0"
                                             data-id="{{ $myevent->id }}">
                                             {{ $myevent->status }}
                                         </button>
-                                        <button type="button" class="btn btn-info btn-sm detail-myevent rounded-0"
+                                        <button type="button" class="button-39 btn-sm detail-myevent rounded-0"
                                             data-id="{{ $myevent->id }}"><i class="fas fa-list"></i></button>
                                     @endif
 
@@ -176,8 +177,8 @@
                 </div>
                 {{-- Pagination --}}
 
-            </div>
-        </div>
+            {{-- </div> --}}
+        {{-- </div> --}}
     </section>
 
     {{-- modal detail form pendaftaran --}}
