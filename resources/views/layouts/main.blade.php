@@ -46,10 +46,11 @@
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/css/datepicker.css" rel="stylesheet"
         type="text/css" />
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.35.0/dist/tabler-icons.min.css" />
 
     <!-- Template Main CSS File -->
     <link href="{{ asset('assets/css/style.css') }}" rel="stylesheet">
-    <link href="{{ asset('assets/css/custom-style.css') }}" rel="stylesheet">
+    <link href="{{ asset('assets/css/custom-style.css?v=22122') }}" rel="stylesheet">
 
     <!-- =======================================================
     * Template Name: Moderna - v2.0.1

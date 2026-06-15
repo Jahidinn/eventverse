@@ -229,9 +229,19 @@
                                 <small>{{ $terbaru->start_date->format('dd-mm-Y') == $terbaru->end_date->format('dd-mm-Y') ? $terbaru->end_date->format('d M Y') : $terbaru->start_date->format('d M Y') . ' - ' . $terbaru->end_date->format('d M Y') }}</small>
                                 <p class="card-text">
                                 <div class="alert alert-info" role="alert">
+                                    
                                     <small>
-                                        <strong><i class="fas fa-tag"></i>
-                                            {{ $terbaru->ticket->first()->ticket_price == 0 ? 'GRATIS!' : ' Rp ' . number_format($terbaru->ticket->first()->ticket_price, 0, ',', '.') }}</strong>
+                                        <strong>
+                                            <i class="fas fa-tag"></i>
+                                            @php
+                                                $firstTicket = $terbaru->ticket->first();
+                                            @endphp
+
+                                            {{ !$firstTicket || $terbaru->ticket_price == 0
+                                                ? 'GRATIS!'
+                                                : 'Rp ' . number_format($terbaru->ticket_price, 0, ',', '.') }}
+                                            
+                                        </strong>
                                     </small>
                                 </div>
                                 </p>

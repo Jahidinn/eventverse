@@ -9,155 +9,155 @@
         </script>
     @endif
 
-    <div class="bg-eventconnect header-hight">
+    <div class="bg-eventconnect header-hight"></div>
 
-    </div>
-    <div class="container pt-4 pb-3 px-0 ">
-        <!-- Stack the columns on mobile by making one full-width and the other half-width -->
-        <div class="row m-0 p-0">
-            <div class="col-md-8 m-0 p-1">
+    <div class="modern-event-detail pt-5 pb-5">
+        <div class="container">
+            <!-- Stack the columns on mobile by making one full-width and the other half-width -->
+            <div class="row g-4">
+                <div class="col-lg-8">
 
-                <div class="card shadow mb-3 mx-1">
-
-                    @php
-                        if ($detailEvent->image == '' || $detailEvent->image == null) {
-                            //Jika gambar kosong
-                            $img = 'assets/default-img/event-images/def-no-img.png';
-                        } else {
-                            $imgPath = 'storage/event-images/' . $detailEvent->image;
-
-                            // Memeriksa apakah file ada
-                            if (file_exists(public_path($imgPath))) {
-                                $img = 'storage/event-images/' . $detailEvent->image;
-                            } else {
-                                // Jika file tidak ada, ganti dengan default
-                                $img = 'assets/default-img/event-images/def-no-img.png';
-                            }
-                        }
-                    @endphp
-
-                    {{-- Gambar / Poster --}}
-                    <div class="view-image-event position-relative">
-                        <img src="{{ asset($img) }}" class="card-img-top" alt="...">
-                        <button class="btn btn-dark rounded-0 position-absolute" data-toggle="modal"
-                            data-target="#fullImageModal"><i class="fas fa-expand"></i></button>
-                    </div>
-
-                    {{-- Detal event --}}
-                    <div class="card-body">
-
-                        {{-- Title / judul --}}
-                        <h6 class="card-title mt-3 mb-0">{{ $detailEvent->title }}</h6>
+                    <div class="event-detail-card modern-card">
 
                         @php
-                            if ($detailEvent->organizer == 'org') {
-                                $penyelenggara = $detailEvent->org->org_name ?? '';
-                                $link = '/organisasi' . '/' . $detailEvent->org->org_id;
-                            } elseif ($detailEvent->organizer == 'individual') {
-                                $penyelenggara = $detailEvent->individual->name ?? '';
-                                $link = '/user' . '/' . $detailEvent->individual->username;
-                            } elseif (
-                                $detailEvent->organizer == null ||
-                                $detailEvent->organizer_id == null ||
-                                $detailEvent->organizer == '' ||
-                                $detailEvent->organizer_id == ''
-                            ) {
-                                $penyelenggara = '';
-                                $link = '';
+                            if ($detailEvent->image == '' || $detailEvent->image == null) {
+                                //Jika gambar kosong
+                                $img = 'assets/default-img/event-images/def-no-img.png';
                             } else {
-                                $penyelenggara = '';
-                                $link = '';
-                            }
+                                $imgPath = 'storage/event-images/' . $detailEvent->image;
 
+                                // Memeriksa apakah file ada
+                                if (file_exists(public_path($imgPath))) {
+                                    $img = 'storage/event-images/' . $detailEvent->image;
+                                } else {
+                                    // Jika file tidak ada, ganti dengan default
+                                    $img = 'assets/default-img/event-images/def-no-img.png';
+                                }
+                            }
                         @endphp
 
-                        {{-- Nama Penyelenggara --}}
-                        <a href="{{ $link }}" class=" mt-2 badge badge-info">
-                            <i
-                                class="fas fa-user-circle mr-1"></i>{{ strlen($penyelenggara) > 40 ? substr($penyelenggara, 0, 40) . ' ...' : $penyelenggara }}
-                        </a>
-                        <hr>
+                        {{-- Gambar / Poster --}}
+                        <div class="event-image-container position-relative overflow-hidden">
+                            <img src="{{ asset($img) }}" class="event-poster-img" alt="Event Poster">
+                            <button class="btn btn-light btn-icon-expand shadow-sm" data-toggle="modal"
+                                data-target="#fullImageModal"><i class="fas fa-expand"></i></button>
+                        </div>
 
-                        <div class="row">
+                        {{-- Detail event --}}
+                        <div class="event-content px-4 py-4">
 
-                            {{-- Lokasi event --}}
-                            <div class="col-md-4 row mt-1">
-                                <div class="col-auto pr-0"><i class="fas fa-map-marker-alt mr-2"></i></div>
-                                <div class="col p-0 pr-1">
-                                    <small>{{ $detailEvent->location_jenis == 'Online' ? 'Online' : $detailEvent->location_detail . ', ' . $detailEvent->location_city . ',  ' . $detailEvent->province->name }}</small>
+                            {{-- Title / judul --}}
+                            <h2 class="event-title mb-3">{{ $detailEvent->title }}</h2>
+
+                            @php
+                                if ($detailEvent->organizer == 'org') {
+                                    $penyelenggara = $detailEvent->org->org_name ?? '';
+                                    $link = '/organisasi' . '/' . $detailEvent->org->org_id;
+                                } elseif ($detailEvent->organizer == 'individual') {
+                                    $penyelenggara = $detailEvent->individual->name ?? '';
+                                    $link = '/user' . '/' . $detailEvent->individual->username;
+                                } elseif (
+                                    $detailEvent->organizer == null ||
+                                    $detailEvent->organizer_id == null ||
+                                    $detailEvent->organizer == '' ||
+                                    $detailEvent->organizer_id == ''
+                                ) {
+                                    $penyelenggara = '';
+                                    $link = '';
+                                } else {
+                                    $penyelenggara = '';
+                                    $link = '';
+                                }
+
+                            @endphp
+
+                            {{-- Nama Penyelenggara --}}
+                            <a href="{{ $link }}" class="organizer-badge mb-3 d-inline-block">
+                                <i
+                                    class="fas fa-user-circle mr-2"></i><span>{{ strlen($penyelenggara) > 40 ? substr($penyelenggara, 0, 40) . ' ...' : $penyelenggara }}</span>
+                            </a>
+
+                            <div class="event-meta-info">
+                                <div class="meta-row">
+                                    {{-- Lokasi event --}}
+                                    <div class="meta-item">
+                                        <i class="fas fa-map-marker-alt"></i>
+                                        <div>
+                                            <span class="meta-label">Lokasi</span>
+                                            <p class="meta-value">{{ $detailEvent->location_jenis == 'Online' ? 'Online' : $detailEvent->location_detail . ', ' . $detailEvent->location_city . ', ' . $detailEvent->province->name }}</p>
+                                        </div>
+                                    </div>
+
+                                    {{-- Tanggal event --}}
+                                    <div class="meta-item">
+                                        <i class="fas fa-calendar-alt"></i>
+                                        <div>
+                                            <span class="meta-label">Tanggal</span>
+                                            <p class="meta-value">
+                                                {{ $detailEvent->start_date == $detailEvent->end_date ? date('d-m-Y', strtotime($detailEvent->start_date)) : date('d-m-Y', strtotime($detailEvent->start_date)) . ' - ' . date('d-m-Y', strtotime($detailEvent->end_date)) }}
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                    {{-- Kategori event --}}
+                                    <div class="meta-item">
+                                        <i class="fas fa-list"></i>
+                                        <div>
+                                            <span class="meta-label">Kategori</span>
+                                            <p class="meta-value">{{ $detailEvent->categories->category }}</p>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
 
-                            {{-- Tanggal event --}}
-                            <div class="col-md-4 row mt-1">
-                                <div class="col-auto pr-0">
-                                    <i class="fas fa-calendar-alt mr-2"></i>
-                                </div>
-                                <div class="col p-0 pr-1">
-                                    <small>
-                                        {{ $detailEvent->start_date == $detailEvent->end_date ? date('d-m-Y', strtotime($detailEvent->start_date)) : date('d-m-Y', strtotime($detailEvent->start_date)) . ' - ' . date('d-m-Y', strtotime($detailEvent->end_date)) }}
+                            <div class="event-actions mt-4">
+                                {{-- Informasi event dibuat --}}
+                                <p class="posted-info">
+                                    <small>Posted
+                                        {{ $detailEvent->created_at->diffForHumans() }}
                                     </small>
+                                </p>
+                                <div class="action-buttons">
+                                    <button class="btn btn-icon btn-light" data-toggle="modal"
+                                        data-target="#shareQrModal" title="Share QR Code">
+                                        <i class="fas fa-qrcode"></i> <span>QR</span>
+                                    </button>
+                                    <button class="btn btn-icon btn-light copyButton" title="Copy Link">
+                                        <i class="fas fa-link"></i> <span>Link</span>
+                                    </button>
+                                    <button class="btn btn-icon btn-light" data-toggle="modal" data-target="#shareModal" title="Share Event">
+                                        <i class="fas fa-share-alt"></i> <span>Share</span>
+                                    </button>
                                 </div>
                             </div>
-
-                            {{-- Kategori event --}}
-                            <div class="col-md-4 row mt-1">
-                                <div class="col-auto pr-0"> <i class="fas fa-list mr-2"></i></div>
-                                <div class="col p-0 pr-1"><small>{{ $detailEvent->categories->category }}</small></div>
-                            </div>
                         </div>
-
-                        <hr>
-
-                        {{-- Informasi event dibuat --}}
-                        <p class="card-text">
-                            <small class="text-muted">Posted
-                                {{ $detailEvent->created_at->diffForHumans() }}
-                            </small>
-                        </p>
-                        <div class="float-right">
-                            <button href="" class="btn btn-outline-info me-2" data-toggle="modal"
-                                data-target="#shareQrModal">
-                                <i class="fas fa-qrcode"></i> <b>QR</b>
-                            </button>
-                            <button href="" class="btn btn-outline-info me-2 copyButton">
-                                <i class="fas fa-link"></i>
-                            </button>
-                            <button href="" class="btn btn-secondary" data-toggle="modal" data-target="#shareModal">
-                                <i class="fas fa-share"></i>
-                            </button>
-                        </div>
-
-
                     </div>
-                </div>
 
-                <div class="card mb-3 mx-1 shadow">
-                    <div class="card-body p-3 p-sm-2 p-md-2 p-lg-3">
+                <div class="modern-card mt-4 mb-4">
+                    <div class="card-body p-4">
 
                         {{-- Pilihan TAB --}}
-                        <div class="col-md-12 row tabs mb-4 text-article">
-                            <div class="col px-0">
-                                <button class="tab-link current w-100 m-0 py-2" data-tab="show-tiket">Tiket
-                                    Pendaftaran</button>
-                            </div>
-                            <div class="col p-0">
-                                <button class="tab-link w-100 py-2" data-tab="show-deskripsi">Deskripsi</button>
-                            </div>
+                        <div class="modern-tabs mb-4">
+                            <button class="tab-link current" data-tab="show-tiket">
+                                <i class="ti ti-ticket ti-sm"></i> Tiket Pendaftaran
+                            </button>
+                            <button class="tab-link" data-tab="show-deskripsi">
+                                <i class="ti ti-list ti-sm"></i> Deskripsi
+                            </button>
                         </div>
 
                         {{-- Tab ticket event --}}
-                        <div id="show-tiket" class="tab-content current p-0 text-article">
-                            <h6 class="card-title">Tiket pendaftaran</h6>
+                        <div id="show-tiket" class="tab-content current">
+                            <h5 class="mb-4">Tiket Pendaftaran</h5>
 
                             {{-- Looping tiket --}}
                             @foreach ($ticketData as $ticket)
-                                <div class="card shadow-sm ticket-card mt-3 rounded-0" id="ticket-example">
-                                    <div class="card-header text-white rounded-0 bg-ticket">
-                                        <small><strong>{{ $ticket->ticket_name }}</strong></small>
+                                <div class="modern-ticket-card">
+                                    <div class="ticket-header">
+                                        <h6 class="ticket-name">{{ $ticket->ticket_name }}</h6>
                                     </div>
 
-                                    <div class="card-body p-3">
+                                    <div class="ticket-body">
                                         @php
                                             $ticketUsed = count($ticketTransaction->where('ticket_id', $ticket->id));
                                             $ticketQuota = $ticket->ticket_quota - $ticketUsed;
@@ -167,60 +167,54 @@
                                             $deadline = $ticket->ticket_deadline;
 
                                         @endphp
-                                        <p class="card-text pt-0">
-                                            <small class="text-muted icon-class">
-                                                <span class="text-secondary">
-                                                    <i class="fas fa-hourglass-end pr-1"></i>
-                                                    Berakhir : <strong>{{ $deadline }}</strong>
-                                                </span>
-                                                <span class="alert alert-success py-1 px-2 ms-1 ml-1">
-                                                    Kuota :
-                                                    @if ($ticketStart > $tanggalSekarang)
-                                                        <strong>0</strong>
-                                                    @else
-                                                        <strong>{{ $ticketQuota }}</strong>
-                                                    @endif
-                                                </span>
-                                            </small>
-                                        </p>
-
-                                        <hr class="dashed">
-                                        <div class="row">
-                                            <div class="col">
-                                                <span class="badge badge-secondary py-2 px-2 rounded-0 ">
-                                                    @if ($ticket->ticket_price == 0 || $ticket->ticket_price == '')
-                                                        <strong><i class="fas fa-tag"></i> GRATIS </strong>
-                                                    @else
-                                                        <strong>
-                                                            <i class="fas fa-tag"></i> Rp
-                                                            {{ number_format($ticket->ticket_price, 0, ',', '.') }}
-                                                        </strong>
-                                                    @endif
-                                                </span>
-                                            </div>
-                                            <div class="col text-right">
-                                                @if ($ticketQuota <= 0)
-                                                    <button class="btn btn-danger bg-none btn-sm ticket-button not-allowed"
-                                                        disabled>Kuota FULL
-                                                    </button>
-                                                @elseif($deadline < $tanggalSekarang)
-                                                    <button class="btn btn-danger bg-none btn-sm ticket-button not-allowed"
-                                                        disabled>Closed!
-                                                    </button>
-                                                @elseif($ticketStart > $tanggalSekarang)
-                                                    <button class="btn btn-info bg-none btn-sm ticket-button not-allowed"
-                                                        disabled>Opening soon!
-                                                    </button>
+                                        <div class="ticket-meta">
+                                            <span class="meta-deadline">
+                                                <i class="fas fa-hourglass-end"></i>
+                                                Berakhir: <strong>{{ $deadline }}</strong>
+                                            </span>
+                                            <span class="meta-quota">
+                                                Kuota:
+                                                @if ($ticketStart > $tanggalSekarang)
+                                                    <strong>0</strong>
                                                 @else
-                                                    <button class="btn btn-success btn-sm ticket-button"
-                                                        data-id="{{ $ticket->id }}"
-                                                        data-event_id="{{ $detailEvent->id }}"
-                                                        data-label_button="{{ $ticket->ticket_button }}">{{ $ticket->ticket_button }}
-                                                        <i class="fas fa-arrow-circle-right"></i>
-                                                    </button>
+                                                    <strong>{{ $ticketQuota }}</strong>
+                                                @endif
+                                            </span>
+                                        </div>
+
+                                        <div class="ticket-footer">
+                                            <div class="ticket-price">
+                                                <i class="fas fa-tag"></i>
+                                                @if ($ticket->ticket_price == 0 || $ticket->ticket_price == '')
+                                                    <strong>GRATIS</strong>
+                                                @else
+                                                    <strong>Rp {{ number_format($ticket->ticket_price, 0, ',', '.') }}</strong>
                                                 @endif
                                             </div>
                                         </div>
+                                        <div class="ticket-footer">
+                                                @if ($ticketQuota <= 0)
+                                                    <button class="btn btn-sm btn-disabled" disabled>
+                                                        <i class="fas fa-ban"></i> Kuota FULL
+                                                    </button>
+                                                @elseif($deadline < $tanggalSekarang)
+                                                    <button class="btn btn-sm btn-disabled" disabled>
+                                                        <i class="fas fa-times-circle"></i> Closed
+                                                    </button>
+                                                @elseif($ticketStart > $tanggalSekarang)
+                                                    <button class="btn btn-sm btn-secondary" disabled>
+                                                        <i class="fas fa-clock"></i> Opening soon
+                                                    </button>
+                                                @else
+                                                    <button class="btn btn-sm btn-primary ticket-button w-full"
+                                                        data-id="{{ $ticket->id }}"
+                                                        data-event_id="{{ $detailEvent->id }}"
+                                                        data-label_button="{{ $ticket->ticket_button }}">
+                                                        {{ $ticket->ticket_button }}
+                                                        <i class="fas fa-arrow-right ms-2"></i>
+                                                    </button>
+                                                @endif
+                                            </div>
 
                                     </div>
                                 </div>
@@ -229,26 +223,22 @@
                         </div>
 
                         {{-- Tab deskripsi --}}
-                        <div id="show-deskripsi" class="tab-content p-0">
+                        <div id="show-deskripsi" class="tab-content">
                             <div>
-                                <h6 class="card-title">Deskripsi</h6>
+                                <h5 class="mb-3">Deskripsi</h5>
                                 <p class="card-text">
                                 <article class="text-article">
                                     {!! $detailEvent->description !!}
                                 </article>
                                 </p>
                             </div>
-                            <hr>
 
-                            <div class="mt-4" hidden>
-                                <h6 class="card-title">Syarat & ketentuan</h6>
+                            <div class="mt-5" hidden>
+                                <h5 class="mb-3">Syarat & ketentuan</h5>
                                 <p class="card-text">
                                 <article class="text-article">
                                     {!! $detailEvent->terms !!}
                                 </article>
-                                </p>
-                                <p class="card-text">
-                                    <small class="text-muted"></small>
                                 </p>
                             </div>
                         </div>
@@ -258,114 +248,127 @@
 
 
             {{-- Info penyelenggara organisasi --}}
-            <div class="col-12 col-md-4 m-0 p-1 ">
-                <div class="card mx-1 shadow">
-                    <div class="card-body text-left">
-                        <h6>Info penyelenggara</h6>
-                        <hr />
+            <div class="col-lg-4">
+                <div class="modern-card organizer-card">
+                    <div class="organizer-header">
+                        <h5>Info Penyelenggara</h5>
+                    </div>
 
-                        @if ($detailEvent->organizer == 'org' && $detailEvent->organizer_id)
-                            {{-- Jika penyelenggar organisasi --}}
-                            @php
-                                if ($detailEvent->org->org_image == '' || $detailEvent->org->org_image == null) {
-                                    $logo = 'assets/default-img/org-images/default-user.jpg';
-                                } else {
+                    @if ($detailEvent->organizer == 'org' && $detailEvent->organizer_id)
+                        {{-- Jika penyelenggar organisasi --}}
+                        @php
+                            if ($detailEvent->org->org_image == '' || $detailEvent->org->org_image == null) {
+                                $logo = 'assets/default-img/org-images/default-user.jpg';
+                            } else {
+                                $logo = 'storage/organization-images/' . $detailEvent->org->org_image;
+
+                                // Cek file ada atau tidak
+                                if (file_exists(public_path($logo))) {
                                     $logo = 'storage/organization-images/' . $detailEvent->org->org_image;
-
-                                    // Cek file ada atau tidak
-                                    if (file_exists(public_path($logo))) {
-                                        $logo = 'storage/organization-images/' . $detailEvent->org->org_image;
-                                    } else {
-                                        // Jika file tidak ada, ganti dengan default
-                                        $logo = 'assets/default-img/org-images/default-user.jpg';
-                                    }
-                                }
-                            @endphp
-
-                            <div id="org-info-logo-container">
-                                <img src="{{ asset($logo) }}" class="org-info-logo">
-                            </div>
-
-                            <a class="mt-3 badge badge-info text-left"
-                                href="/organisasi/{{ $detailEvent->org->org_id }}">
-                                <b>{{ strlen($detailEvent->org->org_name) > 40 ? substr($detailEvent->org->org_name, 0, 40) . ' ...' : $detailEvent->org->org_name }}</b>
-                            </a>
-                            <p class="card-text mt-1 mb-1"><small class="text-muted">Organisasi</small></p>
-
-                            <p class="mb-1">{{ $detailEvent->org->org_contact }}</p>
-                            <p class="mb-1">{{ $detailEvent->org->org_institution }}</p>
-                        @elseif($detailEvent->organizer == 'individual' && $detailEvent->organizer_id)
-                            {{-- Jika penyelenggara individual --}}
-
-                            @php
-                                if (
-                                    $detailEvent->individual->profile_picture == '' ||
-                                    $detailEvent->individual->profile_picture == null
-                                ) {
-                                    $logo = 'assets/default-img/profile-images/default-user.jpg';
                                 } else {
-                                    $logo = 'storage/profile-images/' . $detailEvent->individual->profile_picture;
-
-                                    // Cek file ada atau tidak
-                                    if (file_exists(public_path($logo))) {
-                                        $logo = 'storage/profile-images/' . $detailEvent->individual->profile_picture;
-                                    } else {
-                                        // Jika file tidak ada, ganti dengan default
-                                        $logo = 'assets/default-img/profile-images/default-user.jpg';
-                                    }
+                                    // Jika file tidak ada, ganti dengan default
+                                    $logo = 'assets/default-img/org-images/default-user.jpg';
                                 }
+                            }
+                        @endphp
 
-                            @endphp
+                        <div class="organizer-image">
+                            <img src="{{ asset($logo) }}" class="org-logo" alt="Organization Logo">
+                        </div>
 
+                        <a class="organizer-name"
+                            href="/organisasi/{{ $detailEvent->org->org_id }}">
+                            <h6>{{ strlen($detailEvent->org->org_name) > 40 ? substr($detailEvent->org->org_name, 0, 40) . ' ...' : $detailEvent->org->org_name }}</h6>
+                        </a>
+                        <p class="organizer-type">Organisasi</p>
 
-                            <div id="org-info-logo-container">
-                                <img src="{{ asset($logo) }}" class="org-info-logo">
-                            </div>
+                        <div class="organizer-contact">
+                            <p><i class="fas fa-phone me-2"></i>{{ $detailEvent->org->org_contact }}</p>
+                            <p><i class="fas fa-building me-2"></i>{{ $detailEvent->org->org_institution }}</p>
+                        </div>
+                    @elseif($detailEvent->organizer == 'individual' && $detailEvent->organizer_id)
+                        {{-- Jika penyelenggara individual --}}
 
-                            <a class="badge badge-info mt-3"
-                                href="/user/{{ $detailEvent->individual->username }}">{{ strlen($detailEvent->individual->name) > 40 ? substr($detailEvent->individual->name, 0, 40) . ' ...' : $detailEvent->individual->name }}</a>
+                        @php
+                            if (
+                                $detailEvent->individual->profile_picture == '' ||
+                                $detailEvent->individual->profile_picture == null
+                            ) {
+                                $logo = 'assets/default-img/profile-images/default-user.jpg';
+                            } else {
+                                $logo = 'storage/profile-images/' . $detailEvent->individual->profile_picture;
 
-                            <p class="card-text mt-1 mb-1"><small class="text-muted">Individu</small></p>
+                                // Cek file ada atau tidak
+                                if (file_exists(public_path($logo))) {
+                                    $logo = 'storage/profile-images/' . $detailEvent->individual->profile_picture;
+                                } else {
+                                    // Jika file tidak ada, ganti dengan default
+                                    $logo = 'assets/default-img/profile-images/default-user.jpg';
+                                }
+                            }
 
-                            <p class="mb-1">{{ $detailEvent->individual->email }}</p>
-                            {{-- Mengatasi jika ada info penyelenggara kosong --}}
-                        @else
-                            <div id="org-info-logo-container">
-                                <img src="{{ asset('storage/profile-images') . '/default-user.jpg' }}"
-                                    class="org-info-logo">
-                            </div>
+                        @endphp
 
-                            <a class="badge badge-info mt-3">No info!</a>
-                        @endif
+                        <div class="organizer-image">
+                            <img src="{{ asset($logo) }}" class="org-logo" alt="Profile Picture">
+                        </div>
 
+                        <a class="organizer-name"
+                            href="/user/{{ $detailEvent->individual->username }}">
+                            <h6>{{ strlen($detailEvent->individual->name) > 40 ? substr($detailEvent->individual->name, 0, 40) . ' ...' : $detailEvent->individual->name }}</h6>
+                        </a>
+                        <p class="organizer-type">Individu</p>
+
+                        <div class="organizer-contact">
+                            <p><i class="fas fa-envelope me-2"></i>{{ $detailEvent->individual->email }}</p>
+                        </div>
+                    @else
+                        <div class="organizer-image">
+                            <img src="{{ asset('storage/profile-images') . '/default-user.jpg' }}"
+                                class="org-logo" alt="Default User">
+                        </div>
+
+                        <p class="text-center text-muted">Informasi penyelenggara tidak tersedia</p>
+                    @endif
+                </div>
+
+                <div class="modern-card mt-4 create-event-card">
+                    <div class="card-header">
+                        <h5>Buat Event Mu!</h5>
+                    </div>
+                    <div class="p-3">
+                        <p class="text-muted mb-3">Mulai membuat event eksklusif sekarang</p>
+                        <div class="action-buttons">
+                            <a href="/login" class="btn btn-secondary btn-block">
+                                <i class="fas fa-sign-in-alt mr-2"></i>Login
+                            </a>
+                            <a href="/event/create" class="btn btn-primary btn-block">
+                                <i class="fas fa-plus-circle mr-2"></i>Buat Event
+                            </a>
+                        </div>
                     </div>
                 </div>
 
-                <br />
-
-                <div class="card mx-1 shadow">
-                    <div class="card-body">
-                        <h6>Buat eventmu sekarang!</h6>
-                        <hr />
-                        <a type="button" href="/login" class="btn btn-light">Login</a>
-                        <a type="button" href="/event/create" class="btn btn-dark">Buat!</a>
+                <div class="modern-card mt-4 guide-card">
+                    <div class="card-header">
+                        <h5>Panduan Membuat Event</h5>
                     </div>
-                </div>
-                <br />
-                <div class="card mx-1">
-                    <div class="card-body">
-                        <h6>Bingung? Panduan buat event 👇</h6>
-                        <hr />
-                        <div class="ratio ratio-16x9">
-                            <iframe src="https://www.youtube.com/embed/7PKrnsQUx90?si=WL3EBF8-dPjSyijf"
-                                title="YouTube video" allowfullscreen></iframe>
+                    <div class="p-2">
+                        {{-- <p class="text-muted mb-3">Pelajari cara membuat event yang menarik</p> --}}
+                        <div class="guide-videos">
+                            <div class="ratio ratio-16x9 mb-3">
+                                <iframe src="https://www.youtube.com/embed/7PKrnsQUx90?si=WL3EBF8-dPjSyijf"
+                                    title="YouTube video" allowfullscreen></iframe>
+                            </div>
+                            <div class="ratio ratio-16x9">
+                                <iframe src="https://www.youtube.com/embed/igdg2VMQjn0?si=8bFsDFrRlrQruHmv"
+                                    title="YouTube video" allowfullscreen></iframe>
+                            </div>
                         </div>
-                        <div class="ratio ratio-16x9 mt-3">
-                            <iframe src="https://www.youtube.com/embed/igdg2VMQjn0?si=8bFsDFrRlrQruHmv"
-                                title="YouTube video" allowfullscreen></iframe>
-                        </div>
-                        <div class="mt-3">
-                            <a href="/creator-guide" class="btn btn-info ">Lihat panduan</a>
+                        <div>
+                            <a href="/creator-guide" class="btn btn-outline-primary btn-sm p-2 w-100">
+                            <i class="fas fa-question-circle mr-1"></i>Panduan Lengkap
+                        </a>
                         </div>
                     </div>
                 </div>
@@ -374,107 +377,94 @@
     </div>
 
     {{-- Event terbaru --}}
-    <section class="event-terbaru-section section-bg pt-4 p-0 pb-4" style="background-color: #EFF8FD ">
-        <div class="section-title pb-0">
-            <h2 class="mt-0">Event menarik lainya</h2>
-        </div>
+    <section class="modern-recommended-section pt-4 pb-5 mt-2">
+        <div class="container">
+            <div class="section-header mb-5">
+                <h2>Event Menarik Lainnya</h2>
+                <p class="text-muted">Temukan event-event lain yang mungkin kamu minati</p>
+            </div>
 
-        <div class="container-fluid event-terbaru pt-0 mt-0">
-            @foreach ($recomendedEvents as $moreEvent)
-                <div class="col-md-4 mt-0">
-                    <a href="/{{ $moreEvent->slug }}">
-                        <div class="card profile-card-5 shadow">
+            <div class="event-terbaru m-3">
+                @foreach ($recomendedEvents as $moreEvent)
+                    <div class="pt-3">
+                        <a href="/{{ $moreEvent->slug }}" class="event-card-link">
+                            <div class="modern-event-card">
 
-                            @php
-                                if ($moreEvent->image == '' || $moreEvent->image == null) {
-                                    //Jika gambar kosong
-                                    $imgmoreEvent = 'assets/default-img/event-images/def-img.png';
-                                } else {
-                                    $imgPath = 'storage/event-images/' . $moreEvent->image;
-
-                                    // Memeriksa apakah file ada
-                                    if (file_exists(public_path($imgPath))) {
-                                        $imgmoreEvent = 'storage/event-images/' . $moreEvent->image;
-                                    } else {
-                                        // Jika file tidak ada, ganti dengan default
-                                        $imgmoreEvent = 'assets/default-img/event-images/def-img.png';
-                                    }
-                                }
-                            @endphp
-
-                            {{-- Gambar / poster --}}
-                            <div class="card-img-block">
-                                <img class="card-img-top" src="{{ asset($imgmoreEvent) }}" alt="Card image cap">
-                            </div>
-
-                            {{-- Info lain --}}
-                            <div class="card-body pt-0">
-
-                                {{-- Title / Judul --}}
                                 @php
-                                    if (strlen($moreEvent->title) > 50) {
-                                        $title_moreEvent = substr($moreEvent->title, 0, 50) . ' ...';
+                                    if ($moreEvent->image == '' || $moreEvent->image == null) {
+                                        $imgmoreEvent = 'assets/default-img/event-images/def-no-img.png';
                                     } else {
-                                        $title_moreEvent = $moreEvent->title;
-                                    }
-                                @endphp
-                                <div style="height: 45px">
-                                    <h5 class="card-title pb-0 mb-0">{{ $title_moreEvent }}</h5>
-                                </div>
+                                        $imgPath = 'storage/event-images/' . $moreEvent->image;
 
-                                <hr class="mb-1 mt-1">
-
-                                {{-- Lokasi --}}
-                                <small class="location">
-                                    <i class="fas fa-map-marker-alt mr-2"></i>
-                                    {{ $moreEvent->location_jenis == 'Offline' ? ucwords(strtolower($moreEvent->location_city)) : $moreEvent->location_jenis }}</small>
-                                <br>
-
-                                {{-- Tanggal event --}}
-                                <small>
-                                    <i class="fas fa-clock mr-2"></i>
-                                    {{ $moreEvent->start_date->format('dd-mm-Y') == $moreEvent->end_date->format('dd-mm-Y') ? $moreEvent->end_date->format('d M Y') : $moreEvent->start_date->format('d M Y') . ' - ' . $moreEvent->end_date->format('d M Y') }}</small>
-                                <hr class="mb-1 mt-1">
-
-                                {{-- Harga --}}
-                                <div class="alert alert-info mt-3" role="alert">
-                                    <small>
-                                        <strong><i class="fas fa-tag"></i>
-                                            @php
-                                                $firstTicket = $moreEvent->ticket->first();
-                                            @endphp
-
-                                            {{ !$firstTicket || $firstTicket->ticket_price == 0
-                                                ? 'GRATIS!'
-                                                : 'Rp ' . number_format($firstTicket->ticket_price, 0, ',', '.') }}
-                                                                                        
-                                        </strong>
-                                    </small>
-                                </div>
-
-                                <hr class="mb-1 mt-1">
-
-                                {{-- Penyelenggara --}}
-                                @php
-                                    if ($moreEvent->organizer == 'org') {
-                                        $penyelenggara_moreEvent = $moreEvent->org->org_name ?? '';
-                                    } elseif ($moreEvent->organizer == 'individual') {
-                                        $penyelenggara_moreEvent = $moreEvent->individual->name ?? '';
-                                    } else {
-                                        $penyelenggara_moreEvent = '';
+                                        if (file_exists(public_path($imgPath))) {
+                                            $imgmoreEvent = 'storage/event-images/' . $moreEvent->image;
+                                        } else {
+                                            $imgmoreEvent = 'assets/default-img/event-images/def-no-img.png';
+                                        }
                                     }
                                 @endphp
 
-                                <div class="text-center">
-                                    <small class="event-user">
-                                        {{ $penyelenggara_moreEvent }}
-                                    </small>
+                                <div class="card-image-wrapper">
+                                    <img class="card-image" src="{{ asset($imgmoreEvent) }}" alt="Event Image">
+                                    <div class="overlay"></div>
+                                </div>
+
+                                <div class="card-content">
+
+                                    @php
+                                        if (strlen($moreEvent->title) > 50) {
+                                            $title_moreEvent = substr($moreEvent->title, 0, 50) . ' ...';
+                                        } else {
+                                            $title_moreEvent = $moreEvent->title;
+                                        }
+                                    @endphp
+                                    <div class="mb-2 card-title-wrapper">
+                                        <h5 class="card-title">{{ $title_moreEvent }}</h5>
+                                    </div>
+
+                                    <p class="card-location">
+                                        <i class="fas fa-map-marker-alt"></i>
+                                        {{ $moreEvent->location_jenis == 'Offline' ? ucwords(strtolower($moreEvent->location_city)) : $moreEvent->location_jenis }}
+                                    </p>
+
+                                    <p class="card-date">
+                                        <i class="fas fa-calendar-alt"></i>
+                                        {{ $moreEvent->start_date->format('dd-mm-Y') == $moreEvent->end_date->format('dd-mm-Y') ? $moreEvent->end_date->format('d M Y') : $moreEvent->start_date->format('d M Y') . ' - ' . $moreEvent->end_date->format('d M Y') }}
+                                    </p>
+
+                                    <div class="card-price">
+                                        <i class="fas fa-tag"></i>
+                                        @php
+                                            $firstTicket = $moreEvent->ticket->first();
+                                        @endphp
+
+                                        {{ !$firstTicket || $firstTicket->ticket_price == 0
+                                            ? 'GRATIS!'
+                                            : 'Rp ' . number_format($firstTicket->ticket_price, 0, ',', '.') }}
+
+                                    </div>
+
+                                    @php
+                                        if ($moreEvent->organizer == 'org') {
+                                            $penyelenggara_moreEvent = $moreEvent->org->org_name ?? '';
+                                        } elseif ($moreEvent->organizer == 'individual') {
+                                            $penyelenggara_moreEvent = $moreEvent->individual->name ?? '';
+                                        } else {
+                                            $penyelenggara_moreEvent = '';
+                                        }
+                                    @endphp
+
+                                    <div class="card-organizer">
+                                        <small>
+                                            {{ $penyelenggara_moreEvent }}
+                                        </small>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </a>
-                </div>
-            @endforeach
+                        </a>
+                    </div>
+                @endforeach
+            </div>
         </div>
     </section>
 

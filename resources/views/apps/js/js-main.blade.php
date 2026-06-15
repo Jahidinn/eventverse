@@ -3,16 +3,19 @@
 
     $(document).ready(function() {
 
-        $('.tabs button').click(function() {
-            var tab_id = $(this).attr('data-tab');
+        // Unified tab handler for both old and modern styles
+        const handleTabClick = function() {
+            const tabId = $(this).attr('data-tab');
+            const $tabContainer = $(this).closest('.tabs, .modern-tabs');
 
-            $('.tabs button').removeClass('current');
+            $tabContainer.find('.tab-link, button').removeClass('current');
             $('.tab-content').removeClass('current');
 
             $(this).addClass('current');
-            $("#" + tab_id).addClass('current');
+            $("#" + tabId).addClass('current');
+        };
 
-        })
+        $('.tabs button, .modern-tabs .tab-link').on('click', handleTabClick);
         gridSearch();
 
         $(window).resize(function() {
