@@ -372,41 +372,107 @@
 
     <!-- ======= Why Us Section ======= -->
     <section class="why-us section-bg px-2" data-aos="fade-up" date-aos-delay="200">
-        <div class="container p-4">
+        <div class="container p-4 shadow">
             <div class="text-center">
-                <h5>Kenapa eventhub?</h5>
+                <h5>Mengapa Memilih EventHub?</h5>
+                <p class="text-muted mb-0">
+                    Solusi modern untuk mengelola event secara lebih profesional, efisien, dan terpercaya.
+                </p>
             </div>
+
             <hr>
+
             <div class="mb-3">
                 <ul class="text-article">
-                    <li class="mb-1">Event kamu bisa jadi lebih <b class="text-success">keren & profesional</b>!</li>
-                    <li class="mb-1">Manajemen sistem pendaftaran, ticketing, pembayaran, & data yang simpel.</li>
-                    <li class="mb-1">Tidak perlu urusin data peserta, kita yang urus!</li>
-                    <li class="mb-1">Tidak perlu urus masalaah pembayaran, kita yang urus!</li>
-                    <li class="mb-1">Tersedia berbagai metode pemayaran buat peserta.</li>
-                    <li class="mb-1">Short link event sesuai keinginan.</li>
-                    <li class="mb-1">Menghindari pennipuan dan meningkatkan <b class="text-success">kepercayaan</b>
-                        peserta!</li>
-                    <li class="mb-1">Buat artikel, pengumuman, dan sebagainya dari menu manajemen artikel FREE!</li>
-                    <li class="mb-1">Yang pasti kamu bisa menggunkanan platform eventhub kapanpun dan <span
-                            class="text-success"><b>GRATIS!</b></span>
+                    <li class="mb-2">
+                        Tingkatkan citra event Anda dengan sistem registrasi dan ticketing yang lebih
+                        <strong class="text-success">profesional dan terpercaya</strong>.
+                    </li>
+                    <li class="mb-2">
+                        Kelola pendaftaran peserta, ticketing, pembayaran, check-in, hingga laporan event
+                        dalam satu platform yang terintegrasi.
+                    </li>
+
+                    <li class="mb-2">
+                        Tidak perlu lagi mengelola data peserta secara manual. Seluruh data tersimpan
+                        rapi dan dapat diakses kapan saja melalui dashboard organizer.
+                    </li>
+
+                    <li class="mb-2">
+                        Proses pembayaran ditangani secara otomatis dengan berbagai metode pembayaran
+                        yang memudahkan peserta melakukan transaksi.
+                    </li>
+
+                    <li class="mb-2">
+                        Dilengkapi dengan QR Code Ticketing untuk proses check-in yang lebih cepat,
+                        akurat, dan modern.
+                    </li>
+
+                    <li class="mb-2">
+                        Gunakan URL atau short link event yang lebih singkat, mudah dibagikan,
+                        dan sesuai dengan identitas event Anda.
+                    </li>
+
+                    <li class="mb-2">
+                        Membantu meningkatkan
+                        <strong class="text-success">kepercayaan peserta</strong>
+                        melalui sistem registrasi dan pembayaran yang lebih aman dan transparan.
+                    </li>
+
+                    <li class="mb-2">
+                        Publikasikan artikel, pengumuman, informasi acara, dan berbagai konten lainnya
+                        langsung dari dashboard EventHub tanpa biaya tambahan.
+                    </li>
+
+                    <li class="mb-2">
+                        Pantau statistik peserta, status pembayaran, kehadiran, dan performa event
+                        secara real-time.
+                    </li>
+
+                    <li class="mb-2">
+                        Cocok digunakan untuk seminar, workshop, webinar, pelatihan, kompetisi,
+                        konser, komunitas, hingga event perusahaan.
+                    </li>
+
+                    <li class="mb-2">
+                        Dan yang terpenting, Anda dapat menggunakan EventHub kapan saja dengan
+                        <strong class="text-success">gratis</strong> untuk memulai event Anda.
                     </li>
                 </ul>
             </div>
+
             <hr>
             <div class="text-center">
                 <h5>Apa itu platform eventhub.web.id?</h5>
             </div>
             <hr>
             <div class="text-center">
-                <p class="text-article">
-                    <b>Eventhub.web.id</b> merupakan platform Ticketing Management Sistem yang didirikan oleh <b>PT
-                        Konektivitas Tanpa Batas</b> dan dikelola oleh <b>ILB media</b> (IG @Info.lomba.beasiswa) yang
-                    menyediakan solusi teknologi dalam mendukung penyelenggaraan event mulai dari distribusi tiket,
-                    manajemen pendaftaran, pembayaran, hingga penyediaan report/laporan akhir event.
-                </p>
-                <a href="/about-us" class="btn btn-info rounded-0">Baca selengkapnya ...</a>
-            </div>
+
+<p class="text-article">
+    <strong>EventHub Web ID</strong> adalah platform manajemen event dan ticketing online yang dikembangkan oleh
+    <strong>PT Konektivitas Tanpa Batas</strong> dan dikelola bersama oleh
+    <strong>ILB Media (Info Lomba & Beasiswa)</strong> sebagai media informasi dan promosi event.
+</p>
+
+<p class="text-article">
+    Kami menyediakan solusi teknologi terintegrasi untuk membantu penyelenggara mengelola event secara lebih
+    profesional, efisien, dan terpercaya. Mulai dari registrasi peserta, penjualan tiket online,
+    pengelolaan pembayaran, QR Code check-in, penerbitan sertifikat digital, hingga laporan dan analisis event,
+    seluruh proses dapat dikelola dalam satu platform yang mudah digunakan.
+</p>
+
+<p class="text-article">
+    EventHub hadir untuk membantu komunitas, organisasi, institusi pendidikan, perusahaan,
+    maupun penyelenggara acara dalam menghadirkan pengalaman event yang lebih modern,
+    terstruktur, dan berorientasi pada kemudahan peserta.
+</p>
+
+<a href="/about-us" class="btn btn-info rounded-0 px-4">
+    Pelajari Lebih Lanjut
+</a>
+
+</div>
+
 
         </div>
     </section>
