@@ -299,7 +299,36 @@
             <h2 class="mt-0">Event Pilihan</h2>
         </div>
 
+        @if($eventPilihan->isEmpty())
+
+            <style>
+                .empty-state{
+                        background:#fff;
+                        border-radius:20px;
+                        padding:30px;
+                        text-align:center;
+                        box-shadow:0 4px 20px rgba(0,0,0,.05);
+                    }
+            </style>
+
+            <div class="container empty-state mx-auto mt-4">
+
+                <h5>Belum ada event pilihan 🎉</h5>
+
+                <p class="text-muted mb-3">
+                    Promosikan eventmu sekarang!.
+                </p>
+
+                <a href="/event/create" class="button-40">
+                    Promosikan Event
+                </a>
+
+            </div>
+
+        @endif
+
         <div class="container-fluid event-terbaru pt-0 mt-0">
+
             @foreach ($eventPilihan as $pilihan)
                 <div class="col-md-4 mt-0">
                     <a href="/{{ $pilihan->slug }}">
@@ -391,7 +420,7 @@
 
 
     <!-- ======= Why Us Section ======= -->
-    <section class="why-us px-2 py-4">
+    <section class="event-terbaru-setion p-0">
 
         <style>
 
@@ -555,7 +584,7 @@
 
         </style>
 
-        <div class="container feature-section">
+        <div class=" feature-section">
 
             <div class="text-center">
 
