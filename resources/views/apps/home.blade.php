@@ -391,110 +391,306 @@
 
 
     <!-- ======= Why Us Section ======= -->
-    <section class="why-us section-bg px-2" data-aos="fade-up" date-aos-delay="200">
-        <div class="container p-4 shadow">
+    <section class="why-us px-2 py-4">
+
+        <style>
+
+        .feature-section{
+
+            background:#fff;
+
+            border-radius:28px;
+
+            padding:40px 30px;
+
+            box-shadow:
+                0 10px 40px rgba(0,0,0,.05);
+        }
+
+        .section-title{
+
+            font-size:22px;
+
+            font-weight:700;
+
+            color:#0f172a;
+        }
+
+        .section-subtitle{
+
+            color:#64748b;
+
+            max-width:700px;
+
+            margin:auto;
+        }
+
+        .feature-grid{
+
+            display:grid;
+
+            grid-template-columns:
+                repeat(auto-fit,minmax(250px,1fr));
+
+            gap:18px;
+
+            margin-top:35px;
+        }
+
+        .feature-card{
+
+            background:#fff;
+
+            border:1px solid #eef2f7;
+
+            border-radius:20px;
+
+            padding:22px;
+
+            transition:.25s;
+        }
+
+        .feature-card:hover{
+
+            transform:translateY(-4px);
+
+            box-shadow:
+                0 10px 25px rgba(0,0,0,.06);
+        }
+
+        .feature-icon{
+
+            width:52px;
+            height:52px;
+
+            border-radius:16px;
+
+            display:flex;
+            align-items:center;
+            justify-content:center;
+
+            margin-bottom:14px;
+
+            font-size:22px;
+
+            background:rgba(59,130,246,.08);
+
+            color:#2563eb;
+        }
+
+        .feature-title{
+
+            font-size:17px;
+
+            font-weight:700;
+
+            color:#0f172a;
+
+            margin-bottom:8px;
+        }
+
+        .feature-desc{
+
+            font-size:14px;
+
+            color:#64748b;
+
+            margin-bottom:0;
+        }
+
+        .about-card{
+
+            margin-top:40px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #f8fafc,
+                    #ffffff
+                );
+
+            border-radius:24px;
+
+            padding:35px;
+
+            border:1px solid #eef2f7;
+        }
+
+        .about-title{
+
+            font-size:22px;
+
+            font-weight:700;
+
+            color:#0f172a;
+        }
+
+        .about-desc{
+
+            color:#64748b;
+
+            line-height:1.9;
+        }
+
+        .about-button{
+
+            margin-top:15px;
+        }
+
+        @media(max-width:768px){
+
+            .feature-section{
+                padding:25px 20px;
+            }
+
+            .section-title{
+                font-size:20px;
+            }
+
+            .about-title{
+                font-size:20px;
+            }
+
+        }
+
+        </style>
+
+        <div class="container feature-section">
+
             <div class="text-center">
-                <h5>Mengapa Memilih EventHub?</h5>
-                <p class="text-muted mb-0">
-                    Solusi modern untuk mengelola event secara lebih profesional, efisien, dan terpercaya.
+
+                <h3 class="section-title">
+                    Mengapa Memilih EventHub?
+                </h3>
+
+                <p class="section-subtitle">
+                    Platform manajemen event modern untuk membantu penyelenggara mengelola registrasi, ticketing, pembayaran, dan peserta dalam satu dashboard terintegrasi.
                 </p>
+
             </div>
 
-            <hr>
+            <div class="feature-grid">
 
-            <div class="mb-3">
-                <ul class="text-article">
-                    <li class="mb-2">
-                        Tingkatkan citra event Anda dengan sistem registrasi dan ticketing yang lebih
-                        <strong class="text-success">profesional dan terpercaya</strong>.
-                    </li>
-                    <li class="mb-2">
-                        Kelola pendaftaran peserta, ticketing, pembayaran, check-in, hingga laporan event
-                        dalam satu platform yang terintegrasi.
-                    </li>
+                <div class="feature-card">
 
-                    <li class="mb-2">
-                        Tidak perlu lagi mengelola data peserta secara manual. Seluruh data tersimpan
-                        rapi dan dapat diakses kapan saja melalui dashboard organizer.
-                    </li>
+                    <div class="feature-icon">
+                        <i class="ti ti-ticket"></i>
+                    </div>
 
-                    <li class="mb-2">
-                        Proses pembayaran ditangani secara otomatis dengan berbagai metode pembayaran
-                        yang memudahkan peserta melakukan transaksi.
-                    </li>
+                    <div class="feature-title">
+                        Ticketing Profesional
+                    </div>
 
-                    <li class="mb-2">
-                        Dilengkapi dengan QR Code Ticketing untuk proses check-in yang lebih cepat,
-                        akurat, dan modern.
-                    </li>
+                    <p class="feature-desc">
+                        Tingkatkan citra event dengan sistem registrasi dan ticketing yang lebih profesional dan terpercaya.
+                    </p>
 
-                    <li class="mb-2">
-                        Gunakan URL atau short link event yang lebih singkat, mudah dibagikan,
-                        dan sesuai dengan identitas event Anda.
-                    </li>
+                </div>
 
-                    <li class="mb-2">
-                        Membantu meningkatkan
-                        <strong class="text-success">kepercayaan peserta</strong>
-                        melalui sistem registrasi dan pembayaran yang lebih aman dan transparan.
-                    </li>
+                <div class="feature-card">
 
-                    <li class="mb-2">
-                        Publikasikan artikel, pengumuman, informasi acara, dan berbagai konten lainnya
-                        langsung dari dashboard EventHub tanpa biaya tambahan.
-                    </li>
+                    <div class="feature-icon">
+                        <i class="ti ti-credit-card"></i>
+                    </div>
 
-                    <li class="mb-2">
-                        Pantau statistik peserta, status pembayaran, kehadiran, dan performa event
-                        secara real-time.
-                    </li>
+                    <div class="feature-title">
+                        Pembayaran Otomatis
+                    </div>
 
-                    <li class="mb-2">
-                        Cocok digunakan untuk seminar, workshop, webinar, pelatihan, kompetisi,
-                        konser, komunitas, hingga event perusahaan.
-                    </li>
+                    <p class="feature-desc">
+                        Mendukung berbagai metode pembayaran dengan proses transaksi yang cepat dan aman.
+                    </p>
 
-                    <li class="mb-2">
-                        Dan yang terpenting, Anda dapat menggunakan EventHub kapan saja dengan
-                        <strong class="text-success">gratis</strong> untuk memulai event Anda.
-                    </li>
-                </ul>
+                </div>
+
+                <div class="feature-card">
+
+                    <div class="feature-icon">
+                        <i class="ti ti-qrcode"></i>
+                    </div>
+
+                    <div class="feature-title">
+                        QR Check-In
+                    </div>
+
+                    <p class="feature-desc">
+                        Check-in peserta lebih cepat menggunakan QR Code Ticketing yang modern dan akurat.
+                    </p>
+
+                </div>
+
+                <div class="feature-card">
+
+                    <div class="feature-icon">
+                        <i class="ti ti-users"></i>
+                    </div>
+
+                    <div class="feature-title">
+                        Kelola Peserta
+                    </div>
+
+                    <p class="feature-desc">
+                        Semua data peserta tersimpan rapi dan dapat diakses kapan saja dari dashboard organizer.
+                    </p>
+
+                </div>
+
+                <div class="feature-card">
+
+                    <div class="feature-icon">
+                        <i class="ti ti-chart-bar"></i>
+                    </div>
+
+                    <div class="feature-title">
+                        Statistik Real-Time
+                    </div>
+
+                    <p class="feature-desc">
+                        Pantau peserta, pembayaran, kehadiran, dan performa event secara langsung.
+                    </p>
+
+                </div>
+
+                <div class="feature-card">
+
+                    <div class="feature-icon">
+                        <i class="ti ti-link"></i>
+                    </div>
+
+                    <div class="feature-title">
+                        Short Link Event
+                    </div>
+
+                    <p class="feature-desc">
+                        Bagikan event dengan URL yang lebih singkat dan mudah diingat oleh peserta.
+                    </p>
+
+                </div>
+
             </div>
 
-            <hr>
-            <div class="text-center">
-                <h5>Apa itu platform eventhub.web.id?</h5>
+            <div class="about-card">
+
+                <h3 class="about-title">
+                    Apa itu EventHub?
+                </h3>
+
+                <p class="about-desc">
+                    EventHub adalah platform manajemen event dan ticketing online yang membantu komunitas, organisasi, institusi pendidikan, dan perusahaan mengelola event secara lebih profesional.
+                </p>
+
+                <p class="about-desc">
+                    Mulai dari registrasi peserta, penjualan tiket, pembayaran online, QR Code check-in, sertifikat digital, hingga laporan dan analisis event dapat dikelola dalam satu dashboard yang mudah digunakan.
+                </p>
+
+                <a href="/about-us" class="button-40 about-button">
+                    Pelajari Lebih Lanjut
+                </a>
+
             </div>
-            <hr>
-            <div class="text-center">
-
-<p class="text-article">
-    <strong>EventHub Web ID</strong> adalah platform manajemen event dan ticketing online yang dikembangkan oleh
-    <strong>PT Konektivitas Tanpa Batas</strong> dan dikelola bersama oleh
-    <strong>ILB Media (Info Lomba & Beasiswa)</strong> sebagai media informasi dan promosi event.
-</p>
-
-<p class="text-article">
-    Kami menyediakan solusi teknologi terintegrasi untuk membantu penyelenggara mengelola event secara lebih
-    profesional, efisien, dan terpercaya. Mulai dari registrasi peserta, penjualan tiket online,
-    pengelolaan pembayaran, QR Code check-in, penerbitan sertifikat digital, hingga laporan dan analisis event,
-    seluruh proses dapat dikelola dalam satu platform yang mudah digunakan.
-</p>
-
-<p class="text-article">
-    EventHub hadir untuk membantu komunitas, organisasi, institusi pendidikan, perusahaan,
-    maupun penyelenggara acara dalam menghadirkan pengalaman event yang lebih modern,
-    terstruktur, dan berorientasi pada kemudahan peserta.
-</p>
-
-<a href="/about-us" class="btn btn-info rounded-0 px-4">
-    Pelajari Lebih Lanjut
-</a>
-
-</div>
-
 
         </div>
-    </section>
+
+        </section>
     <!-- End Why Us Section -->
 @endsection
