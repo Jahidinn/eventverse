@@ -3,184 +3,483 @@
 @section('content')
     <!-- Content Header (Page header) -->
     <section class="content-header pb-0">
-        <div class="alert alert-dark bg-dashboard text-white" role="alert">
-            <strong>LAPORAN TRANSAKSI</strong> (Penyelenggara)
+        <div class="page-header-modern mb-3">
+            <div class="page-header-left">
+
+                <div class="page-header-icon">
+                    <i class="ti ti-file-dollar"></i>
+                </div>
+
+                <h2 class="page-header-title">
+                    LAPORAN TRANSAKSI
+                </h2>
+
+            </div>
         </div>
     </section>
 
     <!-- Main content -->
     <section class="content">
 
-        <!-- Default box -->
-        <div class="card">
-            <div class="card-header">
-                <h3 class="card-title manajemen-event-title">Data transaksi event kamu! <i class="fas fa-paper-plane"></i>
-                </h3>
+<style>
+
+.search-modern{
+    height:50px;
+    border:none;
+    border-radius:16px;
+    background:#fff;
+    box-shadow:0 4px 20px rgba(0,0,0,.06);
+    padding-left:18px;
+}
+
+.search-modern:focus{
+    box-shadow:0 0 0 4px rgba(59,130,246,.08);
+}
+
+.finance-card{
+    background:#fff;
+    border:none;
+    border-radius:22px;
+    overflow:hidden;
+    box-shadow:0 4px 20px rgba(0,0,0,.06);
+    transition:.25s;
+    margin-bottom:18px;
+}
+
+.finance-card:hover{
+    transform:translateY(-3px);
+    box-shadow:0 14px 40px rgba(0,0,0,.10);
+}
+
+.finance-body{
+    padding:22px;
+}
+
+.finance-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+    gap:10px;
+}
+
+.finance-title{
+    font-size:18px;
+    font-weight:700;
+    color:#0f172a;
+    line-height:1.5;
+    transition:.2s;
+}
+
+.finance-header:hover .finance-title{
+    color:#2563eb;
+}
+
+.balance-card{
+    margin-top:16px;
+    padding:18px;
+    border-radius:18px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #f0fdf4,
+            #dcfce7
+        );
+}
+
+.balance-label{
+    font-size:13px;
+    color:#15803d;
+    font-weight:600;
+}
+
+.balance-value{
+    font-size:30px;
+    font-weight:700;
+    color:#14532d;
+    line-height:1.2;
+}
+
+.finance-toolbar{
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+    margin-top:18px;
+}
+
+.finance-chip{
+    display:flex;
+    align-items:center;
+    gap:6px;
+
+    padding:8px 14px;
+
+    border-radius:999px;
+
+    font-size:13px;
+    font-weight:600;
+}
+
+.finance-chip-green{
+    background:rgba(16,185,129,.08);
+    color:#059669;
+}
+
+.finance-chip-blue{
+    background:rgba(59,130,246,.08);
+    color:#2563eb;
+}
+
+.finance-chip-action{
+    border:none;
+    background:#f8fafc;
+
+    color:#475569;
+
+    transition:.2s;
+}
+
+.finance-chip-action:hover{
+    background:#eef2ff;
+}
+
+.finance-chip-wd{
+    border:none;
+    background:#2dcd68;
+
+    color:#ffffff;
+
+    transition:.2s;
+}
+
+.finance-chip-wd:hover{
+    background:#26b159;
+}
+
+
+.mobile-hide{
+    display:inline;
+}
+
+@media(max-width:768px){
+
+    .finance-toolbar{
+        display:grid;
+        grid-template-columns:
+            repeat(4,1fr);
+    }
+
+    .mobile-hide{
+        display:none;
+    }
+
+    .finance-chip{
+        justify-content:center;
+        padding:10px;
+    }
+}
+
+.finance-chip{
+    display:flex;
+    align-items:center;
+    gap:6px;
+
+    padding:8px 14px;
+
+    border-radius:999px;
+
+    font-size:13px;
+    font-weight:600;
+}
+
+.finance-chip-green{
+    background:rgba(16,185,129,.08);
+    color:#059669;
+}
+
+.finance-chip-blue{
+    background:rgba(59,130,246,.08);
+    color:#2563eb;
+}
+
+
+.action-text{
+    margin-left:4px;
+}
+
+.empty-state{
+    background:#fff;
+    border-radius:20px;
+    padding:30px;
+    text-align:center;
+    box-shadow:0 4px 20px rgba(0,0,0,.05);
+}
+
+@media(max-width:768px){
+
+    .finance-header{
+        flex-direction:column;
+        align-items:flex-start;
+    }
+
+    .balance-value{
+        font-size:22px;
+    }
+
+    .finance-actions{
+        display:grid;
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .finance-actions .btn{
+        width:100%;
+        display:flex;
+        justify-content:center;
+        align-items:center;
+    }
+
+    .action-text{
+        display:none;
+    }
+}
+
+</style>
+
+<div class="card-body px-0 pt-3 bg-card-blue">
+
+    <div class="manajemen-event-box">
+
+        <form action="" method="GET" {{ $listEvent->isEmpty() ? 'hidden' : '' }}>
+
+            <div class="mb-4">
+
+                <input
+                    class="form-control search-modern shadow-none"
+                    name="key"
+                    type="search"
+                    placeholder="🔍 Cari event..."
+                    value="{{ request('key') }}">
+
             </div>
 
-            <div class="card-body px-2 pt-3 bg-card-blue">
-                <div class="table-responsive py-0 manajemen-event-box">
-                    <form action="" method="GET" {{ $listEvent->isEmpty() ? 'hidden' : '' }}>
-                        <div class="p-0 form-inline mb-4">
-                            <input class="form-control col shadow-none" name="key" type="search"
-                                placeholder="Cari event ..." value="{{ request('key') }}">
-                        </div>
-                    </form>
+        </form>
 
-                    @if ($listEvent->isEmpty())
-                        <div class="alert alert-warning" role="alert">
-                            Wah kamu belum <b>punya event</b> sob! <a href="/event/create"
-                                class="text-info text-decoration-none">Buat event <i class="fas fa-paper-plane"></i></a>
-                        </div>
-                    @endif
+        @if ($listEvent->isEmpty())
 
-                    @foreach ($listEvent as $event)
-                        <div class="card pb-2">
-                            <div class="col-md-12 row card-body px-3 pb-2">
-                                <div class="col-12">
+            <div class="empty-state">
 
-                                    @php
+                <h5>Belum ada event 🎉</h5>
 
-                                        //Biaya admin untuk customer
-                                        $biayaAdmin = config('app.biaya_admin');
+                <p class="text-muted mb-3">
+                    Kamu belum mempunyai event.
+                </p>
 
-                                        //Total transaksi sukses
-                                        $totalPeserta = App\Models\Transaction::where('event_id', $event->id)
-                                            ->where('status', 'Paid')
-                                            ->count();
+                <a href="/event/create" class="button-40">
+                    <i class="ti ti-plus"></i>
+                    Buat Event
+                </a>
 
-                                        //Total biaya admin
-                                        $biayaAdminPeserta = $biayaAdmin * $totalPeserta;
+            </div>
 
-                                        //Total dana sebelum dikurangi biaya admin
-                                        $totalTransaksi = App\Models\Transaction::where('event_id', $event->id)
-                                            ->where('status', 'Paid')
-                                            ->sum('total_price');
+        @endif
 
-                                        //Pengurangan total dana dikurangi biaya admin dari user (Total dana masuk)
-                                        $totalDana = $totalTransaksi - $biayaAdminPeserta;
+        @foreach ($listEvent as $event)
 
-                                        $totalTiket = App\Models\Ticket::where('event_id', $event->id)->count();
+            @php
 
-                                        //Mengkategorikan dana berdasarkan metode pembayaran
-                                        //Metode BANK TRANSFER (VA)
-                                        $qty_bank_tf = App\Models\Transaction::where('event_id', $event->id)
-                                            ->where('status', 'Paid')
-                                            ->where('payment_type', 'bank_transfer')
-                                            ->count();
+                //Biaya admin untuk customer
+                $biayaAdmin = config('app.biaya_admin');
 
-                                        $dana_bank_tf =
-                                            App\Models\Transaction::where('event_id', $event->id)
-                                                ->where('status', 'Paid')
-                                                ->where('payment_type', 'bank_transfer')
-                                                ->sum('total_price') -
-                                            $biayaAdmin * $qty_bank_tf;
+                //Total transaksi sukses
+                $totalPeserta = App\Models\Transaction::where('event_id', $event->id)
+                    ->where('status', 'Paid')
+                    ->count();
 
-                                        // Bank TF : 1.5% + 4500 per transaksi
-                                        $admin_bank_tf = 4500 * $qty_bank_tf + (1.5 / 100) * $dana_bank_tf;
+                //Total biaya admin
+                $biayaAdminPeserta = $biayaAdmin * $totalPeserta;
 
-                                        $total_dana_bank_tf = $dana_bank_tf - $admin_bank_tf;
+                //Total dana sebelum dikurangi biaya admin
+                $totalTransaksi = App\Models\Transaction::where('event_id', $event->id)
+                    ->where('status', 'Paid')
+                    ->sum('total_price');
 
-                                        //Metode CREDIT CARD
+                //Pengurangan total dana dikurangi biaya admin dari user
+                $totalDana = $totalTransaksi - $biayaAdminPeserta;
 
-                                        $qty_credit_card = App\Models\Transaction::where('event_id', $event->id)
-                                            ->where('status', 'Paid')
-                                            ->where('payment_type', 'credit_card')
-                                            ->count();
+                $totalTiket = App\Models\Ticket::where('event_id', $event->id)->count();
 
-                                        $dana_credit_card =
-                                            App\Models\Transaction::where('event_id', $event->id)
-                                                ->where('status', 'Paid')
-                                                ->where('payment_type', 'credit_card')
-                                                ->sum('total_price') -
-                                            $biayaAdmin * $qty_credit_card;
+                $qty_bank_tf = App\Models\Transaction::where('event_id', $event->id)
+                    ->where('status', 'Paid')
+                    ->where('payment_type', 'bank_transfer')
+                    ->count();
 
-                                        //Credit card : 3.5% + 2500 per transaksi
-                                        $admin_credit_card = 2500 * $qty_credit_card + (3.5 / 100) * $dana_credit_card;
+                $dana_bank_tf =
+                    App\Models\Transaction::where('event_id', $event->id)
+                        ->where('status', 'Paid')
+                        ->where('payment_type', 'bank_transfer')
+                        ->sum('total_price') -
+                    $biayaAdmin * $qty_bank_tf;
 
-                                        $total_dana_credit_card = $dana_credit_card - $admin_credit_card;
+                $admin_bank_tf = 4500 * $qty_bank_tf + (1.5 / 100) * $dana_bank_tf;
 
-                                        //Metode Lain (Qris, Gopay, Shopeepay, Dana, Linkaja)
+                $total_dana_bank_tf = $dana_bank_tf - $admin_bank_tf;
 
-                                        $qty_lain = App\Models\Transaction::where('event_id', $event->id)
-                                            ->where('status', 'Paid')
-                                            ->whereNotIn('payment_type', ['bank_transfer', 'credit_card'])
-                                            ->count();
+                $qty_credit_card = App\Models\Transaction::where('event_id', $event->id)
+                    ->where('status', 'Paid')
+                    ->where('payment_type', 'credit_card')
+                    ->count();
 
-                                        $dana_lain =
-                                            App\Models\Transaction::where('event_id', $event->id)
-                                                ->where('status', 'Paid')
-                                                ->whereNotIn('payment_type', ['bank_transfer', 'credit_card'])
-                                                ->sum('total_price') -
-                                            $biayaAdmin * $qty_lain;
+                $dana_credit_card =
+                    App\Models\Transaction::where('event_id', $event->id)
+                        ->where('status', 'Paid')
+                        ->where('payment_type', 'credit_card')
+                        ->sum('total_price') -
+                    $biayaAdmin * $qty_credit_card;
 
-                                        // Pembayaran Lain : 3% pertransaksi / per tiket
-                                        $admin_lain = (3 / 100) * $dana_lain;
+                $admin_credit_card = 2500 * $qty_credit_card + (3.5 / 100) * $dana_credit_card;
 
-                                        $total_dana_lain = $dana_lain - $admin_lain;
+                $total_dana_credit_card = $dana_credit_card - $admin_credit_card;
 
-                                        //Pengurangan biaya admin penyelenggara
-                                        $eventConnectFee = $admin_bank_tf + $admin_credit_card + $admin_lain;
+                $qty_lain = App\Models\Transaction::where('event_id', $event->id)
+                    ->where('status', 'Paid')
+                    ->whereNotIn('payment_type', ['bank_transfer', 'credit_card'])
+                    ->count();
 
-                                        // penarikan dana;
-                                        $danaDitarik = App\Models\WithdrawData::where('event_id', $event->id)
-                                            ->whereIn('status', ['Sukses', 'Proses'])
-                                            ->sum('amount');
+                $dana_lain =
+                    App\Models\Transaction::where('event_id', $event->id)
+                        ->where('status', 'Paid')
+                        ->whereNotIn('payment_type', ['bank_transfer', 'credit_card'])
+                        ->sum('total_price') -
+                    $biayaAdmin * $qty_lain;
 
-                                        $danaBersih = $total_dana_bank_tf + $total_dana_credit_card + $total_dana_lain - $danaDitarik;
+                $admin_lain = (3 / 100) * $dana_lain;
 
-                                        $title = $event->title;
-                                        if (strlen($title) > 61) {
-                                            $title = substr($title, 0, 61) . '...';
-                                        }
-                                    @endphp
-                                    <span class="text-info title-manage-event"><b>{{ $title }}</b></span>
+                $total_dana_lain = $dana_lain - $admin_lain;
 
-                                    <br>
+                $eventConnectFee = $admin_bank_tf + $admin_credit_card + $admin_lain;
 
-                                    <button type="button" class="btn p-0 shadow-none" id="detailReportButton"
-                                        data-toggle="tooltip" data-placement="bottom" title="Klik untuk Lihat detail"
-                                        data-id="{{ $event->id }}">
-                                        <small>
-                                            <b class="text-success"><i class="fas fa-check-circle"></i> Rp
-                                                <span
-                                                    id="view-total-dana-button{{ $event->id }}">{{ number_format($danaBersih, 0, ',', '.') }}</span></b>
-                                        </small>
-                                    </button>
-                                    {{-- <button type="button" class="btn dana btn-sm mt-1 px-3" data-id="{{ $event->id }}"
-                                        data-event="{{ $event->title }}">
-                                        <i class="fas fa-wallet"></i> <b></b>
-                                    </button> --}}
-                                </div>
+                $danaDitarik = App\Models\WithdrawData::where('event_id', $event->id)
+                    ->whereIn('status', ['Sukses', 'Proses'])
+                    ->sum('amount');
+
+                $danaBersih = $total_dana_bank_tf + $total_dana_credit_card + $total_dana_lain - $danaDitarik;
+
+                $title = $event->title;
+                if (strlen($title) > 61) {
+                    $title = substr($title, 0, 61) . '...';
+                }
+
+            @endphp
+
+            <div class="card finance-card">
+
+                <div class="finance-body">
+
+                    <div class="finance-header">
+
+                        <button
+                            type="button"
+                            class="btn p-0 text-left shadow-none"
+                            id="detailReportButton"
+                            data-toggle="tooltip"
+                            data-placement="bottom"
+                            title="Lihat Detail Laporan"
+                            data-id="{{ $event->id }}">
+
+                            <div class="finance-title">
+
+                                {{ $title }}
+
+                                <i class="ti ti-chevron-right text-muted ml-1"></i>
+
                             </div>
 
-                            <hr class="mx-2 my-2">
-                            {{-- Button edit tiket & form --}}
-                            <div class="col-md-12 pb-2 card-body pt-1 pb-2 px-3">
+                        </button>
 
-                                <button type="button" class="btn transaction-button btn-sm px-3 withdraw-button"
-                                    data-id="{{ $event->id }}" data-event="{{ $event->title }}">
-                                    <i class="fas fa-download"></i> Tarik Dana
-                                </button>
-
-                                <button type="button" class="btn btn-sm px-3 transaction-button history-withdraw"
-                                    data-id="{{ $event->id }}" data-event="{{ $event->title }}">
-                                    <i class="fas fa-history"></i> Riwayat
-                                </button>
-                            </div>
-                        </div>
-                    @endforeach
-
-                    {{-- Pagination --}}
-                    <div class="d-flex justify-content-center">
-                        {{ $listEvent->links() }}
                     </div>
-                    {{-- Pagination --}}
+
+                    <div class="balance-card">
+
+                        <div class="balance-label">
+                            Dana Tersedia
+                        </div>
+
+                        <div class="balance-value">
+
+                            Rp
+                            <span id="view-total-dana-button{{ $event->id }}">
+                                {{ number_format($danaBersih, 0, ',', '.') }}
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                    <div class="finance-toolbar">
+
+                        <div class="finance-chip finance-chip-green">
+
+                            <i class="ti ti-users ti-sm"></i>
+
+                            <span class="mobile-hide">
+                                {{ number_format($totalPeserta,0,',','.') }}
+                                Peserta
+                            </span>
+
+                        </div>
+
+                        <div class="finance-chip finance-chip-blue">
+
+                            <i class="ti ti-ticket ti-sm"></i>
+
+                            <span class="mobile-hide">
+                                {{ number_format($totalTiket,0,',','.') }}
+                                Tiket
+                            </span>
+
+                        </div>
+
+                        <button
+                            type="button"
+                            class="finance-chip finance-chip-action history-withdraw"
+                            data-id="{{ $event->id }}"
+                            data-event="{{ $event->title }}">
+
+                            <i class="ti ti-history ti-sm"></i>
+
+                            <span class="mobile-hide">History</span>
+
+                        </button>
+
+                        <button
+                            type="button"
+                            class="finance-chip finance-chip-wd withdraw-button"
+                            data-id="{{ $event->id }}"
+                            data-event="{{ $event->title }}">
+
+                            <i class="ti ti-cash-banknote-move ti-sm"></i>
+
+                            Withdraw
+
+                        </button>
+
+                    </div>
 
                 </div>
+
             </div>
+
+        @endforeach
+
+        <div class="d-flex justify-content-center mt-4">
+            {{ $listEvent->links() }}
         </div>
-    </section>
+
+    </div>
+
+</div>
+
+</section>
 
     <!-- Modal detail -->
     <div class="modal fade" id="detailReportTransaksi" tabindex="-1" aria-labelledby="detailReportTransaksiLabel"

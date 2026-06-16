@@ -50,7 +50,7 @@
 
     <!-- Template Main CSS File -->
     <link href="{{ asset('assets/css/style.css') }}" rel="stylesheet">
-    <link href="{{ asset('assets/css/custom-style.css?v=22122') }}" rel="stylesheet">
+    <link href="{{ asset('assets/css/custom-style.css?v=9212') }}" rel="stylesheet">
 
     <!-- =======================================================
     * Template Name: Moderna - v2.0.1

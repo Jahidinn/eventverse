@@ -26,8 +26,8 @@
                     </h1>
                 </div>
                 <div class="pt-2">
-                    <a href="/event/create" class="btn btn-success rounded-0">Buat event</a>
-                    <a href="/search" class="btn btn-info rounded-0"><i class="fas fa-search"></i> Cari event</a>
+                    <a href="/event/create" class="button-21">Create event</a>
+                    <a href="/search" class="button-1"><i class="fas fa-search"></i> Cari event</a>
                 </div>
             </div>
 
@@ -55,7 +55,7 @@
 
 
     {{-- Form Pencarian --}}
-    <section class="why-us pt-4 pb-4 px-2">
+    {{-- <section class="why-us pt-4 pb-4 px-2">
         <div class="container px-0 my-shadow2" data-aos="fade-up" date-aos-delay="200">
             <div class="d-flex flex-column justify-content-center py-5">
                 <form class="form-search" method="get" action="/search">
@@ -64,6 +64,26 @@
                     <button class="button btn-success" type="submit">Cari</button>
                 </form>
             </div>
+        </div>
+    </section> --}}
+
+    <section class="why-us py-4 px-2">
+        <div class="my-4">
+
+            <form class="search-modern" method="GET" action="/search">
+                <i class="ti ti-search search-icon"></i>
+
+                <input
+                    type="search"
+                    name="key"
+                    placeholder="Cari event, seminar, lomba, workshop..."
+                    autocomplete="off">
+
+                <button type="submit">
+                    <i class="ti ti-search ti-sm"></i> Cari
+                </button>
+            </form>
+
         </div>
     </section>
 
@@ -170,8 +190,8 @@
     <section class="event-terbaru-setion pt-4 p-0 bg-eventconnect">
         <div class="container evnt-terbaru pt-0 mt-0 text-white text-center">
             <div class="py-5">
-                <h6>Jaidikan event kamu lebih keren disini !!!</h6> <a class="btn btn-success" href="/event/create">
-                    <small><strong>Buat event SEKARANG</strong> <i class="fas fa-rocket"></i></small></a>
+                <h6>Jaidikan event kamu lebih keren disini !!!</h6> <a class="button-1" href="/event/create">
+                    <small><strong>BUAT EVENT SEKARANG</strong> <i class="fas fa-rocket"></i></small></a>
             </div>
         </div>
     </section>

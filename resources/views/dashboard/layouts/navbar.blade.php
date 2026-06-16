@@ -22,7 +22,7 @@
 
         <li class="nav-item dropdown">
             <a class="nav-link" data-toggle="dropdown" href="#">
-                {{ auth()->user()->name }} <i class="far fa-caret-square-down ml-1"></i>
+                {{ explode(' ', auth()->user()->name)[0] }} <i class="far fa-caret-square-down ml-1"></i>
             </a>
 
             <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">

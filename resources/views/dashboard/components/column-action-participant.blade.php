@@ -9,7 +9,7 @@
 
 @endphp
 
-<button class="btn btn-sm btn-info detail-transaksi" data-id="{{ $data->id }}" data-event_id="{{ $data->event_id }}"
+<button class="button-39 btn-sm px-2 text-dark detail-transaksi" data-id="{{ $data->id }}" data-event_id="{{ $data->event_id }}"
     data-nama="{{ $data->name }}" data-email="{{ $data->email }}" data-phone="{{ $data->phone }}"
     data-ticket="{{ $data->ticket->ticket_name }}" data-biaya="{{ $price }}" data-status="{{ $data->status }}"
     data-pembayaran="{{ $payment }}" data-id_transaksi="{{ $data->transaction_id }}">

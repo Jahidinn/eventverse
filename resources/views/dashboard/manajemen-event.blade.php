@@ -2,9 +2,19 @@
 
 @section('content')
     <!-- Content Header (Page header) -->
-    <section class="content-header pb-0 ml-1">
-        <div class="alert alert-dark bg-dashboard text-white" role="alert">
-            <strong>MANAGEMENT EVENT</strong> (Penyelenggara)
+    <section class="content-header pb-0">
+        <div class="page-header-modern mb-3">
+            <div class="page-header-left">
+
+                <div class="page-header-icon">
+                    <i class="ti ti-calendar-clock"></i>
+                </div>
+
+                <h2 class="page-header-title">
+                    MANAJEMEN EVENT
+                </h2>
+
+            </div>
         </div>
     </section>
 
@@ -18,79 +28,321 @@
             </div> --}}
 
             {{-- <div class="card-body px-2 pt-3 bg-card-blue"> --}}
-                <div class="py-0 manajemen-event-box ml-1">
-                    <div class="mb-4 mt-4">
-                        <a href="/event/create" class="button-40 rounded-0"><i class="ti ti-pencil-plus"></i> Buat
-                            event</a>
+                <style>
+                    .toolbar-modern{
+                        display:flex;
+                        gap:12px;
+                        align-items:center;
+                        justify-content:space-between;
+                        flex-wrap:wrap;
+                        margin-bottom:20px;
+                    }
+
+                    .search-modern{
+                        height:50px;
+                        border:none;
+                        border-radius:16px;
+                        background:#fff;
+                        box-shadow:0 4px 20px rgba(0,0,0,.06);
+                        padding-left:18px;
+                    }
+
+                    .search-modern:focus{
+                        box-shadow:0 0 0 4px rgba(59,130,246,.1);
+                    }
+
+                    .event-card-modern{
+                        border:none;
+                        overflow:hidden;
+                        border-radius:22px;
+                        background:#fff;
+                        box-shadow:0 4px 20px rgba(0,0,0,.06);
+                        transition:.25s;
+                        margin-bottom:18px;
+                    }
+
+                    .event-card-modern:hover{
+                        transform:translateY(-3px);
+                        box-shadow:0 14px 40px rgba(0,0,0,.10);
+                    }
+
+                    .event-cover{
+                        width:100%;
+                        height:180px;
+                        object-fit:cover;
+                        display:block;
+                    }
+
+                    .event-body{
+                        padding:20px;
+                    }
+
+                    .event-title{
+                        font-size:18px;
+                        font-weight:700;
+                        color:#0f172a;
+                        line-height:1.5;
+                    }
+
+                    .event-meta{
+                        color:#64748b;
+                        font-size:13px;
+                    }
+
+                    .event-stats{
+                        display:flex;
+                        gap:10px;
+                        flex-wrap:wrap;
+                        margin-top:15px;
+                        margin-bottom:18px;
+                    }
+
+                    .stat-chip{
+                        display:inline-flex;
+                        align-items:center;
+                        gap:6px;
+
+                        padding:5px 14px;
+
+                        border-radius:999px;
+
+                        font-size:13px;
+                        font-weight:600;
+                    }
+
+                    .stat-chip-success{
+                        background:rgba(16,185,129,.08);
+                        border:1px solid rgba(16,185,129,.15);
+                        color:#059669;
+                    }
+
+                    .stat-chip-active{
+                    background:rgba(59,130,246,.08);
+                    border:1px solid rgba(59,130,246,.15);
+                    color:#2563eb;
+                    }
+
+                    .stat-chip-inactive{
+                        background:rgba(239,68,68,.08);
+                        border:1px solid rgba(239,68,68,.15);
+                        color:#dc2626;
+                    }
+
+                    .event-actions{
+                        display:flex;
+                        gap:8px;
+                        flex-wrap:wrap;
+                    }
+
+                    .action-text{
+                        margin-left:4px;
+                    }
+
+                    .empty-state{
+                        background:#fff;
+                        border-radius:20px;
+                        padding:30px;
+                        text-align:center;
+                        box-shadow:0 4px 20px rgba(0,0,0,.05);
+                    }
+
+                    @media(max-width:768px){
+
+                        .event-cover{
+                            height:140px;
+                        }
+
+                        .event-title{
+                            font-size:16px;
+                        }
+
+                        .event-actions{
+                            display:grid;
+                            grid-template-columns:repeat(4,1fr);
+                            gap:8px;
+                        }
+
+                        .event-actions .button-39,
+                        .event-actions .button-40{
+                            width:100%;
+                            display:flex;
+                            justify-content:center;
+                            align-items:center;
+                            padding:10px;
+                        }
+
+                        .action-text{
+                            display:none;
+                        }
+
+                        .event-actions i{
+                            margin:0 !important;
+                            font-size:18px;
+                        }
+                    }
+                </style>
+
+                <div class="py-0 manajemen-event-box">
+
+                    <div class="toolbar-modern">
+
+                        <a href="/event/create" class="button-40">
+                            <i class="ti ti-pencil-plus"></i>
+                            Buat Event
+                        </a>
+
+                        <form action="" method="GET" class="flex-grow-1">
+
+                            <input
+                                class="form-control search-modern shadow-none"
+                                name="key"
+                                type="text"
+                                placeholder="Cari event..."
+                                value="{{ request('key') }}"
+                                {{ $listEvent->isEmpty() ? 'hidden' : '' }}>
+
+                        </form>
+
                     </div>
 
-                    <form action="" method="GET">
-                        <div class="p-0 form-inline mb-2" {{ $listEvent->isEmpty() ? 'hidden' : '' }}>
-                            <input class="form-control col shadow-none mr-1" name="key" type="text"
-                                placeholder="Search event ..." value="{{ request('key') }}">
-                        </div>
-                    </form>
+                    @if($listEvent->isEmpty())
 
-                    @if ($listEvent->isEmpty())
-                        <div class="alert alert-warning" role="alert">
-                            Wah kamu belum <b>punya event</b> sob!
+                        <div class="empty-state">
+
+                            <h5>Belum ada event 🎉</h5>
+
+                            <p class="text-muted mb-3">
+                                Buat event pertamamu sekarang.
+                            </p>
+
+                            <a href="/event/create" class="button-40">
+                                Buat Event
+                            </a>
+
                         </div>
+
                     @endif
 
+                    @foreach($listEvent as $event)
 
-                    @foreach ($listEvent as $event)
-                        <div class="card pb-2">
-                            <div class="col-md-12 row card-body px-3 pb-2">
+                        @php
 
-                                <div class="p-1 pl-2">
-                                    <div class="myevent-container-img">
-                                        <img class="card-img-top" src="{{ asset('storage/event-images/' . $event->image) }}"
-                                            alt="Image">
-                                    </div>
+                            $participant = \App\Models\Transaction::where('event_id',$event->id)
+                                ->whereNotIn('status',['Expired','Unpaid','Pending'])
+                                ->count();
+
+                            $title = strlen($event->title) > 70
+                                ? substr($event->title,0,70).'...'
+                                : $event->title;
+
+                        @endphp
+
+                        <div class="card event-card-modern">
+
+                            <img
+                                src="{{ asset('storage/event-images/'.$event->image) }}"
+                                class="event-cover"
+                                alt="{{ $event->title }}">
+
+                            <div class="event-body">
+
+                                <a
+                                    href="/event/{{ $event->slug }}"
+                                    class="event-title text-decoration-none">
+
+                                    {{ $title }}
+
+                                </a>
+
+                                <div class="event-meta mt-2">
+
+                                    <i class="ti ti-calendar"></i>
+
+                                    Dibuat
+                                    {{ $event->created_at->format('d M Y') }}
+
                                 </div>
 
-                                <div class="col ">
-                                    @php
-                                        $title = $event->title;
-                                        if (strlen($title) > 41) {
-                                            $title = substr($title, 0, 45) . ' ...';
-                                        }
-                                    @endphp
+                                <div class="event-stats">
 
-                                    <a href="/event/{{ $event->slug }}"
-                                        class="text-dark-custom title-manage-event"><b>{{ $title }}</b></a><br>
-                                    <small class="text-secondary">Crated at :
-                                        <span>{{ $event->created_at->format('d-m-Y') }}</span></small><br>
-                                    <div class="mt-2">
-                                        <a href="/event/{{ $event->slug }}/edit" type="button"
-                                            class="button-40 btn-sm rounded-0"><i class="ti ti-edit"></i>
-                                            Edit event</a>
-                                        <button type="button" class="button-40 btn-sm rounded-0 delete-event bg-danger"
-                                            data-id="{{ $event->id }}"><i class="ti ti-trash"></i></button>
+                                    <div class="stat-chip stat-chip-success">
+                                        <i class="ti ti-users"></i>
+                                        {{ $participant }} Peserta
                                     </div>
+
+                                    <div class="stat-chip {{ $event->status == 1 ? 'stat-chip-active' : 'stat-chip-inactive' }}">
+                                        <i class="ti {{ $event->status == 1 ? 'ti-circle-check' : 'ti-circle-x' }}"></i>
+                                        {{ $event->status == 1 ? 'Aktif' : 'Tidak Aktif' }}
+                                    </div>
+
                                 </div>
+
+                                <div class="event-actions">
+
+                                    <a
+                                        href="/event/{{ $event->slug }}/edit"
+                                        class="button-39"
+                                        title="Edit Event">
+
+                                        <i class="ti ti-edit ti-sm"></i>
+
+                                        <span class="action-text">
+                                            Edit Event
+                                        </span>
+
+                                    </a>
+
+                                    <button
+                                        type="button"
+                                        class="button-39 edit-ticket-button"
+                                        data-id="{{ $event->id }}"
+                                        data-event="{{ $event->title }}"
+                                        title="Edit Tiket">
+
+                                        <i class="ti ti-ticket ti-sm"></i>
+
+                                        <span class="action-text">
+                                            Edit Tiket
+                                        </span>
+
+                                    </button>
+
+                                    <button
+                                        type="button"
+                                        class="button-39 edit-formulir-button"
+                                        data-id="{{ $event->id }}"
+                                        data-event="{{ $event->title }}"
+                                        title="Edit Formulir">
+
+                                        <i class="ti ti-file-description ti-sm"></i>
+
+                                        <span class="action-text">
+                                            Edit Formulir
+                                        </span>
+
+                                    </button>
+
+                                    <button
+                                        type="button"
+                                        class="button-39 text-danger delete-event"
+                                        data-id="{{ $event->id }}"
+                                        title="Hapus Event">
+
+                                        <i class="ti ti-trash ti-sm"></i>
+
+                                    </button>
+
+                                </div>
+
                             </div>
-                            
-                            <hr class="mx-2 my-2">
-                            {{-- Button edit tiket & form --}}
-                            <div class="col-md-12 pb-2 card-body pt-1 pb-2 px-2">
-                                <button type="button" class="button-39 btn-sm px-3 edit-ticket-button"
-                                    data-id="{{ $event->id }}" data-event="{{ $event->title }}">
-                                    <i class="ti ti-ticket"></i> Edit tiket
-                                </button>
-                                <button type="button" class="button-39 btn-sm px-3 edit-formulir-button"
-                                    data-id="{{ $event->id }}" data-event="{{ $event->title }}">
-                                    <i class="ti ti-file-description"></i> Edit formulir
-                                </button>
-                            </div>
+
                         </div>
+
                     @endforeach
 
-                    {{-- Pagination --}}
-                    <div class="d-flex justify-content-center">
+                    <div class="d-flex justify-content-center mt-4">
                         {{ $listEvent->links() }}
                     </div>
-                    {{-- Pagination --}}
 
                 </div>
 
@@ -103,10 +355,10 @@
                     <hr>
 
                     {{-- Button --}}
-                    <button class="btn btn-secondary btn-sm shadow-none rounded-0" id="back-from-ticket"><i
+                    <button class="button-39 rounded" id="back-from-ticket"><i
                             class="fas fa-arrow-left"></i>
                         Kembali</button>
-                    <button class="btn btn-info btn-sm shadow-none" id="add-ticket-button"><i class="fas fa-plus"></i>
+                    <button class="button-39 text-info rounded" id="add-ticket-button"><i class="fas fa-plus"></i>
                         Tambah tiket</button>
 
                     {{-- Search ticket field --}}
@@ -136,10 +388,10 @@
                     <div class="text-left mb-2"><strong class="event-title-for-formulir"></strong></div>
                     <hr>
                     {{-- Button --}}
-                    <button class="btn btn-secondary btn-sm shadow-none" id="back-from-formulir"><i
+                    <button class="button-39 rounded" id="back-from-formulir"><i
                             class="fas fa-arrow-left"></i>
                         Kembali</button>
-                    <button class="btn btn-info btn-sm shadow-none" id="add-formulir-button"><i class="fas fa-plus"></i>
+                    <button class="button-39 text-info rounded" id="add-formulir-button"><i class="fas fa-plus"></i>
                         Tambah formulir</button>
 
                     {{-- FORM search --}}

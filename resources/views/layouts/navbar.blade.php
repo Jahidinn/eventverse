@@ -26,18 +26,29 @@
 
 
             @if (Auth::check())
-                <li style="position: relative;top: -7px; padding: 1; margin: 0; "><a href="/dashboard"
-                        class=" link-login-register"><button class="btn btn-success w-100 mr-4 py-1"><i
-                                class="fas fa-user mr-1"></i> {{ auth()->user()->name }}</button></a>
+                <li style="position: relative;top: -7px; padding: 1; margin: 0; ">
+                    <a href="/dashboard" class=" link-login-register">
+                        <button class="button-10 w-100 button py-1">
+                            <i class="ti ti-user ti-sm mr-1"></i> {{ explode(' ', auth()->user()->name)[0] }}
+                        </button>
+
+                    </a>
                 </li>
             @else
-                <li style="position: relative;top: -7px; padding: 0; margin: 0;"><a href="/login"
-                        class=" link-login-register"><button
-                            class="btn btn-success btn-large w-100 px-3 mr-4 py-1">Login</button></a>
+                <li style="position: relative;top: -7px; padding: 0; margin: 0;">
+                    <a href="/login" class=" link-login-register">
+                        <button class="button-21 w-100 px-3 mr-4 py-1">
+                            Login
+                        </button>
+                    </a>
                 </li>
-                <li style="position: relative;top: -7px; padding: 0; margin: 0;"><a href="/register"
-                        class="link-login-register"><button class="btn btn-large w-100 px-0 py-1">Daftar</button></a>
-                </li>
+                {{-- <li style="position: relative;top: -7px; padding: 0; margin: 0;">
+                    <a href="/register" class="link-login-register">
+                        <button class="button-21 w-100  py-1">
+                            Daftar
+                        </button>
+                    </a>
+                </li> --}}
             @endif
 
         </ul>

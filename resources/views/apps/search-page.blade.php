@@ -7,7 +7,7 @@
         <!--Content before waves-->
         <div class="inner-header-search flex">
             <div class="wave-content w-100">
-                <h1>Cari event favoritmu! 🤩</h1>
+                <h2>Cari event favoritmu disini! 🤩</h2>
             </div>
 
         </div>
@@ -19,14 +19,30 @@
     <form class="form-serch" method="get" action="" id="search-filter-form">
         @csrf
         <section class="why-us  pt-4 pb-4 px-2">
-            <div class="container px-0" data-aos="fade-up" date-aos-delay="200">
-                <div class="d-flex flex-column justify-content-center py-5 ">
+            <div class="px-0" data-aos="fade-up" date-aos-delay="200">
+                <div class="justify-content-center py-3 ">
 
-                    <div class="form-search">
+                    {{-- <div class="form-search">
                         <input type="search" name="key" placeholder="Cari event kesukaan kamu ..."
                             value="{{ request('key') }}">
                         <button class="button" type="submit">Cari</button>
+                    </div> --}}
+
+                    <div class="search-modern mb-3">
+                        <i class="ti ti-search search-icon"></i>
+
+                        <input
+                            type="search"
+                            name="key"
+                            value="{{ request('key') }}"
+                            placeholder="Cari event, seminar, lomba, workshop...">
+
+                        <button class="button" type="submit">
+                            <i class="ti ti-search ti-sm"></i> Cari
+                        </button>
                     </div>
+
+                    
 
                     @if (request('catName') || request('location') || request('city') || request('date'))
                         <div class="form-search mt-2">
@@ -183,7 +199,7 @@
     {{-- Cari event ... --}}
     <section class="event-terbaru-section pt-2 p-0">
         <div class="section-title pb-0">
-            <h2 class="mt-0">Cari event</h2>
+            <h2 class="mt-0">Search results</h2>
         </div>
 
         <div class="container-fluid m-auto row pt-0 mt-0 search-result-box">

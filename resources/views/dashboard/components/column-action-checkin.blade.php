@@ -1,5 +1,5 @@
 @if (empty($data->checkin))
-    <button class="btn btn-info btn-sm checkin-event" data-id="{{ $data->transaction_id }}"><i
+    <button class="button-39 btn-sm checkin-event" data-id="{{ $data->transaction_id }}"><i
             class="fas fa-check-circle"></i> Check in
     </button>
 @else

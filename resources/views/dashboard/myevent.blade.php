@@ -3,183 +3,450 @@
 @section('content')
     <!-- Content Header (Page header) -->
     <section class="content-header pb-0">
-        <div class="alert alert-dark bg-dashboard text-white" role="alert">
-            <strong>IKUT EVENT</strong> (Peserta)
+        <div class="page-header-modern mb-3">
+            <div class="page-header-left">
+
+                <div class="page-header-icon">
+                    <i class="ti ti-ticket"></i>
+                </div>
+
+                <h2 class="page-header-title">
+                    MEMBER EVENT
+                </h2>
+
+            </div>
         </div>
     </section>
 
     <!-- Main content -->
     <section class="content">
-        <!-- Default box -->
-        {{-- <div class="card "> --}}
-            {{-- <div class="card-header">
-                <h3 class="card-title">Ikut event apapun yang kamu mau! </h3>
-            </div> --}}
 
-            {{-- <div class="card-body px-2"> --}}
-                <a href="/search"><button class="button-40 mb-2 rounded-0 shadow-none">Jelajah event <i
-                            class="fas fa-paper-plane"></i></button></a>
-                <form action="" method="GET" {{ $myevents->isEmpty() ? 'hidden' : '' }}>
-                    <div class="p-0 form-inline mb-4">
-                        <input class="form-control col shadow-none mr-1" id="search-myevent" name="key" type="text"
-                            placeholder="Cari event yang kamu ikuti ..." value="{{ request('key') }}">
-                    </div>
-                </form>
-                @if ($myevents->isEmpty())
-                    <div class="alert alert-warning" role="alert">
-                        Wah kamu belum <b>ikut event</b> apapun guys!
-                    </div>
-                @endif
+        <style>
+            .joined-toolbar{
+                display:flex;
+                gap:12px;
+                align-items:center;
+                justify-content:space-between;
+                flex-wrap:wrap;
+                margin-bottom:20px;
+            }
 
-                {{-- Looping data my event --}}
-                @foreach ($myevents as $myevent)
-                    <div class="card mt-2 ">
-                        <div class="col-md-12 row card-body pl-3 pb-3 mr-0 pr-0">
+            .search-modern{
+                height:50px;
+                border:none;
+                border-radius:16px;
+                background:#fff;
+                box-shadow:0 4px 20px rgba(0,0,0,.06);
+                padding-left:18px;
+            }
 
-                            {{-- Poster / Image --}}
-                            <div class="p-2">
-                                <div class="myevent-container-img">
-                                    <img class="card-img-top"
-                                        src="{{ asset('storage/event-images/' . $myevent->event->image) }}"
-                                        alt="Card image cap">
-                                </div>
-                            </div>
+            .search-modern:focus{
+                box-shadow:0 0 0 4px rgba(59,130,246,.10);
+            }
 
-                            <div class="col">
-                                {{-- Event --}}
-                                @php
-                                    $title = $myevent->event->title ?? '' . ' (' . $myevent->ticket->ticket_name . ')';
-                                    if (strlen($title) > 50) {
-                                        $title = substr($title, 0, 50) . '...';
-                                    }
-                                @endphp
-                                <a href="/{{ $myevent->event->slug }}"
-                                    class="text-info text-decoration-none title-manage-event"><b>{{ $title }}</b></a>
+            .joined-card{
+                border:none;
+                border-radius:22px;
+                overflow:hidden;
 
-                                <br>
+                background:#fff;
 
-                                {{-- Status --}}
-                                @if ($myevent->status == 'Paid')
-                                    {{-- IF PAID --}}
-                                    <small>
-                                        <b class="text-success"><i class="fas fa-check-circle"></i> BERHASIL</b>
-                                    </small>
-                                @elseif($myevent->status == 'Unpaid')
-                                    {{-- IF UNPAID --}}
-                                    <small>
-                                        <b class="text-secondary"><i class="fas fa-times-circle"></i> Unpaid</b>
-                                    </small>
-                                @elseif($myevent->status == 'Pending')
-                                    {{-- IF PENDING --}}
-                                    <small>
-                                        <b class="text-warning"><i class="fas fa-times-circle"></i> PENDING</b>
-                                    </small>
-                                @elseif($myevent->status == 'Expired')
-                                    {{-- IF EXPIRED --}}
-                                    <small>
-                                        <b class="text-danger"><i class="fas fa-times-circle"></i> EXPIRED</b>
-                                    </small>
-                                @else
-                                    {{-- ELSE --}}
-                                    <small>
-                                        <b class="text-warning"><i class="fas fa-info-circle"></i> $myevent->status</b>
-                                    </small>
-                                @endif
-                                <br>
+                box-shadow:
+                    0 4px 20px rgba(0,0,0,.06);
 
-                                @php
+                transition:.25s;
 
-                                    $tanggalHariIni = date('Y-m-d');
+                margin-bottom:20px;
+            }
 
-                                @endphp
+            .joined-card:hover{
+                transform:translateY(-3px);
 
-                                <div class="mt-2">
-                                    {{-- button action --}}
-                                    @if ($myevent->status == 'Paid')
-                                        {{-- IF PAID --}}
-                                        <button type="button" class="button-39 text-info btn-sm rounded-0 info-myevent"
-                                            data-id="{{ $myevent->id }}" data-event="{{ $myevent->event->id }}">
-                                            <i class="fas fa-list"></i> Detail
-                                        </button>
-                                        @if ($myevent->event->end_date < $tanggalHariIni)
-                                            <button type="button" class="button-39 btn-sm rounded-0" disabled>
-                                                <i class="fas fa-edit"></i>
-                                            </button>
-                                        @else
-                                            <button type="button" class="button-39 btn-sm rounded-0 edit-myevent"
-                                                data-id="{{ $myevent->id }}" data-event="{{ $myevent->event->id }}">
-                                                <i class="fas fa-edit"></i>
-                                            </button>
-                                        @endif
-                                        <button type="button" class="button-39 btn-sm rounded-0 detail-myevent"
-                                            data-id="{{ $myevent->id }}">
-                                            <i class="far fa-file-alt"></i> Inv
-                                        </button>
-                                    @elseif($myevent->status == 'Unpaid')
-                                        {{-- IF UNPAID --}}
-                                        <button type="button" class="button-39 btn-sm bg-success rounded-0 lanjutkan-transaksi"
-                                            data-id="{{ $myevent->id }}">
-                                            <i class="ti ti-coin ti-sm"></i> Bayar
-                                        </button>
-                                        <button type="button" class="button-39 btn-sm text-info rounded-0 detail-myevent"
-                                            data-id="{{ $myevent->id }}"><i class="fas fa-list"></i>
-                                        </button>
-                                        <button type="button" class="button-39 text-danger rounded-0 btn-sm" id="delete-myevent"
-                                            data-id="{{ $myevent->id }}">
-                                            <i class="fas fa-trash-alt"></i>
-                                        </button>
-                                    @elseif($myevent->status == 'Pending')
-                                        {{-- IF PENDING --}}
-                                        <button type="button" class="button-39 bg-success btn-sm p-2 rounded-0 lanjutkan-transaksi"
-                                            data-id="{{ $myevent->id }}">
-                                            <i class="ti ti-coin ti-sm"></i> Bayar
-                                        </button>
-                                        <button type="button" class="button-39 text-info rounded-0 btn-sm"
-                                            data-id="{{ $myevent->id }}"><i class="fas fa-list"
-                                                detail-myevent></i></button>
-                                    @elseif($myevent->status == 'Expired')
-                                        {{-- IF EXPIRED --}}
-                                        <button type="button" class="button-39 btn-sm text-info rounded-0 detail-myevent"
-                                            data-id="{{ $myevent->id }}"><i class="fas fa-list"></i> Lihat detail</button>
-                                        <button type="button" class="button-39 text-danger btn-sm rounded-0" disabled
-                                            data-id="{{ $myevent->id }}">
-                                            <i class="fas fa-trash-alt"></i>
-                                        </button>
-                                    @else
-                                        {{-- ELSE --}}
-                                        <button type="button" class="button-39 btn-sm rounded-0"
-                                            data-id="{{ $myevent->id }}">
-                                            {{ $myevent->status }}
-                                        </button>
-                                        <button type="button" class="button-39 btn-sm detail-myevent rounded-0"
-                                            data-id="{{ $myevent->id }}"><i class="fas fa-list"></i></button>
-                                    @endif
+                box-shadow:
+                    0 14px 40px rgba(0,0,0,.10);
+            }
 
-                                </div>
-                            </div>
+            .joined-cover{
+                width:100%;
+                height:180px;
+                object-fit:cover;
+                display:block;
+            }
 
+            .joined-body{
+                padding:20px;
+            }
+
+            .joined-title{
+                font-size:18px;
+                font-weight:700;
+                color:#0f172a;
+                line-height:1.5;
+            }
+
+            .status-chip{
+                display:inline-flex;
+                align-items:center;
+                gap:6px;
+
+                padding:4px 14px;
+
+                border-radius:999px;
+
+                font-size:12px;
+                font-weight:600;
+            }
+
+            .status-paid{
+                background:rgba(16,185,129,.08);
+                border:1px solid rgba(16,185,129,.15);
+                color:#059669;
+            }
+
+            .status-pending{
+                background:rgba(245,158,11,.08);
+                border:1px solid rgba(245,158,11,.15);
+                color:#d97706;
+            }
+
+            .status-unpaid{
+                background:rgba(100,116,139,.08);
+                border:1px solid rgba(100,116,139,.15);
+                color:#475569;
+            }
+
+            .status-expired{
+                background:rgba(239,68,68,.08);
+                border:1px solid rgba(239,68,68,.15);
+                color:#dc2626;
+            }
+
+            .ticket-card{
+                margin-top:16px;
+
+                padding:14px;
+
+                background:#f8fafc;
+
+                border-radius:14px;
+            }
+
+            .ticket-name{
+                color:#64748b;
+                font-size:14px;
+            }
+
+            .ticket-price{
+                font-size:22px;
+                font-weight:700;
+                color:#0f172a;
+            }
+
+            .ticket-qty{
+                font-size:13px;
+                color:#64748b;
+            }
+
+            .joined-actions{
+                display:flex;
+                gap:8px;
+                flex-wrap:wrap;
+                margin-top:16px;
+            }
+
+            .action-text{
+                margin-left:4px;
+            }
+
+            .empty-state{
+                background:#fff;
+                border-radius:20px;
+                padding:30px;
+                text-align:center;
+                box-shadow:0 4px 20px rgba(0,0,0,.05);
+            }
+
+            @media(max-width:768px){
+
+                .joined-cover{
+                    height:140px;
+                }
+
+                .joined-title{
+                    font-size:16px;
+                }
+
+                .joined-actions{
+                    display:grid;
+                    grid-template-columns:repeat(4,1fr);
+                    gap:8px;
+                }
+
+                .joined-actions .button-39{
+                    width:100%;
+                    display:flex;
+                    justify-content:center;
+                    align-items:center;
+                }
+
+                .action-text{
+                    display:none;
+                }
+
+                .joined-actions i{
+                    margin:0 !important;
+                    font-size:18px;
+                }
+            }
+        </style>
+
+        <div class="joined-toolbar">
+
+            <a href="/search" class="button-40">
+                <i class="ti ti-search ti-sm"></i>
+                Jelajah Event
+            </a>
+
+            <form action="" method="GET" class="flex-grow-1">
+
+                <input
+                    class="form-control search-modern shadow-none"
+                    id="search-myevent"
+                    name="key"
+                    type="text"
+                    placeholder="Cari event yang kamu ikuti..."
+                    value="{{ request('key') }}">
+
+            </form>
+
+        </div>
+
+        @if ($myevents->isEmpty())
+
+            <div class="empty-state">
+
+                <h5>Belum ada event 🎉</h5>
+
+                <p class="text-muted mb-0">
+                    Kamu belum mengikuti event apa pun.
+                </p>
+
+            </div>
+
+        @endif
+
+        @foreach ($myevents as $myevent)
+
+            @php
+
+                $title = ($myevent->event->title ?? '') . ' (' . $myevent->ticket->ticket_name . ')';
+
+                if(strlen($title) > 70){
+                    $title = substr($title,0,70).'...';
+                }
+
+                $tanggalHariIni = date('Y-m-d');
+
+            @endphp
+
+            <div class="card joined-card">
+
+                <img
+                    src="{{ asset('storage/event-images/' . $myevent->event->image) }}"
+                    class="joined-cover"
+                    alt="{{ $myevent->event->title }}">
+
+                <div class="joined-body">
+
+                    <a
+                        href="/{{ $myevent->event->slug }}"
+                        class="joined-title text-decoration-none">
+
+                        {{ $title }}
+
+                    </a>
+
+                    <div class="ticket-card">
+
+                        <div class="ticket-name mb-2">
+                            {{ $myevent->ticket->ticket_name }}
                         </div>
-                        <hr class="mx-2 my-0">
-                        <div class="col-md-12 card-body py-2 px-3">
-                            <small class="text-secondary">
-                                <b>Rp <span>{{ number_format($myevent->total_price, 0, ',', '.') }}
-                                    </span></b> (Qty :
-                                <span>{{ $myevent->quantity }}</span>)
 
-                            </small>
+                        <div class="ticket-price">
+                            Rp {{ number_format($myevent->total_price,0,',','.') }}
+
+                            @if($myevent->status == 'Paid')
+
+                                <div class="status-chip status-paid">
+                                    <i class="ti ti-circle-check ti-sm"></i>
+                                    Berhasil
+                                </div>
+
+                            @elseif($myevent->status == 'Pending')
+
+                                <div class="status-chip status-pending">
+                                    <i class="ti ti-clock ti-sm"></i>
+                                    Pending
+                                </div>
+
+                            @elseif($myevent->status == 'Unpaid')
+
+                                <div class="status-chip status-unpaid">
+                                    <i class="ti ti-credit-card ti-sm"></i>
+                                    Belum Bayar
+                                </div>
+
+                            @elseif($myevent->status == 'Expired')
+
+                                <div class="status-chip status-expired">
+                                    <i class="ti ti-alert-circle ti-sm"></i>
+                                    Expired
+                                </div>
+
+                            @endif
                         </div>
-                    </div>
-                @endforeach
 
-                {{-- Pagination --}}
-                <div class="d-flex justify-content-center">
-                    {{ $myevents->links() }}
+                        <div class="ticket-qty">
+                            Qty {{ $myevent->quantity }}
+                        </div>
+
+                    </div>
+
+                    <div class="joined-actions">
+
+                        @if ($myevent->status == 'Paid')
+
+                            <button
+                                type="button"
+                                class="button-39 text-info info-myevent"
+                                data-id="{{ $myevent->id }}"
+                                data-event="{{ $myevent->event->id }}"
+                                title="Detail">
+
+                                <i class="ti ti-list ti-sm"></i>
+                                <span class="action-text">Detail</span>
+
+                            </button>
+
+                            @if ($myevent->event->end_date > $tanggalHariIni)
+
+                                <button
+                                    type="button"
+                                    class="button-39"
+                                    disabled>
+
+                                    <i class="ti ti-edit ti-sm"></i>
+                                    <span class="action-text">Edit</span>
+
+                                </button>
+
+                            @else
+
+                                <button
+                                    type="button"
+                                    class="button-39 edit-myevent"
+                                    data-id="{{ $myevent->id }}"
+                                    data-event="{{ $myevent->event->id }}">
+
+                                    <i class="ti ti-edit ti-sm"></i>
+                                    <span class="action-text">Edit</span>
+
+                                </button>
+
+                            @endif
+
+                            <button
+                                type="button"
+                                class="button-39 detail-myevent"
+                                data-id="{{ $myevent->id }}">
+
+                                <i class="ti ti-file-description ti-sm"></i>
+                                <span class="action-text">Invoice</span>
+
+                            </button>
+
+                        @elseif($myevent->status == 'Unpaid')
+
+                            <button
+                                type="button"
+                                class="button-39 bg-success lanjutkan-transaksi"
+                                data-id="{{ $myevent->id }}">
+
+                                <i class="ti ti-coin"></i>
+                                <span class="action-text">Bayar</span>
+
+                            </button>
+
+                            <button
+                                type="button"
+                                class="button-39 text-info detail-myevent"
+                                data-id="{{ $myevent->id }}">
+
+                                <i class="fas fa-list"></i>
+                                <span class="action-text">Detail</span>
+
+                            </button>
+
+                            <button
+                                type="button"
+                                class="button-39 text-danger"
+                                id="delete-myevent"
+                                data-id="{{ $myevent->id }}">
+
+                                <i class="fas fa-trash-alt"></i>
+                                <span class="action-text">Hapus</span>
+
+                            </button>
+
+                        @elseif($myevent->status == 'Pending')
+
+                            <button
+                                type="button"
+                                class="button-39 bg-success lanjutkan-transaksi"
+                                data-id="{{ $myevent->id }}">
+
+                                <i class="ti ti-coin ti-sm"></i>
+                                <span class="action-text">Bayar</span>
+
+                            </button>
+
+                            <button
+                                type="button"
+                                class="button-39 text-info detail-myevent"
+                                data-id="{{ $myevent->id }}">
+
+                                <i class="ti ti-list ti-sm"></i>
+                                <span class="action-text">Detail</span>
+
+                            </button>
+
+                        @elseif($myevent->status == 'Expired')
+
+                            <button
+                                type="button"
+                                class="button-39 text-info detail-myevent"
+                                data-id="{{ $myevent->id }}">
+
+                                <i class="ti ti-list ti-sm"></i>
+                                <span class="action-text">Detail</span>
+
+                            </button>
+
+                        @endif
+
+                    </div>
+
                 </div>
-                {{-- Pagination --}}
 
-            {{-- </div> --}}
-        {{-- </div> --}}
-    </section>
+            </div>
+
+        @endforeach
+
+        <div class="d-flex justify-content-center mt-4">
+            {{ $myevents->links() }}
+        </div>
+
+        </section>
 
     {{-- modal detail form pendaftaran --}}
     <!-- Modal -->
@@ -195,7 +462,7 @@
                 <div class="modal-body">
                     <div class="card">
                         <div class="card-header bg-secondary">
-                            Event
+                            Nama event
                         </div>
                         <div class="card-body">
                             <h5 class="card-title text-info detail-trx-title">...</h5>
@@ -227,7 +494,7 @@
                 <div class="modal-body">
                     <div class="card">
                         <div class="card-header bg-secondary">
-                            Event
+                            Nama event
                         </div>
                         <div class="card-body">
                             <h5 class="card-title text-info edit-trx-title">...</h5>

@@ -242,23 +242,35 @@
                 $('.edit-trx-title').html(response.event.title)
                 $('.edit-trx-status').html(response.trx.status)
 
-                data.forEach(function(item) {
-                    const form = `
-					<div class="form-group">
-						<label>${item.form_name}</label>
-
-						<div class="input-group">
-							<input type="text" class="form-control form-value-${item.form_id}" value="${item.form_value}" disabled/>
-							<div class="input-group-append">
-								<button class="btn btn-outline-info edit-trx-form btn-form-${item.form_id}" type="button" data-formid="${item.form_id}" data-form_name="${item.form_name}" data-value_id="${item.form_value_id}" data-trx_id="${transaction_id}">
-									<i class="fas fa-edit"></i> Edit
-								</button>
-							</div>
-						</div>
-					</div>
-                `;
-                    $('#edit-trx-container').append(form);
-                });
+                if (data.length === 0) {
+                    const alert = `
+                        <div class="alert alert-warning" role="alert">
+                            Tidak ada data custom form!
+                        </div>
+                    `;
+                    $('#edit-trx-container').html(alert);
+                } else {
+                    data.forEach(function(item) {
+                        const form = `
+                            <div class="form-group">
+                                <label>${item.form_name}</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control form-value-${item.form_id}" value="${item.form_value}" disabled/>
+                                    <div class="input-group-append">
+                                        <button class="btn btn-outline-info edit-trx-form btn-form-${item.form_id}" type="button" 
+                                            data-formid="${item.form_id}" 
+                                            data-form_name="${item.form_name}" 
+                                            data-value_id="${item.form_value_id}" 
+                                            data-trx_id="${transaction_id}">
+                                            <i class="fas fa-edit"></i> Edit
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                        $('#edit-trx-container').append(form);
+                    });
+                }
 
             },
             error: function(xhr, status, error) {

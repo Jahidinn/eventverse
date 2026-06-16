@@ -1629,3 +1629,173 @@ button.slick-disabled {
 		right: -30px;
 	}
 }
+
+/* CSS */
+.button-21 {
+  align-items: center;
+  appearance: none;
+  background-color: #3EB2FD;
+  background-image: linear-gradient(1deg, #4F58FD, #149BF3 99%);
+  background-size: calc(100% + 20px) calc(100% + 20px);
+  border-radius: 100px;
+  border-width: 0;
+  box-shadow: none;
+  box-sizing: border-box;
+  color: #FFFFFF;
+  cursor: pointer;
+  display: inline-flex;
+  font-family: CircularStd,sans-serif;
+  font-size: 14px;
+  height: 40px;
+  justify-content: center;
+  line-height: 1.5;
+  padding: 6px 20px;
+  position: relative;
+  text-align: center;
+  text-decoration: none;
+  transition: background-color .2s,background-position .2s;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  vertical-align: top;
+  white-space: nowrap;
+}
+
+.button-21:active,
+.button-21:focus {
+  outline: none;
+}
+
+.button-21:hover {
+  background-position: -20px -20px;
+}
+
+.button-21:focus:not(:active) {
+  box-shadow: rgba(40, 170, 255, 0.25) 0 0 0 .125em;
+}
+
+/* CSS */
+.button-10 {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 6px 14px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Roboto', sans-serif;
+  border-radius: 6px;
+  border: none;
+
+  color: #fff;
+  background: linear-gradient(180deg, #4B91F7 0%, #367AF6 100%);
+   background-origin: border-box;
+  box-shadow: 0px 0.5px 1.5px rgba(54, 122, 246, 0.25), inset 0px 0.8px 0px -0.25px rgba(255, 255, 255, 0.2);
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+}
+
+.button-10:focus {
+  box-shadow: inset 0px 0.8px 0px -0.25px rgba(255, 255, 255, 0.2), 0px 0.5px 1.5px rgba(54, 122, 246, 0.25), 0px 0px 0px 3.5px rgba(58, 108, 217, 0.5);
+  outline: 0;
+}
+
+/* CSS */
+.button-1 {
+  background-color: #7e74ed;
+  border-style: none;
+  box-sizing: border-box;
+  color: #FFFFFF;
+  cursor: pointer;
+  display: inline-block;
+  font-family: "Haas Grot Text R Web", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  border-radius: 100px;
+  font-weight: 500;
+  height: 40px;
+  line-height: 20px;
+  list-style: none;
+  margin: 0;
+  outline: none;
+  padding: 10px 16px;
+  position: relative;
+  text-align: center;
+  text-decoration: none;
+  transition: color 100ms;
+  vertical-align: baseline;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+}
+
+.button-1:hover,
+.button-1:focus {
+  background-color: #F082AC;
+}
+
+.search-modern {
+    max-width: 850px;
+    margin: auto;
+    position: relative;
+
+    display: flex;
+    align-items: center;
+
+    background: #fff;
+    border-radius: 999px;
+
+    padding: 8px;
+    box-shadow:
+        0 10px 30px rgba(0,0,0,.08),
+        0 2px 10px rgba(0,0,0,.04);
+
+    transition: all .25s ease;
+}
+
+.search-modern:hover,
+.search-modern:focus-within {
+    transform: translateY(-1px);
+    box-shadow:
+        0 16px 40px rgba(0,0,0,.12),
+        0 4px 16px rgba(0,0,0,.06);
+}
+
+.search-modern .search-icon {
+    font-size: 22px;
+    color: #9ca3af;
+    margin-left: 16px;
+}
+
+.search-modern input {
+    flex: 1;
+    border: none;
+    outline: none;
+    background: transparent;
+
+    padding: 14px 18px;
+    font-size: 16px;
+}
+
+.search-modern input::placeholder {
+    color: #9ca3af;
+}
+
+.search-modern button {
+    border: none;
+    border-radius: 999px;
+
+    background: linear-gradient(
+        135deg,
+        #2563eb,
+        #3b82f6
+    );
+
+    color: white;
+    font-weight: 600;
+
+    padding: 14px 28px;
+
+    transition: .2s;
+}
+
+.search-modern button:hover {
+    transform: scale(1.03);
+}

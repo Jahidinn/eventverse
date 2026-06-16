@@ -19,7 +19,7 @@
         href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
     <link rel="stylesheet" href="{{ asset('assets/dashboard/plugins/fontawesome-free/css/all.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/dashboard/dist/css/adminlte.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets/css/dashboard.css?v=123') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/dashboard.css?v=1523') }}">
 
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/dataTables.bootstrap4.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/fixedcolumns/4.3.0/css/fixedColumns.dataTables.min.css">
