@@ -533,11 +533,11 @@
                 <div class="modal-body text-center">
                     {!! $qrlink !!}
                     <div class="mt-2">
-                        <a href="/{{ $detailEvent->slug }}">eventconnect.id/{{ $detailEvent->slug }}</a>
+                        <a href="/{{ $detailEvent->slug }}">eventhub.web.id/{{ $detailEvent->slug }}</a>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="button-39" data-dismiss="modal">Close</button>
                     {{-- <button type="button" class="btn btn-primary">Save changes</button> --}}
                 </div>
             </div>

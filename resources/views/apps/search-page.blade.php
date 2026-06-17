@@ -7,7 +7,7 @@
         <!--Content before waves-->
         <div class="inner-header-search flex">
             <div class="wave-content w-100">
-                <h2>Cari event favoritmu disini! 🤩</h2>
+                <h4>Search your favorite events</h4>
             </div>
 
         </div>
@@ -69,9 +69,9 @@
             </div>
 
             <div class="container shadow-none mt-3 text-center">
-                <button class="btn btn-info filter" type="button" data-toggle="modal" data-target="#filterModal"><i
+                <button class="button-39 filter" type="button" data-toggle="modal" data-target="#filterModal"><i
                         class="fas fa-filter"></i> Filter</button>
-                <button class="btn btn-info filter" type="button" data-toggle="modal" data-target="#sortModal"><i
+                <button class="button-39 filter" type="button" data-toggle="modal" data-target="#sortModal"><i
                         class="fas fa-sort"></i> Urutkan</button>
 
                 <!-- Modal filter -->

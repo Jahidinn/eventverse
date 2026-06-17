@@ -224,7 +224,7 @@ class EventController extends Controller
 			->limit(8)
 			->get();
 
-		$url = 'eventconnect.id/' . $event->slug;
+		$url = 'eventhub.web.id/' . $event->slug;
 		$qrcode = QrCode::size(200)->generate($url);
 
 		return view('events.show', [

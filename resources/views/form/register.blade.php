@@ -1,80 +1,233 @@
 @extends('form.main')
 
 @section('content')
-    <div class="container pb-3 mt-5">
-        <div class="col-md-12 text-center mt-3 pt-3">
-            {{-- <h3>Eventconnect.id</h3> --}}
-        </div>
-        <div class="row m-1 style-form">
-            <div class="col-lg-6 col-md-8 px-4 py-2 m-auto bg-eventconnect text-center text-white"><b>REGISTER</b></div>
-        </div>
-        <div class="row m-1">
-            <div class="col-lg-3 col-md-2"></div>
-            <div class="col-lg-6 col-md-8 login-box px-4">
+    <div class="container py-5">
 
-                <div class="col-lg-12 login-form">
-                    <div class="col-lg-12 login-form style-form">
+<style>
 
-                        <form action="/register" method="post">
-                            @csrf
+.auth-card{
+    max-width:560px;
+    margin:auto;
+    background:#fff;
+    border-radius:28px;
+    padding:35px;
+    box-shadow:0 15px 50px rgba(0,0,0,.08);
+}
 
-                            <div class="form-group">
-                                <label class="form-control-label" for="username">Username</label>
-                                <input type="text" class="form-control @error('username') is-invalid @enderror"
-                                    name="username" autofocus required value="{{ old('username') }}" id="username"
-                                    placeholder="username">
-                                @error('username')
-                                    <small class="invalid-veedback text-danger mt-0 pt-0">{{ $message }}</small>
-                                @enderror
-                            </div>
+.auth-logo{
+    text-align:center;
+    margin-bottom:15px;
+}
 
-                            <div class="form-group">
-                                <label class="form-control-label" for="email">Email</label>
-                                <input type="email" class="form-control @error('email') is-invalid @enderror"
-                                    name="email" required value="{{ old('email') }}" id="email"
-                                    placeholder="example@email.com">
-                                @error('email')
-                                    <small class="invalid-veedback text-danger mt-0 pt-0">{{ $message }}</small>
-                                @enderror
-                            </div>
+.auth-logo img{
+    height:55px;
+}
 
-                            <div class="form-group">
-                                <label class="form-control-label" for="password">Password</label>
-                                <input type="password" class="form-control  @error('password') is-invalid @enderror"
-                                    name="password" required id="password" placeholder="*****">
-                                @error('password')
-                                    <small class="invalid-veedback text-danger mt-0 pt-0">{{ $message }}</small>
-                                @enderror
-                            </div>
+.auth-title{
+    font-size:25px;
+    font-weight:700;
+    color:#0f172a;
+    text-align:center;
+    margin-bottom:6px;
+}
 
-                            <div class="form-group">
-                                <label class="form-control-label" for="confirmPassword">Confirm Password</label>
-                                <input type="password" class="form-control  @error('confirmPassword') is-invalid @enderror"
-                                    name="confirmPassword" required id="confirmPassword" placeholder="*****">
-                                @error('confirmPassword')
-                                    <small class="invalid-veedback text-danger mt-0 pt-0">{{ $message }}</small>
-                                @enderror
-                            </div>
+.auth-subtitle{
+    text-align:center;
+    color:#64748b;
+    margin-bottom:30px;
+    font-size: 13px;
+}
 
-                            <div class="col-lg-12 loginbttm">
-                                <div class="col-lg-6 login-btm login-text">
-                                    <!-- Error Message -->
-                                </div>
-                                <div class="col-lg-12 login-btm login-button mt-2">
-                                    <button type="submit" class="btn btn-eventconnect text-white">REGISTER</button>
-                                </div>
-                            </div>
-                        </form>
+.auth-input{
+    height:56px;
+    border-radius:14px;
+    border:1px solid #e2e8f0;
+    box-shadow:none !important;
+}
 
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-2"></div>
-            </div>
-            <div class="col-md-12 text-center mt-3">
-                <small> Sudah punya akun? <a href="/login" class="btn btn-secondary btn-sm ms-1 btn-log-reg"><span><i
-                                class="fas fa-user"></i> login
-                            sekarang</span></a>
+.auth-input:focus{
+    border-color:#3b82f6;
+    box-shadow:0 0 0 4px rgba(59,130,246,.08) !important;
+}
+
+.auth-btn{
+    width:100%;
+    height:56px;
+    border:none;
+    border-radius:14px;
+    font-weight:600;
+    color:#fff;
+
+    background:linear-gradient(
+        135deg,
+        #2563eb,
+        #3b82f6
+    );
+}
+
+.auth-footer{
+    text-align:center;
+    margin-top:20px;
+    color:#64748b;
+}
+
+.auth-footer a{
+    text-decoration:none;
+    font-weight:600;
+}
+
+@media(max-width:576px){
+
+    .auth-card{
+        padding:25px;
+    }
+
+    .auth-title{
+        font-size:24px;
+    }
+}
+
+</style>
+
+<div class="auth-card">
+
+<div class="auth-logo">
+
+    {{-- Logo EventHub --}}
+    {{-- <img src="{{ asset('img/logo.png') }}"> --}}
+    <div class="auth-logo">
+        <a href="/" class="logo-link">
+            <img src="{{ asset('assets/img/eventhub-3.png') }}" alt="EventHub">
+        </a>
+    </div>
+
+</div>
+
+<div class="auth-title">
+    Buat Akun Baru 🚀
+</div>
+
+<div class="auth-subtitle">
+    Mulai buat event, kelola peserta, ticketing, dan pembayaran dalam satu dashboard terintegrasi.
+</div>
+
+<form action="/register" method="post">
+
+    @csrf
+
+    <div class="mb-3">
+
+        <label class="mb-2">
+            Username
+        </label>
+
+        <input
+            type="text"
+            name="username"
+            class="form-control auth-input @error('username') is-invalid @enderror"
+            value="{{ old('username') }}"
+            placeholder="username"
+            required>
+
+        @error('username')
+            <small class="text-danger">
+                {{ $message }}
+            </small>
+        @enderror
+
+    </div>
+
+    <div class="mb-3">
+
+        <label class="mb-2">
+            Email
+        </label>
+
+        <input
+            type="email"
+            name="email"
+            class="form-control auth-input @error('email') is-invalid @enderror"
+            value="{{ old('email') }}"
+            placeholder="example@email.com"
+            required>
+
+        @error('email')
+            <small class="text-danger">
+                {{ $message }}
+            </small>
+        @enderror
+
+    </div>
+
+    <div class="row">
+
+        <div class="col-md-6 mb-3">
+
+            <label class="mb-2">
+                Password
+            </label>
+
+            <input
+                type="password"
+                name="password"
+                class="form-control auth-input @error('password') is-invalid @enderror"
+                placeholder="••••••••"
+                required>
+
+            @error('password')
+                <small class="text-danger">
+                    {{ $message }}
                 </small>
-            </div>
+            @enderror
+
         </div>
-    @endsection
+
+        <div class="col-md-6 mb-3">
+
+            <label class="mb-2">
+                Konfirmasi Password
+            </label>
+
+            <input
+                type="password"
+                name="confirmPassword"
+                class="form-control auth-input @error('confirmPassword') is-invalid @enderror"
+                placeholder="••••••••"
+                required>
+
+            @error('confirmPassword')
+                <small class="text-danger">
+                    {{ $message }}
+                </small>
+            @enderror
+
+        </div>
+
+    </div>
+
+    <button
+        type="submit"
+        class="auth-btn mt-2">
+
+        Buat Akun
+
+    </button>
+
+</form>
+
+<div class="auth-footer">
+
+    Sudah punya akun?
+
+    <a href="/login">
+        Login sekarang
+    </a>
+
+</div>
+
+</div>
+
+</div>
+
+    
+@endsection
