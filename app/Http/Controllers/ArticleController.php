@@ -15,29 +15,31 @@ class ArticleController extends Controller
 {
 
 	# Main page artikel / blog
-	public function blogMain()
-	{
-		$latestArticles = Article::where('article_code', '!=', 2)->latest()->first();
+public function blogMain()
+{
+    $latestArticles = Article::where('article_code', '!=', 2)->latest()->first();
 
-		if (!$latestArticles) {
-			// Kalau tidak ada artikel, bisa redirect atau tampilkan view kosong
-			return view('article.page-blog-index', [
-				'latestArticle' => null,
-				'articles' => collect(), // kosong
-			]);
-		}
+    if (!$latestArticles) {
+        // Kalau tidak ada artikel sama sekali
+        return view('article.page-blog-index', [
+            'latestArticle' => null,
+            'articles' => collect(), // kosong
+        ]);
+    }
 
-		$articles = Article::where('slug', '!=', $latestArticles->slug)
-			->where('article_code', '!=', 2)
-			->orderBy('id', 'DESC')
-			->paginate(10)
-			->withQueryString();
+    // Bagian ini hanya jalan kalau $latestArticles ada
+    $articles = Article::where('slug', '!=', $latestArticles->slug)
+        ->where('article_code', '!=', 2)
+        ->orderBy('id', 'DESC')
+        ->paginate(10)
+        ->withQueryString();
 
-		return view('article.page-blog-index', [
-			'latestArticle' => $latestArticles,
-			'articles' => $articles,
-		]);
-	}
+    return view('article.page-blog-index', [
+        'latestArticle' => $latestArticles,
+        'articles' => $articles,
+    ]);
+}
+
 
 	public function blogSearch(Request $request)
 	{
