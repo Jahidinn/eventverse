@@ -17,10 +17,16 @@ class ArticleController extends Controller
 	# Main page artikel / blog
 	public function blogMain()
 	{
-		# 1 Artikel terbaru
 		$latestArticles = Article::where('article_code', '!=', 2)->latest()->first();
 
-		# Query mengambil data artikel
+		if (!$latestArticles) {
+			// Kalau tidak ada artikel, bisa redirect atau tampilkan view kosong
+			return view('article.page-blog-index', [
+				'latestArticle' => null,
+				'articles' => collect(), // kosong
+			]);
+		}
+
 		$articles = Article::where('slug', '!=', $latestArticles->slug)
 			->where('article_code', '!=', 2)
 			->orderBy('id', 'DESC')
