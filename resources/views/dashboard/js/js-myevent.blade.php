@@ -44,9 +44,17 @@
         $('body').on('click', '.detail-myevent', function(e) {
             e.preventDefault();
             var id = $(this).data('id');
-            const hashids = new Hashids('eventhub-secret', 15);
+            const hashids = new Hashids('eventhub-secret', 25);
             const hashIdTransaction = hashids.encode(id);
             window.location = "/event/redirect-invoice/" + hashIdTransaction;
+        })
+
+        $('body').on('click', '.ticket-myevent', function(e) {
+            e.preventDefault();
+            var id = $(this).data('id');
+            const hashids = new Hashids('eventhub-secret', 25);
+            const hashIdTransaction = hashids.encode(id);
+            window.location = "/event/ticket/" + hashIdTransaction;
         })
 
         $('body').on('click', '.lanjutkan-transaksi', function(e) {

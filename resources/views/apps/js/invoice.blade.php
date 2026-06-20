@@ -27,9 +27,18 @@
         var url = '{{ env('APP_URL_INVOICE') }}';
 
         var id_transaksi = $(this).data('id_transaksi');
-        const hashids = new Hashids('eventhub-secret', 15);
+        const hashids = new Hashids('eventhub-secret', 25);
         const hashIdTransaction = hashids.encode(id_transaksi);
         window.location.href = '/generate-pdf?id_transaksi=' + hashIdTransaction + '&url=' + url
+    })
+
+    $('body').on('click', '#download-ticket', function(e) {
+        e.preventDefault();
+
+        var id_transaksi = $(this).data('id_transaksi');
+        const hashids = new Hashids('eventhub-secret', 25);
+        const hashIdTransaction = hashids.encode(id_transaksi);
+        window.location.href = '/event/ticket/' + hashIdTransaction
     })
 
     $('body').on('click', '#lanjutkan-transaksi', function(e) {

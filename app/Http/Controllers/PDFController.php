@@ -22,10 +22,13 @@ class PDFController extends Controller
 	 */
 	public function generatePDF(Request $request)
 	{
+		
 		$url = env('APP_URL_INVOICE');
-		if ($request->url != $url) {
-			return redirect('/');
-		}
+		// if ($request->url != $url) {
+		// 	return redirect('/');
+		// }
+
+		// dd($request->all());
 		$id_transaksi = Hashids::decode($request->id_transaksi)[0] ?? abort(404);
 
 		$transaksi = Transaction::find($id_transaksi);
@@ -38,10 +41,10 @@ class PDFController extends Controller
 		// ]);
 
 		$qrcode = base64_encode(QrCode::format('svg')->backgroundColor(0, 0, 0, 0)->color(20, 52, 68)->size(150)->errorCorrection('H')->generate($transaksi->transaction_id));
-		$qrcode_ec = base64_encode(QrCode::format('svg')->size(80)->errorCorrection('H')->generate('http:://www.eventconnect.id'));
+		$qrcode_ec = base64_encode(QrCode::format('svg')->size(80)->errorCorrection('H')->generate('http:://www.eventhub.web.id'));
 
 		$data = [
-			'title' => 'Welcome to ItSolutionStuff.com',
+			'title' => 'Eventhub Ticket',
 			'qrcode_ec' => $qrcode_ec,
 			'qrcode' => $qrcode,
 			'transaction' => $transaksi,
@@ -52,4 +55,28 @@ class PDFController extends Controller
 		$pdf = PDF::loadView('apps.pdf-invoice', $data);
 		return $pdf->download('Invoice-EC' . $transaksi->id + 1 . '.pdf');
 	}
+
+	public function downloadTicket(Request $request)
+	{
+		$id_transaksi = Hashids::decode($request->id_transaksi)[0] ?? abort(404);
+
+		$transaksi = Transaction::find($id_transaksi);
+		$event = Event::with('penyelenggara')->find($transaksi->event_id);
+		$ticket = Ticket::find($transaksi->ticket_id);
+
+		$qrcode = base64_encode(QrCode::format('svg')->backgroundColor(0, 0, 0, 0)->color(20, 52, 68)->size(100)->errorCorrection('H')->generate('EC-WNLKUUEUX5'));
+		$qrcode_ec = base64_encode(QrCode::format('svg')->size(80)->errorCorrection('H')->generate('http:://www.eventhub.id'));
+
+		$data = [
+			'title' => 'Eventhub Ticket',
+			'qrcode_ec' => $qrcode_ec,
+			'qrcode' => $qrcode,
+			'transaction' => $transaksi,
+			'event' => $event,
+			'ticket' => $ticket,
+		];
+    $pdf = Pdf::loadView('apps.ticket-pdf', $data);
+
+    return $pdf->download('apps.ticket-pdf.pdf');
+}
 }

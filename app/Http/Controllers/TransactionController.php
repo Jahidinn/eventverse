@@ -234,7 +234,7 @@ class TransactionController extends Controller
 	public function generateUniqueCode()
 	{
 		do {
-			$randomStr = 'EC-' . Str::random(10);
+			$randomStr = 'EH-' . Str::random(10);
 			$uniqueCode = strtoupper($randomStr);
 		} while (Transaction::where("transaction_id", "=", $uniqueCode)->first());
 
@@ -293,7 +293,7 @@ class TransactionController extends Controller
 		}
 	}
 
-	public function redirectInvoice($hash)
+	public function redirectInvoice(string $hash)
 	{
 		// Render view tanpa langsung redirect
 		// $id = Hashids::decode($hash)[0] ?? abort(404);
@@ -302,7 +302,7 @@ class TransactionController extends Controller
 	}
 
 
-	public function invoice($hash)
+	public function invoice(string $hash)
 	{
 		$id = Hashids::decode($hash)[0] ?? abort(404);
 		$transaction = Transaction::find($id);
@@ -323,6 +323,34 @@ class TransactionController extends Controller
 		]);
 	}
 
+
+	public function ticket(string $hash)
+	{
+		$id = Hashids::decode($hash)[0] ?? abort(404);
+		$transaction = Transaction::find($id);
+		
+		if($transaction->status != 'Paid') {
+			return redirect('/');
+		}
+
+		//jika tidak ada transaksi alihkan halaman (proteksi invoice)
+		if (!$transaction) {
+			return redirect('/');
+		}
+
+		$event = Event::with('penyelenggara')->find($transaction->event_id);
+		$ticket = Ticket::find($transaction->ticket_id);
+
+		return view('apps.ticket', [
+			'transaction' => $transaction,
+			'event' => $event,
+			'ticket' => $ticket,
+			'qrcode' => QrCode::size(150)->generate($transaction->transaction_id),
+		]);
+	}
+
+	
+
 	public function deleteTransaction(Request $request)
 	{
 		//Mengamankan delete dengan akses url ajax
@@ -340,7 +368,7 @@ class TransactionController extends Controller
 		return response()->json('Sukses hapus');
 	}
 
-	public function sendEmail($transaction_code)
+	public function sendEmail(string $transaction_code)
 	{
 		$transaction = Transaction::where('transaction_id', $transaction_code)->first();
 		$event = Event::with('penyelenggara')->find($transaction->event_id);

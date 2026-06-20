@@ -71,7 +71,7 @@
 
         <footer class="main-footer">
             <div class="float-right d-none d-sm-block">
-                <b>Version</b> 3.2.0
+                <small><b>Version</b> 3.2.0</small>
             </div>
             <small><strong>Copyright &copy; 2014-2021 <a href="/">eventhub.web.id</a>.</strong> All rights
                 reserved.</small>

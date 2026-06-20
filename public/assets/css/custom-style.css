@@ -1731,6 +1731,12 @@ button.slick-disabled {
   background-color: #F082AC;
 }
 
+.joined-actions{
+	display:grid;
+	grid-template-columns:repeat(5,1fr);
+	gap:4px;
+}
+
 /* CSS */
 .button-39 {
   background-color: #FFFFFF;
@@ -1751,6 +1757,9 @@ button.slick-disabled {
   user-select: none;
   -webkit-user-select: none;
   touch-action: manipulation;
+  display:flex;
+  justify-content:center;
+  align-items:center;
 }
 
 .button-39:hover {

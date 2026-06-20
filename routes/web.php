@@ -226,13 +226,17 @@ Route::middleware(['auth'])->group(function () {
 	# Checkout
 	Route::get('/event/checkout', [TransactionController::class, 'checkoutPreview']);
 	Route::get('/event/invoice/{hash}', [TransactionController::class, 'invoice']);
+	Route::get('/event/ticket/{hash}', [TransactionController::class, 'ticket']);
 	Route::post('/event/checkout-proccess', [TransactionController::class, 'transaction']);
 	Route::post('/event/continue-transaction', [TransactionController::class, 'continueTransaction']);
 	Route::post('/event/transaction-delete', [TransactionController::class, 'deleteTransaction']);
 	Route::get('/event/send-email/{transaction_code}', [TransactionController::class, 'sendEmail']);
 	Route::get('/event/redirect-invoice/{hash}', [TransactionController::class, 'redirectInvoice']);
 	Route::get('/generate-pdf', [PDFController::class, 'generatePDF']);
+	Route::get('/download-ticket', [PDFController::class, 'downloadTicket'])->name('ticket.download');
 });
+
+// Route::view('/email', 'apps.email-sandbox');
 
 Route::get('/{event}', [EventController::class, 'show']);
 Route::get('/event/{event}', [EventController::class, 'show']);

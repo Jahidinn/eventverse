@@ -19,7 +19,7 @@
                 <div class="col-md-12 px-2 mt-2">
                     <div class="card">
                         <div class="card-header bg-secondary text-white">
-                            Eventconnect.ID
+                            EventHub ID
                         </div>
                         <div class="mt-3 ml-2">
                             <h5 class="card-title mb-1">Halo, {{ $transaction->name }}!</h5>
@@ -48,19 +48,25 @@
                             @endif
 
                             <br>
-                            <button type="button" class="btn btn-info btn-sm mt-2" onClick="window.location.reload();"><i
-                                    class="fas fa-redo-alt"></i> Refresh
-                            </button>
-                            <button type="button" class="btn btn-success btn-sm mt-2"
-                                data-id_transaksi="{{ $transaction->id }}" id="download-invoice"><i
-                                    class="fas fa-file-pdf"></i> Download
-                            </button>
-
-                            @if ($transaction->status == 'Unpaid' || $transaction->status == 'Pending')
-                                <button type="button" class="btn btn-secondary btn-sm mt-2" id="lanjutkan-transaksi"
-                                    data-id_transaksi="{{ $transaction->id }}"><i class="fas fa-wallet"></i> Bayar
+                            <div class="joined-actions">
+                                <button type="button" class="button-39 mt-2 px-0" onClick="window.location.reload();"><i
+                                    class="ti ti-reload ti-sm mr-1"></i> Refresh
                                 </button>
-                            @endif
+                                <button type="button" class="button-39 text-success btn-sm mt-2"
+                                    data-id_transaksi="{{ $transaction->id }}" id="download-invoice"><i
+                                        class="ti ti-file-type-pdf ti-sm mr-1"></i> Download
+                                </button>
+                                <button type="button" class="button-39 text-info btn-sm mt-2"
+                                    data-id_transaksi="{{ $transaction->id }}" id="download-ticket"><i
+                                        class="ti ti-ticket ti-sm mr-1"></i> Ticket
+                                </button>
+
+                                @if ($transaction->status == 'Unpaid' || $transaction->status == 'Pending')
+                                    <button type="button" class="button-39 text-success btn-sm mt-2" id="lanjutkan-transaksi"
+                                        data-id_transaksi="{{ $transaction->id }}"><i class="fas fa-wallet"></i> Bayar
+                                    </button>
+                                @endif
+                            </div>
                         </div>
                         <hr class="mx-2 mt-2">
                         <div class="col-md-12 row mb-2">
@@ -122,7 +128,7 @@
                             </div>
                             <div class="alert alert-primary" role="alert">
                                 {{ $ticket->ticket_name }} <strong><span
-                                        class="badge badge-secondary p-2">{{ $transaction->quantity }}X</span>
+                                        class="badge badge-secondary p-2">{{ $transaction->quantity }}X</span></strong>
                                     <hr>
                                     Total bayar :
 

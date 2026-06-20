@@ -41,7 +41,7 @@ class TransactionEmail extends Mailable
 		}
 
 		return new Envelope(
-			subject: 'Transaksi eventconnect.id (' . $status . ')',
+			subject: 'Transaksi EventHub (' . $status . ')',
 		);
 	}
 

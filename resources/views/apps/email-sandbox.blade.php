@@ -143,18 +143,18 @@
             box-sizing: border-box;
             color: #1e4356;
             cursor: pointer;
-            display: inline-block;
+            /* display: inline-block; */
             font-size: 16px;
             font-weight: bold;
             margin: 0;
-            padding: 5px 24px;
+            padding: 5px 20px;
             text-decoration: none;
             text-transform: capitalize;
         }
 
-        .btn-primary table td {
+        /* .btn-primary table td {
             background-color: #1e4356;
-        }
+        } */
 
         .btn-primary a {
             background-color: #1e4356;
@@ -168,8 +168,8 @@
             } */
 
             .btn-primary a:hover {
-                background-color: rgb(13, 37, 49) !important;
-                border-color: rgb(13, 36, 47) !important;
+                background-color: rgb(17, 44, 56) !important;
+                border-color: rgb(17, 45, 59) !important;
             }
         }
 
@@ -312,6 +312,44 @@
     </style>
 </head>
 
+@php
+
+// ==========================
+// DUMMY DATA UNTUK TEST VIEW
+// ==========================
+
+$transaction = (object) [
+    'id' => 1,
+    'name' => 'Jahidin Nur',
+    'email' => 'jahidin@email.com',
+    'quantity' => 1,
+    'total_price' => 150000,
+    'status' => 'Paid',
+    'transaction_id' => 'EVT20260001',
+];
+
+$ticket = (object) [
+    'ticket_name' => 'Tiket VIP',
+];
+
+$event = (object) [
+    'title' => 'Workshop Nasional Artificial Intelligence 2026',
+];
+
+// $qrcode = base64_encode(
+//     file_get_contents(public_path('assets/img/qrcode-dummy.png'))
+// );
+
+// Simulasi object message agar embed tidak error
+$message = new class {
+    public function embed($path)
+    {
+        return $path;
+    }
+};
+
+@endphp
+
 <body>
     <table role="presentation" border="0" cellpadding="0" cellspacing="0" class="body">
         <tr>
@@ -326,7 +364,7 @@
                         <!-- START MAIN CONTENT AREA -->
                         <tr>
                             <td class="wrapper">
-                                <h3>Halo, {{ $transaction['name'] }}!</h3>
+                                <h3>Halo, {{ $transaction->name }}!</h3>
                                 <div style="font-size: 12px;">
                                     <p style="font-size: 13px;">Terimakasih sudah melakukan pendaftaran/pembelian tiket
                                         event di
@@ -340,7 +378,7 @@
                                     <span>Quantity : <b>{{ $transaction->quantity }}</b></span><br>
 
                                     <span>Total biaya :
-                                        <b>Rp {{ number_format($transaction['total_price'], 0, ',', '.') }}</b></span>
+                                        <b>Rp {{ number_format($transaction->total_price, 0, ',', '.') }}</b></span>
                                     @if ($transaction->status == 'Paid')
                                         <span style="color: #00762d">(Sukses!)</span>
                                     @else
@@ -349,9 +387,9 @@
 
                                     <br>
 
-                                    <span>Kode transaksi : <b>#{{ $transaction['transaction_id'] }}</b></span>
+                                    <span>Kode transaksi : <b>#{{ $transaction->transaction_id }}</b></span>
                                 </div>
-                                <div style="text-align: left; margin-top:15px"> {!! QrCode::size(130)->generate($transaction['transaction_id']) !!}</div>
+                                <div style="text-align: left; margin-top:15px"> {!! QrCode::size(130)->generate($transaction->transaction_id) !!}</div>
 
                                 {{-- <div style="text-align: center">
                                     <img style="text-align: center;" src="data:image/png;base64,{{ $qrcode }}">
@@ -362,8 +400,7 @@
                                     <tbody>
                                         <tr>
                                             <td align="left">
-                                                <table role="presentation" border="3" cellpadding="3"
-                                                    cellspacing="0">
+                                                <table role="presentation" border="0" cellspacing="4" cellpadding="3">
                                                     <tbody>
                                                         <tr>
                                                             @php
@@ -371,12 +408,11 @@
                                                             @endphp
 
                                                             <td>
-                                                                <a href="{{ url('/event/redirect-invoice/' . $hashids->encode($transaction['id'])) }}"
+                                                                <a href="{{ url('/event/redirect-invoice/' . $hashids->encode($transaction->id)) }}"
                                                                     target="_blank">
-                                                                    Lihat invoice
+                                                                    Invoice
                                                                 </a>
                                                             </td>
-
                                                             <td>
                                                                 <a href="{{ url('/event/ticket/' . $hashids->encode($transaction->id)) }}"
                                                                     target="_blank">

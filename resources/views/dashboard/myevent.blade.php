@@ -84,6 +84,11 @@
                 line-height:1.5;
             }
 
+            .lanjutkan-transaksi{
+                background:rgba(16,185,129,.08);
+                color:#059669;
+            }
+
             .status-chip{
                 display:inline-flex;
                 align-items:center;
@@ -155,7 +160,7 @@
             }
 
             .action-text{
-                margin-left:4px;
+                margin-left:2px;
             }
 
             .empty-state{
@@ -324,7 +329,7 @@
                                 title="Detail">
 
                                 <i class="ti ti-list ti-sm"></i>
-                                <span class="action-text">Detail</span>
+                                {{-- <span class="action-text">Detail</span> --}}
 
                             </button>
 
@@ -336,7 +341,7 @@
                                     disabled>
 
                                     <i class="ti ti-edit ti-sm"></i>
-                                    <span class="action-text">Edit</span>
+                                    {{-- <span class="action-text">Edit</span> --}}
 
                                 </button>
 
@@ -349,7 +354,7 @@
                                     data-event="{{ $myevent->event->id }}">
 
                                     <i class="ti ti-edit ti-sm"></i>
-                                    <span class="action-text">Edit</span>
+                                    {{-- <span class="action-text">Edit</span> --}}
 
                                 </button>
 
@@ -365,47 +370,24 @@
 
                             </button>
 
+                            <button
+                                type="button"
+                                class="button-39 ticket-myevent"
+                                data-id="{{ $myevent->id }}">
+
+                                <i class="ti ti-ticket ti-sm"></i>
+                                <span class="action-text">Ticket</span>
+
+                            </button>
+
                         @elseif($myevent->status == 'Unpaid')
 
                             <button
                                 type="button"
-                                class="button-39 bg-success lanjutkan-transaksi"
+                                class="button-39 lanjutkan-transaksi"
                                 data-id="{{ $myevent->id }}">
 
-                                <i class="ti ti-coin"></i>
-                                <span class="action-text">Bayar</span>
-
-                            </button>
-
-                            <button
-                                type="button"
-                                class="button-39 text-info detail-myevent"
-                                data-id="{{ $myevent->id }}">
-
-                                <i class="fas fa-list"></i>
-                                <span class="action-text">Detail</span>
-
-                            </button>
-
-                            <button
-                                type="button"
-                                class="button-39 text-danger"
-                                id="delete-myevent"
-                                data-id="{{ $myevent->id }}">
-
-                                <i class="fas fa-trash-alt"></i>
-                                <span class="action-text">Hapus</span>
-
-                            </button>
-
-                        @elseif($myevent->status == 'Pending')
-
-                            <button
-                                type="button"
-                                class="button-39 bg-success lanjutkan-transaksi"
-                                data-id="{{ $myevent->id }}">
-
-                                <i class="ti ti-coin ti-sm"></i>
+                                <i class="ti ti-cash ti-sm"></i>
                                 <span class="action-text">Bayar</span>
 
                             </button>
@@ -416,7 +398,40 @@
                                 data-id="{{ $myevent->id }}">
 
                                 <i class="ti ti-list ti-sm"></i>
-                                <span class="action-text">Detail</span>
+                                {{-- <span class="action-text">Detail</span> --}}
+
+                            </button>
+
+                            <button
+                                type="button"
+                                class="button-39 text-danger"
+                                id="delete-myevent"
+                                data-id="{{ $myevent->id }}">
+
+                                <i class="ti ti-trash ti-sm"></i>
+                                {{-- <span class="action-text">Hapus</span> --}}
+
+                            </button>
+
+                        @elseif($myevent->status == 'Pending')
+
+                            <button
+                                type="button"
+                                class="button-39 lanjutkan-transaksi"
+                                data-id="{{ $myevent->id }}">
+
+                                <i class="ti ti-cash ti-sm"></i>
+                                <span class="action-text">Bayar</span>
+
+                            </button>
+
+                            <button
+                                type="button"
+                                class="button-39 text-info detail-myevent"
+                                data-id="{{ $myevent->id }}">
+
+                                <i class="ti ti-list ti-sm"></i>
+                                {{-- <span class="action-text">Detail</span> --}}
 
                             </button>
 

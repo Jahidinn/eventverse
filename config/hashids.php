@@ -30,7 +30,7 @@ return [
 
         'main' => [
             'salt' => 'eventhub-secret',
-            'length' => 15,
+            'length' => 25,
             // 'alphabet' => 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890'
         ],
 

@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title>Laravel 10 Generate PDF Example - ItSolutionStuff.com</title>
+    <title>Eventhub Ticket</title>
     <style>
         /*
   Common invoice styles. These styles will work in a browser or using the HTML
@@ -214,7 +214,7 @@
     </div>
 
     <div class="logo-container">
-        <img style="height: 60px" src="{{ public_path('/assets/img/logo-2.png') }}">
+        <img style="height: 60px" src="{{ public_path('/assets/img/eventhub-3.png') }}">
     </div>
 
     <table class="invoice-info-container">
