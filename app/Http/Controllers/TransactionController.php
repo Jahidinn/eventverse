@@ -297,7 +297,7 @@ class TransactionController extends Controller
 	{
 		// Render view tanpa langsung redirect
 		// $id = Hashids::decode($hash)[0] ?? abort(404);
-		return view('apps.redirect-to-invoice', ['invoiceId' => $hash]);
+		return view('apps.invoice-redirect', ['invoiceId' => $hash]);
 		//return redirect('/event/invoice/' . $id);
 	}
 
@@ -315,7 +315,7 @@ class TransactionController extends Controller
 		$event = Event::with('penyelenggara')->find($transaction->event_id);
 		$ticket = Ticket::find($transaction->ticket_id);
 
-		return view('apps.invoice', [
+		return view('apps.invoice-page', [
 			'transaction' => $transaction,
 			'event' => $event,
 			'ticket' => $ticket,
@@ -328,7 +328,7 @@ class TransactionController extends Controller
 	{
 		$id = Hashids::decode($hash)[0] ?? abort(404);
 		$transaction = Transaction::find($id);
-		
+
 		if($transaction->status != 'Paid') {
 			return redirect('/');
 		}

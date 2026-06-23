@@ -52,8 +52,8 @@ class PDFController extends Controller
 			'ticket' => $ticket,
 		];
 
-		$pdf = PDF::loadView('apps.pdf-invoice', $data);
-		return $pdf->download('Invoice-EC' . $transaksi->id + 1 . '.pdf');
+		$pdf = PDF::loadView('apps.invoice-pdf', $data);
+		return $pdf->download('Invoice ' . $transaksi->transaction_id . '.pdf');
 	}
 
 	public function downloadTicket(Request $request)
