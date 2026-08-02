@@ -10,10 +10,13 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DownloadController;
+use App\Http\Controllers\EventStudioController;
 use App\Http\Controllers\OrganizationController;
 use App\Http\Controllers\ScoreController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\UserProfileController;
+use App\Http\Controllers\LocationController;
+use App\Http\Controllers\CheckoutController;
 use GuzzleHttp\Promise\Create;
 
 /*
@@ -60,9 +63,85 @@ Route::redirect('/ec-esai2024', '/ec-esai24');
 Route::redirect('/EC-ESAI2024', '/ec-esai24');
 
 Route::middleware(['auth'])->group(function () {
+
+	Route::get('/url-check', [EventStudioController::class, 'urlCheck']);
+	Route::prefix('event-studio')->name('event-studio.')->group(function () {
+		Route::post('/store', [EventStudioController::class, 'store'])->name('store');
+		Route::post('/{event_id}/autosave', [EventStudioController::class, 'autosave'])->name('autosave');
+
+		# Banner
+		Route::post('/{event_id}/banner', [EventStudioController::class, 'uploadBanner'])->name('banner');
+		Route::delete('/{event_id}/banner', [EventStudioController::class, 'deleteBanner'])->name('banner.delete');
+
+		# Gallery
+		Route::post('/{event_id}/gallery', [EventStudioController::class, 'uploadGallery'])->name('gallery');
+		Route::delete('/{event_id}/gallery/{image}', [EventStudioController::class, 'deleteGallery'])->name('gallery.delete');
+		Route::post('/{event_id}/gallery/sort', [EventStudioController::class, 'sortGallery'])->name('gallery.sort');
+
+		# Ticket
+    	Route::post('/{event_id}/ticket', [EventStudioController::class, 'storeTicket'])->name('ticket.store');
+		Route::put('/{event_id}/ticket/{ticket_id}', [EventStudioController::class, 'updateTicket'])->name('ticket.update');
+		Route::delete('/{event_id}/ticket/{ticket_id}', [EventStudioController::class, 'deleteTicket'])->name('ticket.delete');
+
+		Route::post('/{event_id}/form', [EventStudioController::class, 'storeForm'])->name('form.store');
+		Route::put('/{event_id}/form/{form_id}', [EventStudioController::class, 'updateForm'])->name('form.update');
+		Route::delete('/{event_id}/form/{form_id}', [EventStudioController::class, 'deleteForm'])->name('form.delete');
+
+		Route::get('/{event_id}/basic', [EventStudioController::class, 'basic'])->name('basic');
+		Route::get('/{event_id}/detail', [EventStudioController::class, 'detail'])->name('detail');
+		Route::get('/{event_id}/ticket', [EventStudioController::class, 'ticket'])->name('ticket');
+		Route::get('/{event_id}/form', [EventStudioController::class, 'form'])->name('form');
+		Route::get('/{event_id}/preview', [EventStudioController::class, 'preview'])->name('preview');
+		Route::post('/{event}/publish', [EventStudioController::class, 'publish'])->name('publish');
+	});
+
+	Route::prefix('locations')->name('locations.')->group(function () {
+		Route::get('/provinces', [LocationController::class, 'provinces'])->name('provinces');
+		Route::get('/cities/{province}', [LocationController::class, 'cities'])->name('cities');
+
+	});
+
+	# CHECKOUT
+    Route::get('/checkout', [CheckoutController::class, 'create'])->name('checkout.create');
+	Route::post('/checkout/validate', [CheckoutController::class, 'validateCheckout'])->name('checkout.validate');
+	Route::post('/checkout/store', [CheckoutController::class, 'store'])->name('checkout.store');
+	Route::get('/checkout/cleanup-sandbox', [CheckoutController::class, 'cleanupSandbox']);
+
+	Route::prefix('transaction')->name('transaction.')->group(function () {
+
+		Route::get(
+			'/{transaction:transaction_code}',
+			[TransactionController::class, 'show']
+		)->name('show');
+
+		Route::get(
+			'/{transaction:transaction_code}/check-status',
+			[TransactionController::class, 'checkStatus']
+		)->name('check-status');
+		
+		Route::post(
+			'/{transaction:transaction_code}/change-payment',
+			[TransactionController::class, 'changePayment']
+		)->name('change-payment');
+
+		Route::get(
+			'/{transaction:transaction_code}/payment-methods',
+			[TransactionController::class, 'paymentMethods']
+		)->name('payment-methods');
+
+		Route::get(
+			'/{transaction:transaction_code}/invoice',
+			[TransactionController::class, 'invoice']
+		)->name('invoice');
+
+	});
+
+
+
 	// Rute-rute yang akan terkena middleware auth
 	// LIST ROUTE ......
 
+	# ROUTE LAMA
 	# event
 	Route::post('/event-edit-image', [EventController::class, 'editImage']);
 	Route::post('/event-edit', [EventController::class, 'editProcess']);
@@ -190,9 +269,9 @@ Route::middleware(['auth'])->group(function () {
 	});
 });
 
-Route::get('/check-url', function () {
-    return config('app.url');
-});
+// Route::get('/check-url', function () {
+//     return config('app.url');
+// });
 
 # Tanpa middleware
 
@@ -238,7 +317,7 @@ Route::middleware(['auth'])->group(function () {
 
 // Route::view('/email', 'apps.email-sandbox');
 
-Route::get('/{event}', [EventController::class, 'show']);
+Route::get('/{event}', [EventController::class, 'show'])->name('event.show');
 Route::get('/event/{event}', [EventController::class, 'show']);
 
 # download file

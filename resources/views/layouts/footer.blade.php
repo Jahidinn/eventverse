@@ -25,7 +25,7 @@
                 <h4>Link penting</h4>
                 <ul>
                     <li><i class="bx bx-chevron-right"></i> <a href="/">Home</a></li>
-                    <li><i class="bx bx-chevron-right"></i> <a href="/about-us">Tentang eventhub.web.id</a></li>
+                    <li><i class="bx bx-chevron-right"></i> <a href="/about-us">Tentang eventverse.id</a></li>
                     <li><i class="bx bx-chevron-right"></i> <a href="/terms-and-condition">Terms and condition</a>
                     </li>
                     <li><i class="bx bx-chevron-right"></i> <a href="/privacy-policy">Privacy policy</a></li>
@@ -51,15 +51,15 @@
                     Kota Semarang, Pos 50215
                     Indonesia <br><br>
                     <strong>Phone:</strong> +62 896 123 94600<br>
-                    <strong>Email:</strong> info@eventhub.web.id<br>
+                    <strong>Email:</strong> info@eventverse.id<br>
                     <a href="/blog/contact-us" class="btn btn-info btn-sm">contact us</a>
                 </p>
 
             </div>
 
             <div class="col-lg-3 col-md-6 footer-info">
-                <h3>About eventhub.web.id</h3>
-                <p>Eventhub.web.id merupaan platform Ticketing Management Sistem yang
+                <h3>About eventverse.id</h3>
+                <p>Eventverse.id merupaan platform Ticketing Management Sistem yang
                     menyediakan solusi dalam mendukung penyelenggaraan event. <a href="/blog/about-us"
                         class="text-success">selengkapnya ...</a></p>
                 <div class="social-links mt-3">
@@ -76,7 +76,7 @@
 
 <div class="containe bg-copyright pb-4">
     <div class="copyright">2018 - {{ date('Y') }}
-        &copy; Copyright <strong><span>www.eventhub.web.id</span></strong>. All Rights Reserved
+        &copy; Copyright <strong><span>www.eventverse.id</span></strong>. All Rights Reserved
     </div>
     <!-- All the links in the footer should remain intact. -->
     <!-- You can delete the links only if you purchased the pro version. -->

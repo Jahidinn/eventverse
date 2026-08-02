@@ -2,7 +2,7 @@
     <div class="logo float-left">
         <!--  <h1 class="text-light"><a href="index.html"><span>Mediaprestasi</span></a></h1> -->
         <!-- Uncomment below if you prefer to use an image logo -->
-        <a href="/"><img src="/assets/img/eventhub-logo.png" alt="" class="img-fluid"></a>
+        <a href="/"><img src="/assets/img/eventverse-2026.png" alt="" class="img-fluid"></a>
     </div>
 
     <nav class="nav-menu float-right d-none d-lg-block">
@@ -28,7 +28,7 @@
             @if (Auth::check())
                 <li style="position: relative;top: -7px; padding: 1; margin: 0; ">
                     <a href="/dashboard" class=" link-login-register">
-                        <button class="button-10 w-100 button py-1">
+                        <button class="button-21 w-100 button py-1">
                             <i class="ti ti-user ti-sm mr-1"></i> {{ explode(' ', auth()->user()->name)[0] }}
                         </button>
 
@@ -36,7 +36,7 @@
                 </li>
             @else
                 <li style="position: relative;top: -7px; padding: 0; margin: 0;">
-                    <a href="/login" class=" link-login-register">
+                    <a href="/login" class="link-login-register">
                         <button class="button-21 w-100 px-3 mr-4 py-1">
                             Login
                         </button>

@@ -16,7 +16,7 @@
         </div>
     </section> --}}
 
-    <div class="header-wave">
+    {{-- <div class="header-wave">
         <!--Content before waves-->
         <div class="inner-header flex">
             <div class="wave-content w-100">
@@ -51,7 +51,64 @@
         <!--Waves end-->
 
     </div>
-    <!--Header ends-->
+    <!--Header ends--> --}}
+
+
+    {{-- ============================= --}}
+    {{-- Featured Event Banner --}}
+    {{-- ============================= --}}
+
+@if(count($heroBanners))
+<section class="featured-banner-section">
+
+    <div class="swiper featuredSwiper">
+
+        <div class="swiper-wrapper">
+
+            @foreach($heroBanners as $banner)
+
+                <div class="swiper-slide">
+
+                    <a href="{{ $banner['link'] }}" class="featured-banner-card">
+
+                        <img
+                            src="{{ $banner['image'] }}"
+                            class="featured-banner-image"
+                            loading="lazy">
+
+                        <div class="featured-overlay"></div>
+
+                        {{-- <span class="featured-detail-btn">
+
+                            {{ $banner['button_text'] }}
+
+                            <i class="ti ti-arrow-right"></i>
+
+                        </span> --}}
+
+                    </a>
+
+                </div>
+
+            @endforeach
+
+        </div>
+
+        <div class="swiper-pagination"></div>
+
+        <div class="featured-prev">
+            <i class="ti ti-chevron-left"></i>
+        </div>
+
+        <div class="featured-next">
+            <i class="ti ti-chevron-right"></i>
+        </div>
+
+    </div>
+
+</section>
+
+@endif
 
 
     {{-- Form Pencarian --}}
@@ -67,8 +124,8 @@
         </div>
     </section> --}}
 
-    <section class="why-us py-4 px-2">
-        <div class="my-4">
+    <section class="why-us pt-0 pb-2 px-2">
+        <div class="mt-1 mb-3">
 
             <form class="search-modern" method="GET" action="/search">
                 <i class="ti ti-search search-icon"></i>
@@ -186,11 +243,67 @@
         </div>
     </section>
 
+    <section class="event-category-section my-0 py-4">
+
+        <div class="container">
+
+            <div class="section-title">
+                <h2>Kategori Event</h2>
+            </div>
+
+        </div>
+
+        <div class="category-wrapper">
+
+            <button
+                type="button"
+                class="category-prev">
+
+                <i class="ti ti-chevron-left"></i>
+
+            </button>
+
+            <div class="container">
+
+                <div class="category-slider">
+
+                    @foreach($categories as $category)
+
+                        <a href="#" class="category-item">
+
+                            <div class="category-icon">
+
+                                <i class="{{ $category->icon }}"></i>
+
+                            </div>
+
+                            <span>{{ $category->name }}</span>
+
+                        </a>
+
+                    @endforeach
+
+                </div>
+
+            </div>
+
+            <button
+                type="button"
+                class="category-next">
+
+                <i class="ti ti-chevron-right"></i>
+
+            </button>
+
+        </div>
+
+    </section>
+
     {{-- Penawaran --}}
     <section class="event-terbaru-setion pt-4 p-0 bg-eventconnect">
         <div class="container evnt-terbaru pt-0 mt-0 text-white text-center">
             <div class="py-5">
-                <h6>Jaidikan event kamu lebih keren disini !!!</h6> <a class="button-21" href="/event/create">
+                <h6>Jaidikan event kamu lebih keren di eventverse !!!</h6> <a class="button-21" href="/event/create">
                     <small><strong>BUAT EVENT SEKARANG</strong> <i class="fas fa-rocket"></i></small></a>
             </div>
         </div>
@@ -198,7 +311,7 @@
 
 
     {{-- Event Populer --}}
-    <section class="event-terbaru-section section-bg pt-4 p-0" style="background-color: #fff ">
+    <section class="event-terbaru-section bg-soft pt-4 p-0">
         <div class="section-title pb-0">
             <h2 class="mt-0">Event Populer</h2>
         </div>
@@ -294,7 +407,7 @@
     </section>
 
     {{-- Event pilihan --}}
-    <section class="event-terbaru-section section-bg pt-4 p-0" style="background-color: #fff ">
+    <section class="event-terbaru-section section-bg pt-4 p-0 bg-soft">
         <div class="section-title pb-0">
             <h2 class="mt-0">Event Pilihan</h2>
         </div>
@@ -419,307 +532,1594 @@
     </section>
 
 
-    <!-- ======= Why Us Section ======= -->
-    <section class="event-terbaru-setion p-0">
+   <!-- =========================================
+    WHY EVENTVERSE
+========================================= -->
 
-        <style>
+<section class="ev-why mb-4">
 
-        .feature-section{
+    <div class="container">
 
-            background:#fff;
+        <!-- =========================
+                SECTION TITLE
+        ========================== -->
 
-            border-radius:28px;
+        <div class="ev-title">
 
-            padding:40px 30px;
+            <span class="ev-badge">
 
-            box-shadow:
-                0 10px 40px rgba(0,0,0,.05);
-        }
+                <i class="ti ti-sparkles"></i>
 
-        .section-title{
+                Eventverse.id
 
-            font-size:22px;
+            </span>
 
-            font-weight:700;
+            <h3>
 
-            color:#0f172a;
-        }
+                Semua kebutuhan event dalam satu platform
 
-        .section-subtitle{
+            </h3>
 
-            color:#64748b;
+            <p>
 
-            max-width:700px;
+                Eventverse membantu komunitas, organisasi, institusi pendidikan,
+                perusahaan, hingga Event Organizer mengelola event secara
+                profesional mulai dari registrasi peserta, ticketing,
+                pembayaran online, QR Code Check-In, sertifikat digital,
+                hingga laporan event dalam satu dashboard modern.
 
-            margin:auto;
-        }
+            </p>
 
-        .feature-grid{
+        </div>
 
-            display:grid;
+        <!-- =========================
+                CONTENT
+        ========================== -->
 
-            grid-template-columns:
-                repeat(auto-fit,minmax(250px,1fr));
+        <div class="ev-wrapper">
 
-            gap:18px;
+            <!-- =====================================
+                        LEFT SIDE
+            ====================================== -->
 
-            margin-top:35px;
-        }
+            <div class="ev-left">
 
-        .feature-card{
+                <div class="ev-section-title">
 
-            background:#fff;
+                    <h4>
+                        Mengapa Memilih Eventverse?
+                    </h4>
 
-            border:1px solid #eef2f7;
+                    <p>
 
-            border-radius:20px;
+                        Semua kebutuhan penyelenggaraan event tersedia
+                        dalam satu platform modern sehingga Anda dapat
+                        fokus menghadirkan pengalaman terbaik bagi peserta.
 
-            padding:22px;
+                    </p>
 
-            transition:.25s;
-        }
+                </div>
 
-        .feature-card:hover{
+                <div class="ev-feature-list">
 
-            transform:translateY(-4px);
+                    <!-- ==================== -->
 
-            box-shadow:
-                0 10px 25px rgba(0,0,0,.06);
-        }
+                    <div class="ev-feature">
+                        <div class="ev-icon">
+                            <i class="ti ti-ticket"></i>
+                        </div>
+                        <div>
+                            <h4>100% Gratis!</h4>
+                        </div>
+                    </div>
 
-        .feature-icon{
+                    <div class="ev-feature">
+                        <div class="ev-icon">
+                            <i class="ti ti-ticket"></i>
+                        </div>
+                        <div>
+                            <h4>Modern event management</h4>
+                        </div>
+                    </div>
 
-            width:52px;
-            height:52px;
+                    <div class="ev-feature">
 
-            border-radius:16px;
+                        <div class="ev-icon">
 
-            display:flex;
-            align-items:center;
-            justify-content:center;
+                            <i class="ti ti-ticket"></i>
 
-            margin-bottom:14px;
+                        </div>
 
-            font-size:22px;
+                        <div>
 
-            background:rgba(59,130,246,.08);
+                            <h4>
+                                Ticketing Modern
+                            </h4>
 
-            color:#2563eb;
-        }
+                            <p>
 
-        .feature-title{
+                                Buat tiket gratis maupun berbayar dengan
+                                berbagai kategori, kuota, jadwal penjualan,
+                                promo, dan batas pembelian peserta.
 
-            font-size:17px;
+                            </p>
 
-            font-weight:700;
+                        </div>
 
-            color:#0f172a;
+                    </div>
 
-            margin-bottom:8px;
-        }
+                    <!-- ==================== -->
 
-        .feature-desc{
+                    <div class="ev-feature">
 
-            font-size:14px;
+                        <div class="ev-icon">
 
-            color:#64748b;
+                            <i class="ti ti-forms"></i>
 
-            margin-bottom:0;
-        }
+                        </div>
 
-        .about-card{
+                        <div>
 
-            margin-top:40px;
+                            <h4>
+                                Formulir Registrasi Fleksibel
+                            </h4>
 
-            background:
-                linear-gradient(
-                    135deg,
-                    #f8fafc,
-                    #ffffff
-                );
+                            <p>
 
-            border-radius:24px;
+                                Buat formulir pendaftaran sesuai kebutuhan
+                                event tanpa coding menggunakan berbagai
+                                jenis pertanyaan.
 
-            padding:35px;
+                            </p>
 
-            border:1px solid #eef2f7;
-        }
+                        </div>
 
-        .about-title{
+                    </div>
 
-            font-size:22px;
+                    <!-- ==================== -->
 
-            font-weight:700;
+                    <div class="ev-feature">
 
-            color:#0f172a;
-        }
+                        <div class="ev-icon">
 
-        .about-desc{
+                            <i class="ti ti-credit-card"></i>
 
-            color:#64748b;
+                        </div>
 
-            line-height:1.9;
-        }
+                        <div>
 
-        .about-button{
+                            <h4>
+                                Pembayaran Online
+                            </h4>
 
-            margin-top:15px;
-        }
+                            <p>
 
-        @media(max-width:768px){
+                                Mendukung berbagai metode pembayaran
+                                dengan verifikasi transaksi otomatis
+                                sehingga peserta dapat bertransaksi
+                                dengan lebih mudah.
 
-            .feature-section{
-                padding:25px 20px;
-            }
+                            </p>
 
-            .section-title{
-                font-size:20px;
-            }
+                        </div>
 
-            .about-title{
-                font-size:20px;
-            }
+                    </div>
 
-        }
+                    <!-- ==================== -->
 
-        </style>
+                    <div class="ev-feature">
 
-        <div class=" feature-section">
+                        <div class="ev-icon">
 
-            <div class="text-center">
+                            <i class="ti ti-qrcode"></i>
 
-                <h3 class="section-title">
-                    Mengapa Memilih EventHub?
-                </h3>
+                        </div>
 
-                <p class="section-subtitle">
-                    Platform manajemen event modern untuk membantu penyelenggara mengelola registrasi, ticketing, pembayaran, dan peserta dalam satu dashboard terintegrasi.
-                </p>
+                        <div>
+
+                            <h4>
+                                QR Code Ticket & Check-In
+                            </h4>
+
+                            <p>
+
+                                Setiap tiket memiliki QR Code unik yang
+                                mempercepat proses check-in peserta saat
+                                hari pelaksanaan event.
+
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                    <!-- ==================== -->
+
+                    <div class="ev-feature">
+
+                        <div class="ev-icon">
+
+                            <i class="ti ti-users-group"></i>
+
+                        </div>
+
+                        <div>
+
+                            <h4>
+                                Multi User Organizer
+                            </h4>
+
+                            <p>
+
+                                Tambahkan admin, panitia, maupun PIC
+                                dengan hak akses berbeda agar seluruh
+                                tim dapat bekerja bersama.
+
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                    <!-- ==================== -->
+
+                    <div class="ev-feature">
+
+                        <div class="ev-icon">
+
+                            <i class="ti ti-users"></i>
+
+                        </div>
+
+                        <div>
+
+                            <h4>
+                                Manajemen Peserta
+                            </h4>
+
+                            <p>
+
+                                Kelola seluruh data peserta,
+                                status registrasi, pembayaran,
+                                serta kehadiran dalam satu dashboard.
+
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                    <!-- ==================== -->
+
+                    <div class="ev-feature">
+
+                        <div class="ev-icon">
+
+                            <i class="ti ti-certificate"></i>
+
+                        </div>
+
+                        <div>
+
+                            <h4>
+                                Sertifikat Digital
+                            </h4>
+
+                            <p>
+
+                                Bagikan sertifikat digital secara
+                                otomatis kepada peserta setelah
+                                event selesai.
+
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                    <!-- ==================== -->
+
+                    <div class="ev-feature">
+
+                        <div class="ev-icon">
+
+                            <i class="ti ti-browser"></i>
+
+                        </div>
+
+                        <div>
+
+                            <h4>
+                                Landing Page Event
+                            </h4>
+
+                            <p>
+
+                                Setiap event memiliki halaman
+                                profesional yang siap dibagikan
+                                kepada calon peserta.
+
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                    <!-- ==================== -->
+
+                    <div class="ev-feature">
+
+                        <div class="ev-icon">
+
+                            <i class="ti ti-link"></i>
+
+                        </div>
+
+                        <div>
+
+                            <h4>
+                                Short Link Event
+                            </h4>
+
+                            <p>
+
+                                Bagikan event menggunakan URL pendek
+                                yang lebih mudah diingat dan dibagikan.
+
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                    <!-- ==================== -->
+
+                    <div class="ev-feature">
+
+                        <div class="ev-icon">
+
+                            <i class="ti ti-mail"></i>
+
+                        </div>
+
+                        <div>
+
+                            <h4>
+                                Email & Notifikasi Otomatis
+                            </h4>
+
+                            <p>
+
+                                Kirim konfirmasi pendaftaran,
+                                pembayaran, pengingat event,
+                                dan informasi penting kepada peserta.
+
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                    <!-- ==================== -->
+
+                    <div class="ev-feature">
+
+                        <div class="ev-icon">
+
+                            <i class="ti ti-chart-line"></i>
+
+                        </div>
+
+                        <div>
+
+                            <h4>
+                                Laporan & Analitik Real-Time
+                            </h4>
+
+                            <p>
+
+                                Pantau penjualan tiket,
+                                pembayaran, jumlah peserta,
+                                dan tingkat kehadiran secara langsung.
+
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                    <!-- ==================== -->
+
+                    <div class="ev-feature">
+
+                        <div class="ev-icon">
+
+                            <i class="ti ti-cloud"></i>
+
+                        </div>
+
+                        <div>
+
+                            <h4>
+                                Berbasis Cloud
+                            </h4>
+
+                            <p>
+
+                                Akses dan kelola event kapan saja
+                                dan di mana saja tanpa perlu
+                                menginstal aplikasi tambahan.
+
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
 
             </div>
 
-            <div class="feature-grid">
+            <!-- RIGHT SIDE DIMULAI PADA BAGIAN 2 -->
+                        <!-- =====================================
+                        RIGHT SIDE
+            ====================================== -->
 
-                <div class="feature-card">
+            <div class="ev-right">
 
-                    <div class="feature-icon">
-                        <i class="ti ti-ticket"></i>
+                <div class="ev-dashboard">
+
+                    <div class="ev-topbar">
+
+                        <span></span>
+                        <span></span>
+                        <span></span>
+
                     </div>
 
-                    <div class="feature-title">
-                        Ticketing Profesional
-                    </div>
+                    <div class="ev-screen">
 
-                    <p class="feature-desc">
-                        Tingkatkan citra event dengan sistem registrasi dan ticketing yang lebih profesional dan terpercaya.
-                    </p>
+                        <!-- nanti ganti screenshot dashboard -->
+
+                        <img
+                            src="/assets/img/dashboard-eventverse.webp"
+                            class="ev-dashboard-image"
+                            alt="Dashboard Eventverse">
+
+                    </div>
 
                 </div>
-
-                <div class="feature-card">
-
-                    <div class="feature-icon">
-                        <i class="ti ti-credit-card"></i>
-                    </div>
-
-                    <div class="feature-title">
-                        Pembayaran Otomatis
-                    </div>
-
-                    <p class="feature-desc">
-                        Mendukung berbagai metode pembayaran dengan proses transaksi yang cepat dan aman.
-                    </p>
-
-                </div>
-
-                <div class="feature-card">
-
-                    <div class="feature-icon">
-                        <i class="ti ti-qrcode"></i>
-                    </div>
-
-                    <div class="feature-title">
-                        QR Check-In
-                    </div>
-
-                    <p class="feature-desc">
-                        Check-in peserta lebih cepat menggunakan QR Code Ticketing yang modern dan akurat.
-                    </p>
-
-                </div>
-
-                <div class="feature-card">
-
-                    <div class="feature-icon">
-                        <i class="ti ti-users"></i>
-                    </div>
-
-                    <div class="feature-title">
-                        Kelola Peserta
-                    </div>
-
-                    <p class="feature-desc">
-                        Semua data peserta tersimpan rapi dan dapat diakses kapan saja dari dashboard organizer.
-                    </p>
-
-                </div>
-
-                <div class="feature-card">
-
-                    <div class="feature-icon">
-                        <i class="ti ti-chart-bar"></i>
-                    </div>
-
-                    <div class="feature-title">
-                        Statistik Real-Time
-                    </div>
-
-                    <p class="feature-desc">
-                        Pantau peserta, pembayaran, kehadiran, dan performa event secara langsung.
-                    </p>
-
-                </div>
-
-                <div class="feature-card">
-
-                    <div class="feature-icon">
-                        <i class="ti ti-link"></i>
-                    </div>
-
-                    <div class="feature-title">
-                        Short Link Event
-                    </div>
-
-                    <p class="feature-desc">
-                        Bagikan event dengan URL yang lebih singkat dan mudah diingat oleh peserta.
-                    </p>
-
-                </div>
-
-            </div>
-
-            <div class="about-card">
-
-                <h3 class="about-title">
-                    Apa itu EventHub?
-                </h3>
-
-                <p class="about-desc">
-                    EventHub adalah platform manajemen event dan ticketing online yang membantu komunitas, organisasi, institusi pendidikan, dan perusahaan mengelola event secara lebih profesional.
-                </p>
-
-                <p class="about-desc">
-                    Mulai dari registrasi peserta, penjualan tiket, pembayaran online, QR Code check-in, sertifikat digital, hingga laporan dan analisis event dapat dikelola dalam satu dashboard yang mudah digunakan.
-                </p>
-
-                <a href="/about-us" class="button-40 about-button">
-                    Pelajari Lebih Lanjut
-                </a>
 
             </div>
 
         </div>
 
-        </section>
-    <!-- End Why Us Section -->
+    </div>
+
+
+</section>
+
+<style> 
+    /* =====================================================
+    WHY EVENTVERSE
+===================================================== */
+
+.ev-why{
+
+    position: relative;
+
+    overflow:visible;
+
+    padding: 0px 0;
+
+    background:
+        radial-gradient(circle at top right,
+        rgba(37,99,235,.06),
+        transparent 35%),
+        linear-gradient(
+        180deg,
+        #ffffff 0%,
+        #f8fbff 100%);
+
+}
+
+/* ====================================== */
+
+.ev-why::before{
+
+    content:"";
+
+    position:absolute;
+
+    width:450px;
+
+    height:450px;
+
+    left:-180px;
+
+    top:-180px;
+
+    border-radius:50%;
+
+    background:#2563eb;
+
+    opacity:.05;
+
+    filter:blur(120px);
+
+}
+
+.ev-why::after{
+
+    content:"";
+
+    position:absolute;
+
+    width:350px;
+
+    height:350px;
+
+    right:-120px;
+
+    bottom:-120px;
+
+    border-radius:50%;
+
+    background:#3b82f6;
+
+    opacity:.04;
+
+    filter:blur(100px);
+
+}
+
+/* ====================================== */
+
+.ev-why .container{
+
+    position:relative;
+
+    z-index:2;
+
+}
+
+/* =====================================================
+    SECTION TITLE
+===================================================== */
+
+.ev-title{
+
+    max-width:850px;
+
+    margin:0 auto 80px;
+
+    text-align:center;
+
+}
+
+.ev-badge{
+
+    display:inline-flex;
+
+    align-items:center;
+
+    gap:10px;
+
+    padding:10px 20px;
+
+    border-radius:999px;
+
+    background:#eef4ff;
+
+    color:#2563eb;
+
+    font-size:14px;
+
+    font-weight:600;
+
+    margin-bottom:24px;
+
+}
+
+.ev-badge i{
+
+    font-size:18px;
+
+}
+
+.ev-title h2{
+
+    font-size:52px;
+
+    line-height:1.15;
+
+    font-weight:800;
+
+    color:#0f172a;
+
+    letter-spacing:-1px;
+
+    margin-bottom:24px;
+
+}
+
+.ev-title p{
+
+    max-width:760px;
+
+    margin:auto;
+
+    font-size:16px;
+
+    line-height:1.7;
+
+    color:#64748b;
+
+}
+
+/* =====================================================
+    CONTENT
+===================================================== */
+
+.ev-wrapper{
+
+    display:grid;
+
+    grid-template-columns:1.1fr .9fr;
+
+    gap:70px;
+
+    align-items:start;
+
+}
+
+/* =====================================================
+    LEFT
+===================================================== */
+
+.ev-left{
+
+    min-width:0;
+
+}
+
+/* =====================================================
+    RIGHT
+===================================================== */
+
+.ev-right{
+
+    position:sticky;
+
+    top:100px;
+
+    align-self:start;
+
+}
+
+/* =====================================================
+    Smooth Animation
+===================================================== */
+
+.ev-title,
+.ev-left,
+.ev-right{
+
+    animation:fadeUp .7s ease;
+
+}
+
+@keyframes fadeUp{
+
+    from{
+
+        opacity:0;
+
+        transform:translateY(35px);
+
+    }
+
+    to{
+
+        opacity:1;
+
+        transform:none;
+
+    }
+
+}
+
+/* =====================================================
+    LEFT CONTENT
+===================================================== */
+
+.ev-section-title{
+
+    margin-bottom:45px;
+
+}
+
+.ev-section-title h3{
+
+    font-size:36px;
+
+    font-weight:800;
+
+    color:#0f172a;
+
+    letter-spacing:-.5px;
+
+    margin-bottom:15px;
+
+}
+
+.ev-section-title p{
+
+    max-width:560px;
+
+    color:#64748b;
+
+    line-height:1.9;
+
+    font-size:16px;
+
+}
+
+/* =====================================================
+    FEATURE LIST
+===================================================== */
+
+.ev-feature-list{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:16px;
+
+}
+
+/* =====================================================
+    FEATURE ITEM
+===================================================== */
+
+.ev-feature{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:20px;
+
+    padding:15px 24px;
+
+    background:#fff;
+
+    border-radius:20px;
+
+    border:1px solid #edf2f7;
+
+    transition:.35s;
+
+    position:relative;
+
+}
+
+
+
+.ev-feature:hover{
+
+    transform:translateY(-6px);
+
+    border-color:#bfdbfe;
+
+    box-shadow:
+        0 18px 45px rgba(15,23,42,.08);
+
+}
+
+/* =====================================================
+    ICON
+===================================================== */
+
+.ev-icon{
+
+    width:39px;
+
+    height:39px;
+
+    min-width:39px;
+
+    border-radius:15px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    background:
+        linear-gradient(
+            135deg,
+            #3b82f6,
+            #2563eb
+        );
+
+    color:#fff;
+
+    font-size:20px;
+
+    transition:.3s;
+
+    box-shadow:
+        0 12px 30px rgba(37,99,235,.20);
+
+}
+
+.ev-feature:hover .ev-icon{
+
+    transform:scale(1.08) rotate(-4deg);
+
+}
+
+/* =====================================================
+    TEXT
+===================================================== */
+
+.ev-feature h4{
+
+    margin:0px;
+
+    color:#0f172a;
+
+    font-size:15px;
+
+    font-weight:500;
+
+}
+
+.ev-feature p{
+
+    margin:0;
+
+    color:#64748b;
+
+    font-size:15px;
+
+    line-height:1.8;
+
+}
+
+/* =====================================================
+    SMALL BLUE BAR
+===================================================== */
+
+.ev-feature::before{
+
+    content:"";
+
+    position:absolute;
+
+    left:0;
+
+    top:22px;
+
+    bottom:22px;
+
+    width:4px;
+
+    border-radius:20px;
+
+    background:transparent;
+
+    transition:.3s;
+
+}
+
+.ev-feature:hover::before{
+
+    background:#2563eb;
+
+}
+
+/* =====================================================
+    SPACING
+===================================================== */
+
+.ev-feature:last-child{
+
+    margin-bottom:0;
+
+}
+
+/* =====================================================
+    RIGHT SIDE
+===================================================== */
+
+.ev-right{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:35px;
+
+}
+
+/* =====================================================
+    DASHBOARD
+===================================================== */
+
+.ev-dashboard{
+
+    background:#fff;
+
+    border-radius:28px;
+
+    overflow:hidden;
+
+    border:1px solid #e5e7eb;
+
+    box-shadow:
+        0 25px 60px rgba(15,23,42,.10);
+
+    transition:.35s;
+
+}
+
+.ev-dashboard:hover{
+
+    transform:translateY(-8px);
+
+    box-shadow:
+        0 35px 80px rgba(15,23,42,.14);
+
+}
+
+.ev-topbar{
+
+    height:54px;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:10px;
+
+    padding:0 24px;
+
+    background:#f8fafc;
+
+    border-bottom:1px solid #edf2f7;
+
+}
+
+.ev-topbar span{
+
+    width:12px;
+
+    height:12px;
+
+    border-radius:50%;
+
+    background:#cbd5e1;
+
+}
+
+.ev-screen{
+
+    position:relative;
+
+    padding:40px;
+
+    min-height:420px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    background:
+        linear-gradient(
+            180deg,
+            #ffffff,
+            #f8fbff
+        );
+
+}
+
+/* =====================================================
+    PLACEHOLDER
+===================================================== */
+
+.ev-placeholder{
+
+    text-align:center;
+
+    max-width:420px;
+
+}
+
+.ev-placeholder i{
+
+    font-size:70px;
+
+    color:#2563eb;
+
+    margin-bottom:20px;
+
+}
+
+.ev-placeholder h3{
+
+    font-size:28px;
+
+    font-weight:800;
+
+    color:#0f172a;
+
+    margin-bottom:12px;
+
+}
+
+.ev-placeholder p{
+
+    color:#64748b;
+
+    line-height:1.8;
+
+}
+
+/* nanti ketika pakai screenshot */
+
+.ev-dashboard-image{
+
+    width:100%;
+
+    border-radius:12px;
+
+    display:block;
+
+}
+
+/* =====================================================
+    ABOUT
+===================================================== */
+
+.ev-about{
+
+    background:#fff;
+
+    border-radius:24px;
+
+    padding:35px;
+
+    border:1px solid #edf2f7;
+
+    box-shadow:
+        0 10px 35px rgba(15,23,42,.05);
+
+}
+
+.ev-about-badge{
+
+    display:inline-flex;
+
+    align-items:center;
+
+    gap:8px;
+
+    padding:8px 16px;
+
+    border-radius:999px;
+
+    background:#eef4ff;
+
+    color:#2563eb;
+
+    font-size:14px;
+
+    font-weight:600;
+
+    margin-bottom:20px;
+
+}
+
+.ev-about h3{
+
+    font-size:34px;
+
+    font-weight:800;
+
+    line-height:1.25;
+
+    color:#0f172a;
+
+    margin-bottom:18px;
+
+}
+
+.ev-about p{
+
+    color:#64748b;
+
+    line-height:1.9;
+
+    margin-bottom:18px;
+
+}
+
+/* =====================================================
+    HIGHLIGHT
+===================================================== */
+
+.ev-highlight{
+
+    margin-top:30px;
+
+    display:grid;
+
+    grid-template-columns:repeat(2,minmax(180px,1fr));
+
+    gap:16px;
+
+}
+
+.ev-highlight div{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:10px;
+
+    color:#334155;
+
+    font-weight:500;
+
+}
+
+.ev-highlight i{
+
+    width:26px;
+
+    height:26px;
+
+    border-radius:50%;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    background:#ecfdf5;
+
+    color:#16a34a;
+
+    font-size:13px;
+
+    flex-shrink:0;
+
+}
+
+/* =====================================================
+    BUTTONS
+===================================================== */
+
+.ev-buttons{
+
+    display:flex;
+
+    gap:16px;
+
+    margin-top:35px;
+
+    flex-wrap:wrap;
+
+}
+
+.button-outline{
+
+    background:#fff;
+
+    color:#2563eb;
+
+    border:1px solid #bfdbfe;
+
+}
+
+.button-outline:hover{
+
+    background:#2563eb;
+
+    color:#fff;
+
+}
+
+/* =====================================================
+    RESPONSIVE
+===================================================== */
+
+@media (max-width:1200px){
+
+    .ev-wrapper{
+
+        grid-template-columns:1fr;
+
+        gap:60px;
+
+    }
+
+    .ev-right{
+
+        position:relative;
+
+        top:0;
+
+    }
+
+    .ev-title{
+
+        margin-bottom:60px;
+
+    }
+
+}
+
+/* ====================================== */
+
+@media (max-width:992px){
+
+    .ev-why{
+
+        padding:90px 0;
+
+    }
+
+    .ev-title h2{
+
+        font-size:42px;
+
+    }
+
+    .ev-section-title h3{
+
+        font-size:30px;
+
+    }
+
+    .ev-about h3{
+
+        font-size:30px;
+
+    }
+
+    .ev-screen{
+
+        min-height:360px;
+
+    }
+
+}
+
+/* ====================================== */
+
+@media (max-width:768px){
+
+    .ev-why{
+
+        padding:70px 0;
+
+    }
+
+    .ev-title{
+
+        margin-bottom:45px;
+
+    }
+
+    .ev-title h2{
+
+        font-size:34px;
+
+    }
+
+    .ev-title p{
+
+        font-size:16px;
+
+        line-height:1.8;
+
+    }
+
+    .ev-wrapper{
+
+        gap:45px;
+
+    }
+
+    .ev-feature{
+
+        padding:18px;
+
+        gap:16px;
+
+    }
+
+    .ev-icon{
+
+        width:52px;
+
+        height:52px;
+
+        min-width:52px;
+
+        font-size:22px;
+
+        border-radius:16px;
+
+    }
+
+    .ev-feature h4{
+
+        font-size:17px;
+
+    }
+
+    .ev-feature p{
+
+        font-size:14px;
+
+    }
+
+    .ev-dashboard{
+
+        border-radius:22px;
+
+    }
+
+    .ev-screen{
+
+        min-height:280px;
+
+        padding:25px;
+
+    }
+
+    .ev-placeholder i{
+
+        font-size:54px;
+
+    }
+
+    .ev-placeholder h3{
+
+        font-size:22px;
+
+    }
+
+    .ev-about{
+
+        padding:28px;
+
+    }
+
+    .ev-about h3{
+
+        font-size:26px;
+
+    }
+
+    .ev-highlight{
+
+        grid-template-columns:1fr;
+
+        gap:14px;
+
+    }
+
+    .ev-buttons{
+
+        flex-direction:column;
+
+    }
+
+    .ev-buttons .button-40{
+
+        width:100%;
+
+        justify-content:center;
+
+    }
+
+}
+
+/* ====================================== */
+
+@media (max-width:480px){
+
+    .ev-badge{
+
+        font-size:13px;
+
+    }
+
+    .ev-title h2{
+
+        font-size:28px;
+
+    }
+
+    .ev-title p{
+
+        font-size:15px;
+
+    }
+
+    .ev-section-title h3{
+
+        font-size:26px;
+
+    }
+
+    .ev-about h3{
+
+        font-size:24px;
+
+    }
+
+    .ev-feature{
+
+        border-radius:18px;
+
+    }
+
+}
+
+/* =====================================================
+    SMOOTH ANIMATION
+===================================================== */
+
+.ev-feature,
+.ev-dashboard,
+.ev-about{
+
+    transition:
+        transform .35s ease,
+        box-shadow .35s ease,
+        border-color .35s ease;
+
+}
+
+/* =====================================================
+    OPTIONAL SCROLL ANIMATION
+===================================================== */
+
+.ev-feature{
+
+    opacity:0;
+
+    transform:translateY(30px);
+
+    animation:evFadeUp .6s forwards;
+
+}
+
+.ev-feature:nth-child(1){ animation-delay:.05s; }
+.ev-feature:nth-child(2){ animation-delay:.10s; }
+.ev-feature:nth-child(3){ animation-delay:.15s; }
+.ev-feature:nth-child(4){ animation-delay:.20s; }
+.ev-feature:nth-child(5){ animation-delay:.25s; }
+.ev-feature:nth-child(6){ animation-delay:.30s; }
+.ev-feature:nth-child(7){ animation-delay:.35s; }
+.ev-feature:nth-child(8){ animation-delay:.40s; }
+.ev-feature:nth-child(9){ animation-delay:.45s; }
+.ev-feature:nth-child(10){ animation-delay:.50s; }
+.ev-feature:nth-child(11){ animation-delay:.55s; }
+.ev-feature:nth-child(12){ animation-delay:.60s; }
+
+@keyframes evFadeUp{
+
+    to{
+
+        opacity:1;
+
+        transform:translateY(0);
+
+    }
+
+}
+
+/* =====================================================
+    IMAGE
+===================================================== */
+
+.ev-dashboard-image{
+
+    width:100%;
+
+    display:block;
+
+    border-radius:12px;
+
+}
+</style>
+
+
+    @push('home-js')
+
+    <script>
+        new Swiper(".featuredSwiper",{
+
+    loop:true,
+
+    centeredSlides:true,
+
+    slidesPerView:"auto",
+
+    spaceBetween:0,
+
+    speed:700,
+
+    grabCursor:true,
+
+    autoplay:{
+        delay:5000,
+        disableOnInteraction:false
+    },
+
+    pagination:{
+        el:".swiper-pagination",
+        clickable:true
+    },
+
+    navigation:{
+        nextEl:".featured-next",
+        prevEl:".featured-prev"
+    }
+
+});
+
+document.addEventListener("DOMContentLoaded", () => {
+
+    const slider = document.querySelector(".category-slider");
+
+    const prev = document.querySelector(".category-prev");
+
+    const next = document.querySelector(".category-next");
+
+    if (!slider) return;
+
+    const amount = 500;
+
+    next.addEventListener("click", () => {
+
+        slider.scrollBy({
+
+            left: amount,
+
+            behavior: "smooth"
+
+        });
+
+    });
+
+    prev.addEventListener("click", () => {
+
+        slider.scrollBy({
+
+            left: -amount,
+
+            behavior: "smooth"
+
+        });
+
+    });
+
+});
+    </script>
+        
+    @endpush
 @endsection

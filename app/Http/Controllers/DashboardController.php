@@ -33,12 +33,12 @@ class DashboardController extends Controller
 		$biayaAdmin = config('app.biaya_admin');
 		$totalTransaksi = 0;
 
-		$eventDiikuti = Transaction::where('user_login_id', $user_id)->count();
+		$eventDiikuti = Transaction::where('user_id', $user_id)->count();
 		$eventDibuat = Event::where('user_id', $user_id)->get();
 
 		foreach ($eventDibuat as $event) {
 			$jumlahPeserta = Transaction::where('event_id', $event->id)->where('status', 'Paid')->count();
-			$transaksi = Transaction::where('event_id', $event->id)->where('status', 'Paid')->sum('total_price');
+			$transaksi = Transaction::where('event_id', $event->id)->where('status', 'Paid')->sum('grand_total');
 
 			// Tambahkan jumlah peserta ke totalPeserta
 			$totalPeserta += $jumlahPeserta;

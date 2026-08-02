@@ -33,15 +33,23 @@ class Event extends Model
 	{
 		return $this->belongsTo(Province::class, 'location_province', 'code');
 	}
-	public function categories()
+
+	public function category()
 	{
-		return $this->belongsTo(Category::class, 'category');
+		return $this->belongsTo(EventCategory::class);
 	}
+	
 	public function themes()
 	{
 		return $this->belongsTo(Theme::class, 'theme');
 	}
+
+	// Metode lama, nanti akan dihapus
 	public function ticket()
+	{
+		return $this->hasMany(Ticket::class, 'event_id');
+	}
+	public function tickets()
 	{
 		return $this->hasMany(Ticket::class, 'event_id');
 	}
@@ -49,5 +57,14 @@ class Event extends Model
 	public function getRouteKeyName()
 	{
 		return 'slug';
+	}
+
+	public function images()
+{
+    return $this->hasMany(
+        EventImage::class,
+			'event_id',
+			'event_id'
+		)->orderBy('sort_order');
 	}
 }

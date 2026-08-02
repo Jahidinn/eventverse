@@ -93,7 +93,7 @@
 
 
             // PERUBAHAN, PEMBELI HARUS LOGIN
-            window.location.href = '/event/checkout?event=' + event_id +
+            window.location.href = '/checkout?event=' + event_id +
                 '&ticket=' + ticket_id;
 
             // if (!userAuthLogin) {

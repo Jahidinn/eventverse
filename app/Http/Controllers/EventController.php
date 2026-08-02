@@ -200,40 +200,100 @@ class EventController extends Controller
 
 	public function show(Event $event, Request $request)
 	{
-		//Menyimpan data visitor unik berdasarkan IP Address
-		$ipAddress = $request->ip();
-		$cekUnique = EventVisitor::where('ip_address', $ipAddress)->where('event_id', $event->id)->exists();
+		/*
+		|--------------------------------------------------------------------------
+		| Visitor
+		|--------------------------------------------------------------------------
+		*/
 
-		//Jika belum ada visitor
-		if (!$cekUnique) {
-			//Masukan ip address dan event yag dikunjungi
-			EventVisitor::create([
-				'ip_address' => $ipAddress,
-				'event_id' => $event->id,
-			]);
+		EventVisitor::firstOrCreate(
+			[
+				'ip_address' => $request->ip(),
+				'event_id'   => $event->id,
+			],
+			[]
+		);
 
-			// Update kolom pengunjung di tabel Event
-			$event = Event::find($event->id);
+		if (EventVisitor::where('ip_address', $request->ip())
+			->where('event_id', $event->id)
+			->count() == 1) {
+
 			$event->increment('visitor');
 		}
 
-		# Event rekomendasi
-		$recomendedEvent = Event::where('status', 1)
-			->where('slug', '!=', $event->slug)
+		/*
+		|--------------------------------------------------------------------------
+		| Load Relation
+		|--------------------------------------------------------------------------
+		*/
+
+		$event->load([
+			'category',
+			'province',
+			'themes',
+			'images',
+			'individual',
+			'org',
+			'tickets'
+		]);
+
+		/*
+		|--------------------------------------------------------------------------
+		| Ticket
+		|--------------------------------------------------------------------------
+		*/
+
+		$ticketData = $event->tickets;
+
+		/*
+		|--------------------------------------------------------------------------
+		| Transaction
+		|--------------------------------------------------------------------------
+		*/
+
+		$ticketTransaction = Transaction::where('event_id', $event->event_id)
+			->whereNotIn('status', ['Expired', 'Unpaid'])
+			->get();
+
+		/*
+		|--------------------------------------------------------------------------
+		| Recommended Event
+		|--------------------------------------------------------------------------
+		*/
+
+		$recomendedEvents = Event::with([
+				'category',
+				'tickets'
+			])
+			->where('status',1)
+			->where('slug','!=',$event->slug)
 			->inRandomOrder()
 			->limit(8)
 			->get();
 
-		$url = 'eventhub.web.id/' . $event->slug;
-		$qrcode = QrCode::size(200)->generate($url);
+		/*
+		|--------------------------------------------------------------------------
+		| QR Code
+		|--------------------------------------------------------------------------
+		*/
 
-		return view('events.show', [
-			'detailEvent' => $event,
-			'ticketData' => Ticket::where('event_id', $event->id)->get(),
-			'ticketTransaction' => Transaction::where('event_id', $event->id)->whereNotIn('status', ['Expired', 'Unpaid'])->get(),
-			'dateNow' => Carbon::now()->format('Y-m-d'),
-			'recomendedEvents' => $recomendedEvent,
-			'qrlink' => $qrcode,
+		$url = url('/'.$event->slug);
+
+		$qrlink = QrCode::size(220)->generate($url);
+
+		/*
+		|--------------------------------------------------------------------------
+		| Return
+		|--------------------------------------------------------------------------
+		*/
+
+		return view('apps.event-show',[
+			'detailEvent'       => $event,
+			'ticketData'        => $ticketData,
+			'ticketTransaction' => $ticketTransaction,
+			'dateNow'           => now()->toDateString(),
+			'recomendedEvents'  => $recomendedEvents,
+			'qrlink'            => $qrlink,
 		]);
 	}
 

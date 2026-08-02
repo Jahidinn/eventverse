@@ -325,5 +325,16 @@ class DatabaseSeeder extends Seeder
 
 		// Seeder data privinsi dan kota
 		// php artisan migrate:fresh --seed && php artisan laravolt:indonesia:seed
+
+		$this->call([
+			EventCategorySeeder::class,
+		]);
+
+		$this->call([
+            PaymentGatewaySeeder::class,
+            PaymentCategorySeeder::class,
+            PaymentMethodSeeder::class,
+            PaymentGatewayMethodSeeder::class,
+        ]);
 	}
 }

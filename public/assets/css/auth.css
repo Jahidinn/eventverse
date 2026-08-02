@@ -5,13 +5,13 @@
     height: auto;
     background: #fff;
 	border-top: 3px solid;
-	border-image: linear-gradient(to right, rgba(84, 58, 183, 1) 0%, rgba(0, 172, 193, 1) 100%);
+	border-image: linear-gradient(to right, rgb(3, 114, 205) 0%, rgb(3, 192, 255)  100%);
 	border-image-slice: 1;
     text-align: center;
     box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
 }
 .bg-eventconnect{
-	background: linear-gradient(60deg, rgb(58, 83, 183) 0%, rgba(0,172,193,1) 100%);
+	background: linear-gradient(60deg, rgb(3, 114, 205) 0%, rgb(3, 192, 255)  100%);
 }
 
 .login-title {
@@ -21,7 +21,7 @@
     letter-spacing: 1px;
     margin-top: 15px;
     font-weight: bold;
-    color: linear-gradient(60deg, rgba(84,58,183,1) 0%, rgba(0,172,193,1) 100%);
+    color: linear-gradient(60deg, rgb(3, 114, 205) 0%, rgb(3, 192, 255)  100%);
 }
 .reset-password-title {
     margin-top: 15px;

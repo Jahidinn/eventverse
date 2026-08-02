@@ -186,10 +186,22 @@
 
                     <div class="toolbar-modern">
 
-                        <a href="/event/create" class="button-40">
+                        {{-- <a href="/event/create" class="button-40">
                             <i class="ti ti-pencil-plus"></i>
                             Buat Event
-                        </a>
+                        </a> --}}
+
+                        {{-- OPEN MODAL --}}
+                        <button
+    type="button"
+    class="button-40"
+    data-toggle="modal"
+    data-target="#createEventModal">
+
+    <i class="ti ti-pencil-plus"></i>
+    Buat Event
+
+</button>
 
                         <form action="" method="GET" class="flex-grow-1">
 
@@ -555,11 +567,905 @@
             </div>
         </div>
 
+
+       <div class="modal fade" id="createEventModal" tabindex="-1">
+
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+
+        <form
+             id="createEventForm"
+    class="modal-content ev-card"
+    method="POST" onsubmit="return false;">
+
+            @csrf
+
+            
+
+            <div class="">
+
+                <div class="ev-card-header">
+
+                    <div class="ev-card-icon">
+
+                        <i class="ti ti-edit"></i>
+
+                    </div>
+
+                    <div>
+
+                        <h5>Event Information</h5>
+
+                        <p>
+                            Give your event a memorable name and unique public URL.
+                        </p>
+
+                    </div>
+
+                </div>
+
+                <!-- Event Name -->
+
+                <div class="ev-form-group">
+
+                    <label>
+
+                        Event Name
+
+                        <span>*</span>
+
+                    </label>
+
+                    <input
+                        type="text"
+                        id="name"
+                        name="name"
+                        class="ev-input"
+                        placeholder="Example: Tech Innovation Summit 2026">
+
+                </div>
+
+
+            <!-- =========================================
+                EVENT CATEGORY
+            ========================================= -->
+            <div class="ev-form-group">
+
+                <label class="ev-label">
+
+                    Kategori Event <span>*</span>
+
+                </label>
+
+                <select
+                    id="category_id"
+                    name="category_id">
+
+                    <option value="">Pilih kategori event</option>
+
+                    <option value="seminar">Seminar</option>
+                    <option value="workshop">Workshop</option>
+                    <option value="conference">Conference</option>
+                    <option value="concert">Concert</option>
+                    <option value="festival">Festival</option>
+                    <option value="sport">Sport</option>
+                    <option value="technology">Technology</option>
+                    <option value="business">Business</option>
+                    <option value="education">Education</option>
+                    <option value="startup">Startup</option>
+                    <option value="gaming">Gaming & Esports</option>
+                    <option value="food">Food & Beverage</option>
+                    <option value="art">Art & Culture</option>
+                    <option value="community">Community</option>
+                    <option value="charity">Charity</option>
+                    <option value="religious">Religious</option>
+                    <option value="others">Lainnya</option>
+
+                </select>
+
+            </div>
+
+                <!-- URL -->
+
+                <div class="ev-form-group">
+
+                    <label>
+
+                        Event URL
+
+                        <span>*</span>
+
+                    </label>
+
+                    <div class="ev-url-input">
+
+                        <div class="ev-url-prefix">
+
+                            eventverse.id/
+
+                        </div>
+
+                        <input
+                            type="text"
+                            id="slug"
+                            name="slug"
+                            class="ev-input-url"
+                            placeholder="tech-innovation-summit">
+
+                    </div>
+
+                </div>
+
+                <div class="ev-url-preview">
+
+                    <div id="slugAlert" class="ev-url-status info">
+
+                <span id="slugStatus">
+                    <i class="ti ti-info-circle"></i> URL akan dibuat otomatis
+                </span>
+
+            </div>
+
+                    <div id="urlPreview">
+
+                        eventverse.id/
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            {{-- <div class="modal-footer border-0">
+
+                <button
+                    type="button"
+                    class="btn btn-light"
+                    data-dismiss="modal">
+
+                    Cancel
+
+                </button>
+
+                <button
+                    type="submit"
+                    class="btn btn-primary">
+
+                    <i class="ti ti-check mr-1"></i>
+
+                    Create Event
+
+                </button>
+
+            </div> --}}
+
+            <!-- ACTION -->
+
+<div class="ev-card-footer">
+
+    <button
+        type="button"
+        class="btn btn-light"
+        data-dismiss="modal">
+
+        Cancel
+
+    </button>
+
+    <button
+        type="submit"
+        id="btnCreateEvent"
+        class="btn btn-primary">
+
+        <i class="ti ti-arrow-right mr-1"></i>
+
+        Create Event
+
+    </button>
+
+</div>
+
+        </form>
+
+    </div>
+
+</div>
+
     </section>
+
+
+    <style>
+
+
+/* =====================================================
+    CARD
+===================================================== */
+
+.ev-card{
+
+    background:#fff;
+
+    border:1px solid #E7EDF5;
+
+    border-radius:24px;
+
+    padding:28px;
+
+    box-shadow:0 10px 30px rgba(15,23,42,.04);
+
+    margin-bottom:28px;
+
+}
+
+.ev-card-header{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:18px;
+
+    margin-bottom:28px;
+
+}
+
+.ev-card-header h5{
+
+    margin:0;
+
+    font-size:1.15rem;
+
+    font-weight:700;
+
+    color:#0F172A;
+
+}
+
+.ev-card-header p{
+
+    margin:6px 0 0;
+
+    color:#64748B;
+
+    font-size:.92rem;
+
+}
+
+.ev-card-icon{
+
+    width:58px;
+
+    height:58px;
+
+    border-radius:18px;
+
+    background:linear-gradient(135deg,#EEF5FF,#DDEAFF);
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    color:#4F8CFF;
+
+    font-size:22px;
+
+}
+
+
+/* =====================================================
+    MOBILE
+===================================================== */
+
+@media(max-width:767px){
+
+.ev-card{
+
+    padding:20px;
+
+}
+
+.ev-title{
+
+    font-size:1.8rem;
+
+}
+}
+
+.ev-form-group{
+
+    margin-bottom:24px;
+    margin-top: 20px;
+
+}
+
+.ev-form-group label{
+
+    display:block;
+
+    font-weight:700;
+
+    margin-bottom:10px;
+
+    color:#0F172A;
+
+}
+
+.ev-form-group span{
+
+    color:#EF4444;
+
+}
+
+.ev-input{
+
+    width:100%;
+
+    height:58px;
+
+    border:1px solid #E2E8F0;
+
+    border-radius:16px;
+
+    padding:0 18px;
+
+    font-size:15px;
+
+    transition:.25s;
+
+}
+
+.ev-input:focus{
+
+    border-color:#4F8CFF;
+
+    box-shadow:0 0 0 4px rgba(79,140,255,.08);
+
+    outline:none;
+
+}
+
+.ev-url-input{
+
+    display:flex;
+
+    border:1px solid #E2E8F0;
+
+    border-radius:16px;
+
+    overflow:hidden;
+
+    transition:.25s;
+
+}
+
+.ev-url-input:focus-within{
+
+    border-color:#4F8CFF;
+
+    box-shadow:0 0 0 4px rgba(79,140,255,.08);
+
+}
+
+.ev-url-prefix{
+
+    background:#F8FAFC;
+
+    border-right:1px solid #E2E8F0;
+
+    padding:0 18px;
+
+    display:flex;
+
+    align-items:center;
+
+    color:#64748B;
+
+    font-weight:600;
+
+}
+
+.ev-input-url{
+
+    flex:1;
+
+    border:none;
+
+    height:58px;
+
+    padding:0 18px;
+
+    outline:none;
+
+}
+
+.ev-url-preview{
+
+    margin-top:20px;
+
+    padding:18px;
+
+    border-radius:16px;
+
+    background:#F8FAFC;
+
+    border:1px solid #E2E8F0;
+
+}
+
+.ev-url-status{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:10px;
+
+    margin-bottom:10px;
+
+    font-size:.92rem;
+
+    font-weight:600;
+
+}
+
+.ev-url-status.success{
+
+    color:#10B981;
+
+}
+
+.ev-url-status.error{
+
+    color:#EF4444;
+
+}
+
+.ev-url-status.checking{
+
+    color:#F59E0B;
+
+}
+
+.ev-url-status.info{
+
+    color:#64748B;
+
+}
+
+#urlPreview{
+
+    color:#334155;
+
+    word-break:break-all;
+
+}
+
+.ev-card-footer{
+
+    display:flex;
+
+    justify-content:flex-end;
+
+    align-items:center;
+
+    gap:12px;
+
+    margin-top:28px;
+
+    padding-top:24px;
+
+    border-top:1px solid #EEF2F7;
+
+}
+
+.ev-card-footer .btn{
+
+    min-width:140px;
+
+    height:46px;
+
+    border-radius:12px;
+
+    font-weight:600;
+
+}
+
+
+/* =========================================
+   CHOICES.JS - EVENTVERSE
+========================================= */
+
+.choices{
+    margin:0;
+}
+
+.choices__inner{
+
+    display:flex;
+    align-items:center;
+
+    min-height:58px;
+
+    padding:0 16px !important;
+
+    border:1px solid #E2E8F0;
+    border-radius:16px;
+
+    background:#FFF;
+
+    font-size:15px;
+
+    transition:.25s;
+
+}
+
+.choices.is-focused .choices__inner{
+
+    border-color:var(--primary);
+
+    box-shadow:0 0 0 4px rgba(79,110,247,.08);
+
+}
+
+/* text yang dipilih */
+
+.choices__list--single{
+
+    display:flex;
+    align-items:center;
+
+    height:56px;
+
+    padding:0 !important;
+
+}
+
+.choices__list--single .choices__item{
+
+    display:flex;
+    align-items:center;
+
+    font-weight:500;
+
+}
+
+/* search */
+
+.choices__input{
+
+    background:transparent !important;
+
+    margin:0 !important;
+
+    padding:0 !important;
+
+    font-size:15px;
+
+}
+
+/* dropdown */
+
+.choices__list--dropdown,
+.choices__list[aria-expanded]{
+
+    margin-top:8px;
+
+    border:1px solid #E2E8F0;
+
+    border-radius:16px;
+
+    overflow:hidden;
+
+    box-shadow:0 18px 40px rgba(15,23,42,.08);
+
+}
+
+/* item */
+
+.choices__list--dropdown .choices__item{
+
+    padding:13px 16px;
+
+    font-size:14px;
+
+    transition:.2s;
+
+}
+
+.choices__list--dropdown .choices__item--selectable.is-highlighted{
+
+    background:#EEF2FF;
+
+    color:var(--primary);
+
+}
+
+/* placeholder */
+
+.choices__placeholder{
+
+    opacity:.55;
+
+}
+
+/* Input search dalam dropdown */
+
+.choices__list--dropdown .choices__input,
+.choices__list[aria-expanded] .choices__input{
+
+    font-size:15px;
+
+    padding:10px 14px !important;
+
+    min-height:42px;
+
+    border:1px solid #E2E8F0;
+
+    border-radius:12px;
+
+    margin:10px !important;
+
+    width:calc(100% - 20px);
+
+    box-sizing:border-box;
+
+}
+
+/* Focus */
+
+.choices__list--dropdown .choices__input:focus,
+.choices__list[aria-expanded] .choices__input:focus{
+
+    border-color:var(--primary);
+
+    box-shadow:0 0 0 3px rgba(79,110,247,.08);
+
+}
+
+/* Placeholder */
+
+.choices__list--dropdown .choices__input::placeholder{
+
+    color:#94A3B8;
+
+}
+
+/* arrow */
+/* 
+.choices[data-type*="select-one"]::after{
+
+    border:none;
+
+    content:"\f078";
+
+    font-family:"Font Awesome 6 Free";
+
+    font-weight:900;
+
+    color:#94A3B8;
+
+    top:50%;
+
+    right:18px;
+
+    transform:translateY(-50%);
+
+    margin:0;
+
+}
+
+.choices[data-type*="select-one"].is-open::after{
+
+    transform:translateY(-50%) rotate(180deg);
+
+} */
+
+/* hilangkan garis atas dropdown */
+
+.choices[data-type*="select-one"] .choices__inner{
+
+    padding-bottom:0;
+
+}
+
+/* hilangkan border default */
+
+.choices.is-open .choices__inner{
+
+    border-radius:16px;
+
+}
+
+/* disabled */
+
+.choices.is-disabled .choices__inner{
+
+    background:#F8FAFC;
+
+}
+    </style>
 
     @if (Session::has('popup'))
         <script type="text/javascript">
             alertify.alert("Sukses!", "{{ session()->get('popup') }}");
         </script>
     @endif
+
+    <script>
+
+document.addEventListener("DOMContentLoaded", function(){
+
+    const element = document.getElementById("category_id");
+
+    if(element && window.Choices){
+
+        new Choices(element,{
+            searchEnabled:true,
+            itemSelectText:"",
+            shouldSort:false
+        });
+
+    }
+
+});
+
+let timer = null;
+
+const eventName=document.getElementById("name");
+
+const slug=document.getElementById("slug");
+
+const urlPreview=document.getElementById("urlPreview");
+
+const slugStatus=document.getElementById("slugStatus");
+
+eventName.addEventListener("keyup",()=>{
+
+    if(slug.value.trim()===""){
+
+        slug.value=eventName.value
+            .toLowerCase()
+            .replace(/[^\w ]+/g,"")
+            .replace(/\s+/g,"-");
+
+        updateSlug();
+
+    }
+
+});
+
+slug.addEventListener("keyup",updateSlug);
+
+function updateSlug(){
+
+    // Ganti spasi menjadi -
+    slug.value = slug.value.replace(/\s+/g, "-");
+
+    const value = slug.value;
+
+    urlPreview.textContent = "eventverse.id/" + value;
+
+    clearTimeout(timer);
+
+    if(value === ""){
+
+        slugStatus.innerHTML =
+            '<i class="ti ti-info-circle"></i> URL akan dibuat otomatis';
+
+        slugStatus.className = "ev-url-status info";
+
+        return;
+
+    }
+
+    slugStatus.innerHTML =
+        '<i class="ti ti-loader fa-spin"></i> Memeriksa URL...';
+
+    slugStatus.className = "ev-url-status checking";
+
+    timer = setTimeout(() => {
+
+        checkSlug(value);
+
+    }, 500);
+
+}
+function checkSlug(slug){
+
+    fetch("/url-check?url=" + encodeURIComponent(slug))
+        .then(response => response.json())
+        .then(res => {
+
+            if(res.result == 0){
+
+                slugStatus.innerHTML =
+                    '<i class="ti ti-circle-check"></i> URL tersedia';
+
+                slugStatus.className = "ev-url-status success";
+
+            }else if(res.result == 'N'){
+
+                slugStatus.innerHTML =
+                    '<i class="ti ti-info-circle"></i> Masukkan URL event';
+
+                slugStatus.className = "ev-url-status info";
+
+            }else{
+
+                slugStatus.innerHTML =
+                    '<i class="ti ti-circle-x"></i> URL sudah digunakan';
+
+                slugStatus.className = "ev-url-status error";
+
+            }
+
+        })
+        .catch((error) => {
+
+            console.error(error);
+
+            slugStatus.innerHTML =
+                '<i class="fa-solid fa-triangle-exclamation"></i> Gagal memeriksa URL';
+
+            slugStatus.className = "ev-url-status error";
+
+        });
+
+}
+
+
+
+// STORE
+document.getElementById('createEventForm').addEventListener('submit', async function(e){
+
+    e.preventDefault();
+
+    const btn = document.getElementById('btnCreateEvent');
+
+    btn.disabled = true;
+    btn.innerHTML = '<i class="ti ti-loader-2 ti-spin mr-1"></i> Creating...';
+
+    const formData = new FormData(this);
+
+    try{
+
+        const response = await fetch('/event-studio/store',{
+
+            method:'POST',
+
+            headers:{
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+            },
+
+            body: formData
+
+        });
+
+        const result = await response.json();
+
+        if(result.success){
+
+            window.location.href = '/event-studio/' + result.event_id + '/basic';
+
+        }else{
+
+            alert(result.message ?? 'Failed to create event.');
+
+        }
+
+    }catch(err){
+
+        console.error(err);
+
+        alert('Terjadi kesalahan.');
+
+    }
+
+    btn.disabled = false;
+    btn.innerHTML = '<i class="ti ti-arrow-right mr-1"></i> Create Event';
+
+});
+
+    </script>
 @endsection

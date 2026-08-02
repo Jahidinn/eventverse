@@ -3,34 +3,28 @@
 namespace App\Http\Controllers;
 
 use Carbon\Carbon;
-use Midtrans\Snap;
-use Midtrans\Config;
 use App\Models\Event;
 use App\Models\Ticket;
-use App\Models\SnapToken;
 use App\Models\CustomForm;
 use App\Models\Transaction;
-use Illuminate\Support\Str;
 use Illuminate\Http\Request;
-use App\Mail\TransactionEmail;
-use App\Models\TransactionForm;
-use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Validator;
-use SebastianBergmann\Diff\Diff;
-use SimpleSoftwareIO\QrCode\Facades\QrCode;
-use Vinkla\Hashids\Facades\Hashids;
+use App\Services\TransactionService;
 
 class TransactionController extends Controller
 {
+	public function __construct(
+        protected TransactionService $transactionService,
+    ) {}
+
 	public function checkoutPreview(Request $request)
 	{
 		if (!$request->event || !$request->ticket) {
 			return redirect('/search');
 		}
 
-		$detailEvent = Event::with('penyelenggara')->where('id', $request->event)->first();
-		$detailTicket = Ticket::where('id', $request->ticket)->where('event_id', $request->event)->first();
-		$customForms = CustomForm::where('event_id', $request->event)->get();
+		$detailEvent = Event::with('penyelenggara')->where('event_id', $request->event)->first();
+		$detailTicket = Ticket::where('id', $request->ticket)->where('event_id', $detailEvent->id)->first();
+		$customForms = CustomForm::where('event_id', $detailEvent->id)->get();
 		$today = Carbon::now()->format('Y-m-d');
 
 		$ticketUsed = count(Transaction::where('event_id', $request->event)->where('status', '==', 'Paid')->where('ticket_id', $request->ticket)->get());
@@ -41,348 +35,142 @@ class TransactionController extends Controller
 		}
 
 		//Jika tiket sudah deadlin, belum mulai, atau quota full
-		if ($ticketAvailable <= 0 || $detailTicket->ticket_deadline < $today || $detailTicket->ticket_start > $today) {
+		if ($ticketAvailable <= 0 || $detailTicket->ticket_end < $today || $detailTicket->ticket_start > $today) {
 			return redirect('/' . $detailEvent->slug);
 		}
 
-		return view('apps.transaction', [
+		return view('transaction.checkout', [
 			'detailEvent' => $detailEvent,
 			'detailTicket' => $detailTicket,
 			'customForms' => $customForms,
 		]);
 	}
 
-	public function transaction(Request $request)
+    // App/Http/Controllers/TransactionController.php
+
+	public function show(Transaction $transaction)
 	{
-		$validasi = Validator::make($request->all(), [
-			'fullName' => 'required',
-			'email' => 'required|email',
-			'nomorHp' => 'required|min:10',
-			'idEvent' => 'required',
-			'idTicket' => 'required',
-			'quantity' => 'required',
-			'totalPrice' => 'required',
+		$transaction->load([
+			'event',
+			'ticket',
+			'paymentGatewayMethod.method',
 		]);
 
-		if ($validasi->fails()) {
-			return response()->json(['error' => $validasi->errors()->first()]);
-		} else {
-			$biayaAdmin = config('app.biaya_admin');
-
-			if ($request->totalPrice == 0 || empty($request->totalPrice)) {
-				$status = 'Paid';
-				$quantity = 1;
-				$price = 0;
-			} else {
-				$status = 'Unpaid';
-				$quantity = $request->totalPrice / $request->quantity;
-				$price = $request->totalPrice + $biayaAdmin;
-			}
-
-			$data = [
-				'ticket_id' => $request->idTicket,
-				'event_id' => $request->idEvent,
-				'name' => $request->fullName,
-				'phone' => $request->nomorHp,
-				'email' => $request->email,
-				'is_login' => $request->is_login,
-				'user_login_id' => $request->user_login_id,
-				'quantity' => $quantity,
-				'total_price' => $price,
-				'transaction_id' => $this->generateUniqueCode(),
-				'status' => $status,
-			];
-
-			//Keamanan beli tiket dari sisi backend
-			$ticketQuota = Ticket::where('event_id', $request->idEvent)->where('id', $request->idTicket)->first();
-			$ticketUsed = count(Transaction::where('event_id', $request->idEvent)->where('status', '==', 'Paid')->where('ticket_id', $request->idTicket)->get());
-			$ticketAvailable = $ticketQuota->ticket_quota - $ticketUsed;
-			$today = Carbon::now()->format('Y-m-d');
-
-			if ($ticketAvailable <= 0) {
-				return response()->json(['error' => 'Ticket habis guys!']);
-			} elseif ($ticketQuota->ticket_deadline < $today) {
-				return response()->json(['error' => 'Ticket expired!']);
-			} elseif ($ticketQuota->ticket_start > $today) {
-				return response()->json(['error' => 'Pendaftaran tiket ini belum dibuka!']);
-			}
-
-			//Cek keamanan boleh order lebih dari 1x atau engga
-			$ticketQuantity = Ticket::find($request->idTicket)->more_quantity;
-
-			$cekTransaction = Transaction::where('event_id', $request->idEvent)
-				->where('ticket_id', $request->idTicket)
-				->where(function ($query) use ($request) {
-					$query->where('email', $request->email)
-						->orWhere('phone', $request->nomorHp);
-				})->exists();
-			//Jika tidak boleh lebih dari 1 dan sudah ada peserta terdaftar
-			if ($ticketQuantity == 0 && $cekTransaction) {
-				return response()->json(['error' => 'Max registrasi tiket ini cuma 1x, cek lagi email atau nomer hp ya!']);
-			}
-
-			//Jika tidak boleh lebih dari 1 dan sudah ada peserta terdaftar (LOGIN)
-			if ($request->is_login == 1) {
-
-				$cekTransactionUser = Transaction::where('event_id', $request->idEvent)
-					->where('ticket_id', $request->idTicket)
-					->where('is_login', 1)
-					->where('user_login_id', $request->user_login_id)
-					->exists();
-
-				if ($ticketQuantity == 0 && $cekTransactionUser) {
-					return response()->json(['error' => 'Pada tiket ini, 1 akun hanya bisa registrasi 1x ya!']);
-				}
-			}
-
-
-			//Jika event gratis langsung masukan transaksi tanpa pembayaran
-			if ($request->totalPrice == 0 || empty($request->totalPrice)) {
-				///Proteksi jika mengirimkan data gratis tapi tiket pada database tidak gratis
-				$dataTicket = Ticket::where('id', $request->idTicket)->first();
-
-				if (($dataTicket->ticket_price !== null && $dataTicket->ticket_price != 0) || $dataTicket->ticket_price != 0) {
-					// Membuat respons JSON
-					return response()->json(['error' => 'Pelanggaran data!']);
-				}
-
-				$transaction = Transaction::create($data);
-				$this->sendEmail($transaction->transaction_id);
-
-				// insert custom form data
-				if ($transaction || $request->customForm) {
-					foreach ($request->customForm as $key => $customForm) {
-						$dataForm[] = [
-							"transaction_id" => $transaction->id,
-							"form_id" => $key,
-							"form_value" => $customForm
-						];
-					}
-					TransactionForm::insert($dataForm);
-				}
-				return response()->json(['success' => 'Berhasil melakukan pendaftaran!', 'id' => $transaction->id]);
-			}
-
-			$transaction = Transaction::create($data);
-
-			// dd($transaction, $request->customForm);
-			// insert custom form data
-			// if ($transaction || $request->customForm) {
-			// 	foreach ($request->customForm as $key => $customForm) {
-			// 		$dataForm[] = [
-			// 			"transaction_id" => $transaction->id,
-			// 			"form_id" => $key,
-			// 			"form_value" => $customForm
-			// 		];
-			// 	}
-			// 	TransactionForm::insert($dataForm);
-			// }
-			if ($transaction && !empty($request->customForm)) {
-				$dataForm = [];
-
-				foreach ($request->customForm ?? [] as $key => $customForm) {
-					$dataForm[] = [
-						"transaction_id" => $transaction->id,
-						"form_id" => $key,
-						"form_value" => $customForm
-					];
-				}
-
-				if (!empty($dataForm)) {
-					TransactionForm::insert($dataForm);
-				}
-			}
-
-
-			// Set your Merchant Server Key
-			Config::$serverKey = config('midtrans.server_key');
-			// Set to Development/Sandbox Environment (default). Set to true for Production Environment (accept real transaction).
-			Config::$isProduction = config('midtrans.is_production');
-			// Set sanitization on (default)
-			Config::$isSanitized = true;
-			// Set 3DS transaction for credit card to true
-			Config::$is3ds = true;
-
-			$params = array(
-				'transaction_details' => array(
-					'order_id' => $transaction->transaction_id,
-					'gross_amount' => $transaction->total_price,
-				),
-				'customer_details' => array(
-					'first_name' => $request->fullName,
-					'last_name' => '',
-					'email' => $request->email,
-					'phone' => $request->nomorHp,
-				),
+		if ($transaction->status === 'Paid') {
+			return redirect()->route(
+				'transaction.invoice',
+				$transaction->transaction_code
 			);
-
-			$event = Event::with('penyelenggara')->find($request->idEvent);
-			$ticket = Ticket::find($request->idTicket);
-
-			$snapToken = Snap::getSnapToken($params);
-
-			$dataToken = [
-				'transaction_id' => $transaction->id,
-				'token' => $snapToken,
-			];
-			SnapToken::create($dataToken);
-
-			return response()->json(['transaction' => $transaction, 'token' => $snapToken, 'event' => $event, 'ticket' => $ticket]);
-		}
-	}
-
-	public function generateUniqueCode()
-	{
-		do {
-			$randomStr = 'EH-' . Str::random(10);
-			$uniqueCode = strtoupper($randomStr);
-		} while (Transaction::where("transaction_id", "=", $uniqueCode)->first());
-
-		return $uniqueCode;
-	}
-
-
-	public function continueTransaction(Request $request)
-	{
-		$transaction = Transaction::find($request->id);
-		$event = Event::with('penyelenggara')->find($transaction->event_id);
-		$ticket = Ticket::find($transaction->ticket_id);
-		$snapToken = SnapToken::where('transaction_id', $request->id)->first();
-
-		if (!$transaction || !$event || !$ticket || !$snapToken) {
-			return response()->json(['error' => 'Gagal!!']);
 		}
 
-		$now = Carbon::now();
-		$postCreatedAt = new Carbon($transaction->created_at);
-
-		//Jika transaksi lebih dari 12 jam maka tidak bisa di pay
-		if ($now->diffInHours($postCreatedAt) > 12) {
-			$editTransaction = Transaction::where('id', $request->id)->first();
-			$editTransaction->update(['status' => 'Expired']);
-			return response()->json(['expired' => 'Transaksi ini expired, gabisa dilanjutin guys!']);
-		}
-
-		return response()->json(['transaction' => $transaction, 'token' => $snapToken->token, 'event' => $event, 'ticket' => $ticket]);
-	}
-
-
-	public function callback(Request $request)
-	{
-		$serverKey = config('midtrans.server_key');
-		$hashed = hash("sha512", $request->order_id . $request->status_code . $request->gross_amount . $serverKey);
-		if ($hashed == $request->signature_key) {
-			if (($request->transaction_status == 'capture' && $request->payment_type == 'credit_card' && $request->fraud_status == 'accept') or $request->transaction_status == 'settlement') {
-				$transaction = Transaction::where('transaction_id', $request->order_id)->first();
-				$transaction->update(['status' => 'Paid']);
-			} elseif ($request->transaction_status == 'pending') {
-				$transaction = Transaction::where('transaction_id', $request->order_id)->first();
-				$transaction->update(['status' => 'Pending']);
-			} else {
-				// $request->transaction_status == 'expire'
-				$transaction = Transaction::where('transaction_id', $request->order_id)->first();
-				$transaction->update(['status' => 'Expired']);
-			}
-
-			$paymentMethod = Transaction::where('transaction_id', $request->order_id)->first();
-			$paymentMethod->update(['payment_type' => $request->payment_type]);
-
-			$transaction_code = $request->order_id;
-			$this->sendEmail($transaction_code);
-			return response()->json(['success' => 'Sukses kirim email'], 200);
-		}
-	}
-
-	public function redirectInvoice(string $hash)
-	{
-		// Render view tanpa langsung redirect
-		// $id = Hashids::decode($hash)[0] ?? abort(404);
-		return view('apps.invoice-redirect', ['invoiceId' => $hash]);
-		//return redirect('/event/invoice/' . $id);
-	}
-
-
-	public function invoice(string $hash)
-	{
-		$id = Hashids::decode($hash)[0] ?? abort(404);
-		$transaction = Transaction::find($id);
-
-		//jika tidak ada transaksi alihkan halaman (proteksi invoice)
-		if (!$transaction) {
-			return redirect('/');
-		}
-
-		$event = Event::with('penyelenggara')->find($transaction->event_id);
-		$ticket = Ticket::find($transaction->ticket_id);
-
-		return view('apps.invoice-page', [
+		return view('transaction.show', [
 			'transaction' => $transaction,
-			'event' => $event,
-			'ticket' => $ticket,
-			'qrcode' => QrCode::size(200)->generate($transaction->transaction_id),
+			'paymentDisplay' => $this->buildPaymentDisplay($transaction),
 		]);
 	}
 
-
-	public function ticket(string $hash)
+	private function buildPaymentDisplay(Transaction $transaction): array
 	{
-		$id = Hashids::decode($hash)[0] ?? abort(404);
-		$transaction = Transaction::find($id);
+		$payload = is_array($transaction->payment_payload)
+			? $transaction->payment_payload
+			: json_decode($transaction->payment_payload ?? '{}', true);
 
-		if($transaction->status != 'Paid') {
-			return redirect('/');
-		}
-
-		//jika tidak ada transaksi alihkan halaman (proteksi invoice)
-		if (!$transaction) {
-			return redirect('/');
-		}
-
-		$event = Event::with('penyelenggara')->find($transaction->event_id);
-		$ticket = Ticket::find($transaction->ticket_id);
-
-		return view('apps.ticket', [
-			'transaction' => $transaction,
-			'event' => $event,
-			'ticket' => $ticket,
-			'qrcode' => QrCode::size(150)->generate($transaction->transaction_id),
-		]);
-	}
-
-	
-
-	public function deleteTransaction(Request $request)
-	{
-		//Mengamankan delete dengan akses url ajax
-		$transaksi = Transaction::where('id', $request->id)->where('email', $request->email)->first();
-		if (!$transaksi) {
-			return response()->json('Gagal');
-		}
-		//Proses delete
-		$deleteTransaction = Transaction::where('id', $request->id)->where('is_login', 0)->where('user_login_id', 0)->where('status', 'Unpaid')->delete();
-		//Delete snap token
-		if ($deleteTransaction) {
-			SnapToken::where('transaction_id', $request->id)->delete();
-			TransactionForm::where('transaction_id', $request->id)->delete();
-		}
-		return response()->json('Sukses hapus');
-	}
-
-	public function sendEmail(string $transaction_code)
-	{
-		$transaction = Transaction::where('transaction_id', $transaction_code)->first();
-		$event = Event::with('penyelenggara')->find($transaction->event_id);
-		$ticket = Ticket::find($transaction->ticket_id);
-
-		$mailData = [
-			'subjek' => $transaction->status,
-			'transaction' => $transaction,
-			'event' => $event,
-			'ticket' => $ticket,
+		$display = [
+			'type' => 'default',
+			'title' => $transaction->paymentGatewayMethod->name,
+			'qr_value' => null,
+			'va_number' => null,
+			'deeplink_url' => null,
 		];
 
-		Mail::to($transaction->email)->send(new TransactionEmail($mailData));
+		foreach ($payload['actions'] ?? [] as $action) {
 
-		return response()->json('Sukses kirim email');
+			switch ($action['type'] ?? null) {
+
+				case 'PRESENT_TO_CUSTOMER':
+
+					$display['type'] = 'qris';
+					$display['qr_value'] = $action['value'] ?? null;
+
+					break;
+
+				case 'DEEPLINK':
+
+				case 'MOBILE_PAYMENT':
+
+					$display['type'] = 'redirect';
+					$display['deeplink_url'] = $action['value'] ?? null;
+
+					break;
+			}
+		}
+
+		if (
+			isset($payload['account_number']) ||
+			isset($payload['va_number'])
+		) {
+
+			$display['type'] = 'virtual_account';
+
+			$display['va_number'] = $payload['account_number']
+				?? $payload['va_number'];
+		}
+
+		return $display;
 	}
+
+	/**
+	 * Endpoint JSON untuk polling status transaksi via AJAX
+	 */
+	public function checkStatus(Transaction $transaction)
+	{
+		return response()->json([
+			'status' => strtolower($transaction->status), // 'pending', 'paid', 'expired', dsb.
+			'redirect_url' => route('transaction.invoice', $transaction->transaction_code),
+			//ganti invoice
+		]);
+	}
+
+	public function changePayment(
+		Request $request,
+		Transaction $transaction
+	) {
+		$request->validate([
+			'payment_gateway_method_id' => [
+				'required',
+				'exists:payment_gateway_methods,id',
+			],
+		]);
+
+		$transaction = $this->transactionService
+			->changePaymentMethod(
+				transaction: $transaction,
+				paymentGatewayMethodId: $request->payment_gateway_method_id,
+			);
+
+		return response()->json([
+			'success' => true,
+			'redirect_url' => route(
+				'transaction.show',
+				$transaction->transaction_code
+			),
+		]);
+	}
+
+
+	public function paymentMethods(
+		Transaction $transaction
+	) {
+		return response()->json([
+
+			'success' => true,
+
+			'payment_categories' => $this->transactionService
+				->getPaymentMethods(
+					$transaction->payment_gateway_method_id
+				),
+
+		]);
+	}
+
 }
