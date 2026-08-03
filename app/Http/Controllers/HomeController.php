@@ -140,7 +140,7 @@ class HomeController extends Controller
 			->where(function ($query) use ($request) {
 				$query->where('title', 'LIKE', '%' . $request->key . '%')->orWhere('description', 'LIKE', '%' . $request->key . '%');
 			})
-			->where('category', 'LIKE', '%' . $request->category . '%')
+			->where('category_id', 'LIKE', '%' . $request->category . '%')
 			->where('location_jenis', 'LIKE', '%' . $request->location . '%')
 			->where('price_category', 'LIKE', '%' . $request->price . '%')
 			->where(function ($query) use ($request) {
@@ -167,7 +167,7 @@ class HomeController extends Controller
 		return view('apps.search-page', [
 			'eventTerbaru' => $resultEvent,
 			'cities' => Cities::all(),
-			'categories' => Category::all(),
+			'categories' => EventCategory::all(),
 			'jenisevent' => $jenisevent,
 			'sorts' => $sorts,
 		]);

@@ -47,12 +47,12 @@
             <div class="col-lg-3 col-md-6 footer-contact">
                 <h4>Contact</h4>
                 <p>
-                    Kab tegal dan kawasan perumahan mijen permai/BSB city,
-                    Kota Semarang, Pos 50215
+                    Jl Mijen permai, mijen permai/BSB city,
+                    Kota Semarang, Pos 50219
                     Indonesia <br><br>
                     <strong>Phone:</strong> +62 896 123 94600<br>
                     <strong>Email:</strong> info@eventverse.id<br>
-                    <a href="/blog/contact-us" class="btn btn-info btn-sm">contact us</a>
+                    <a href="/blog/contact-us" class="btn bg-blue btn-sm text-white mt-2">contact us</a>
                 </p>
 
             </div>

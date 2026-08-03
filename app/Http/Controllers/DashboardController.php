@@ -51,7 +51,7 @@ class DashboardController extends Controller
 			'eventDiikuti' => $eventDiikuti,
 			'eventDibuat' => count($eventDibuat),
 			'totalPeserta' => $totalPeserta,
-			'totalTransaksi' => $totalTransaksi - ($biayaAdmin * $totalPeserta),
+			'totalTransaksi' => $totalTransaksi,
 		]);
 	}
 

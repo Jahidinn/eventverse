@@ -205,7 +205,7 @@
                                 <hr class="mb-1 mt-1">
 
                                 {{-- PRICE --}}
-                                <div class="alert alert-info mt-3" role="alert">
+                                <div class="alert alert-success mt-3" role="alert">
                                     <small>
                                         <strong><i class="fas fa-tag"></i>
                                             @if ($terbaru->ticket->isNotEmpty() && $terbaru->ticket->first()->ticket_price !== null)
@@ -407,6 +407,7 @@
     </section>
 
     {{-- Event pilihan --}}
+    @if(!$eventPilihan->isEmpty())
     <section class="event-terbaru-section section-bg pt-4 p-0 bg-soft">
         <div class="section-title pb-0">
             <h2 class="mt-0">Event Pilihan</h2>
@@ -530,13 +531,14 @@
             @endforeach
         </div>
     </section>
+    @endif
 
 
    <!-- =========================================
     WHY EVENTVERSE
 ========================================= -->
 
-<section class="ev-why mb-4">
+<section class="ev-why py-4 mb-4">
 
     <div class="container">
 
@@ -554,19 +556,15 @@
 
             </span>
 
-            <h3>
+            <h4>
 
                 Semua kebutuhan event dalam satu platform
 
-            </h3>
+            </h4>
 
             <p>
 
-                Eventverse membantu komunitas, organisasi, institusi pendidikan,
-                perusahaan, hingga Event Organizer mengelola event secara
-                profesional mulai dari registrasi peserta, ticketing,
-                pembayaran online, QR Code Check-In, sertifikat digital,
-                hingga laporan event dalam satu dashboard modern.
+                Eventverse.id membantu komunitas, organisasi, institusi pendidikan, perusahaan, hingga event organizer mengelola event secara profesional mulai dari registrasi peserta, ticketing, pembayaran, QR Code Check-In, manajemen participant, hingga laporan event dalam satu dashboard modern.
 
             </p>
 
@@ -593,8 +591,8 @@
                     <p>
 
                         Semua kebutuhan penyelenggaraan event tersedia
-                        dalam satu platform modern sehingga Anda dapat
-                        fokus menghadirkan pengalaman terbaik bagi peserta.
+                        dalam satu platform modern sehingga kamu dapat
+                        fokus menghadirkan pengalaman terbaik bagi peserta!
 
                     </p>
 
@@ -618,342 +616,58 @@
                             <i class="ti ti-ticket"></i>
                         </div>
                         <div>
-                            <h4>Modern event management</h4>
+                            <h4>Modern event management & ticketing</h4>
                         </div>
                     </div>
 
                     <div class="ev-feature">
-
                         <div class="ev-icon">
-
                             <i class="ti ti-ticket"></i>
-
                         </div>
-
                         <div>
-
-                            <h4>
-                                Ticketing Modern
-                            </h4>
-
-                            <p>
-
-                                Buat tiket gratis maupun berbayar dengan
-                                berbagai kategori, kuota, jadwal penjualan,
-                                promo, dan batas pembelian peserta.
-
-                            </p>
-
+                            <h4>Payment modern terintegrasi</h4>
                         </div>
-
                     </div>
 
-                    <!-- ==================== -->
-
                     <div class="ev-feature">
-
                         <div class="ev-icon">
-
-                            <i class="ti ti-forms"></i>
-
-                        </div>
-
-                        <div>
-
-                            <h4>
-                                Formulir Registrasi Fleksibel
-                            </h4>
-
-                            <p>
-
-                                Buat formulir pendaftaran sesuai kebutuhan
-                                event tanpa coding menggunakan berbagai
-                                jenis pertanyaan.
-
-                            </p>
-
-                        </div>
-
-                    </div>
-
-                    <!-- ==================== -->
-
-                    <div class="ev-feature">
-
-                        <div class="ev-icon">
-
-                            <i class="ti ti-credit-card"></i>
-
-                        </div>
-
-                        <div>
-
-                            <h4>
-                                Pembayaran Online
-                            </h4>
-
-                            <p>
-
-                                Mendukung berbagai metode pembayaran
-                                dengan verifikasi transaksi otomatis
-                                sehingga peserta dapat bertransaksi
-                                dengan lebih mudah.
-
-                            </p>
-
-                        </div>
-
-                    </div>
-
-                    <!-- ==================== -->
-
-                    <div class="ev-feature">
-
-                        <div class="ev-icon">
-
                             <i class="ti ti-qrcode"></i>
-
                         </div>
-
                         <div>
-
-                            <h4>
-                                QR Code Ticket & Check-In
-                            </h4>
-
-                            <p>
-
-                                Setiap tiket memiliki QR Code unik yang
-                                mempercepat proses check-in peserta saat
-                                hari pelaksanaan event.
-
-                            </p>
-
+                            <h4>QR code check in</h4>
                         </div>
-
                     </div>
 
-                    <!-- ==================== -->
-
                     <div class="ev-feature">
-
                         <div class="ev-icon">
-
                             <i class="ti ti-users-group"></i>
-
                         </div>
-
                         <div>
-
-                            <h4>
-                                Multi User Organizer
-                            </h4>
-
-                            <p>
-
-                                Tambahkan admin, panitia, maupun PIC
-                                dengan hak akses berbeda agar seluruh
-                                tim dapat bekerja bersama.
-
-                            </p>
-
+                            <h4>Multi organizer</h4>
                         </div>
-
                     </div>
 
                     <!-- ==================== -->
 
                     <div class="ev-feature">
-
                         <div class="ev-icon">
-
-                            <i class="ti ti-users"></i>
-
-                        </div>
-
-                        <div>
-
-                            <h4>
-                                Manajemen Peserta
-                            </h4>
-
-                            <p>
-
-                                Kelola seluruh data peserta,
-                                status registrasi, pembayaran,
-                                serta kehadiran dalam satu dashboard.
-
-                            </p>
-
-                        </div>
-
-                    </div>
-
-                    <!-- ==================== -->
-
-                    <div class="ev-feature">
-
-                        <div class="ev-icon">
-
-                            <i class="ti ti-certificate"></i>
-
-                        </div>
-
-                        <div>
-
-                            <h4>
-                                Sertifikat Digital
-                            </h4>
-
-                            <p>
-
-                                Bagikan sertifikat digital secara
-                                otomatis kepada peserta setelah
-                                event selesai.
-
-                            </p>
-
-                        </div>
-
-                    </div>
-
-                    <!-- ==================== -->
-
-                    <div class="ev-feature">
-
-                        <div class="ev-icon">
-
-                            <i class="ti ti-browser"></i>
-
-                        </div>
-
-                        <div>
-
-                            <h4>
-                                Landing Page Event
-                            </h4>
-
-                            <p>
-
-                                Setiap event memiliki halaman
-                                profesional yang siap dibagikan
-                                kepada calon peserta.
-
-                            </p>
-
-                        </div>
-
-                    </div>
-
-                    <!-- ==================== -->
-
-                    <div class="ev-feature">
-
-                        <div class="ev-icon">
-
-                            <i class="ti ti-link"></i>
-
-                        </div>
-
-                        <div>
-
-                            <h4>
-                                Short Link Event
-                            </h4>
-
-                            <p>
-
-                                Bagikan event menggunakan URL pendek
-                                yang lebih mudah diingat dan dibagikan.
-
-                            </p>
-
-                        </div>
-
-                    </div>
-
-                    <!-- ==================== -->
-
-                    <div class="ev-feature">
-
-                        <div class="ev-icon">
-
                             <i class="ti ti-mail"></i>
-
                         </div>
 
                         <div>
-
-                            <h4>
-                                Email & Notifikasi Otomatis
-                            </h4>
-
-                            <p>
-
-                                Kirim konfirmasi pendaftaran,
-                                pembayaran, pengingat event,
-                                dan informasi penting kepada peserta.
-
-                            </p>
-
+                            <h4>Email & Notifikasi Otomatis</h4>
                         </div>
-
                     </div>
 
                     <!-- ==================== -->
 
                     <div class="ev-feature">
-
                         <div class="ev-icon">
-
                             <i class="ti ti-chart-line"></i>
-
                         </div>
-
                         <div>
-
-                            <h4>
-                                Laporan & Analitik Real-Time
-                            </h4>
-
-                            <p>
-
-                                Pantau penjualan tiket,
-                                pembayaran, jumlah peserta,
-                                dan tingkat kehadiran secara langsung.
-
-                            </p>
-
+                            <h4>Laporan & Analitik Real-Time</h4>
                         </div>
-
-                    </div>
-
-                    <!-- ==================== -->
-
-                    <div class="ev-feature">
-
-                        <div class="ev-icon">
-
-                            <i class="ti ti-cloud"></i>
-
-                        </div>
-
-                        <div>
-
-                            <h4>
-                                Berbasis Cloud
-                            </h4>
-
-                            <p>
-
-                                Akses dan kelola event kapan saja
-                                dan di mana saja tanpa perlu
-                                menginstal aplikasi tambahan.
-
-                            </p>
-
-                        </div>
-
                     </div>
 
                 </div>
@@ -982,7 +696,7 @@
                         <!-- nanti ganti screenshot dashboard -->
 
                         <img
-                            src="/assets/img/dashboard-eventverse.webp"
+                            src="/assets/img/dashboard-ss.png"
                             class="ev-dashboard-image"
                             alt="Dashboard Eventverse">
 
@@ -1127,9 +841,9 @@
 
 }
 
-.ev-title h2{
+.ev-title h4{
 
-    font-size:52px;
+    font-size:22px;
 
     line-height:1.15;
 
@@ -1149,9 +863,9 @@
 
     margin:auto;
 
-    font-size:16px;
+    font-size:15px;
 
-    line-height:1.7;
+    line-height:1.6;
 
     color:#64748b;
 
@@ -1239,9 +953,9 @@
 
 }
 
-.ev-section-title h3{
+.ev-section-title h4{
 
-    font-size:36px;
+    font-size:22px;
 
     font-weight:800;
 
@@ -1510,7 +1224,7 @@
 
     position:relative;
 
-    padding:40px;
+    padding:10px;
 
     min-height:420px;
 
@@ -1520,12 +1234,7 @@
 
     justify-content:center;
 
-    background:
-        linear-gradient(
-            180deg,
-            #ffffff,
-            #f8fbff
-        );
+    background: #eff1f6;
 
 }
 

@@ -55,8 +55,8 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css">
     <!-- Template Main CSS File -->
-    <link href="{{ asset('assets/css/style.css?v=23') }}" rel="stylesheet">
-    <link href="{{ asset('assets/css/custom-style.css?v=97282') }}" rel="stylesheet">
+    <link href="{{ asset('assets/css/style.css?v=232') }}" rel="stylesheet">
+    <link href="{{ asset('assets/css/custom-style.css?v=92') }}" rel="stylesheet">
 
     <!-- =======================================================
     * Template Name: Moderna - v2.0.1

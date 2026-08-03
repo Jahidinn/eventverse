@@ -508,7 +508,7 @@ section {
   display: block;
   width: 40px;
   height: 3px;
-  background: #68A4C4;
+  background: #2282ff;
   bottom: 0;
   left: calc(50% - 20px);
 }
@@ -561,6 +561,7 @@ section {
     display: inline-block;
   }
 }
+
 
 /*--------------------------------------------------------------
 # Our Services
@@ -2216,4 +2217,9 @@ section {
 
 #footer .credits a {
   color: #a2cce3;
+}
+
+
+.bg-blue{
+  background-color: #2282ff;
 }

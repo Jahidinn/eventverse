@@ -278,13 +278,13 @@
                         <div class="card-body p-3 p-xl-4">
                             @php
                                 if($detailEvent->organizer == 'org'){
-                                    $logo = $detailEvent->org->logo ? asset('storage/organization-logo/'.$detailEvent->org->logo) : asset('assets/default-img/profile.png');
+                                    $logo = $detailEvent->org->logo ? asset('storage/organization-logo/'.$detailEvent->org->logo) : asset('assets/default-img/org-images/default-user.jpg');
                                     $organizerName = $detailEvent->org->org_name;
                                     $organizerUsername = $detailEvent->org->username ? '@'.$detailEvent->org->username : 'Organisasi Terverifikasi';
                                     $organizerLink = url('/organisasi/'.$detailEvent->org->org_id);
                                     $typeLabel = 'Organisasi';
                                 }else{
-                                    $logo = $detailEvent->individual->profile_picture ? asset('storage/profile-images/'.$detailEvent->individual->profile_picture) : asset('assets/default-img/profile.png');
+                                    $logo = $detailEvent->individual->profile_picture ? asset('storage/profile-images/'.$detailEvent->individual->profile_picture) : asset('assets/default-img/org-images/default-user.jpg');
                                     $organizerName = $detailEvent->individual->name;
                                     $organizerUsername = '@'.$detailEvent->individual->username;
                                     $organizerLink = url('/user/'.$detailEvent->individual->username);

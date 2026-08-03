@@ -7,7 +7,7 @@
         <!--Content before waves-->
         <div class="inner-header-search flex">
             <div class="wave-content w-100">
-                <h1>Tentang EventHub</h1>
+                <h1>Tentang eventverse.id</h1>
             </div>
         </div>
         <!--Waves end-->
@@ -16,20 +16,20 @@
     <section class="container mt-0 pt-5 px-3">
 
 <p class="text-article">
-    <strong>EventHub Web ID</strong> adalah platform <em>Event Management & Ticketing System</em> yang dikembangkan oleh
-    <strong>PT Konektivitas Tanpa Batas</strong> dan dikelola bersama oleh
+    <strong>Eventverse.id</strong> adalah platform <em>Event Management & Ticketing System</em> yang dikembangkan oleh
+    <strong>PT Satu Karya Teknologi</strong> dan dikelola bersama oleh
     <strong>ILB Media (Info Lomba & Beasiswa)</strong>.
-    Platform ini terintegrasi dengan berbagai layanan pembayaran digital untuk membantu
+    Platform ini terintegrasi dengan berbagai layanan pembayaran digital terintegrasi untuk membantu
     penyelenggara mengelola event secara lebih mudah, profesional, dan efisien.
 </p>
 
 <p class="text-article">
-    EventHub menyediakan solusi teknologi yang mendukung seluruh proses penyelenggaraan event,
+    eventverse menyediakan solusi teknologi yang mendukung seluruh proses penyelenggaraan event,
     mulai dari publikasi acara, registrasi peserta, penjualan tiket online, pengelolaan pembayaran,
     check-in peserta berbasis QR Code, hingga penyajian laporan dan analisis event secara real-time.
 </p>
 
-<h5 class="mt-5 mb-3">Fitur Unggulan EventHub</h5>
+<h5 class="mt-5 mb-3">Fitur unggulan eventverse</h5>
 
 <div class="text-article">
     <ul>
@@ -46,7 +46,7 @@
     </ul>
 </div>
 
-<h5 class="mt-5 mb-3">Mengapa Memilih EventHub?</h5>
+<h5 class="mt-5 mb-3">Mengapa Memilih eventverse?</h5>
 
 <div class="text-article">
     <ul>
@@ -86,7 +86,7 @@
 
 <div class="mt-4">
     <p class="text-article">
-        Fokus pada pengembangan event Anda, sementara EventHub membantu mengelola proses registrasi,
+        Fokus pada pengembangan event Anda, sementara eventverse membantu mengelola proses registrasi,
         ticketing, pembayaran, dan pelaporan secara lebih efisien.
     </p>
 </div>

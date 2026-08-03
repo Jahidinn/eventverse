@@ -21,7 +21,7 @@
                     <div class="legal-header mb-4">
                         <h3>Terms and condition</h3>
                         <p class="text-muted mb-0">
-                            Syarat dan Ketentuan Penggunaan EventHub Web ID
+                            Syarat dan Ketentuan Penggunaan Eventverse.id
                         </p>
                         <small class="text-muted">
                             Terakhir diperbarui: [15 June 2026]
@@ -33,7 +33,7 @@
                         Dengan mengakses, menggunakan, mendaftarkan akun, membuat event,
                         membeli tiket, melakukan pembayaran, menggunakan dashboard organizer,
                         melakukan check-in peserta, menerima sertifikat elektronik,
-                        maupun menggunakan layanan lainnya yang tersedia di EventHub,
+                        maupun menggunakan layanan lainnya yang tersedia di Eventverse,
                         Anda dianggap telah membaca, memahami, dan menyetujui seluruh
                         Syarat dan Ketentuan ini.
                     </div>
@@ -96,17 +96,17 @@
                             <li>
                                 <strong>Platform</strong> adalah situs web, aplikasi, dashboard,
                                 API, sistem ticketing, sistem registrasi, sistem check-in,
-                                serta seluruh layanan digital yang disediakan oleh EventHub.
+                                serta seluruh layanan digital yang disediakan oleh Eventverse.
                             </li>
 
                             <li>
-                                <strong>EventHub</strong> adalah penyedia layanan teknologi
+                                <strong>Eventverse</strong> adalah penyedia layanan teknologi
                                 manajemen event dan ticketing online.
                             </li>
 
                             <li>
                                 <strong>Pengguna</strong> adalah setiap individu, organisasi,
-                                badan usaha, komunitas, lembaga, atau badan hukum yang menggunakan layanan EventHub.
+                                badan usaha, komunitas, lembaga, atau badan hukum yang menggunakan layanan Eventverse.
                             </li>
 
                             <li>
@@ -148,7 +148,7 @@
                         <h4>2. Layanan yang Disediakan</h4>
 
                         <p>
-                            EventHub menyediakan layanan teknologi yang mendukung penyelenggaraan event secara online maupun offline.
+                            Eventverse menyediakan layanan teknologi yang mendukung penyelenggaraan event secara online maupun offline.
                         </p>
 
                         <p>
@@ -174,7 +174,7 @@
                         </ul>
 
                         <p>
-                            EventHub berhak menambah, mengubah, mengurangi,
+                            Eventverse berhak menambah, mengubah, mengurangi,
                             membatasi, menangguhkan, atau menghentikan sebagian
                             maupun seluruh layanan kapan saja sesuai kebutuhan operasional,
                             keamanan sistem, atau kepatuhan hukum.
@@ -224,7 +224,7 @@
                         <h4>4. Persyaratan Usia dan Kapasitas Hukum</h4>
 
                         <p>
-                            Dengan menggunakan layanan EventHub,
+                            Dengan menggunakan layanan Eventverse,
                             pengguna menyatakan memiliki kapasitas hukum yang cukup
                             untuk menyetujui Syarat dan Ketentuan ini.
                         </p>
@@ -242,7 +242,7 @@
                         <h4>5. Verifikasi Penyelenggara (KYC)</h4>
 
                         <p>
-                            EventHub dapat melakukan proses verifikasi identitas
+                            Eventverse dapat melakukan proses verifikasi identitas
                             terhadap penyelenggara sebelum memberikan akses
                             terhadap fitur tertentu.
                         </p>
@@ -261,7 +261,7 @@
                         </ul>
 
                         <p>
-                            EventHub berhak menolak, membatasi,
+                            Eventverse berhak menolak, membatasi,
                             atau menghentikan layanan apabila data verifikasi
                             dianggap tidak lengkap, tidak valid,
                             atau menimbulkan risiko hukum maupun keamanan.
@@ -293,7 +293,7 @@
                         </ul>
 
                         <p>
-                            EventHub hanya bertindak sebagai penyedia platform teknologi
+                            Eventverse hanya bertindak sebagai penyedia platform teknologi
                             dan bukan penyelenggara event.
                         </p>
 
@@ -347,7 +347,7 @@
                         </p>
 
                         <p>
-                            EventHub maupun penyelenggara berhak menolak tiket yang:
+                            Eventverse maupun penyelenggara berhak menolak tiket yang:
                         </p>
 
                         <ul>
@@ -358,7 +358,7 @@
                         </ul>
 
                         <p>
-                            EventHub tidak bertanggung jawab atas penyalahgunaan tiket
+                            Eventverse tidak bertanggung jawab atas penyalahgunaan tiket
                             akibat kelalaian pengguna.
                         </p>
                     </section>
@@ -371,7 +371,7 @@
                         <p>
                             Seluruh pembayaran yang dilakukan melalui Platform diproses
                             melalui mitra pembayaran resmi yang telah bekerja sama
-                            dan terintegrasi dengan sistem EventHub.
+                            dan terintegrasi dengan sistem Eventverse.
                         </p>
 
                         <p>
@@ -383,7 +383,7 @@
                         <h5>9.1 Metode Pembayaran</h5>
 
                         <p>
-                            EventHub dapat menyediakan berbagai metode pembayaran,
+                            Eventverse dapat menyediakan berbagai metode pembayaran,
                             termasuk namun tidak terbatas pada:
                         </p>
 
@@ -400,7 +400,7 @@
                         <h5>9.2 Keamanan Pembayaran</h5>
 
                         <p>
-                            EventHub tidak menyimpan nomor kartu kredit, PIN,
+                            Eventverse tidak menyimpan nomor kartu kredit, PIN,
                             CVV/CVC, password e-wallet, maupun kredensial pembayaran sensitif lainnya.
                         </p>
 
@@ -412,7 +412,7 @@
                         <h5>9.3 Kegagalan Pembayaran</h5>
 
                         <p>
-                            EventHub tidak bertanggung jawab atas kegagalan transaksi
+                            Eventverse tidak bertanggung jawab atas kegagalan transaksi
                             yang disebabkan oleh gangguan sistem bank,
                             mitra pembayaran, jaringan internet,
                             atau faktor lain di luar kendali yang wajar.
@@ -421,7 +421,7 @@
                         <h5>9.4 Biaya Layanan</h5>
 
                         <p>
-                            EventHub dapat mengenakan biaya layanan,
+                            Eventverse dapat mengenakan biaya layanan,
                             biaya administrasi, biaya transaksi,
                             biaya pemrosesan pembayaran,
                             maupun biaya lainnya sesuai ketentuan yang berlaku.
@@ -441,7 +441,7 @@
                         <h5>10.1 Verifikasi Sebelum Pencairan</h5>
 
                         <p>
-                            Sebelum pencairan dilakukan, EventHub dapat meminta proses
+                            Sebelum pencairan dilakukan, Eventverse dapat meminta proses
                             verifikasi tambahan terhadap identitas penyelenggara,
                             rekening bank, dokumen legalitas organisasi,
                             maupun dokumen pendukung lainnya.
@@ -450,7 +450,7 @@
                         <h5>10.2 Penundaan Pencairan</h5>
 
                         <p>
-                            EventHub berhak menunda atau menahan pencairan dana apabila:
+                            Eventverse berhak menunda atau menahan pencairan dana apabila:
                         </p>
 
                         <ul>
@@ -466,7 +466,7 @@
                         <h5>10.3 Cadangan Risiko (Reserve Fund)</h5>
 
                         <p>
-                            Dalam kondisi tertentu EventHub dapat menahan sebagian dana
+                            Dalam kondisi tertentu Eventverse dapat menahan sebagian dana
                             sebagai cadangan risiko untuk melindungi peserta,
                             penyelenggara, dan Platform dari potensi kerugian,
                             refund, chargeback, sengketa transaksi,
@@ -477,11 +477,11 @@
 
                         <p>
                             Penyelenggara bertanggung jawab penuh atas keakuratan
-                            informasi rekening yang diberikan kepada EventHub.
+                            informasi rekening yang diberikan kepada Eventverse.
                         </p>
 
                         <p>
-                            EventHub tidak bertanggung jawab atas kegagalan pencairan
+                            Eventverse tidak bertanggung jawab atas kegagalan pencairan
                             yang disebabkan oleh kesalahan data rekening.
                         </p>
 
@@ -516,10 +516,10 @@
                             <li>Terdapat indikasi penyalahgunaan sistem.</li>
                         </ul>
 
-                        <h5>11.3 Peran EventHub</h5>
+                        <h5>11.3 Peran Eventverse</h5>
 
                         <p>
-                            EventHub dapat membantu proses administrasi refund
+                            Eventverse dapat membantu proses administrasi refund
                             namun tidak menjamin bahwa refund akan disetujui.
                         </p>
 
@@ -555,10 +555,10 @@
                             yang diumumkan kepada peserta.
                         </p>
 
-                        <h5>12.2 Batasan Tanggung Jawab EventHub</h5>
+                        <h5>12.2 Batasan Tanggung Jawab Eventverse</h5>
 
                         <p>
-                            EventHub tidak bertanggung jawab atas kerugian langsung maupun tidak langsung
+                            Eventverse tidak bertanggung jawab atas kerugian langsung maupun tidak langsung
                             yang timbul akibat perubahan atau pembatalan event.
                         </p>
 
@@ -610,7 +610,7 @@
                     <section id="sertifikat" class="py-2">
                         <h4>14. Sertifikat Elektronik</h4>
                         <p>
-                            EventHub dapat menyediakan fitur penerbitan sertifikat elektronik
+                            Eventverse dapat menyediakan fitur penerbitan sertifikat elektronik
                             apabila diaktifkan oleh penyelenggara.
                         </p>
 
@@ -676,17 +676,17 @@
                         <p>
                             Pengumpulan, penggunaan, penyimpanan,
                             pengungkapan, dan pemrosesan data pribadi pengguna
-                            diatur lebih lanjut dalam Kebijakan Privasi EventHub.
+                            diatur lebih lanjut dalam Kebijakan Privasi Eventverse.
                         </p>
 
                         <p>
-                            Dengan menggunakan layanan EventHub,
+                            Dengan menggunakan layanan Eventverse,
                             pengguna menyetujui pemrosesan data pribadi
                             sesuai Kebijakan Privasi yang berlaku.
                         </p>
 
                         <p>
-                            EventHub berkomitmen melindungi data pribadi pengguna
+                            Eventverse berkomitmen melindungi data pribadi pengguna
                             sesuai ketentuan hukum yang berlaku,
                             termasuk Undang-Undang Perlindungan Data Pribadi.
                         </p>
@@ -699,7 +699,7 @@
                         <h4>17. Komunikasi Elektronik</h4>
                     <p>
                         Pengguna menyetujui untuk menerima komunikasi elektronik
-                        dari EventHub maupun penyelenggara event.
+                        dari Eventverse maupun penyelenggara event.
                     </p>
 
                     <ul>
@@ -728,7 +728,7 @@
                     <section id="anti-fraud" class="py-2">
                         <h4>18. Anti Fraud dan Chargeback</h4>
                         <p>
-                            EventHub berhak melakukan investigasi terhadap aktivitas
+                            Eventverse berhak melakukan investigasi terhadap aktivitas
                             yang diduga mengandung unsur:
                         </p>
 
@@ -745,7 +745,7 @@
                         <h5>18.1 Tindakan yang Dapat Dilakukan</h3>
 
                         <p>
-                            Dalam kondisi tertentu EventHub dapat:
+                            Dalam kondisi tertentu Eventverse dapat:
                         </p>
 
                         <ul>
@@ -758,7 +758,7 @@
                         </ul>
 
                         <p>
-                            Keputusan investigasi yang dilakukan EventHub bersifat final
+                            Keputusan investigasi yang dilakukan Eventverse bersifat final
                             sepanjang tidak bertentangan dengan hukum yang berlaku.
                         </p>
 
@@ -770,17 +770,17 @@
                     <section id="anti-money-laundering" class="py-2">
                         <h4>19. Pencegahan Pencucian Uang dan Pendanaan Terlarang</h4>
                     <p>
-                        EventHub berkomitmen mendukung upaya pencegahan pencucian uang,
+                        Eventverse berkomitmen mendukung upaya pencegahan pencucian uang,
                         pendanaan terorisme, penipuan keuangan, dan aktivitas ilegal lainnya.
                     </p>
 
                     <p>
-                        EventHub berhak melakukan pemeriksaan tambahan terhadap akun,
+                        Eventverse berhak melakukan pemeriksaan tambahan terhadap akun,
                         transaksi, event, maupun penyelenggara yang dianggap memiliki risiko tinggi.
                     </p>
 
                     <p>
-                        EventHub dapat meminta dokumen tambahan, melakukan pembatasan akun,
+                        Eventverse dapat meminta dokumen tambahan, melakukan pembatasan akun,
                         menunda pencairan dana, atau melaporkan aktivitas tertentu kepada pihak berwenang
                         sesuai ketentuan hukum yang berlaku.
                     </p>
@@ -792,7 +792,7 @@
                     <section id="api-integrasi" class="py-2">
                         <h4>20. API dan Integrasi Pihak Ketiga</h4>
                         <p>
-                            EventHub dapat menyediakan API, webhook, maupun integrasi dengan layanan pihak ketiga
+                            Eventverse dapat menyediakan API, webhook, maupun integrasi dengan layanan pihak ketiga
                             untuk mendukung operasional pengguna.
                         </p>
 
@@ -819,7 +819,7 @@
                         <h5>20.3 Perubahan API</h5>
 
                         <p>
-                            EventHub berhak mengubah, membatasi,
+                            Eventverse berhak mengubah, membatasi,
                             atau menghentikan API kapan saja tanpa kewajiban kompensasi.
                         </p>
 
@@ -830,7 +830,7 @@
                     <section id="larangan-penggunaan" class="py-2">
                         <h4>21. Larangan Penggunaan</h4>
                         <p>
-                            Pengguna dilarang menggunakan layanan EventHub untuk tujuan yang melanggar hukum,
+                            Pengguna dilarang menggunakan layanan Eventverse untuk tujuan yang melanggar hukum,
                             merugikan pihak lain, atau mengganggu operasional Platform.
                         </p>
 
@@ -859,8 +859,8 @@
                         <p>
                             Seluruh sistem, desain, logo, nama dagang, database,
                             perangkat lunak, kode program, tampilan antarmuka,
-                            dan materi lain yang terdapat pada Platform merupakan milik EventHub
-                            atau pihak yang memberikan lisensi kepada EventHub.
+                            dan materi lain yang terdapat pada Platform merupakan milik Eventverse
+                            atau pihak yang memberikan lisensi kepada Eventverse.
                         </p>
 
                         <p>
@@ -886,7 +886,7 @@
                         </p>
 
                         <p>
-                            Dengan mengunggah konten, pengguna memberikan hak kepada EventHub
+                            Dengan mengunggah konten, pengguna memberikan hak kepada Eventverse
                             untuk menyimpan, memproses, menampilkan, mendistribusikan,
                             dan menggunakan konten tersebut sejauh diperlukan
                             untuk penyediaan layanan.
@@ -920,11 +920,11 @@
                     <section id="ketersediaan-layanan" class="py-2">
                         <h4>24. Ketersediaan Layanan</h4>
                     <p>
-                        EventHub berupaya menjaga layanan tetap tersedia dan berfungsi dengan baik.
+                        Eventverse berupaya menjaga layanan tetap tersedia dan berfungsi dengan baik.
                     </p>
 
                     <p>
-                        Namun EventHub tidak menjamin bahwa layanan akan:
+                        Namun Eventverse tidak menjamin bahwa layanan akan:
                     </p>
 
                     <ul>
@@ -947,7 +947,7 @@
                     <section id="force-majeure" class="py-2">
                         <h4>25. Force Majeure</h4>
                         <p>
-                            EventHub tidak bertanggung jawab atas keterlambatan,
+                            Eventverse tidak bertanggung jawab atas keterlambatan,
                             gangguan, atau kegagalan layanan yang disebabkan oleh keadaan
                             di luar kendali yang wajar.
                         </p>
@@ -972,7 +972,7 @@
                     <section id="hubungan-peserta-organizer" class="py-2">
                         <h4>26. Hubungan antara Peserta dan Penyelenggara</h4>
                         <p>
-                            EventHub hanya menyediakan sarana teknologi yang mempertemukan
+                            Eventverse hanya menyediakan sarana teknologi yang mempertemukan
                             peserta dan penyelenggara.
                         </p>
 
@@ -982,7 +982,7 @@
                         </p>
 
                         <p>
-                            EventHub bukan pihak dalam perjanjian antara peserta dan penyelenggara,
+                            Eventverse bukan pihak dalam perjanjian antara peserta dan penyelenggara,
                             kecuali ditentukan lain secara tertulis.
                         </p>
 
@@ -994,7 +994,7 @@
                         <h4>27. Batasan Tanggung Jawab</h4>
                         <p>
                             Sejauh diizinkan oleh hukum yang berlaku,
-                            EventHub tidak bertanggung jawab atas:
+                            Eventverse tidak bertanggung jawab atas:
                         </p>
 
                         <ul>
@@ -1016,9 +1016,9 @@
                         <h4>28. Batas Maksimum Ganti Rugi</h4>
                         <p>
                             Sejauh diizinkan oleh hukum yang berlaku,
-                            total tanggung jawab EventHub kepada pengguna
+                            total tanggung jawab Eventverse kepada pengguna
                             tidak akan melebihi jumlah biaya layanan yang dibayarkan pengguna
-                            kepada EventHub dalam periode 12 (dua belas) bulan terakhir.
+                            kepada Eventverse dalam periode 12 (dua belas) bulan terakhir.
                         </p>
 
                     </section>
@@ -1029,7 +1029,7 @@
                         <h4>29. Ganti Rugi oleh Pengguna (Indemnification)</h4>
                         <p>
                             Pengguna setuju untuk membebaskan, membela,
-                            dan mengganti kerugian EventHub,
+                            dan mengganti kerugian Eventverse,
                             afiliasi, direksi, karyawan, maupun mitra kami
                             dari segala klaim, tuntutan, kerugian, biaya,
                             dan kewajiban yang timbul akibat:
@@ -1050,7 +1050,7 @@
                     <section id="suspend-account">
                         <h4>30. Penangguhan dan Penghapusan Akun</h4>
                         <p>
-                            EventHub berhak menangguhkan, membatasi,
+                            Eventverse berhak menangguhkan, membatasi,
                             atau menghapus akun pengguna apabila:
                         </p>
 
@@ -1082,7 +1082,7 @@
                         </p>
 
                         <p>
-                            EventHub tidak bertanggung jawab atas kewajiban perpajakan
+                            Eventverse tidak bertanggung jawab atas kewajiban perpajakan
                             yang menjadi tanggung jawab penyelenggara.
                         </p>
 
@@ -1128,7 +1128,7 @@
                     <section id="perubahan-ketentuan" class="py-2">
                         <h2>34. Perubahan Syarat dan Ketentuan</h2>
                         <p>
-                            EventHub berhak memperbarui atau mengubah Syarat dan Ketentuan ini
+                            Eventverse berhak memperbarui atau mengubah Syarat dan Ketentuan ini
                             sewaktu-waktu.
                         </p>
 
@@ -1175,13 +1175,13 @@
                         </p>
 
                         <p>
-                            <strong>EventHub Web ID</strong><br>
-                            Website: https://eventhub.web.id<br>
-                            Email: support@eventhub.web.id
+                            <strong>Eventverse</strong><br>
+                            Website: https://eventverse.id<br>
+                            Email: support@eventverse.id
                         </p>
 
                         <p>
-                            Dengan menggunakan layanan EventHub,
+                            Dengan menggunakan layanan Eventverse,
                             Anda menyatakan telah membaca, memahami,
                             dan menyetujui seluruh isi Syarat dan Ketentuan ini.
                         </p>

@@ -26,7 +26,7 @@
 <p><strong>Terakhir diperbarui:</strong> [15 June 2026]</p>
 
 <p>
-EventHub Web ID ("EventHub", "kami", "kita", atau "platform") berkomitmen untuk melindungi
+Eventverse ("Eventverse", "kami", "kita", atau "platform") berkomitmen untuk melindungi
 privasi, keamanan, dan kerahasiaan data pribadi seluruh pengguna layanan kami.
 Kebijakan Privasi ini menjelaskan bagaimana kami mengumpulkan, menggunakan, menyimpan,
 mengungkapkan, memproses, dan melindungi data pribadi yang diperoleh melalui website,
@@ -36,13 +36,13 @@ invoice elektronik, sertifikat elektronik, email notifikasi, dan layanan lain ya
 <hr>
 
 <h4>1. Definisi</h4>
-<p>Pengguna adalah setiap individu atau organisasi yang mengakses layanan EventHub.</p>
-<p>Organizer adalah pihak yang membuat atau mengelola event melalui EventHub.</p>
+<p>Pengguna adalah setiap individu atau organisasi yang mengakses layanan Eventverse.</p>
+<p>Organizer adalah pihak yang membuat atau mengelola event melalui Eventverse.</p>
 <p>Peserta adalah individu yang melakukan registrasi atau pembelian tiket event.</p>
 <p>Data Pribadi adalah setiap data yang dapat mengidentifikasi seseorang secara langsung maupun tidak langsung.</p>
 <hr>
 <h4>2. Ruang Lingkup</h4>
-<p>Kebijakan ini berlaku untuk seluruh layanan EventHub termasuk halaman event, dashboard organizer,
+<p>Kebijakan ini berlaku untuk seluruh layanan Eventverse termasuk halaman event, dashboard organizer,
 sistem tiket, QR check-in, invoice, email, WhatsApp notifikasi, API, dan fitur lainnya.</p>
 
 <hr>
@@ -89,7 +89,7 @@ sistem tiket, QR check-in, invoice, email, WhatsApp notifikasi, API, dan fitur l
 </ul>
 
 <p>
-EventHub tidak menyimpan nomor kartu kredit, PIN, CVV, password e-wallet,
+Eventverse tidak menyimpan nomor kartu kredit, PIN, CVV, password e-wallet,
 atau kredensial sensitif pembayaran lainnya.
 </p>
 
@@ -171,7 +171,7 @@ lokasi check-in (jika tersedia), dan status kehadiran peserta.
 
 <h4>9. Sertifikat Elektronik</h4>
 <p>
-Apabila organizer menyediakan sertifikat, EventHub dapat menggunakan data peserta
+Apabila organizer menyediakan sertifikat, Eventverse dapat menggunakan data peserta
 untuk menghasilkan dan mendistribusikan sertifikat elektronik.
 </p>
 
@@ -238,7 +238,7 @@ yang memiliki standar perlindungan data yang memadai.
 
 <h4>15. Data Breach</h4>
 <p>
-Apabila terjadi insiden keamanan yang berdampak signifikan, EventHub dapat melakukan investigasi,
+Apabila terjadi insiden keamanan yang berdampak signifikan, Eventverse dapat melakukan investigasi,
 mitigasi risiko, serta memberikan pemberitahuan sesuai ketentuan hukum yang berlaku.
 </p>
 
@@ -254,7 +254,7 @@ chargeback yang tidak sah, pencucian uang, atau aktivitas yang berpotensi merugi
 
 <h4>17. KYC Organizer</h4>
 <p>
-EventHub dapat meminta dokumen identitas, rekening bank, NPWP, atau dokumen legalitas organisasi
+Eventverse dapat meminta dokumen identitas, rekening bank, NPWP, atau dokumen legalitas organisasi
 untuk proses verifikasi organizer.
 </p>
 
@@ -310,7 +310,7 @@ perpajakan, audit, atau penyelesaian sengketa.
 
 <h4>23. Analytics dan AI</h4>
 <p>
-EventHub dapat menggunakan teknologi analitik, machine learning, atau kecerdasan buatan
+Eventverse dapat menggunakan teknologi analitik, machine learning, atau kecerdasan buatan
 untuk meningkatkan performa layanan, mendeteksi aktivitas mencurigakan, mengurangi spam,
 dan menghasilkan laporan statistik yang telah dianonimkan.
 </p>
@@ -336,14 +336,14 @@ Layanan tidak ditujukan untuk anak di bawah usia yang ditentukan oleh hukum tanp
 
 <h4>26. Perubahan Kebijakan Privasi</h4>
 <p>
-Kami dapat mengubah Kebijakan Privasi ini sewaktu-waktu. Perubahan akan dipublikasikan melalui website EventHub.
+Kami dapat mengubah Kebijakan Privasi ini sewaktu-waktu. Perubahan akan dipublikasikan melalui website Eventverse.
 </p>
 
 <hr>
 
 <h4>27. Persetujuan Pengguna</h4>
 <p>
-Dengan membuat akun, membeli tiket, mendaftar event, atau menggunakan layanan EventHub,
+Dengan membuat akun, membeli tiket, mendaftar event, atau menggunakan layanan Eventverse,
 Anda menyatakan telah membaca, memahami, dan menyetujui Kebijakan Privasi ini.
 </p>
 
@@ -351,9 +351,9 @@ Anda menyatakan telah membaca, memahami, dan menyetujui Kebijakan Privasi ini.
 
 <h4>28. Hubungi Kami</h4>
 <p>
-<strong>EventHub Web ID</strong><br>
-Website: https://eventhub.web.id<br>
-Email: support@eventhub.web.id
+<strong>Eventverse</strong><br>
+Website: https://eventverse.id<br>
+Email: support@eventverse.id
 </p>
 
                     </article>

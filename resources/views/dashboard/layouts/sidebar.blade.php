@@ -2,7 +2,7 @@
 <aside class="main-sidebar sidebar-dark-primary elevation-4 position-fixed" style="background-color: #08334b">
     <!-- Brand Logo -->
     <a href="/" class="brand-link">
-        <img src="/assets/img/eventhub-logo.png"
+        <img src="/assets/img/eventverse-2026.png"
             alt="Logo"
             style="height:33px; width:auto; margin-left:8px;">
     </a>

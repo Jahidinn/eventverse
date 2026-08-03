@@ -20,7 +20,7 @@
 }
 
 .auth-logo img{
-    height:55px;
+    height:45px;
 }
 
 .auth-title{
@@ -97,14 +97,15 @@
     {{-- <img src="{{ asset('img/logo.png') }}"> --}}
     <div class="auth-logo">
         <a href="/" class="logo-link">
-            <img src="{{ asset('assets/img/eventhub-3.png') }}" alt="EventHub">
+            <img src="{{ asset('assets/img/eventverse-color.png') }}" alt="EventHub">
         </a>
     </div>
 
 </div>
+<hr>
 
 <div class="auth-title">
-    Buat Akun Baru 🚀
+    Buat Akun Baru
 </div>
 
 <div class="auth-subtitle">

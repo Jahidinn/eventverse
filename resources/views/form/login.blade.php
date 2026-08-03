@@ -30,7 +30,7 @@
 
             .auth-logo img{
 
-                height:55px;
+                height:45px;
             }
 
             .auth-title{
@@ -136,16 +136,17 @@
         <div class="auth-card">
             <div class="auth-logo">
                 <a href="/" class="logo-link">
-                    <img src="{{ asset('assets/img/eventhub-3.png') }}" alt="EventHub">
+                    <img src="{{ asset('assets/img/eventverse-color.png') }}" alt="EventHub">
                 </a>
             </div>
+            <hr>
 
             <div class="auth-title">
-                Welcome Back 👋
+                Login
             </div>
 
             <div class="auth-subtitle">
-                Login untuk mengelola event, peserta, dan transaksi kamu.
+                Login untuk melanjutkan!
             </div>
 
             @if (session()->has('success'))
@@ -223,7 +224,7 @@
                     type="submit"
                     class="auth-btn">
 
-                    Masuk ke Dashboard
+                    Get started
 
                 </button>
 

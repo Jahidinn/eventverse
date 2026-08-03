@@ -94,7 +94,7 @@
                                         @foreach ($categories as $category)
                                             <option value="{{ $category->id }}"
                                                 {{ request('category') == $category->id ? 'selected' : '' }}>
-                                                {{ ucwords(strtolower($category->category)) }}
+                                                {{ ucwords(strtolower($category->name)) }}
                                             </option>
                                         @endforeach
                                     </select>

@@ -10,35 +10,43 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class ArticleController extends Controller
 {
 
 	# Main page artikel / blog
-public function blogMain()
-{
-    $latestArticles = Article::where('article_code', '!=', 2)->latest()->first();
 
-    if (!$latestArticles) {
-        // Kalau tidak ada artikel sama sekali
-        return view('article.page-blog-index', [
-            'latestArticle' => null,
-            'articles' => collect(), // kosong
-        ]);
-    }
+	public function blogMain()
+	{
+		$latestArticle = Article::where('article_code', '!=', 2)
+			->latest()
+			->first();
 
-    // Bagian ini hanya jalan kalau $latestArticles ada
-    $articles = Article::where('slug', '!=', $latestArticles->slug)
-        ->where('article_code', '!=', 2)
-        ->orderBy('id', 'DESC')
-        ->paginate(10)
-        ->withQueryString();
+		if (!$latestArticle) {
 
-    return view('article.page-blog-index', [
-        'latestArticle' => $latestArticles,
-        'articles' => $articles,
-    ]);
-}
+			$articles = new LengthAwarePaginator(
+				[],
+				0,
+				10,
+				1,
+				[
+					'path' => request()->url(),
+					'query' => request()->query(),
+				]
+			);
+
+			return view('article.page-blog-index', compact('latestArticle', 'articles'));
+		}
+
+		$articles = Article::where('slug', '!=', $latestArticle->slug)
+			->where('article_code', '!=', 2)
+			->latest()
+			->paginate(10)
+			->withQueryString();
+
+		return view('article.page-blog-index', compact('latestArticle', 'articles'));
+	}
 
 
 	public function blogSearch(Request $request)

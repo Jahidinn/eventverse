@@ -20,16 +20,16 @@
             <div class="card-body px-4 py-3">
                 <div class="text-article mt-0">
                     <a class="btn w-100 text-left" data-toggle="collapse" href="#faq-1" role="button">
-                        <b>Apa itu eventhub.web.id?</b>
+                        <b>Apa itu eventverse.id?</b>
                     </a>
                     <div class="collapse" id="faq-1">
                         <hr class="m-2 mt-3">
                         <p>
-                            eventhub adalah platform ticketing management service (TMS) yang dikelola oleh PT
-                            Konektivitas Tanpa Batas. Kami bekerja sama dengan ILB media (@Info.lomba.beasiswa) untuk
+                            eventverse adalah platform ticketing management service (TMS) yang dikelola oleh PT
+                            Satu Karya Teknologi. Kami bekerja sama dengan ILB media (@Info.lomba.beasiswa) untuk
                             menyediakan solusi teknologi dalam mendukung penyelenggaraan event, mulai dari distribusi dan manajemen tiket
                             pendaftaran hingga penyediaan laporan event secara efisien, info selengkapnya <a href="/about-us">about
-                                eventhub</a>.
+                                eventverse</a>.
                         </p>
                     </div>
 
@@ -43,13 +43,13 @@
             <div class="card-body px-4 py-3">
                 <div class="text-article mt-0">
                     <a class="btn w-100 text-left" data-toggle="collapse" href="#faq-2" role="button">
-                        <b>Apa saja layanan yang ditawarkan oleh eventhub?</b>
+                        <b>Apa saja layanan yang ditawarkan oleh eventverse?</b>
                     </a>
 
                     <div class="collapse" id="faq-2">
                         <hr class="m-2 mt-3">
                         <p>
-                            Eventhub menyediakan berbagai layanan terkait manajemen event, ticketing event,
+                            eventverse menyediakan berbagai layanan terkait manajemen event, ticketing event,
                             kelola data event, manajemen pendaftaran peserta, pembayaran terverifikasi, dan masih banyak lagi yang membuat eventmu terintegrasi. <a href="/about-us">More
                                 info</a>.
                         </p>
@@ -64,12 +64,12 @@
             <div class="card-body px-4 py-3">
                 <div class="text-article mt-0">
                     <a class="btn w-100 text-left" data-toggle="collapse" href="#faq-2-1" role="button">
-                        <b>Apakah eventhub.web.id dapat dipercaya?</b>
+                        <b>Apakah eventverse.id dapat dipercaya?</b>
                     </a>
 
                     <div class="collapse" id="faq-2">
                         <hr class="m-2 mt-3">
-                        <p>Ya, eventhub.web.id di kelola organisasi/perusahaan yang berbadan hukum dan dikelola oleh ILB media
+                        <p>Ya, eventverse.id di kelola organisasi/perusahaan yang berbadan hukum dan dikelola oleh ILB media
                             (@info.lomba.beasiswa) serta menggunakan sistem pembayaran dari midtrans (by gojek) jadi tidak perlu
                             diragukan keamananannya.</a>.
                         </p>
@@ -84,7 +84,7 @@
             <div class="card-body px-4 py-3">
                 <div class="text-article mt-0">
                     <a class="btn w-100 text-left" data-toggle="collapse" href="#faq-3" role="button">
-                        <b>Bagaimana cara menggunakan eventhub.web.id sebagai penyelenggara event?</b>
+                        <b>Bagaimana cara menggunakan eventverse.id sebagai penyelenggara event?</b>
                     </a>
                     <div class="collapse" id="faq-3">
                         <hr class="m-2 mt-3">
@@ -103,7 +103,7 @@
             <div class="card-body px-4 py-3">
                 <div class="text-article mt-0">
                     <a class="btn w-100 text-left" data-toggle="collapse" href="#faq-4" role="button">
-                        <b>Apakah eventhub.web.id menyediakan layanan pembayaran online?</b>
+                        <b>Apakah eventverse.id menyediakan layanan pembayaran online?</b>
                     </a>
                     <div class="collapse" id="faq-4">
                         <hr class="m-2 mt-3">
@@ -141,7 +141,7 @@
             <div class="card-body px-4 py-3">
                 <div class="text-article mt-0">
                     <a class="btn w-100 text-left" data-toggle="collapse" href="#faq-6" role="button">
-                        <b>Apakah eventhub.web.id memiliki dukungan pelanggan?</b>
+                        <b>Apakah eventverse.id memiliki dukungan pelanggan?</b>
                     </a>
                     <div class="collapse" id="faq-6">
                         <hr class="m-2 mt-3">
@@ -159,7 +159,7 @@
             <div class="card-body px-4 py-3">
                 <div class="text-article mt-0">
                     <a class="btn w-100 text-left" data-toggle="collapse" href="#faq-7" role="button">
-                        <b>Bagaimana keamanan data peserta yang menggunakan platform eventhub?</b>
+                        <b>Bagaimana keamanan data peserta yang menggunakan platform eventverse?</b>
                     </a>
                     <div class="collapse" id="faq-7">
                         <hr class="m-2 mt-3">
@@ -178,7 +178,7 @@
             <div class="card-body px-4 py-3">
                 <div class="text-article mt-0">
                     <a class="btn w-100 text-left" data-toggle="collapse" href="#faq-8" role="button">
-                        <b>Apakah eventhub menyediakan integrasi dengan platform lain seperti media sosial atau
+                        <b>Apakah eventverse menyediakan integrasi dengan platform lain seperti media sosial atau
                             aplikasi lainnya?</b>
                     </a>
                     <div class="collapse" id="faq-8">
@@ -199,7 +199,7 @@
             <div class="card-body px-4 py-3">
                 <div class="text-article mt-0">
                     <a class="btn w-100 text-left" data-toggle="collapse" href="#faq-9" role="button">
-                        <b>Apakah ada biaya atau komisi yang dikenakan oleh eventhub?</b>
+                        <b>Apakah ada biaya atau komisi yang dikenakan oleh eventverse?</b>
                     </a>
                     <div class="collapse" id="faq-9">
                         <hr class="m-2 mt-3">
@@ -217,7 +217,7 @@
             <div class="card-body px-4 py-3">
                 <div class="text-article mt-0">
                     <a class="btn w-100 text-left" data-toggle="collapse" href="#faq-10" role="button">
-                        <b>Bagaimana cara saya memulai menggunakan eventhub untuk event saya?</b>
+                        <b>Bagaimana cara saya memulai menggunakan eventverse untuk event saya?</b>
                     </a>
                     <div class="collapse" id="faq-10">
                         <hr class="m-2 mt-3">

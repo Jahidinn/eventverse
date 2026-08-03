@@ -254,23 +254,22 @@
 
             <div class="hero-subtitle">
 
-                Selamat datang kembali di EventHub.
-                Kelola event, pantau peserta, dan tingkatkan performa eventmu.
+                Selamat datang kembali di eventverse!
 
             </div>
 
             <div class="hero-stats">
 
                 <div class="hero-chip">
-                    🎉 {{ number_format($eventDibuat,0,',','.') }} Event
+                    <i class="ti ti-calendar-event"></i> {{ number_format($eventDibuat,0,',','.') }} Event
                 </div>
 
                 <div class="hero-chip">
-                    👥 {{ number_format($totalPeserta,0,',','.') }} Peserta
+                    <i class="ti ti-users"></i> {{ number_format($totalPeserta,0,',','.') }} Peserta
                 </div>
 
                 <div class="hero-chip">
-                    💰 {{ number_format($totalTransaksi,0,',','.') }} Transaksi
+                    <i class="ti ti-coin"></i> {{ number_format($totalTransaksi,0,',','.') }} Transaksi
                 </div>
 
             </div>
@@ -288,7 +287,7 @@
                 <a href="/search"
                 class="hero-btn hero-btn-secondary">
 
-                    <i class="ti ti-compass"></i>
+                    <i class="ti ti-search"></i>
                     Jelajah Event
 
                 </a>

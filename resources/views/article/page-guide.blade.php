@@ -15,7 +15,7 @@
 
     <section class="container mt-0 pt-4 px-3">
         <div class="alert alert-success" role="alert">
-            <span>Panduan <b>event creator</b> dan <b>pengguna</b> eventhub.web.id</span>
+            <span>Panduan <b>event creator</b> dan <b>pengguna</b> eventverse.id</span>
         </div>
         <hr>
         <div id="content">
@@ -25,7 +25,7 @@
                     <h3>Registrasi</h3>
                     <ol class="pl-4 text-article">
                         <li class="mb-2">
-                            Untuk event creator pastikan kamu punya akun di eventhub, jika belum punya
+                            Untuk event creator pastikan kamu punya akun di eventverse, jika belum punya
                             bisa <a href="/register"><b>registrasi disini</b></a>, kamu bisa membuat event atas nama individu atau
                             organisasi. jika atas nama organisasi kamu bisa menambahkan data organisasi di profil.
                         </li>
@@ -57,7 +57,7 @@
                     <h3>Create event</h3>
                     <ol class="pl-4 text-article">
                         <li class="mb-2">
-                            Masuk ke Akun kamu: Langkah pertama untuk memulai adalah masuk ke akun eventhub.web.id kamu,
+                            Masuk ke Akun kamu: Langkah pertama untuk memulai adalah masuk ke akun eventverse.id kamu,
                             login dengan email dan password yang telah terdaftar.
                         </li>
                         <li class="mb-2">
@@ -131,7 +131,7 @@
                 <li class="event">
                     <h3>Manajemen artikel</h3>
                     <span class="text-article mb-3">
-                        Tidak hanya menyediakan platform untuk mengelola event, tetapi eventhub.web.id juga memungkinkan
+                        Tidak hanya menyediakan platform untuk mengelola event, tetapi eventverse.id juga memungkinkan
                         user menulis dan mengelola artikel untuk berbagai keperluan seperti pengumuman, berita,
                         dan seagainya.
                     </span>
@@ -155,7 +155,7 @@
                     <h3>Mendaftar event (peserta)</h3>
                     <ol class="pl-4 text-article">
                         <li class="mb-2">
-                            Untuk registrasi atau membeli tiket event di eventhub.web.id tidak harus punya akun, kamu bisa
+                            Untuk registrasi atau membeli tiket event di eventverse.id tidak harus punya akun, kamu bisa
                             registrasi event dengan akun atau tanpa akun.
                         </li>
                         <li class="mb-2">
@@ -194,7 +194,7 @@
                 </li>
                 <li class="event">
                     <h3>Done!</h3>
-                    <p class="text-article">Selamat! Kamus sudah bisa menjadi event creator atau peserta event di eventhub.web.id
+                    <p class="text-article">Selamat! Kamus sudah bisa menjadi event creator atau peserta event di eventverse.id
                     </p>
                 </li>
             </ul>
