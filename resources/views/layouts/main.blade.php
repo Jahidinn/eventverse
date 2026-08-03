@@ -13,8 +13,8 @@
         data-client-key="{{ config('midtrans.client_key') }}"></script>
 
     <!-- Favicons -->
-    <link href="{{ asset('assets/img/eventhub-icon.png') }}" rel="icon">
-    <link href="{{ asset('assets/img/eventhub-apple-icon.png') }}" rel="apple-touch-icon">
+    <link href="{{ asset('assets/img/eventverse-icon.png') }}" rel="icon">
+    <link href="{{ asset('assets/img/eventverse-apple-icon.png') }}" rel="apple-touch-icon">
 
     <!-- Google Fonts -->
     <link

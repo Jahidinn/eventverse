@@ -11,8 +11,8 @@
     <title>Dashboard | eventhub.web.id</title>
 
     <!-- Favicons -->
-    <link href="{{ asset('assets/img/eventhub-icon.png') }}" rel="icon">
-    <link href="{{ asset('assets/img/eventhub-apple-icon.png') }}" rel="apple-touch-icon">
+    <link href="{{ asset('assets/img/eventverse-icon.png') }}" rel="icon">
+    <link href="{{ asset('assets/img/eventverse-apple-icon.png') }}" rel="apple-touch-icon">
 
     <!-- Google Font: Source Sans Pro -->
     <link rel="stylesheet"
