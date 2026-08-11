@@ -18,6 +18,7 @@ use App\Http\Controllers\UserProfileController;
 use App\Http\Controllers\LocationController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\ReservationController;
+use App\Models\Event;
 use GuzzleHttp\Promise\Create;
 
 /*
@@ -347,3 +348,11 @@ Route::get('/auth/forgot-password', [AuthController::class, 'forgotPasswordView'
 Route::post('/auth/forgot-password', [AuthController::class, 'forgotPassword'])->middleware('guest')->name('password.email');
 Route::get('/auth/reset-password/{token}', [AuthController::class, 'resetPasswordView'])->middleware('guest')->name('password.reset');
 Route::post('/auth/send-reset-password', [AuthController::class, 'resetPassword'])->middleware('guest')->name('password.update');
+
+
+Route::get('/test-event/{event:slug}', function (Event $event) {
+    return response()->json([
+        'id' => $event->id,
+        'slug' => $event->slug,
+    ]);
+});
