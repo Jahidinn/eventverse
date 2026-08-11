@@ -207,14 +207,14 @@ class EventController extends Controller
 		|--------------------------------------------------------------------------
 		*/
 
-		$visitor = EventVisitor::firstOrCreate([
-			'ip_address' => $request->ip(),
-			'event_id'   => $event->id,
-		]);
+		// $visitor = EventVisitor::firstOrCreate([
+		// 	'ip_address' => $request->ip(),
+		// 	'event_id'   => $event->id,
+		// ]);
 
-		if ($visitor->wasRecentlyCreated) {
-			$event->increment('visitor');
-		}
+		// if ($visitor->wasRecentlyCreated) {
+		// 	$event->increment('visitor');
+		// }
 
 		/*
 		|--------------------------------------------------------------------------
