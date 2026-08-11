@@ -1,4 +1,5 @@
 @extends('layouts.main')
+
 <style>
 /* ===========================================================
    EVENTCONNECT COMPLETE CHECKOUT THEME & OVERRIDES
@@ -178,7 +179,7 @@
 
 .checkout-textarea{
     min-height:120px !important;
-    height:120px !important; /* atau auto jika ingin fleksibel */
+    height:120px !important;
     padding:12px 14px !important;
     resize:vertical !important;
     line-height:1.6 !important;
@@ -196,7 +197,6 @@
     border:1.5px solid #CBD5E1 !important;
     border-radius:var(--radius-sm) !important;
     background:#FFF !important;
-
     display:flex !important;
     align-items:center !important;
 }
@@ -229,7 +229,6 @@
     border: 1px solid #E2E8F0 !important;
     z-index: 99 !important;
 }
-
 
 /* 6. TICKET QUANTITY COUNTER */
 .ticket-qty {
@@ -397,8 +396,28 @@ label.upload-box {
     line-height: 1.5 !important;
 }
 
-/* 9. SUMMARY CARD (SISI KANAN) */
-.summary-card { position: sticky !important; top: 90px !important; }
+/* 9. SUMMARY CARD & SIDEBAR STICKY FIX */
+
+/* PERBAIKAN 1: Mencegah Flexbox Bootstrap memaksa tinggi kolom kanan sama dengan kolom kiri */
+.col-lg-5 {
+    align-self: flex-start !important;
+}
+.col-lg-5{
+    align-self:flex-start;
+}
+
+/* PERBAIKAN 2: Penyesuaian Sticky Sidebar */
+.summary-sidebar-wrapper.fixed{
+    position: fixed;
+    top: 90px;
+    width: 370px;
+}
+
+.summary-sidebar-wrapper.bottom{
+    position: absolute;
+    bottom: 0;
+}
+
 .summary-cover { width: 100% !important; height: 160px !important; object-fit: cover !important; }
 .summary-content { padding: 22px !important; }
 .summary-title { font-size: 18px !important; font-weight: 800 !important; color: var(--text) !important; margin-bottom: 10px !important; line-height: 1.3 !important; }
@@ -412,7 +431,22 @@ label.upload-box {
     padding: 12px 14px !important;
     font-size: 13px !important;
 }
-.price-box { margin-top: 18px !important; padding-top: 16px !important; border-top: 1px solid var(--border-light) !important; }
+
+/* CARD KHUSUS AKSI CHECKOUT (COUNTDOWN, TOTAL, BUTTON) */
+.sticky-checkout-action {
+    background: var(--card) !important;
+    border: 1px solid var(--border) !important;
+    border-radius: var(--radius-lg) !important;
+    padding: 22px !important;
+    margin-top: 16px !important;
+    box-shadow: 0 10px 25px -5px rgba(15,23,42,.04) !important;
+}
+
+.price-box { 
+    margin-top: 0 !important; 
+    padding-top: 0 !important; 
+    border-top: none !important; 
+}
 .price-box small { color: var(--muted) !important; font-size: 12px !important; display: block !important; }
 .price-amount { font-size: 28px !important; font-weight: 800 !important; color: var(--primary) !important; margin-top: 2px !important; letter-spacing: -0.5px !important; }
 
@@ -421,22 +455,24 @@ label.upload-box {
 .trust-item + .trust-item { margin-top: 6px !important; }
 
 /* Checkbox Persetujuan Syarat & Ketentuan */
-.summary-content .form-check {
+.summary-sidebar-wrapper .form-check {
     display: flex !important;
     align-items: center !important;
     gap: 10px !important;
-    padding: 0 !important;
-    margin-top: 20px !important;
+    padding: 20 !important;
+    margin-top: 10px !important;
     min-height: auto !important;
+    font-size: 13px !important;
+
 }
-.summary-content .form-check-input {
+.summary-sidebar-wrapper.form-check-input {
     width: 16px !important; height: 16px !important;
     margin: 0 !important; padding: 0 !important;
     float: none !important; position: static !important;
     accent-color: var(--primary) !important;
     cursor: pointer !important; flex-shrink: 0 !important;
 }
-.summary-content .form-check-label {
+.summary-sidebar-wrapper.form-check-label {
     font-size: 13px !important; color: var(--text) !important;
     margin: 0 !important; cursor: pointer !important;
 }
@@ -461,8 +497,116 @@ label.upload-box {
 }
 .checkout-pay-btn:hover { background: var(--primary-hover) !important; transform: translateY(-1px) !important; box-shadow: 0 6px 18px rgba(0,102,255,.35) !important; }
 
-/* Responsive Adjustments */
-@media(max-width: 991px) { .summary-card { position: relative !important; top: 0 !important; margin-top: 24px !important; } }
+.reservation-countdown{
+    display:flex !important;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+    margin:0 0 16px 0 !important;
+    padding:10px 18px;
+    background:#FFF7ED;
+    border:1px solid #FED7AA;
+    color:#C2410C;
+    border-radius:999px;
+    font-size:14px;
+    font-weight:700;
+    width: 100% !important;
+}
+
+.reservation-countdown.expired{
+    background:#FEF2F2;
+    border-color:#FECACA;
+    color:#DC2626;
+}
+
+/* Responsive Adjustments (Mobile Sticky Bottom Bar Fix) */
+@media(max-width: 991px) {
+    .summary-sidebar-wrapper { 
+        position: relative !important; 
+        top: 0 !important; 
+        margin-top: 24px !important; 
+    }
+    
+    /* .sticky-checkout-action {
+        position: -webkit-sticky !important;
+        position: sticky !important;
+        bottom: 0 !important;
+        z-index: 1000 !important;
+        margin-top: 20px !important;
+        border-radius: var(--radius-lg) var(--radius-lg) 0 0 !important;
+        box-shadow: 0 -10px 25px rgba(15,23,42,.1) !important;
+        background: #FFFFFF !important;
+    } */
+}
+
+@media (max-width: 991.98px) {
+
+    .sticky-checkout-action{
+        position: fixed !important;
+        left: 0 !important;
+        right: 0 !important;
+        bottom: 0 !important;
+        z-index: 1050 !important;
+
+        background: #fff !important;
+        padding: 16px !important;
+
+        border-top: 1px solid #e9ecef !important;
+        box-shadow: 0 -6px 20px rgba(0,0,0,.08) !important;
+    }
+
+    /* Supaya isi halaman tidak tertutup sticky */
+    .checkout-page{
+        padding-bottom: 260px;
+    }
+
+    /* Countdown tidak perlu ditampilkan di sticky mobile */
+    .sticky-checkout-action .reservation-countdown{
+        display: none;
+    }
+
+    /* Harga dan tombol */
+    .sticky-checkout-action .price-box{
+        margin-bottom: 12px;
+    }
+
+    .sticky-checkout-action .checkout-pay-btn{
+        width: 100%;
+    }
+
+}
+
+
+/* Mobile */
+@media (max-width: 991.98px){
+
+    .price-box{
+        display:flex;
+        justify-content:space-between;
+        align-items:center;
+        text-align:left;
+        padding:0 0 12px;
+        margin-bottom:12px;
+        border-bottom:1px solid #eee;
+    }
+
+    .price-box small{
+        display:inline;
+        margin:0;
+        font-size:14px;
+        color:#6c757d;
+    }
+
+    .price-amount{
+        display:inline;
+        margin:0;
+        font-size:22px;
+        font-weight:700;
+        line-height:1;
+    }
+
+}
+
 @media(max-width: 768px) {
     .checkout-card-body, .summary-content { padding: 18px !important; }
     .progress-step span { display: none !important; }
@@ -473,32 +617,23 @@ label.upload-box {
 </style>
 
 @section('content')
-<div class="bg-eventconnect header-hight">
+<div class="bg-eventconnect header-hight"></div>
 
-    </div>
 <section class="checkout-section pt-4 pb-5">
-
 <div class="container">
 
     <div class="checkout-hero">
-
-        {{-- <div class="checkout-badge">
-            <i class="ti ti-ticket"></i>
-            Checkout Event
-        </div> --}}
-
         <div class="checkout-title">
             Selesaikan Pemesanan
         </div>
 
-        {{-- <div class="checkout-subtitle">
-            Lengkapi data peserta dan lanjutkan ke pembayaran
-        </div> --}}
-
+        <input
+            type="hidden"
+            id="reservationExpiredAt"
+            value="{{ $reservation->expired_at->toIso8601String() }}">
     </div>
 
     <div class="checkout-progress">
-
         <div class="progress-step">
             <div class="progress-circle progress-done">
                 <i class="ti ti-check"></i>
@@ -532,23 +667,21 @@ label.upload-box {
             </div>
             <span>Tiket</span>
         </div>
-
     </div>
 
     <form
-    method="POST"
-    enctype="multipart/form-data"
-    id="checkout-event">
+        method="POST"
+        enctype="multipart/form-data"
+        id="checkout-event">
 
         @csrf
 
-        <div class="row">
+        <div class="row g-4 position-relative">
 
-            {{-- FORM --}}
+            {{-- FORM LEFT --}}
             <div class="col-lg-7">
 
                 <div class="checkout-card">
-
                     <div class="checkout-card-body">
 
                         <div class="checkout-section-title">
@@ -556,9 +689,7 @@ label.upload-box {
                         </div>
 
                         @if(auth()->check())
-
                         <div class="checkout-user-card">
-
                             <div class="user-avatar">
                                 {{ strtoupper(substr(auth()->user()->name,0,1)) }}
                             </div>
@@ -571,39 +702,16 @@ label.upload-box {
                                     {{ auth()->user()->email }}
                                 </div>
                             </div>
-
                         </div>
-
                         @endif
 
-                        {{-- SELURUH INPUT FORM LAMA ANDA TEMPEL DI SINI --}}
-                        {{-- mulai dari checkbox --}}
-                        {{-- hidden input --}}
-                        {{-- nama --}}
-                        {{-- email --}}
-                        {{-- hp --}}
-                        {{-- custom forms --}}
-
-                        {{-- @if (auth()->check())
-                            <div class="mb-3">
-                                <label>
-                                    <input class="checkbox checkbox-success" type="checkbox" name="checkbox"
-                                        value="1">
-                                    <strong>Pesan buat orang lain</strong>
-                                </label>
-                            </div>
-                        @endif --}}
-
-                        {{-- Dipakai jika pesan ticket dengan login --}}
                         <input type="hidden" name="is_login" id="is_login"
                             value="{{ auth()->check() ? 1 : 0 }}">
 
                         <input type="hidden" name="user_login_id" id="user_login_id"
                             value="{{ auth()->check() ? auth()->user()->id : '0' }}">
-                        {{-- Dipakai jika pesan ticket dengan login --}}
 
                         <div class="form-group mb-3">
-
                             <label for="buyerName" class="checkout-label">
                                 Nama Lengkap <span class="text-danger">*</span>
                             </label>
@@ -618,11 +726,9 @@ label.upload-box {
                                 autocomplete="on"
                                 {{ auth()->check() ? 'readonly' : '' }}
                                 value="{{ auth()->check() ? auth()->user()->name : '' }}">
-
                         </div>
 
                         <div class="form-group mb-3">
-
                             <label for="buyerEmail" class="checkout-label">
                                 Email <span class="text-danger">*</span>
                             </label>
@@ -637,11 +743,9 @@ label.upload-box {
                                 autocomplete="on"
                                 {{ auth()->check() ? 'readonly' : '' }}
                                 value="{{ auth()->check() ? auth()->user()->email : '' }}">
-
                         </div>
 
                         <div class="form-group mb-3">
-
                             <label for="buyerPhone" class="checkout-label">
                                 Nomor HP <span class="text-danger">*</span>
                             </label>
@@ -654,25 +758,19 @@ label.upload-box {
                                 placeholder="+62 821 3355 3002"
                                 value="+62"
                                 required>
-
                         </div>
 
-
                         <div class="checkout-field">
-
                             <label class="checkout-label">
                                 Jumlah Tiket
                             </label>
 
                             <div class="ticket-qty">
-
                                 <button
                                     type="button"
                                     class="qty-btn"
                                     id="qtyMinus">
-
                                     <i class="ti ti-minus"></i>
-
                                 </button>
 
                                 <input
@@ -680,152 +778,140 @@ label.upload-box {
                                     class="qty-input"
                                     type="number"
                                     min="1"
-                                    value="1"
+                                    value="{{ $reservation->quantity }}"
                                     readonly>
 
                                 <button
                                     type="button"
                                     class="qty-btn"
                                     id="qtyPlus">
-
                                     <i class="ti ti-plus"></i>
-
                                 </button>
-
                             </div>
-
                         </div>
 
                         <hr class="my-4">
-
-                        {{-- PARTICIPANT COMPONENTS --}}
-                       
 
                         <div class="checkout-note mt-4">
                             Form dapat di ubah jika registrasi menggunakan akun!
                         </div>
 
                     </div>
-
                 </div>
 
-                 @include('transaction.participant')
+                @include('transaction.participant')
 
             </div>
 
-            {{-- SUMMARY --}}
+            {{-- SUMMARY RIGHT --}}
             <div class="col-lg-5">
+                
+                {{-- Pembungkus Sticky Sidebar --}}
+                <div class="summary-sidebar-wrapper">
+                
 
-                <div class="checkout-card summary-card">
+                    {{-- Card Informasi Event & Tiket --}}
+                    <div class="checkout-card summary-card">
+                        <img
+                            src="{{ asset('storage/event-images/' . $event->image) }}"
+                            class="summary-cover">
 
-                    <img
-                        src="{{ asset('storage/event-images/' . $event->image) }}"
-                        class="summary-cover">
-
-                    <div class="summary-content">
-
-                        <div class="summary-title">
-                            {{ $event->title }}
-                        </div>
-
-                        <div class="summary-meta">
-                            <i class="ti ti-user"></i>
-                            {{ $event->penyelenggara->name }}
-                        </div>
-
-                        <div class="summary-meta">
-                            <i class="ti ti-map-pin"></i>
-
-                            @if(strtolower($event->location_jenis)=='online')
-
-                                Online
-
-                            @else
-
-                                {{ $event->location_detail }}
-
-                                <br>
-
-                                {{ $event->location_city }},
-                                {{ $event->province->name }}
-                            @endif
-
-                        </div>
-
-                        <div class="ticket-box">
-
-                            <strong>
-                                {{ $ticket->ticket_name }}
-                            </strong>
-
-                            <br>
-
-                            <small class="text-muted" id="summaryQty">
-
-                                Qty 1 Ticket
-
-                            </small>
-
-                        </div>
-
-                        <div class="price-box">
-
-                            <small>Total Pembayaran</small>
-
-                            <div class="price-amount" id="summaryPrice">
-
-                                Rp {{ number_format($ticket->ticket_price,0,',','.') }}
-
+                        <div class="summary-content">
+                            <div class="summary-title">
+                                {{ $event->title }}
                             </div>
 
+                            <div class="summary-meta">
+                                <i class="ti ti-user"></i>
+                                {{ $event->penyelenggara->name }}
+                            </div>
+
+                            <div class="summary-meta">
+                                <i class="ti ti-map-pin"></i>
+
+                                @if(strtolower($event->location_jenis)=='online')
+                                    Online
+                                @else
+                                    {{ $event->location_detail }}
+                                    <br>
+                                    {{ $event->location_city }},
+                                    {{ $event->province->name }}
+                                @endif
+                            </div>
+
+                            <div class="ticket-box">
+                                <strong>
+                                    {{ $ticket->ticket_name }}
+                                </strong>
+                                <br>
+                                <small class="text-muted" id="summaryQty">
+                                    Qty 1 Ticket
+                                </small>
+                            </div>
+
+                            <div class="trust-card">
+                                <div class="trust-item">
+                                    <i class="ti ti-shield-check"></i> Secure payment
+                                </div>
+
+                                <div class="trust-item">
+                                    <i class="ti ti-ticket"></i> Verify and generate tickets automatically
+                                </div>
+                            </div>
+
+                            <!-- 3. Persetujuan Syarat & Ketentuan -->
+                            <div class="form-check">
+                                <input
+                                    type="checkbox"
+                                    class="form-check-input"
+                                    id="persetujuan"
+                                    required>
+
+                                <label
+                                    class="form-check-label"
+                                    for="persetujuan">
+                                    Saya setuju dengan <strong>Syarat & Ketentuan</strong>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    {{-- CARD KHUSUS: COUNTDOWN + TOTAL PRICE + ACTION BUTTON (Sticky) --}}
+                    <div class="sticky-checkout-action">
+                        
+                        <!-- 1. Countdown Pindah ke Atas Total Harga -->
+                        <div class="reservation-countdown" id="reservationCountdown">
+                            <i class="ti ti-clock"></i>
+                            <span id="countdownText">Memuat sisa waktu...</span>
                         </div>
 
-                        
-                        <input type="hidden" name="event_id" value="{{ $event->id }}">
-                        <input type="hidden" name="ticket_id" value="{{ $ticket->id }}">
+                        <!-- 2. Price Box -->
+                        <div class="price-box">
+                            <small>Total Pembayaran</small>
+                            <div class="price-amount" id="summaryPrice">
+                                Rp {{ number_format($ticket->ticket_price,0,',','.') }}
+                            </div>
+                        </div>
 
-                        <input type="hidden" id="quantity" name="quantity" value="1">
+                        <input
+                            type="hidden"
+                            name="reservation_code"
+                            value="{{ $reservation->reservation_code }}">
+
+                        <input
+                            type="hidden"
+                            id="quantity"
+                            name="quantity" value="{{ $reservation->quantity }}">
                         <input type="hidden" id="ticketPrice" value="{{ $ticket->ticket_price }}">
                         <input type="hidden" id="totalPrice" name="totalPrice" value="{{ $ticket->ticket_price }}">
 
-                        <div class="trust-card">
-
-                            <div class="trust-item">
-                                <i class="ti ti-shield-check"></i> Secure payment
-                            </div>
-
-                            <div class="trust-item">
-                                <i class="ti ti-ticket"></i> Verify and generate tickets automatically
-                            </div>
-
-                        </div>
-
-                        <div class="form-check mt-4">
-
-                            <input
-                                type="checkbox"
-                                class="form-check-input"
-                                id="persetujuan"
-                                required>
-
-                            <label
-                                class="form-check-label"
-                                for="persetujuan">
-
-                                Saya setuju dengan <strong>Syarat & Ketentuan</strong>
-
-                            </label>
-
-                        </div>
-
+                        <!-- 4. Tombol Lanjut ke Pembayaran -->
                         <button
                             type="submit"
                             id="checkout-button"
-                            class="checkout-pay-btn mt-4">
-
+                            class="checkout-pay-btn mt-3">
                             <i class="ti ti-credit-card"></i>
                             Lanjut ke Pembayaran
-
                         </button>
 
                     </div>
@@ -839,33 +925,96 @@ label.upload-box {
     </form>
 
 </div>
-
 </section>
-    
 
-    <!-- Modal konfirmasi checkout -->
-    {{-- @include('apps.components.modal-checkout') --}}
-    @include('transaction.payment-confirmation')
-    
-    {{-- javascript --}}
-    {{-- @push('transaction-scripts')
-        @include('apps.js.payment-process')
-    @endpush --}}
+<!-- Modal konfirmasi checkout -->
+@include('transaction.payment-confirmation')
 
-    {{-- javascript --}}
-    {{-- @push('transaction-scripts')
-        @include('apps.js.transaction')
-    @endpush --}}
+{{-- NEW script --}}
+@push('transaction-scripts')
+    @include('transaction.scripts.participant-init')
+    @include('transaction.scripts.participant')
+    @include('transaction.scripts.participant-copy')
+    @include('transaction.scripts.participant-upload')
+    @include('transaction.scripts.summary')
+    @include('transaction.scripts.payment-confirmation')
+    <script>
+        const expiredAt = new Date(
+            document.getElementById('reservationExpiredAt').value
+        );
 
-    {{-- NEW script --}}
-    @push('transaction-scripts')
-        @include('transaction.scripts.participant-init')
-        @include('transaction.scripts.participant')
-        @include('transaction.scripts.participant-copy')
-        @include('transaction.scripts.participant-upload')
-        @include('transaction.scripts.summary')
-        @include('transaction.scripts.payment-confirmation')
+        const countdownText = document.getElementById('countdownText');
+        const countdownBox = document.getElementById('reservationCountdown');
 
-    @endpush
+        let reservationExpired = false;
+
+        const timer = setInterval(async function () {
+
+            if (reservationExpired) {
+                return;
+            }
+
+            const now = new Date();
+            const diff = expiredAt - now;
+
+            if (diff <= 0) {
+
+                reservationExpired = true;
+
+                clearInterval(timer);
+
+                countdownBox.classList.add('expired');
+
+                countdownText.innerHTML = 'Reservation telah berakhir';
+
+                try {
+
+                    await $.ajax({
+                        url: "{{ route('reservation.expire', ['reservationCode' => $reservation->reservation_code]) }}",
+                        type: "POST",
+                        dataType: "json",
+                        data: {
+                            _token: "{{ csrf_token() }}"
+                        }
+                    });
+
+                    Toast.fire({
+                        icon: 'error',
+                        title: 'Waktu reservasi telah habis.'
+                    });
+
+                    setTimeout(function () {
+
+                        window.location.href = "{{ url($event->slug) }}";
+
+                    }, 2000);
+
+                } catch (xhr) {
+
+                    console.error(xhr);
+
+                    Toast.fire({
+                        icon: 'error',
+                        title: xhr.responseJSON?.message ??
+                            'Gagal mengakhiri reservation. Silakan refresh halaman.'
+                    });
+
+                    reservationExpired = false;
+
+                }
+
+                return;
+            }
+
+            const minutes = Math.floor(diff / 60000);
+            const seconds = Math.floor((diff % 60000) / 1000);
+
+            countdownText.innerHTML =
+                `Selesaikan pembayaran dalam ${minutes}:${String(seconds).padStart(2, '0')}`;
+
+        }, 1000);
+        
+    </script>
+@endpush
 
 @endsection

@@ -190,28 +190,29 @@
                 </div>
 
                 {{-- TABS SECTION (TIKET & DESKRIPSI) --}}
-                <div class="modern-card p-4">
+                <div class="modern-card p-4 mb-4">
                     <div class="modern-tabs-wrapper">
                         <div class="modern-tabs mb-0">
-                            <button id="ticket-tab" class="nav-link active">
-                                <i class="ti ti-ticket fs-5"></i>
-                                <span>Tiket</span>
-                            </button>
-                            <button id="description-tab" class="nav-link">
+                            <button id="description-tab" class="nav-link active">
                                 <i class="ti ti-file-text fs-5"></i>
                                 <span>Deskripsi</span>
+                            </button>
+
+                            <button id="ticket-tab" class="nav-link">
+                                <i class="ti ti-ticket fs-5"></i>
+                                <span>Tiket</span>
                             </button>
                         </div>
                     </div>
 
                     <div class="tab-content-container mt-4">
                         {{-- TICKET CONTENT --}}
-                        <div id="ticket-content">
+                        <div id="ticket-content" style="display:none;">
                             @include('apps.event-list-ticket')
                         </div>
 
                         {{-- DESCRIPTION CONTENT --}}
-                        <div id="description-content" class="description-wrapper" style="display:none;">
+                        <div id="description-content" class="description-wrapper">
                             <div class="description-header mb-3">
                                 <h4 class="fw-bold m-0">Tentang Event</h4>
                                 <p class="text-muted small">Informasi lengkap mengenai acara ini.</p>
@@ -322,7 +323,7 @@
 
                             <!-- Action Group -->
                             <div class="d-flex gap-2">
-                                <a href="{{ $organizerLink }}" class="btn btn-outline-primary-custom w-100 btn-sm-custom d-flex align-items-center justify-content-center gap-1">
+                                <a href="{{ $organizerLink }}" class="btn btn-outline-primary-custom w-100 mr-1 btn-sm-custom d-flex align-items-center justify-content-center gap-1">
                                     <i class="ti ti-user fs-5"></i>
                                     <span>Lihat Profil</span>
                                 </a>
@@ -1068,7 +1069,16 @@ body {
 }
 </style>
 
+@push('reservation-js')
 <script>
+
+    //   const Toast = Swal.mixin({
+    //     toast: true,
+    //     position: 'top-end',
+    //     showConfirmButton: false,
+    //     timer: 3000,
+    //     timerProgressBar: true
+    // });
 document.addEventListener('DOMContentLoaded', function () {
 
     // Carousel Thumbnail Switcher
@@ -1122,6 +1132,138 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
 });
+
+document.addEventListener('DOMContentLoaded', function () {
+
+    // 1. Event Handler Tombol Plus (+)
+    document.addEventListener('click', function (e) {
+        const plusBtn = e.target.closest('.qty-plus-btn');
+        if (plusBtn) {
+            const container = plusBtn.closest('.ticket-qty');
+            const inputField = container ? container.querySelector('.qty-input-field') : null;
+
+            if (inputField) {
+                let val = parseInt(inputField.value) || 0;
+                inputField.value = val + 1;
+            }
+        }
+    });
+
+    // 2. Event Handler Tombol Minus (-)
+    document.addEventListener('click', function (e) {
+        const minusBtn = e.target.closest('.qty-minus-btn');
+        if (minusBtn) {
+            const container = minusBtn.closest('.ticket-qty');
+            const inputField = container ? container.querySelector('.qty-input-field') : null;
+
+            if (inputField) {
+                let val = parseInt(inputField.value) || 1;
+                if (val > 1) {
+                    inputField.value = val - 1;
+                }
+            }
+        }
+    });
+
+    // 3. Event Handler Klik Tombol Tiket (Validasi Kuota & Stok)
+    document.addEventListener('click', async function (e) {
+
+        const ticketBtn = e.target.closest('.ticket-button');
+
+        if (!ticketBtn) {
+            return;
+        }
+
+        const ticketCard = ticketBtn.closest('.ticket-card');
+        const inputField = ticketCard.querySelector('.qty-input-field');
+
+        const ticketId = ticketBtn.dataset.id;
+        const eventId = ticketBtn.dataset.event_id;
+        const maxStock = parseInt(ticketBtn.dataset.stock);
+        const quantity = parseInt(inputField.value);
+
+        if (isNaN(quantity) || quantity < 1) {
+
+            Toast.fire({
+                icon: 'error',
+                title: 'Jumlah tiket minimal 1.'
+            });
+
+            inputField.value = 1;
+            return;
+        }
+
+
+        const originalButton = ticketBtn.innerHTML;
+
+        ticketBtn.disabled = true;
+
+        ticketBtn.innerHTML = `
+            <span class="spinner-border spinner-border-sm mr-2" role="status" aria-hidden="true"></span>
+            Checking...
+        `;
+
+        try {
+
+            const response = await $.ajax({
+                url: "{{ route('reservation.store') }}",
+                type: "POST",
+                dataType: "json",
+                data: {
+                    _token: "{{ csrf_token() }}",
+                    event_id: eventId,
+                    ticket_id: ticketId,
+                    quantity: quantity
+                }
+            });
+
+            if (!response.success) {
+
+                Toast.fire({
+                    icon: 'error',
+                    title: response.message
+                });
+
+                ticketBtn.disabled = false;
+                ticketBtn.innerHTML = originalButton;
+
+                return;
+            }
+
+            window.location.href = response.redirect_url;
+
+        } catch (xhr) {
+
+        let message = 'Terjadi kesalahan pada server.';
+
+        if (xhr.responseJSON?.errors) {
+
+            const errors = xhr.responseJSON.errors;
+
+            const firstKey = Object.keys(errors)[0];
+
+            message = errors[firstKey][0];
+
+        } else if (xhr.responseJSON?.message) {
+
+            message = xhr.responseJSON.message;
+
+        }
+
+        Toast.fire({
+            icon: 'error',
+            title: message
+        });
+
+        ticketBtn.disabled = false;
+        ticketBtn.innerHTML = originalButton;
+
+    }
+
+    });
+
+});
 </script>
+@endpush
 
 @endsection

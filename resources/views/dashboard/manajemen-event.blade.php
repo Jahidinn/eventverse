@@ -292,7 +292,7 @@
                                 <div class="event-actions">
 
                                     <a
-                                        href="/event/{{ $event->slug }}/edit"
+                                        href="/event-studio/{{ $event->event_id }}/basic"
                                         class="button-39"
                                         title="Edit Event">
 
@@ -304,7 +304,7 @@
 
                                     </a>
 
-                                    <button
+                                    <!-- <button
                                         type="button"
                                         class="button-39 edit-ticket-button"
                                         data-id="{{ $event->id }}"
@@ -332,7 +332,7 @@
                                             Edit Formulir
                                         </span>
 
-                                    </button>
+                                    </button> -->
 
                                     <button
                                         type="button"
@@ -340,7 +340,7 @@
                                         data-id="{{ $event->id }}"
                                         title="Hapus Event">
 
-                                        <i class="ti ti-trash ti-sm"></i>
+                                        <i class="ti ti-trash ti-sm"></i> Delete
 
                                     </button>
 

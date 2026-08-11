@@ -19,6 +19,7 @@ use Illuminate\Support\Facades\Storage;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Facades\Validator;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
+use Illuminate\Support\Facades\Cache;
 
 class EventController extends Controller
 {
@@ -206,18 +207,12 @@ class EventController extends Controller
 		|--------------------------------------------------------------------------
 		*/
 
-		EventVisitor::firstOrCreate(
-			[
-				'ip_address' => $request->ip(),
-				'event_id'   => $event->id,
-			],
-			[]
-		);
+		$visitor = EventVisitor::firstOrCreate([
+			'ip_address' => $request->ip(),
+			'event_id'   => $event->id,
+		]);
 
-		if (EventVisitor::where('ip_address', $request->ip())
-			->where('event_id', $event->id)
-			->count() == 1) {
-
+		if ($visitor->wasRecentlyCreated) {
 			$event->increment('visitor');
 		}
 
@@ -234,7 +229,7 @@ class EventController extends Controller
 			'images',
 			'individual',
 			'org',
-			'tickets'
+			'tickets',
 		]);
 
 		/*
@@ -247,27 +242,16 @@ class EventController extends Controller
 
 		/*
 		|--------------------------------------------------------------------------
-		| Transaction
-		|--------------------------------------------------------------------------
-		*/
-
-		$ticketTransaction = Transaction::where('event_id', $event->event_id)
-			->whereNotIn('status', ['Expired', 'Unpaid'])
-			->get();
-
-		/*
-		|--------------------------------------------------------------------------
 		| Recommended Event
 		|--------------------------------------------------------------------------
 		*/
 
 		$recomendedEvents = Event::with([
 				'category',
-				'tickets'
+				'tickets',
 			])
-			->where('status',1)
-			->where('slug','!=',$event->slug)
-			->inRandomOrder()
+			->where('status', 1)
+			->where('id', '!=', $event->id)
 			->limit(8)
 			->get();
 
@@ -277,9 +261,12 @@ class EventController extends Controller
 		|--------------------------------------------------------------------------
 		*/
 
-		$url = url('/'.$event->slug);
-
-		$qrlink = QrCode::size(220)->generate($url);
+		$qrlink = Cache::remember(
+			'event:qrcode:' . $event->id,
+			now()->addDay(),
+			fn () => QrCode::size(220)
+				->generate(url('/' . $event->slug))
+		);
 
 		/*
 		|--------------------------------------------------------------------------
@@ -287,13 +274,12 @@ class EventController extends Controller
 		|--------------------------------------------------------------------------
 		*/
 
-		return view('apps.event-show',[
-			'detailEvent'       => $event,
-			'ticketData'        => $ticketData,
-			'ticketTransaction' => $ticketTransaction,
-			'dateNow'           => now()->toDateString(),
-			'recomendedEvents'  => $recomendedEvents,
-			'qrlink'            => $qrlink,
+		return view('apps.event-show', [
+			'detailEvent'      => $event,
+			'ticketData'       => $ticketData,
+			'dateNow'          => now()->toDateString(),
+			'recomendedEvents' => $recomendedEvents,
+			'qrlink'           => $qrlink,
 		]);
 	}
 

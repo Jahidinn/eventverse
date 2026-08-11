@@ -20,36 +20,10 @@ class TicketService
      * Get all data required for checkout page.
      */
     public function getCheckoutData(
-        string $eventId,
-        int $ticketId
+        Event $event,
+        Ticket $ticket
     ): array
     {
-        $event = Event::with('penyelenggara')
-            ->where('event_id', $eventId)
-            ->first();
-
-        if (!$event) {
-            return [
-                'redirect' => '/search',
-            ];
-        }
-
-        $ticket = Ticket::where('id', $ticketId)
-            ->where('event_id', $event->id)
-            ->first();
-
-        if (!$ticket) {
-            return [
-                'redirect' => '/search',
-            ];
-        }
-
-        if (!$this->isCheckoutAvailable($ticket)) {
-            return [
-                'redirect' => '/' . $event->slug,
-            ];
-        }
-
         return [
             'event' => $event,
             'ticket' => $ticket,
@@ -173,7 +147,7 @@ class TicketService
         if ($quantity > $ticket->max_quantity) {
 
             throw ValidationException::withMessages([
-                'participants' => 'Jumlah tiket melebihi batas pembelian.'
+                'ticket' => "Maksimal pembelian {$ticket->max_quantity} tiket."
             ]);
 
         }

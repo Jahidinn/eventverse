@@ -17,6 +17,7 @@ use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\UserProfileController;
 use App\Http\Controllers\LocationController;
 use App\Http\Controllers\CheckoutController;
+use App\Http\Controllers\ReservationController;
 use GuzzleHttp\Promise\Create;
 
 /*
@@ -101,10 +102,22 @@ Route::middleware(['auth'])->group(function () {
 
 	});
 
+	Route::prefix('reservation')->name('reservation.')->group(function () {
+		Route::post('/', [ReservationController::class, 'store'])->name('store');
+		Route::patch('/{reservationCode}', [ReservationController::class, 'update'])->name('update');
+		Route::post('/{reservationCode}/expire', [ReservationController::class, 'expire'])->name('expire');
+	});
+
 	# CHECKOUT
-    Route::get('/checkout', [CheckoutController::class, 'create'])->name('checkout.create');
-	Route::post('/checkout/validate', [CheckoutController::class, 'validateCheckout'])->name('checkout.validate');
-	Route::post('/checkout/store', [CheckoutController::class, 'store'])->name('checkout.store');
+	Route::get('/checkout/{reservation_code}', [CheckoutController::class, 'create'])
+		->name('checkout.show');
+
+	Route::post('/checkout/validate', [CheckoutController::class, 'validateCheckout'])
+		->name('checkout.validate');
+
+	Route::post('/checkout/store', [CheckoutController::class, 'store'])
+		->name('checkout.store');
+
 	Route::get('/checkout/cleanup-sandbox', [CheckoutController::class, 'cleanupSandbox']);
 
 	Route::prefix('transaction')->name('transaction.')->group(function () {

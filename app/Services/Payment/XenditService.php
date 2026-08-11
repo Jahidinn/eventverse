@@ -71,6 +71,7 @@ class XenditService
     {
         $transaction->loadMissing([
             'paymentGatewayMethod',
+            'reservation',
         ]);
 
         return [
@@ -105,8 +106,9 @@ class XenditService
             $transaction->transaction_code
         );
 
-        $expiresAt = Carbon::now()
-            ->addMinutes(10)
+        $expiresAt = $transaction->reservation
+            ->expired_at
+            ->copy()
             ->utc()
             ->toIso8601String();
 

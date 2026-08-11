@@ -7,16 +7,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>EventVerse Studio</title>
+    <title>Eventverse.id | event studio</title>
 
     <link rel="stylesheet" href="{{ asset('assets/css/studio.css') }}">
+
+     <!-- Favicons -->
+    <link href="{{ asset('assets/img/eventverse-icon.png') }}" rel="icon">
+    <link href="{{ asset('assets/img/eventverse-apple-icon.png') }}" rel="apple-touch-icon">
+
 
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css">
-    <link rel="stylesheet"
-href="https://unpkg.com/trix@2.1.15/dist/trix.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/trix@2.1.15/dist/trix.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 {{-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/themes/material_blue.css"> --}}
 
     <style>
@@ -26,16 +30,16 @@ href="https://unpkg.com/trix@2.1.15/dist/trix.css">
 
 :root{
 
-    --primary:#5B7FFF;
-    --primary-dark:#4A68F6;
+    --primary: #186deb;
+    --primary-dark: #186deb;
 
-    --bg:#F5F7FB;
-    --card:#FFFFFF;
+    --bg: #F5F7FB;
+    --card: #FFFFFF;
 
-    --text:#0F172A;
-    --muted:#64748B;
+    --text: #0F172A;
+    --muted: #64748B;
 
-    --border:#E8EDF5;
+    --border: #E8EDF5;
 
     --radius:24px;
 
@@ -1147,7 +1151,7 @@ ITEM
 
     width:2px;
 
-    background:#E7EDF7;
+    background: #E7EDF7;
 
 }
 
@@ -1207,9 +1211,9 @@ ITEM
 
             135deg,
 
-            #5B7FFF,
+            #4587f9,
 
-            #6F63FF
+            #4d8cf9
 
         );
 
@@ -1953,6 +1957,26 @@ MOBILE DRAWER
 .swal2-container{
     z-index: 20000 !important;
 }
+
+
+.sidebar-top{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0px 20px;
+}
+
+.logo{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.logo-image{
+    width: 180px; /* sesuaikan */
+    height: auto;
+    display: block;
+}
     </style>
 
 </head>
@@ -1969,19 +1993,11 @@ MOBILE DRAWER
 
             <div class="logo">
 
-                <div class="logo-icon">
-
-                    EV
-
-                </div>
-
-                <div class="logo-text">
-
-                    <h4>Event studio</h4>
-
-                    <span>eventverse.id</span>
-
-                </div>
+                <img
+                    src="{{ asset('assets/img/eventverse-color.png') }}"
+                    alt="Eventverse"
+                    class="logo-image"
+                >
 
             </div>
 
@@ -2177,21 +2193,23 @@ MOBILE DRAWER
 
         <div class="studio-brand">
 
-            <span>Event management</span>
+            <span>Event studio</span>
 
         </div>
 
     </div>
 
     <div class="header-right">
-
-        <button class="btn-light">
+        <a href="{{ route('event-studio.preview', $eventId) }}">
+            <button class="btn-light">
             Preview
         </button>
+        </a>
+        
 
-        <button class="btn-primary">
+        <!-- <button class="btn-primary">
             Publish
-        </button>
+        </button> -->
 
     </div>
 

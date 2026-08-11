@@ -1,4 +1,5 @@
 <script>
+    
     $(function () {
 
         const ticketPrice = Number($('#ticketPrice').val());
@@ -12,24 +13,67 @@
             renderParticipants(qty);
         }
 
+        async function updateReservation(quantity) {
+
+            return $.ajax({
+                url: "{{ route('reservation.update', ['reservationCode' => $reservation->reservation_code]) }}",
+                type: "PATCH",
+                dataType: "json",
+                data: {
+                    _token: "{{ csrf_token() }}",
+                    quantity: quantity
+                }
+            });
+
+        }
+
         /*
         |--------------------------------------------------------------------------
         | Minus
         |--------------------------------------------------------------------------
         */
 
-        $('#qtyMinus').on('click', function () {
+        $('#qtyMinus').on('click', async function () {
 
-            if (qty <= 1) return;
+            if (qty <= 1) {
 
-            qty--;
+                Toast.fire({
+                    icon: 'warning',
+                    title: 'Minimal pembelian 1 tiket.'
+                });
 
-            $('#ticketQty').val(qty);
+                return;
+            }
 
-            updateSummary();
+            try {
 
-            if (typeof renderParticipants === 'function') {
-                renderParticipants(qty);
+                const response = await updateReservation(qty - 1);
+
+                qty = Number(response.quantity);
+
+                $('#ticketQty').val(qty);
+
+                updateSummary();
+
+                if (typeof renderParticipants === 'function') {
+                    renderParticipants(qty);
+                }
+
+            } catch (xhr) {
+
+                let message = 'Terjadi kesalahan pada server.';
+
+                if (xhr.responseJSON?.errors) {
+                    message = Object.values(xhr.responseJSON.errors)[0][0];
+                } else if (xhr.responseJSON?.message) {
+                    message = xhr.responseJSON.message;
+                }
+
+                Toast.fire({
+                    icon: 'error',
+                    title: message
+                });
+
             }
 
         });
@@ -40,18 +84,47 @@
         |--------------------------------------------------------------------------
         */
 
-        $('#qtyPlus').on('click', function () {
+        $('#qtyPlus').on('click', async function () {
 
-            if (qty >= maxQty) return;
+            if (qty >= maxQty) {
 
-            qty++;
+                Toast.fire({
+                    icon: 'warning',
+                    title: `Maksimal ${maxQty} tiket tersedia.`
+                });
 
-            $('#ticketQty').val(qty);
+                return;
+            }
 
-            updateSummary();
+            try {
 
-            if (typeof renderParticipants === 'function') {
-                renderParticipants(qty);
+                const response = await updateReservation(qty + 1);
+
+                qty = Number(response.quantity);
+
+                $('#ticketQty').val(qty);
+
+                updateSummary();
+
+                if (typeof renderParticipants === 'function') {
+                    renderParticipants(qty);
+                }
+
+            } catch (xhr) {
+
+                let message = 'Terjadi kesalahan pada server.';
+
+                if (xhr.responseJSON?.errors) {
+                    message = Object.values(xhr.responseJSON.errors)[0][0];
+                } else if (xhr.responseJSON?.message) {
+                    message = xhr.responseJSON.message;
+                }
+
+                Toast.fire({
+                    icon: 'error',
+                    title: message
+                });
+
             }
 
         });
@@ -67,7 +140,7 @@
             const total = ticketPrice * qty;
 
             $('#summaryQty').text(
-                qty + ' Ticket' + (qty > 1 ? 's' : '')
+                `Qty ${qty} Ticket${qty > 1 ? 's' : ''}`
             );
 
             if (ticketPrice <= 0) {
@@ -81,20 +154,15 @@
             }
 
             $('#quantity').val(qty);
-
             $('#totalPrice').val(total);
-
-            $('#qtyMinus').prop('disabled', qty <= 1);
-
-            $('#qtyPlus').prop('disabled', qty >= maxQty);
 
         }
 
     });
 
-    function formatRupiah(number) {
+function formatRupiah(number) {
 
-        return 'Rp ' + Number(number).toLocaleString('id-ID');
+    return 'Rp ' + Number(number).toLocaleString('id-ID');
 
-    }
+}
 </script>

@@ -1,6 +1,14 @@
 <script>
     // For example trigger on button clicked, or any time you need
 
+    const Toast = Swal.mixin({
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true
+    });
+
     $(document).ready(function() {
 
         // Unified tab handler for both old and modern styles
@@ -84,42 +92,44 @@
             this.form.submit();
         });
 
-        $('body').on('click', '.ticket-button', function(e) {
-            e.preventDefault();
-            var userAuthLogin = {{ auth()->check() ? 'true' : 'false' }};
-            var ticket_id = $(this).data('id');
-            var event_id = $(this).data('event_id');
-            var label_button = $(this).data('label_button');
 
 
-            // PERUBAHAN, PEMBELI HARUS LOGIN
-            window.location.href = '/checkout?event=' + event_id +
-                '&ticket=' + ticket_id;
+        // $('body').on('click', '.ticket-button', function(e) {
+        //     e.preventDefault();
+        //     var userAuthLogin = {{ auth()->check() ? 'true' : 'false' }};
+        //     var ticket_id = $(this).data('id');
+        //     var event_id = $(this).data('event_id');
+        //     var label_button = $(this).data('label_button');
 
-            // if (!userAuthLogin) {
-            //     Swal.fire({
-            //         title: "",
-            //         html: "Kamu belum login nih! <strong>login</strong> dulu? atau " +
-            //             label_button + " <strong>tanpa login?</strong>",
-            //         showDenyButton: true,
-            //         showCancelButton: true,
-            //         confirmButtonText: "Login",
-            //         denyButtonText: `Tanpa login`,
-            //         denyButtonColor: "#0dcaf0",
-            //     }).then((result) => {
-            //         /* Read more about isConfirmed, isDenied below */
-            //         if (result.isConfirmed) {
-            //             window.location.href = '/login';
-            //         } else if (result.isDenied) {
-            //             window.location.href = '/event/checkout?event=' + event_id +
-            //                 '&ticket=' + ticket_id;
-            //         }
-            //     });
-            // } else {
-            //     window.location.href = '/event/checkout?event=' + event_id +
-            //         '&ticket=' + ticket_id;
-            // }
-        });
+
+        //     // PERUBAHAN, PEMBELI HARUS LOGIN
+        //     window.location.href = '/checkout?event=' + event_id +
+        //         '&ticket=' + ticket_id;
+
+        //     // if (!userAuthLogin) {
+        //     //     Swal.fire({
+        //     //         title: "",
+        //     //         html: "Kamu belum login nih! <strong>login</strong> dulu? atau " +
+        //     //             label_button + " <strong>tanpa login?</strong>",
+        //     //         showDenyButton: true,
+        //     //         showCancelButton: true,
+        //     //         confirmButtonText: "Login",
+        //     //         denyButtonText: `Tanpa login`,
+        //     //         denyButtonColor: "#0dcaf0",
+        //     //     }).then((result) => {
+        //     //         /* Read more about isConfirmed, isDenied below */
+        //     //         if (result.isConfirmed) {
+        //     //             window.location.href = '/login';
+        //     //         } else if (result.isDenied) {
+        //     //             window.location.href = '/event/checkout?event=' + event_id +
+        //     //                 '&ticket=' + ticket_id;
+        //     //         }
+        //     //     });
+        //     // } else {
+        //     //     window.location.href = '/event/checkout?event=' + event_id +
+        //     //         '&ticket=' + ticket_id;
+        //     // }
+        // });
 
         $('#form-subscribe').submit(function(event) {
             // Menghentikan pengiriman formulir secara default

@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\Services\TicketService;
+use App\Services\ReservationService;
 use App\Services\TransactionService;
 use Illuminate\Http\Request;
 use App\Models\Transaction;
@@ -14,20 +14,14 @@ use Illuminate\Support\Facades\Storage;
 class CheckoutController extends Controller
 {
     public function __construct(
-        protected TicketService $ticketService,
+        protected ReservationService $reservationService,
         protected TransactionService $transactionService,
     ) {}
 
-    public function create(Request $request)
+    public function create(string $reservationCode)
     {
-        if (!$request->event || !$request->ticket) {
-            return redirect('/search');
-        }
-
-        $checkout = $this->ticketService->getCheckoutData(
-            $request->event,
-            $request->ticket
-        );
+        $checkout = $this->reservationService
+            ->getCheckoutData($reservationCode);
 
         if (isset($checkout['redirect'])) {
             return redirect($checkout['redirect']);
@@ -39,8 +33,9 @@ class CheckoutController extends Controller
     public function validateCheckout(Request $request)
     {
         $request->validate([
-            'event_id' => ['required', 'exists:events,id'],
-            'ticket_id' => ['required', 'exists:tickets,id'],
+            // 'event_id' => ['required', 'exists:events,id'],
+            // 'ticket_id' => ['required', 'exists:tickets,id'],
+            'reservation_code' => ['required', 'exists:reservations,reservation_code'],
 
             'buyer.name' => ['required', 'string', 'max:255'],
             'buyer.email' => ['required', 'email:rfc,dns'],

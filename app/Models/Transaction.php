@@ -42,5 +42,12 @@ class Transaction extends Model
         );
     }
 
+	public function reservation()
+	{
+		return $this->belongsTo(
+			Reservation::class
+		);
+	}
+
 
 }

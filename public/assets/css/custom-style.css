@@ -2624,6 +2624,18 @@ button.slick-disabled {
     color:#111827;
 
 }
+html,
+body{
+    width:100%;
+    max-width:100%;
+    overflow-x:hidden;
+}
+
+section{
+    max-width:100%;
+    overflow-x:hidden;
+}
+
 
 /* ==========================================================
    TABLET

@@ -1,341 +1,255 @@
 @extends('event-studio.layouts.studio')
 
 @section('content')
-
-<!-- =======================================================
-    BASIC INFORMATION
-======================================================= -->
-
-<div class="ev-section">
-
-    <div class="ev-section-header">
-
-        <div>
-
-            <span class="ev-badge">
-                Step 1
-            </span>
-
-            <h2 class="ev-title">
-                Basic Information
-            </h2>
-
-            <p class="ev-subtitle">
-                Start by introducing your event. Add a banner, event title and basic details that attendees will see first.
-            </p>
-
+    <!-- =======================================================
+        BASIC INFORMATION
+    ======================================================= -->
+    <div class="ev-section">
+        <div class="ev-section-header">
+            <div>
+                <span class="ev-badge">
+                    BASIC INFORMATION
+                </span>
+                <!-- <h2 class="ev-title">
+                    Basic Information
+                </h2>
+                <p class="ev-subtitle">
+                    Start by introducing your event. Add a banner, event title and basic details that attendees will see first.
+                </p> -->
+            </div>
         </div>
-
     </div>
 
-</div>
-
-<form id="basicForm">
-    @csrf
+    <form id="basicForm">
+        @csrf
 
 
-<!-- =======================================================
-    EVENT BANNER
-======================================================= -->
+    <!-- =======================================================
+        EVENT BANNER
+    ======================================================= -->
 
-<div class="ev-card">
-
-    <div class="ev-card-header">
-
-        <div class="ev-card-icon">
-
-            <i class="fa-regular fa-image"></i>
-
+    <div class="ev-card">
+        <div class="ev-card-header">
+            <div class="ev-card-icon">
+                <i class="fa-regular fa-image"></i>
+            </div>
+            
+            <div>
+                <h5>Event Banner</h5>
+                <p>Upload an attractive cover image to increase attendee interest.</p>
+            </div>
         </div>
 
-        <div>
+        <div class="ev-banner-upload">
+            <input type="file" id="banner" name="banner" accept="image/*" hidden>
+            <label for="banner" class="ev-upload-box">
 
-            <h5>
-                Event Banner
-            </h5>
+                <div class="ev-upload-preview">
+                    <img
+                        id="bannerPreview"
+                        src="{{ $event->image ? asset('storage/event-images/'.$event->image) : '' }}"
+                        alt="Banner Preview"
+                        @if(!$event->image) style="display:none;" @endif>
 
-            <p>
-                Upload an attractive cover image to increase attendee interest.
-            </p>
+                    <div
+                        id="bannerPlaceholder"
+                        @if($event->image) style="display:none;" @endif>
 
+                        <div class="ev-upload-icon">
+                            <i class="fa-solid fa-cloud-arrow-up"></i>
+                        </div>
+                        <h5>Upload Event Banner</h5>
+
+                        <p>
+                            Drag & drop your image here or click to browse.
+                        </p>
+
+                        <span class="ev-upload-button">
+                            Choose Image
+                        </span>
+
+                        <small>
+                            Recommended size 1600 × 900 px
+                        </small>
+
+                    </div>
+
+                    <div
+                        id="bannerActions"
+                        class="ev-banner-actions"
+                        @if($event->image)
+                            style="display:flex;"
+                        @else
+                            style="display:none;"
+                        @endif>
+
+                        <label
+                            for="banner"
+                            class="btn-change-banner">
+
+                            <i class="fa-solid fa-pen"></i>
+
+                            Change Banner
+
+                        </label>
+
+                        <button
+                            type="button"
+                            id="removeBanner"
+                            class="btn-remove-banner">
+
+                            <i class="fa-solid fa-trash"></i>
+
+                        </button>
+                    </div>
+                </div>
+            </label>
         </div>
-
     </div>
 
-    <div class="ev-banner-upload">
 
-    <input
-        type="file"
-        id="banner"
-        name="banner"
-        accept="image/*"
-        hidden>
+    <!-- =========================================
+        ADDITIONAL IMAGES
+    ========================================= -->
 
-    <label for="banner" class="ev-upload-box">
+    <div class="ev-card">
 
-        <div class="ev-upload-preview">
+        <div class="ev-card-header">
+            <div class="ev-card-icon">
+                <i class="fa-regular fa-image"></i>
+            </div>
+            
+            <div>
+                <h5>Add otional image</h5>
+                <p>such as posters, galery,lineup, venue, sponsors, or other supporting visuals</p>
+            </div>
+        </div>
 
-            <img
-                id="bannerPreview"
-                src="{{ $event->image ? asset('storage/event-images/'.$event->image) : '' }}"
-                alt="Banner Preview"
-                @if(!$event->image) style="display:none;" @endif>
+        <div id="galleryWrapper" class="ev-gallery">
+            @foreach($event->images as $image)
+                <div class="ev-gallery-item" data-id="{{ $image->id }}">
+                    <img src="{{ asset('storage/event-gallery/'.$image->image) }}" alt="Gallery">
 
-            <div
-                id="bannerPlaceholder"
-                @if($event->image) style="display:none;" @endif>
-
-                <div class="ev-upload-icon">
-                    <i class="fa-solid fa-cloud-arrow-up"></i>
+                    <button type="button" class="ev-gallery-remove">
+                        <i class="fa-solid fa-times"></i>
+                    </button>
                 </div>
 
-                <h5>Upload Event Banner</h5>
+            @endforeach
 
+            <label class="ev-gallery-add">
+                <input id="galleryInput" type="file" name="images[]" accept="image/*" multiple hidden>
+                <i class="fa-solid fa-plus"></i>
+                <span>Add Image</span>
+            </label>
+        </div>
+
+    </div>
+
+
+    <!-- EVENT INFORMATION -->
+
+    <div class="ev-card">
+        <div class="ev-card-header">
+            <div class="ev-card-icon">
+                <i class="fa-solid fa-pen-to-square"></i>
+            </div>
+
+            <div>
+                <h5>Event Information</h5>
                 <p>
-                    Drag & drop your image here or click to browse.
+                    Give your event a memorable name and unique public URL.
                 </p>
-
-                <span class="ev-upload-button">
-                    Choose Image
-                </span>
-
-                <small>
-                    Recommended size 1600 × 900 px
-                </small>
-
             </div>
-
-            <div
-                id="bannerActions"
-                class="ev-banner-actions"
-                @if($event->image)
-                    style="display:flex;"
-                @else
-                    style="display:none;"
-                @endif>
-
-                <label
-                    for="banner"
-                    class="btn-change-banner">
-
-                    <i class="fa-solid fa-pen"></i>
-
-                    Change Banner
-
-                </label>
-
-                <button
-                    type="button"
-                    id="removeBanner"
-                    class="btn-remove-banner">
-
-                    <i class="fa-solid fa-trash"></i>
-
-                </button>
-
-            </div>
-
         </div>
 
-    </label>
-
-</div>
-
-</div>
-
-<!-- =========================================
-     ADDITIONAL IMAGES
-========================================= -->
-
-<div class="ev-card">
-
-    <div class="ev-section-title">
-
-        <div>
-
-            <h5>Additional Images</h5>
-
-            <p>
-                Add optional images such as posters, lineup, venue, sponsors, or other supporting visuals.
-            </p>
-
-        </div>
-
-    </div>
-
-    <div id="galleryWrapper" class="ev-gallery">
-
-    @foreach($event->images as $image)
-
-        <div
-            class="ev-gallery-item"
-            data-id="{{ $image->id }}">
-
-            <img
-                src="{{ asset('storage/event-gallery/'.$image->image) }}"
-                alt="Gallery">
-
-            <button
-                type="button"
-                class="ev-gallery-remove">
-
-                <i class="fa-solid fa-times"></i>
-
-            </button>
-
-        </div>
-
-    @endforeach
-
-    <label class="ev-gallery-add">
-
-        <input
-            id="galleryInput"
-            type="file"
-            name="images[]"
-            accept="image/*"
-            multiple
-            hidden>
-
-        <i class="fa-solid fa-plus"></i>
-
-        <span>Add Image</span>
-
-    </label>
-
-</div>
-
-</div>
-
-
-
-<div class="ev-card">
-
-    <div class="ev-card-header">
-
-        <div class="ev-card-icon">
-
-            <i class="fa-solid fa-pen-to-square"></i>
-
-        </div>
-
-        <div>
-
-            <h5>Event Information</h5>
-
-            <p>
-                Give your event a memorable name and unique public URL.
-            </p>
-
-        </div>
-
-    </div>
-
-    <!-- Event Name -->
-
-    <div class="ev-form-group">
-
-        <label>
-
-            Event Name
-
-            <span>*</span>
-
-        </label>
-
-        <input
-            type="text"
-            id="name"
-            name="title"
-            class="ev-input"
-            placeholder="Example: Tech Innovation Summit 2026"
-            value="{{ $event->title }}"
-            >
-
-
-    </div>
-
-
-<!-- =========================================
-    EVENT CATEGORY
-========================================= -->
-<div class="ev-form-group">
-
-    <label class="ev-label">
-
-        Kategori Event <span>*</span>
-
-    </label>
-
-    <select id="category_id" name="category_id">
-
-        @foreach($categories as $category)
-
-            <option
-                value="{{ $category->id }}"
-                @selected(old('category_id', $event->category_id ?? null) == $category->id)>
-
-                {{ $category->name }}
-
-            </option>
-
-        @endforeach
-
-    </select>
-
-
-</div>
-
-    <!-- URL -->
-
-    <div class="ev-form-group">
-
-        <label>
-
-            Event URL
-
-            <span>*</span>
-
-        </label>
-
-        <div class="ev-url-input">
-
-            <div class="ev-url-prefix">
-
-                eventverse.id/
-
-            </div>
+        <!-- Event Name -->
+
+        <div class="ev-form-group">
+            <label class="ev-label">Event Name <span>*</span>
+            </label>
 
             <input
                 type="text"
-                id="slug"
-                name="slug"
-                class="ev-input-url"
-                placeholder="tech-innovation-summit" value="{{ $event->slug }}">
+                id="name"
+                name="title"
+                class="ev-input"
+                placeholder="Example: Tech Innovation Summit 2026"
+                value="{{ $event->title }}"
+                >
+        </div>
+
+
+        <!-- =========================================
+            EVENT CATEGORY
+        ========================================= -->
+        <div class="ev-form-group">
+
+            <label class="ev-label">
+                Kategori Event <span>*</span>
+            </label>
+
+            <select id="category_id" name="category_id">
+                @foreach($categories as $category)
+                    <option
+                        value="{{ $category->id }}"
+                        @selected(old('category_id', $event->category_id ?? null) == $category->id)>
+                        {{ $category->name }}
+                    </option>
+                @endforeach
+            </select>
+        </div>
+
+        <!-- URL -->
+
+        <div class="ev-form-group">
+
+            <label class="ev-label">
+
+                Event URL
+
+                <span>*</span>
+
+            </label>
+
+            <div class="ev-url-input">
+
+                <div class="ev-url-prefix">
+
+                    eventverse.id/
+
+                </div>
+
+                <input
+                    type="text"
+                    id="slug"
+                    name="slug"
+                    class="ev-input-url"
+                    placeholder="tech-innovation-summit" value="{{ $event->slug }}">
+
+            </div>
+
+        </div>
+
+        <div class="ev-url-preview">
+
+            <div id="slugAlert" class="ev-url-status info">
+
+        <span id="slugStatus">
+            <i class="fa-solid fa-circle-info"></i> URL akan dibuat otomatis
+        </span>
+
+    </div>
+
+            <div id="urlPreview">
+
+                https://eventverse.id/{{ $event->slug }}
+
+            </div>
 
         </div>
 
     </div>
-
-    <div class="ev-url-preview">
-
-        <div id="slugAlert" class="ev-url-status info">
-
-    <span id="slugStatus">
-        <i class="fa-solid fa-circle-info"></i> URL akan dibuat otomatis
-    </span>
-
-</div>
-
-        <div id="urlPreview">
-
-            https://eventverse.id/{{ $event->slug }}
-
-        </div>
-
-    </div>
-
-</div>
 
 
 <div class="ev-card">
@@ -558,7 +472,7 @@
 
 .ev-section{
 
-    margin-bottom:34px;
+    margin-bottom:15px;
 
 }
 
@@ -718,7 +632,7 @@
 
     width:100%;
 
-    height:420px;
+    height:320px;
 
     object-fit:cover;
 
@@ -995,9 +909,6 @@
 }
 
 
-
-//kkk
-
 .ev-form-group{
 
     margin-bottom:24px;
@@ -1174,7 +1085,7 @@
 .ev-label{
     display:block;
     margin-bottom:14px;
-    font-size:15px;
+    font-size:14px;
     font-weight:700;
     color:#1E293B;
 }
@@ -1240,7 +1151,7 @@
 
 .ev-organizer-card input:checked + .ev-organizer-content{
 
-    border:2px solid #4F6EF7;
+    border:2px solid #3279f5;
 
     background:#F7F9FF;
 
@@ -1254,8 +1165,8 @@
 
 .ev-organizer-icon{
 
-    width:74px;
-    height:74px;
+    width:54px;
+    height:54px;
 
     border-radius:20px;
 
@@ -1265,21 +1176,21 @@
 
     flex-shrink:0;
 
-    font-size:30px;
+    font-size:20px;
 
 }
 
 .ev-organizer-icon.personal{
 
-    background:#EEF4FF;
-    color:#4F6EF7;
+    background: #EEF4FF;
+    color: #3279f5;
 
 }
 
 .ev-organizer-icon.organization{
 
-    background:#ECFDF3;
-    color:#16A34A;
+    background: #ECFDF3;
+    color: #16A34A;
 
 }
 
@@ -1297,7 +1208,7 @@
 
     margin:0;
 
-    font-size:20px;
+    font-size:17px;
     font-weight:700;
 
     color:#0F172A;
@@ -1308,9 +1219,9 @@
 
     margin:4px 0 0;
 
-    color:#64748B;
+    color: #64748B;
 
-    font-size:15px;
+    font-size:13px;
 
     line-height:1.5;
 
@@ -1327,7 +1238,7 @@
 
     border-radius:50%;
 
-    background:#CBD5E1;
+    background: #CBD5E1;
 
     display:flex;
     justify-content:center;
@@ -1345,7 +1256,7 @@
 
 .ev-organizer-card input:checked + .ev-organizer-content .ev-organizer-check{
 
-    background:#4F46E5;
+    background: #3279f5;
 
 }
 
@@ -1375,8 +1286,8 @@
 
     border-radius:50%;
 
-    background:#EEF4FF;
-    color:#4F46E5;
+    background: #EEF4FF;
+    color: #3279f5;
 
     display:flex;
     align-items:center;
@@ -1396,7 +1307,7 @@
 
     font-size:18px;
 
-    color:#0F172A;
+    color: #0F172A;
 
 }
 
@@ -1406,7 +1317,7 @@
 
     margin-top:4px;
 
-    color:#64748B;
+    color: #64748B;
 
     font-size:14px;
 
@@ -1431,7 +1342,7 @@
 
     transform:translateY(-50%);
 
-    color:#5B5CE6;
+    color: #3279f5;
 
     font-size:20px;
 
@@ -1469,7 +1380,7 @@
     border:1px solid #DCE8FF;
     border-radius:22px;
 
-    background:#F8FAFF;
+    background: #F8FAFF;
 
 }
 
@@ -1480,9 +1391,9 @@
 
     border-radius:18px;
 
-    background:#EEF4FF;
+    background: #EEF4FF;
 
-    color:#4F46E5;
+    color: #3279f5;
 
     display:flex;
     justify-content:center;
@@ -1506,7 +1417,7 @@
 
     font-size:18px;
 
-    color:#0F172A;
+    color: #0F172A;
 
 }
 
@@ -1514,7 +1425,7 @@
 
     margin:6px 0 0;
 
-    color:#64748B;
+    color: #64748B;
 
     font-size:14px;
 

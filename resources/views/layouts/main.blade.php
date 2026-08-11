@@ -56,7 +56,7 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css">
     <!-- Template Main CSS File -->
     <link href="{{ asset('assets/css/style.css?v=232') }}" rel="stylesheet">
-    <link href="{{ asset('assets/css/custom-style.css?v=92') }}" rel="stylesheet">
+    <link href="{{ asset('assets/css/custom-style.css?v=9112') }}" rel="stylesheet">
 
     <!-- =======================================================
     * Template Name: Moderna - v2.0.1
@@ -128,6 +128,7 @@
     @stack('transaction-invoice')
     @stack('js-download')
     @stack('home-js')
+    @stack('reservation-js')
     
 </body>
 

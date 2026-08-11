@@ -7,6 +7,7 @@ use App\Models\Event;
 use App\Models\Ticket;
 use App\Models\Transaction;
 use App\Models\PaymentGateway;
+use App\Models\Reservation;
 use App\Models\PaymentGatewayMethod;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -35,22 +36,50 @@ class TransactionService
     
     public function validateCheckout(Request $request): array
     {
-        $event = Event::findOrFail(
-            $request->event_id
-        );
+        // $event = Event::findOrFail(
+        //     $request->event_id
+        // );
 
-        $ticket = Ticket::where('id', $request->ticket_id)
-            ->where('event_id', $event->id)
-            ->firstOrFail();
+        // $ticket = Ticket::where('id', $request->ticket_id)
+        //     ->where('event_id', $event->id)
+        //     ->firstOrFail();
+        $reservation = Reservation::with([
+            'event',
+            'ticket',
+        ])->where(
+            'reservation_code',
+            $request->reservation_code
+        )->firstOrFail();
+
+        if ($reservation->status !== 'Reserved') {
+            throw ValidationException::withMessages([
+                'reservation' => 'Reservation sudah tidak aktif.',
+            ]);
+        }
+
+        if ($reservation->expired_at->isPast()) {
+
+            app(ReservationService::class)
+                ->expire($reservation->reservation_code);
+
+            throw ValidationException::withMessages([
+                'reservation' => 'Reservation telah berakhir.',
+            ]);
+        }
+
+        $event = $reservation->event;
+        $ticket = $reservation->ticket;
+        $quantity = $reservation->quantity;
 
         $quantity = count(
             $request->participants
         );
 
-        $this->ticketService->validateAvailability(
-            $ticket,
-            $quantity
-        );
+        // Sudah check saat reservasi
+        // $this->ticketService->validateAvailability(
+        //     $ticket,
+        //     $quantity
+        // );
 
         $this->validateParticipants(
             $request,
@@ -421,10 +450,10 @@ class TransactionService
 
     public function checkout(Request $request): Transaction
     {
-        $this->ticketService->validateCheckout([
-            'ticket_id' => $request->ticket_id,
-            'quantity'  => (int) $request->quantity,
-        ]);
+        // $this->ticketService->validateCheckout([
+        //     'ticket_id' => $request->ticket_id,
+        //     'quantity'  => (int) $request->quantity,
+        // ]);
 
         $transaction = $this->storeTransaction($request);
 
@@ -468,12 +497,6 @@ class TransactionService
     private function storeTransaction(Request $request): Transaction
     {
         return DB::transaction(function () use ($request) {
-
-            # KUNCI STOCK
-            $this->ticketService->reserve(
-                $request->ticket_id,
-                (int) $request->quantity
-            );
 
             $transaction = $this->createTransaction($request);
 
@@ -561,9 +584,18 @@ class TransactionService
 
     private function createTransaction(Request $request): Transaction
     {
-        $ticket = Ticket::findOrFail(
-            $request->ticket_id
-        );
+        // $ticket = Ticket::findOrFail(
+        //     $request->ticket_id
+        // );
+
+        $reservation = Reservation::with('ticket')
+            ->where(
+                'reservation_code',
+                $request->reservation_code
+            )
+            ->firstOrFail();
+
+        $ticket = $reservation->ticket;
 
         $paymentGatewayMethod = PaymentGatewayMethod::with([
             'gateway',
@@ -572,7 +604,7 @@ class TransactionService
             $request->payment_gateway_method_id
         );
 
-        $subtotal = $ticket->ticket_price * $request->quantity;
+        $subtotal = $ticket->ticket_price * $reservation->quantity;
 
         $platformFee = $this->calculateFeeRule(
             'platform_fee',
@@ -608,7 +640,7 @@ class TransactionService
 
             'buyer_email' => $request->buyer['email'],
 
-            'quantity' => $request->quantity,
+            'quantity' => $reservation->quantity,
 
             'subtotal' => $subtotal,
 
