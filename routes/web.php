@@ -356,3 +356,5 @@ Route::get('/test-event/{event:slug}', function (Event $event) {
         'slug' => $event->slug,
     ]);
 });
+
+Route::get('/test-event2/{event}', [EventController::class, 'show']);
