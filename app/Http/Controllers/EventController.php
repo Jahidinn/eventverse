@@ -201,6 +201,16 @@ class EventController extends Controller
 
 	public function show(Event $event, Request $request)
 	{
+		$event->load([
+			'category',
+			'province',
+			'themes',
+			'images',
+			'individual',
+			'org',
+			'tickets',
+		]);
+
 		return response()->json([
 			'id' => $event->id,
 			'slug' => $event->slug,
