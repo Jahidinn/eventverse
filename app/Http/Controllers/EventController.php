@@ -249,6 +249,13 @@ class EventController extends Controller
 			->limit(8)
 			->get();
 
+		$qrlink = Cache::remember(
+			'event:qrcode:' . $event->id,
+			now()->addDay(),
+			fn () => QrCode::size(220)
+				->generate(url('/' . $event->slug))
+		);
+
 		return response()->json([
 			'id' => $event->id,
 			'slug' => $event->slug,
