@@ -490,16 +490,25 @@
 
                     <section id="refund" class="py-2">
                         <h4>11. Refund dan Pembatalan</h4>
+
                         <p>
-                            Kebijakan refund ditentukan oleh masing-masing penyelenggara event
-                            dan dapat berbeda untuk setiap event.
+                            Kebijakan refund ditetapkan berdasarkan ketentuan masing-masing event
+                            dan dapat berbeda untuk setiap event. Eventverse tetap berperan dalam
+                            memfasilitasi dan menangani proses refund serta penyelesaian sengketa
+                            yang berkaitan dengan transaksi tiket melalui platform Eventverse.
                         </p>
 
                         <h5>11.1 Pengajuan Refund</h5>
 
                         <p>
-                            Peserta dapat mengajukan refund sesuai syarat dan ketentuan
-                            yang diumumkan oleh penyelenggara.
+                            Peserta dapat mengajukan refund sesuai syarat dan ketentuan yang
+                            berlaku pada event. Pengajuan refund dilakukan melalui mekanisme
+                            yang disediakan oleh Eventverse.
+                        </p>
+
+                        <p>
+                            Eventverse dapat meminta informasi atau bukti tambahan dari peserta
+                            dan penyelenggara untuk melakukan pemeriksaan atas pengajuan refund.
                         </p>
 
                         <h5>11.2 Penolakan Refund</h5>
@@ -509,23 +518,53 @@
                         </p>
 
                         <ul>
-                            <li>Event telah berlangsung.</li>
-                            <li>Melewati batas waktu refund.</li>
-                            <li>Melanggar kebijakan event.</li>
-                            <li>Data peserta tidak dapat diverifikasi.</li>
-                            <li>Terdapat indikasi penyalahgunaan sistem.</li>
+                            <li>Event telah berlangsung dan tidak terdapat dasar refund yang berlaku.</li>
+                            <li>Pengajuan telah melewati batas waktu refund.</li>
+                            <li>Peserta tidak memenuhi ketentuan refund yang berlaku.</li>
+                            <li>Data atau bukti yang diberikan tidak dapat diverifikasi.</li>
+                            <li>Terdapat indikasi penipuan atau penyalahgunaan sistem.</li>
+                            <li>Transaksi tidak memenuhi ketentuan pengembalian dana yang berlaku.</li>
                         </ul>
 
-                        <h5>11.3 Peran Eventverse</h5>
+                        <h5>11.3 Peran Eventverse dalam Refund dan Sengketa</h5>
 
                         <p>
-                            Eventverse dapat membantu proses administrasi refund
-                            namun tidak menjamin bahwa refund akan disetujui.
+                            Eventverse tidak hanya bertindak sebagai perantara administratif.
+                            Dalam hal terjadi permintaan refund atau sengketa terkait event,
+                            Eventverse dapat melakukan pemeriksaan, meminta klarifikasi kepada
+                            peserta dan penyelenggara, serta mengambil tindakan yang dianggap
+                            perlu berdasarkan informasi dan bukti yang tersedia.
                         </p>
 
                         <p>
-                            Keputusan akhir refund berada pada penyelenggara
-                            sesuai kebijakan event yang berlaku.
+                            Eventverse dapat memfasilitasi penyelesaian sengketa, menunda atau
+                            membatasi pencairan dana kepada penyelenggara apabila diperlukan,
+                            serta memproses refund kepada peserta apabila berdasarkan hasil
+                            pemeriksaan refund dinyatakan memenuhi ketentuan yang berlaku.
+                        </p>
+
+                        <p>
+                            Penyelenggara tetap bertanggung jawab atas pelaksanaan event,
+                            keakuratan informasi event, serta kewajiban kepada peserta yang
+                            timbul dari event tersebut. Namun, Eventverse dapat mengambil
+                            tindakan terhadap penyelenggara apabila ditemukan pelanggaran,
+                            kelalaian, penipuan, atau kondisi lain yang merugikan peserta.
+                        </p>
+
+                        <h5>11.4 Pembatalan atau Perubahan Event</h5>
+
+                        <p>
+                            Apabila event dibatalkan, ditunda, atau mengalami perubahan material,
+                            Eventverse dapat melakukan pemeriksaan dan berkoordinasi dengan
+                            penyelenggara untuk menentukan mekanisme penanganan transaksi,
+                            termasuk pemberian refund kepada peserta sesuai kondisi dan ketentuan
+                            yang berlaku.
+                        </p>
+
+                        <p>
+                            Dalam kondisi tertentu, Eventverse dapat mengambil tindakan
+                            perlindungan terhadap peserta, termasuk menangguhkan pencairan dana
+                            atau membatasi akses penyelenggara sampai proses pemeriksaan selesai.
                         </p>
                     </section>
 

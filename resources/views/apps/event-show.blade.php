@@ -480,6 +480,31 @@
     </div>
 </div>
 
+{{-- Modal share QR CODE link event --}}
+    <div class="modal fade" id="shareQrModal" tabindex="-1" aria-labelledby="shareQrModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="shareQrModalLabel">QR Code</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body text-center">
+                    {!! $qrlink !!}
+                    <div class="mt-2">
+                        <a href="/{{ $detailEvent->slug }}">eventverse.id/{{ $detailEvent->slug }}</a>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="button-39" data-dismiss="modal">Close</button>
+                    {{-- <button type="button" class="btn btn-primary">Save changes</button> --}}
+                </div>
+            </div>
+        </div>
+    </div>
+    {{-- Modal share QRCODE link event --}}
+
 {{-- MODERN STYLES --}}
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
