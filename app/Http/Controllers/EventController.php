@@ -199,6 +199,7 @@ class EventController extends Controller
 		}
 	}
 
+
 	public function show(Event $event, Request $request)
 	{
 		/*
@@ -216,6 +217,12 @@ class EventController extends Controller
 			$event->increment('visitor');
 		}
 
+		/*
+		|--------------------------------------------------------------------------
+		| Load Relation
+		|--------------------------------------------------------------------------
+		*/
+
 		$event->load([
 			'category',
 			'province',
@@ -226,7 +233,7 @@ class EventController extends Controller
 			'tickets',
 		]);
 
-				/*
+		/*
 		|--------------------------------------------------------------------------
 		| Ticket
 		|--------------------------------------------------------------------------
@@ -240,111 +247,42 @@ class EventController extends Controller
 		|--------------------------------------------------------------------------
 		*/
 
-		// $recomendedEvents = Event::with([
-		// 		'category',
-		// 		'tickets',
-		// 	])
-		// 	->where('status', 1)
-		// 	->where('id', '!=', $event->id)
-		// 	->limit(8)
-		// 	->get();
+		$recomendedEvents = Event::with([
+				'category',
+				'tickets',
+			])
+			->where('status', 1)
+			->where('id', '!=', $event->id)
+			->limit(8)
+			->get();
 
-		// $qrlink = Cache::remember(
-		// 	'event:qrcode:' . $event->id,
-		// 	now()->addDay(),
-		// 	fn () => QrCode::size(220)
-		// 		->generate(url('/' . $event->slug))
-		// );
+		/*
+		|--------------------------------------------------------------------------
+		| QR Code
+		|--------------------------------------------------------------------------
+		*/
 
-		return response()->json([
-			'id' => $event->id,
-			'slug' => $event->slug,
+		$qrlink = Cache::remember(
+			'event:qrcode:' . $event->id,
+			now()->addDay(),
+			fn () => QrCode::size(220)
+				->generate(url('/' . $event->slug))
+		);
+
+		/*
+		|--------------------------------------------------------------------------
+		| Return
+		|--------------------------------------------------------------------------
+		*/
+
+		return view('apps.event-show', [
+			'detailEvent'      => $event,
+			'ticketData'       => $ticketData,
+			'dateNow'          => now()->toDateString(),
+			'recomendedEvents' => $recomendedEvents,
+			'qrlink'           => $qrlink,
 		]);
 	}
-
-	// public function show(Event $event, Request $request)
-	// {
-	// 	/*
-	// 	|--------------------------------------------------------------------------
-	// 	| Visitor
-	// 	|--------------------------------------------------------------------------
-	// 	*/
-
-	// 	$visitor = EventVisitor::firstOrCreate([
-	// 		'ip_address' => $request->ip(),
-	// 		'event_id'   => $event->id,
-	// 	]);
-
-	// 	if ($visitor->wasRecentlyCreated) {
-	// 		$event->increment('visitor');
-	// 	}
-
-	// 	/*
-	// 	|--------------------------------------------------------------------------
-	// 	| Load Relation
-	// 	|--------------------------------------------------------------------------
-	// 	*/
-
-	// 	$event->load([
-	// 		'category',
-	// 		'province',
-	// 		'themes',
-	// 		'images',
-	// 		'individual',
-	// 		'org',
-	// 		'tickets',
-	// 	]);
-
-	// 	/*
-	// 	|--------------------------------------------------------------------------
-	// 	| Ticket
-	// 	|--------------------------------------------------------------------------
-	// 	*/
-
-	// 	$ticketData = $event->tickets;
-
-	// 	/*
-	// 	|--------------------------------------------------------------------------
-	// 	| Recommended Event
-	// 	|--------------------------------------------------------------------------
-	// 	*/
-
-	// 	$recomendedEvents = Event::with([
-	// 			'category',
-	// 			'tickets',
-	// 		])
-	// 		->where('status', 1)
-	// 		->where('id', '!=', $event->id)
-	// 		->limit(8)
-	// 		->get();
-
-	// 	/*
-	// 	|--------------------------------------------------------------------------
-	// 	| QR Code
-	// 	|--------------------------------------------------------------------------
-	// 	*/
-
-	// 	$qrlink = Cache::remember(
-	// 		'event:qrcode:' . $event->id,
-	// 		now()->addDay(),
-	// 		fn () => QrCode::size(220)
-	// 			->generate(url('/' . $event->slug))
-	// 	);
-
-	// 	/*
-	// 	|--------------------------------------------------------------------------
-	// 	| Return
-	// 	|--------------------------------------------------------------------------
-	// 	*/
-
-	// 	return view('apps.event-show', [
-	// 		'detailEvent'      => $event,
-	// 		'ticketData'       => $ticketData,
-	// 		'dateNow'          => now()->toDateString(),
-	// 		'recomendedEvents' => $recomendedEvents,
-	// 		'qrlink'           => $qrlink,
-	// 	]);
-	// }
 
 	/**
 	 * Show the form for editing the specified resource.
