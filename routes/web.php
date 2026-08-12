@@ -20,6 +20,7 @@ use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\ReservationController;
 use App\Models\Event;
 use GuzzleHttp\Promise\Create;
+use Illuminate\Support\Facades\DB;
 
 /*
 |--------------------------------------------------------------------------
@@ -384,5 +385,24 @@ Route::get('/test-event4/{id}', function ($id) {
         'id' => $event?->id,
         'slug' => $event?->slug,
         'query_ms' => round($time, 2),
+    ]);
+});
+
+Route::get('/test-db', function () {
+    $start = microtime(true);
+
+    DB::connection()->getPdo();
+
+    $connect = (microtime(true) - $start) * 1000;
+
+    $start = microtime(true);
+
+    DB::select('SELECT 1');
+
+    $query = (microtime(true) - $start) * 1000;
+
+    return response()->json([
+        'connect_ms' => round($connect, 2),
+        'query_ms' => round($query, 2),
     ]);
 });
