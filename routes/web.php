@@ -374,10 +374,15 @@ Route::get('/test-event3/{id}', function ($id) {
 });
 
 Route::get('/test-event4/{id}', function ($id) {
+    $start = microtime(true);
+
     $event = Event::find($id);
 
+    $time = (microtime(true) - $start) * 1000;
+
     return response()->json([
-        'id' => $event->id,
-        'slug' => $event->slug,
+        'id' => $event?->id,
+        'slug' => $event?->slug,
+        'query_ms' => round($time, 2),
     ]);
 });
