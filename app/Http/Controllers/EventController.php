@@ -201,6 +201,21 @@ class EventController extends Controller
 
 	public function show(Event $event, Request $request)
 	{
+		/*
+		|--------------------------------------------------------------------------
+		| Visitor
+		|--------------------------------------------------------------------------
+		*/
+
+		$visitor = EventVisitor::firstOrCreate([
+			'ip_address' => $request->ip(),
+			'event_id'   => $event->id,
+		]);
+
+		if ($visitor->wasRecentlyCreated) {
+			$event->increment('visitor');
+		}
+
 		$event->load([
 			'category',
 			'province',
@@ -210,6 +225,20 @@ class EventController extends Controller
 			'org',
 			'tickets',
 		]);
+
+				/*
+		|--------------------------------------------------------------------------
+		| Ticket
+		|--------------------------------------------------------------------------
+		*/
+
+		$ticketData = $event->tickets;
+
+		/*
+		|--------------------------------------------------------------------------
+		| Recommended Event
+		|--------------------------------------------------------------------------
+		*/
 
 		return response()->json([
 			'id' => $event->id,
