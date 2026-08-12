@@ -232,7 +232,7 @@ class EventController extends Controller
 		|--------------------------------------------------------------------------
 		*/
 
-		$ticketData = $event->tickets;
+		// $ticketData = $event->tickets;
 
 		/*
 		|--------------------------------------------------------------------------
@@ -259,7 +259,7 @@ class EventController extends Controller
 		return response()->json([
 			'id' => $event->id,
 			'slug' => $event->slug,
-			'ee' => 'wwws'
+			'ee' => 'wwwnjs'
 		]);
 	}
 
