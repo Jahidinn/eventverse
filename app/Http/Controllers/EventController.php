@@ -240,21 +240,21 @@ class EventController extends Controller
 		|--------------------------------------------------------------------------
 		*/
 
-		$recomendedEvents = Event::with([
-				'category',
-				'tickets',
-			])
-			->where('status', 1)
-			->where('id', '!=', $event->id)
-			->limit(8)
-			->get();
+		// $recomendedEvents = Event::with([
+		// 		'category',
+		// 		'tickets',
+		// 	])
+		// 	->where('status', 1)
+		// 	->where('id', '!=', $event->id)
+		// 	->limit(8)
+		// 	->get();
 
-		$qrlink = Cache::remember(
-			'event:qrcode:' . $event->id,
-			now()->addDay(),
-			fn () => QrCode::size(220)
-				->generate(url('/' . $event->slug))
-		);
+		// $qrlink = Cache::remember(
+		// 	'event:qrcode:' . $event->id,
+		// 	now()->addDay(),
+		// 	fn () => QrCode::size(220)
+		// 		->generate(url('/' . $event->slug))
+		// );
 
 		return response()->json([
 			'id' => $event->id,
