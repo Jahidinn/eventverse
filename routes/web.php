@@ -32,6 +32,24 @@ use Illuminate\Support\Facades\DB;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
+Route::get('/test-db', function () {
+    $start = microtime(true);
+
+    DB::connection()->getPdo();
+
+    $connect = (microtime(true) - $start) * 1000;
+
+    $start = microtime(true);
+
+    DB::select('SELECT 1');
+
+    $query = (microtime(true) - $start) * 1000;
+
+    return response()->json([
+        'connect_ms' => round($connect, 2),
+        'query_ms' => round($query, 2),
+    ]);
+});
 
 # LOMBAESAI
 Route::get('/essay-announcement-2024', [ScoreController::class, 'index']);
@@ -388,21 +406,3 @@ Route::get('/test-event4/{id}', function ($id) {
     ]);
 });
 
-Route::get('/test-db', function () {
-    $start = microtime(true);
-
-    DB::connection()->getPdo();
-
-    $connect = (microtime(true) - $start) * 1000;
-
-    $start = microtime(true);
-
-    DB::select('SELECT 1');
-
-    $query = (microtime(true) - $start) * 1000;
-
-    return response()->json([
-        'connect_ms' => round($connect, 2),
-        'query_ms' => round($query, 2),
-    ]);
-});
