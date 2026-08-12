@@ -240,6 +240,15 @@ class EventController extends Controller
 		|--------------------------------------------------------------------------
 		*/
 
+		$recomendedEvents = Event::with([
+				'category',
+				'tickets',
+			])
+			->where('status', 1)
+			->where('id', '!=', $event->id)
+			->limit(8)
+			->get();
+
 		return response()->json([
 			'id' => $event->id,
 			'slug' => $event->slug,
