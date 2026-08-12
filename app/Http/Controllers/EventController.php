@@ -216,15 +216,15 @@ class EventController extends Controller
 			$event->increment('visitor');
 		}
 
-		$event->load([
-			'category',
-			'province',
-			'themes',
-			'images',
-			'individual',
-			'org',
-			'tickets',
-		]);
+		// $event->load([
+		// 	'category',
+		// 	'province',
+		// 	'themes',
+		// 	'images',
+		// 	'individual',
+		// 	'org',
+		// 	'tickets',
+		// ]);
 
 				/*
 		|--------------------------------------------------------------------------
@@ -259,6 +259,7 @@ class EventController extends Controller
 		return response()->json([
 			'id' => $event->id,
 			'slug' => $event->slug,
+			'ee' => 'ww'
 		]);
 	}
 
