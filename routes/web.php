@@ -372,3 +372,12 @@ Route::get('/test-event3/{id}', function ($id) {
         'hh' => 'ss',
     ]);
 });
+
+Route::get('/test-event4/{id}', function ($id) {
+    $event = Event::find($id);
+
+    return response()->json([
+        'id' => $event->id,
+        'slug' => $event->slug,
+    ]);
+});
