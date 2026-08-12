@@ -32,24 +32,6 @@ use Illuminate\Support\Facades\DB;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
-Route::get('/test-db', function () {
-    $start = microtime(true);
-
-    DB::connection()->getPdo();
-
-    $connect = (microtime(true) - $start) * 1000;
-
-    $start = microtime(true);
-
-    DB::select('SELECT 1');
-
-    $query = (microtime(true) - $start) * 1000;
-
-    return response()->json([
-        'connect_ms' => round($connect, 2),
-        'query_ms' => round($query, 2),
-    ]);
-});
 
 # LOMBAESAI
 Route::get('/essay-announcement-2024', [ScoreController::class, 'index']);
@@ -369,40 +351,40 @@ Route::get('/auth/reset-password/{token}', [AuthController::class, 'resetPasswor
 Route::post('/auth/send-reset-password', [AuthController::class, 'resetPassword'])->middleware('guest')->name('password.update');
 
 
-Route::get('/test-event/{event:slug}', function (Event $event) {
-    return response()->json([
-        'id' => $event->id,
-        'slug' => $event->slug,
-		'hh' => 'ss'
-    ]);
-});
+// Route::get('/test-event/{event:slug}', function (Event $event) {
+//     return response()->json([
+//         'id' => $event->id,
+//         'slug' => $event->slug,
+// 		'hh' => 'ss'
+//     ]);
+// });
 
-Route::get('/test-event2/{event}', function (Event $event) {
-    return response()->json([
-        'id' => $event->id,
-        'slug' => $event->slug,
-        'hh' => 'ss'
-    ]);
-});
+// Route::get('/test-event2/{event}', function (Event $event) {
+//     return response()->json([
+//         'id' => $event->id,
+//         'slug' => $event->slug,
+//         'hh' => 'ss'
+//     ]);
+// });
 
-Route::get('/test-event3/{id}', function ($id) {
-    return response()->json([
-        'id' => $id,
-        'hh' => 'ss',
-    ]);
-});
+// Route::get('/test-event3/{id}', function ($id) {
+//     return response()->json([
+//         'id' => $id,
+//         'hh' => 'ss',
+//     ]);
+// });
 
-Route::get('/test-event4/{id}', function ($id) {
-    $start = microtime(true);
+// Route::get('/test-event4/{id}', function ($id) {
+//     $start = microtime(true);
 
-    $event = Event::find($id);
+//     $event = Event::find($id);
 
-    $time = (microtime(true) - $start) * 1000;
+//     $time = (microtime(true) - $start) * 1000;
 
-    return response()->json([
-        'id' => $event?->id,
-        'slug' => $event?->slug,
-        'query_ms' => round($time, 2),
-    ]);
-});
+//     return response()->json([
+//         'id' => $event?->id,
+//         'slug' => $event?->slug,
+//         'query_ms' => round($time, 2),
+//     ]);
+// });
 
