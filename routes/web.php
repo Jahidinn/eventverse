@@ -358,4 +358,10 @@ Route::get('/test-event/{event:slug}', function (Event $event) {
     ]);
 });
 
-Route::get('/test-event2/{event}', [EventController::class, 'show']);
+Route::get('/test-event2/{event}', function (Event $event) {
+    return response()->json([
+        'id' => $event->id,
+        'slug' => $event->slug,
+        'hh' => 'ss'
+    ]);
+});
