@@ -365,3 +365,10 @@ Route::get('/test-event2/{event}', function (Event $event) {
         'hh' => 'ss'
     ]);
 });
+
+Route::get('/test-event3/{id}', function ($id) {
+    return response()->json([
+        'id' => $id,
+        'hh' => 'ss',
+    ]);
+});
