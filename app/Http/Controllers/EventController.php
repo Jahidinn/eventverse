@@ -256,10 +256,10 @@ class EventController extends Controller
 		// 		->generate(url('/' . $event->slug))
 		// );
 
-		// return response()->json([
-		// 	'id' => $event->id,
-		// 	'slug' => $event->slug,
-		// ]);
+		return response()->json([
+			'id' => $event->id,
+			'slug' => $event->slug,
+		]);
 	}
 
 	// public function show(Event $event, Request $request)
