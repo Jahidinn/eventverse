@@ -26,12 +26,12 @@
                     if(blank($detailEvent->image)){
                         $img = 'assets/default-img/event-images/def-no-img.png';
                     }else{
-                        <!-- $bannerPath = 'storage/event-images/'.$detailEvent->image;
+                        $bannerPath = 'storage/event-images/'.$detailEvent->image;
                         if(file_exists(public_path($bannerPath))){
                             $img = $bannerPath;
                         }else{
                             $img='assets/default-img/event-images/def-no-img.png';
-                        } -->
+                        }
                     }
 
                     $gallery = collect();
@@ -42,12 +42,12 @@
 
                     foreach($detailEvent->images as $image){
                         $galleryPath='storage/event-gallery/'.$image->image;
-                        <!-- if(file_exists(public_path($galleryPath))){
+                        if(file_exists(public_path($galleryPath))){
                             $gallery->push([
                                 'image'=>asset($galleryPath),
                                 'banner'=>false
                             ]);
-                        } -->
+                        }
                     }
 
                     if ($detailEvent->organizer == 'org') {
@@ -395,11 +395,11 @@
                         $eventImage = asset('assets/default-img/event-images/def-no-img.png');
                     }else{
                         $path = 'storage/event-images/'.$event->image;
-                        <!-- if(file_exists(public_path($path))){
+                        if(file_exists(public_path($path))){
                             $eventImage = asset($path);
                         }else{
                             $eventImage = asset('assets/default-img/event-images/def-no-img.png');
-                        } -->
+                        }
                     }
 
                     $eventMinPrice = $event->tickets->min('ticket_price');
