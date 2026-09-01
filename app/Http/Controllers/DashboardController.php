@@ -14,6 +14,7 @@ use App\Models\WithdrawData;
 use Illuminate\Http\Request;
 use App\Models\ArticleCategory;
 use App\Models\TransactionForm;
+use App\Models\TransactionParticipant;
 use Illuminate\Support\Facades\Redirect;
 use PhpOffice\PhpSpreadsheet\Style\Fill;
 use Yajra\DataTables\Facades\DataTables;
@@ -22,6 +23,7 @@ use PhpOffice\PhpSpreadsheet\Style\Color;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use PhpOffice\PhpSpreadsheet\Style\Border;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
+use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 
 class DashboardController extends Controller
 {
@@ -224,28 +226,283 @@ class DashboardController extends Controller
 		]);
 	}
 
+	// public function getParticipant(Request $request)
+	// {
+	// 	if (!auth()->user()) {
+	// 		return response()->json(['error' => 'Gagal!']);
+	// 	}
+
+	// 	$dataParticipant = Transaction::with(['event', 'ticket'])
+	// 		->where('event_id', $request->id)
+	// 		->orderByRaw('id DESC')
+	// 		->get();
+
+	// 	return DataTables::of($dataParticipant)
+	// 		->addIndexColumn()
+	// 		->addColumn('transaction_status', function ($dataParticipant) {
+	// 			return view('dashboard.components.column-status')->with(['data' => $dataParticipant]);
+	// 		})
+	// 		->addColumn('transaction_date', function ($dataParticipant) {
+	// 			return $dataParticipant->created_at->format('d M Y');
+	// 		})
+	// 		->addColumn('transaction_action', function ($dataParticipant) {
+	// 			return view('dashboard.components.column-action-participant')->with(['data' => $dataParticipant]);
+	// 		})
+	// 		->make(true);
+	// }
+
 	public function getParticipant(Request $request)
 	{
-		if (!auth()->user()) {
-			return response()->json(['error' => 'Gagal!']);
+		if (!auth()->check()) {
+			return response()->json([
+				'error' => 'Gagal!'
+			], 401);
 		}
 
-		$dataParticipant = Transaction::with(['event', 'ticket'])
-			->where('event_id', $request->id)
-			->orderByRaw('id DESC')
+		/*
+		|--------------------------------------------------------------------------
+		| EVENT
+		|--------------------------------------------------------------------------
+		*/
+
+		$event = Event::where(
+			'event_id',
+			$request->event_id
+		)->first();
+
+		if (!$event) {
+			return response()->json([
+				'error' => 'Event tidak ditemukan!'
+			], 404);
+		}
+
+
+		/*
+		|--------------------------------------------------------------------------
+		| CUSTOM FORM EVENT
+		|--------------------------------------------------------------------------
+		*/
+
+		$customForms = CustomForm::where(
+			'event_id',
+			$event->id
+		)
+			->orderBy('id')
 			->get();
 
-		return DataTables::of($dataParticipant)
-			->addIndexColumn()
-			->addColumn('transaction_status', function ($dataParticipant) {
-				return view('dashboard.components.column-status')->with(['data' => $dataParticipant]);
-			})
-			->addColumn('transaction_date', function ($dataParticipant) {
-				return $dataParticipant->created_at->format('d M Y');
-			})
-			->addColumn('transaction_action', function ($dataParticipant) {
-				return view('dashboard.components.column-action-participant')->with(['data' => $dataParticipant]);
-			})
+
+		/*
+		|--------------------------------------------------------------------------
+		| PARTICIPANT
+		|--------------------------------------------------------------------------
+		*/
+
+		$dataParticipant = TransactionParticipant::with([
+			'transaction.event.customForms',
+			'transaction.ticket',
+			'transaction.paymentGatewayMethod.gateway',
+			'transaction.paymentGatewayMethod.method',
+			'forms.form',
+		])
+		->whereHas('transaction', function ($query) use ($event) {
+			$query->where('event_id', $event->id);
+		})
+		->latest();
+
+
+		/*
+		|--------------------------------------------------------------------------
+		| DATATABLE
+		|--------------------------------------------------------------------------
+		*/
+
+		$dataTable = DataTables::of($dataParticipant)
+
+			->addIndexColumn();
+
+
+		/*
+		|--------------------------------------------------------------------------
+		| PARTICIPANT NAME
+		|--------------------------------------------------------------------------
+		*/
+
+		$dataTable->addColumn('name', function ($participant) {
+
+			return $participant->name ?? '-';
+
+		});
+
+
+		/*
+		|--------------------------------------------------------------------------
+		| PARTICIPANT EMAIL
+		|--------------------------------------------------------------------------
+		*/
+
+		$dataTable->addColumn('email', function ($participant) {
+
+			return $participant->email ?? '-';
+
+		});
+
+
+		/*
+		|--------------------------------------------------------------------------
+		| PARTICIPANT PHONE
+		|--------------------------------------------------------------------------
+		*/
+
+		$dataTable->addColumn('phone', function ($participant) {
+
+			return $participant->phone ?? '-';
+
+		});
+
+
+		/*
+		|--------------------------------------------------------------------------
+		| TICKET
+		|--------------------------------------------------------------------------
+		*/
+
+		$dataTable->addColumn('ticket_name', function ($participant) {
+
+			return $participant
+				->transaction
+				?->ticket
+				?->ticket_name ?? '-';
+
+		});
+
+
+		/*
+		|--------------------------------------------------------------------------
+		| CUSTOM FORM
+		|--------------------------------------------------------------------------
+		|
+		| Setiap CustomForm menjadi satu kolom.
+		|
+		*/
+
+		foreach ($customForms as $customForm) {
+
+			$dataTable->addColumn(
+				'form_' . $customForm->id,
+				function ($participant) use ($customForm) {
+
+					$transactionForm = $participant->forms
+						->firstWhere(
+							'form_id',
+							$customForm->id
+						);
+
+					return $transactionForm?->form_value ?? '-';
+				}
+			);
+
+		}
+
+
+		/*
+		|--------------------------------------------------------------------------
+		| TRANSACTION CODE
+		|--------------------------------------------------------------------------
+		*/
+
+		$dataTable->addColumn(
+			'transaction_id',
+			function ($participant) {
+
+				return $participant
+					->transaction
+					?->transaction_code ?? '-';
+
+			}
+		);
+		
+
+
+		/*
+		|--------------------------------------------------------------------------
+		| TRANSACTION DATE
+		|--------------------------------------------------------------------------
+		*/
+
+		$dataTable->addColumn(
+			'transaction_date',
+			function ($participant) {
+
+				return $participant
+					->transaction
+					?->created_at
+					?->format('d M Y')
+					?? '-';
+
+			}
+		);
+
+
+		/*
+		|--------------------------------------------------------------------------
+		| STATUS
+		|--------------------------------------------------------------------------
+		*/
+
+		$dataTable->addColumn(
+			'transaction_status',
+			function ($participant) {
+
+				if (!$participant->transaction) {
+					return '-';
+				}
+
+				return view(
+					'dashboard.components.column-status',
+					[
+						'data' => $participant->transaction,
+					]
+				)->render();
+
+			}
+		);
+
+
+		/*
+		|--------------------------------------------------------------------------
+		| ACTION
+		|--------------------------------------------------------------------------
+		*/
+
+		$dataTable->addColumn(
+			'transaction_action',
+			function ($participant) {
+
+				return view(
+					'dashboard.components.column-action-participant',
+					[
+						'data' => $participant->transaction,
+						'participant' => $participant,
+					]
+				)->render();
+
+			}
+		);
+
+
+		/*
+		|--------------------------------------------------------------------------
+		| RESPONSE
+		|--------------------------------------------------------------------------
+		*/
+
+		return $dataTable
+
+			->rawColumns([
+				'transaction_status',
+				'transaction_action',
+			])
+
 			->make(true);
 	}
 
@@ -268,6 +525,7 @@ class DashboardController extends Controller
 		return response()->json(['data' => $data]);
 	}
 
+	# Next boleh tarik walau event belum selesai
 	public function checkEventDate(Request $request)
 	{
 		$event_id = $request->event_id;
@@ -293,116 +551,284 @@ class DashboardController extends Controller
 			->withQueryString();
 
 
-		return view('dashboard.page-transaction-report', [
+		return view('dashboard.page-transaction', [
 			'listEvent' => $listEvent,
 		]);
 	}
 
+	// public function getTransactionReport(Request $request)
+	// {
+	// 	$event_id = $request->event_id;
+	// 	//Biaya admin untuk customer
+	// 	$biayaAdmin = config('app.biaya_admin');
+
+	// 	//Total transaksi sukses
+	// 	$totalPeserta = Transaction::where('event_id', $event_id)
+	// 		->where('status', 'Paid')
+	// 		->count();
+
+	// 	//Total biaya admin
+	// 	$biayaAdminPeserta = $biayaAdmin * $totalPeserta;
+
+	// 	//Total dana sebelum dikurangi biaya admin
+	// 	$totalTransaksi = Transaction::where('event_id', $event_id)
+	// 		->where('status', 'Paid')
+	// 		->sum('total_price');
+
+	// 	//Pengurangan total dana dikurangi biaya admin dari user (Total dana masuk)
+	// 	$totalDana = $totalTransaksi - $biayaAdminPeserta;
+
+	// 	$totalTiket = Ticket::where('event_id', $event_id)->count();
+
+	// 	//Mengkategorikan dana berdasarkan metode pembayaran
+
+	// 	//Metode BANK TRANSFER (VA)
+	// 	$qty_bank_tf = Transaction::where('event_id', $event_id)
+	// 		->where('status', 'Paid')
+	// 		->where('payment_type', 'bank_transfer')
+	// 		->count();
+
+	// 	$dana_bank_tf = Transaction::where('event_id', $event_id)
+	// 		->where('status', 'Paid')
+	// 		->where('payment_type', 'bank_transfer')
+	// 		->sum('total_price') -
+	// 		$biayaAdmin * $qty_bank_tf;
+
+	// 	// Bank TF : 1.5% + 4500 per transaksi
+	// 	$admin_bank_tf = 4500 * $qty_bank_tf + (1.5 / 100) * $dana_bank_tf;
+
+	// 	$total_dana_bank_tf = $dana_bank_tf - $admin_bank_tf;
+
+	// 	//Metode CREDIT CARD
+
+	// 	$qty_credit_card = Transaction::where('event_id', $event_id)
+	// 		->where('status', 'Paid')
+	// 		->where('payment_type', 'credit_card')
+	// 		->count();
+
+	// 	$dana_credit_card = Transaction::where('event_id', $event_id)
+	// 		->where('status', 'Paid')
+	// 		->where('payment_type', 'credit_card')
+	// 		->sum('total_price') -
+	// 		$biayaAdmin * $qty_credit_card;
+
+	// 	//Credit card : 3.5% + 2500 per transaksi
+	// 	$admin_credit_card = 2500 * $qty_credit_card + (3.5 / 100) * $dana_credit_card;
+
+	// 	$total_dana_credit_card = $dana_credit_card - $admin_credit_card;
+
+	// 	//Metode Lain (Qris, Gopay, Shopeepay, Dana, Linkaja)
+
+	// 	$qty_lain = Transaction::where('event_id', $event_id)
+	// 		->where('status', 'Paid')
+	// 		->whereNotIn('payment_type', ['bank_transfer', 'credit_card'])
+	// 		->count();
+
+	// 	$dana_lain = Transaction::where('event_id', $event_id)
+	// 		->where('status', 'Paid')
+	// 		->whereNotIn('payment_type', ['bank_transfer', 'credit_card'])
+	// 		->sum('total_price') -
+	// 		$biayaAdmin * $qty_lain;
+
+	// 	// Pembayaran Lain : 3% pertransaksi / per tiket
+	// 	$admin_lain = (3 / 100) * $dana_lain;
+
+	// 	$total_dana_lain = $dana_lain - $admin_lain;
+
+	// 	//Pengurangan biaya admin penyelenggara
+	// 	$eventConnectFee = $admin_bank_tf + $admin_credit_card + $admin_lain;
+
+	// 	// penarikan dana -> tambahkan yang statusnya hanya sukses dan berhasil, dan pending
+	// 	$danaDitarik = WithdrawData::where('event_id', $event_id)->where(function ($query) {
+	// 		$query->where('status', 'Sukses')
+	// 			->orWhere('status', 'Proses');
+	// 	})->sum('amount');
+
+	// 	$danaBersih = $total_dana_bank_tf + $total_dana_credit_card + $total_dana_lain - $danaDitarik;
+
+	// 	$data = [
+	// 		'danaTotal' => $totalDana,
+	// 		'peserta' => $totalPeserta,
+	// 		'tiket' => $totalTiket,
+	// 		'fee' => $eventConnectFee,
+	// 		'danaDitarik' => $danaDitarik,
+	// 		'danaBersih' => $danaBersih,
+	// 	];
+
+	// 	if ($request->from_request == 'withdraw') {
+	// 		return $data;
+	// 	} else {
+	// 		return response()->json(['data' => $data]);
+	// 	}
+	// }
+
 	public function getTransactionReport(Request $request)
 	{
-		$event_id = $request->event_id;
-		//Biaya admin untuk customer
-		$biayaAdmin = config('app.biaya_admin');
+		$eventId = $request->event_id;
 
-		//Total transaksi sukses
-		$totalPeserta = Transaction::where('event_id', $event_id)
+		/*
+		|--------------------------------------------------------------------------
+		| TRANSAKSI PAID
+		|--------------------------------------------------------------------------
+		*/
+
+		$transactions = Transaction::with([
+			'participants',
+		])
+			->where('event_id', $eventId)
 			->where('status', 'Paid')
-			->count();
+			->get();
 
-		//Total biaya admin
-		$biayaAdminPeserta = $biayaAdmin * $totalPeserta;
 
-		//Total dana sebelum dikurangi biaya admin
-		$totalTransaksi = Transaction::where('event_id', $event_id)
-			->where('status', 'Paid')
-			->sum('total_price');
+		/*
+		|--------------------------------------------------------------------------
+		| TOTAL PESERTA
+		|--------------------------------------------------------------------------
+		|
+		| Sekarang peserta berasal dari transaction_participants.
+		|
+		*/
 
-		//Pengurangan total dana dikurangi biaya admin dari user (Total dana masuk)
-		$totalDana = $totalTransaksi - $biayaAdminPeserta;
+		$totalPeserta = $transactions->sum(function ($transaction) {
 
-		$totalTiket = Ticket::where('event_id', $event_id)->count();
+			return $transaction->participants->count();
 
-		//Mengkategorikan dana berdasarkan metode pembayaran
+		});
 
-		//Metode BANK TRANSFER (VA)
-		$qty_bank_tf = Transaction::where('event_id', $event_id)
-			->where('status', 'Paid')
-			->where('payment_type', 'bank_transfer')
-			->count();
 
-		$dana_bank_tf = Transaction::where('event_id', $event_id)
-			->where('status', 'Paid')
-			->where('payment_type', 'bank_transfer')
-			->sum('total_price') -
-			$biayaAdmin * $qty_bank_tf;
+		/*
+		|--------------------------------------------------------------------------
+		| TOTAL TIKET TERJUAL
+		|--------------------------------------------------------------------------
+		|
+		| Jika 1 participant = 1 tiket.
+		|
+		*/
 
-		// Bank TF : 1.5% + 4500 per transaksi
-		$admin_bank_tf = 4500 * $qty_bank_tf + (1.5 / 100) * $dana_bank_tf;
+		$totalTiket = $totalPeserta;
 
-		$total_dana_bank_tf = $dana_bank_tf - $admin_bank_tf;
 
-		//Metode CREDIT CARD
+		/*
+		|--------------------------------------------------------------------------
+		| DANA TOTAL
+		|--------------------------------------------------------------------------
+		|
+		| Gunakan SUBTOTAL.
+		|
+		| subtotal = hak Event Creator
+		| grand_total = total yang dibayar customer
+		|
+		*/
 
-		$qty_credit_card = Transaction::where('event_id', $event_id)
-			->where('status', 'Paid')
-			->where('payment_type', 'credit_card')
-			->count();
+		$danaTotal = $transactions->sum(function ($transaction) {
 
-		$dana_credit_card = Transaction::where('event_id', $event_id)
-			->where('status', 'Paid')
-			->where('payment_type', 'credit_card')
-			->sum('total_price') -
-			$biayaAdmin * $qty_credit_card;
+			return (float) $transaction->subtotal;
 
-		//Credit card : 3.5% + 2500 per transaksi
-		$admin_credit_card = 2500 * $qty_credit_card + (3.5 / 100) * $dana_credit_card;
+		});
 
-		$total_dana_credit_card = $dana_credit_card - $admin_credit_card;
 
-		//Metode Lain (Qris, Gopay, Shopeepay, Dana, Linkaja)
+		/*
+		|--------------------------------------------------------------------------
+		| FEE EVENTVERSE
+		|--------------------------------------------------------------------------
+		|
+		| Fee admin + payment gateway sudah dibebankan
+		| kepada customer.
+		|
+		| Jadi tidak ada pengurangan fee dari subtotal.
+		|
+		*/
 
-		$qty_lain = Transaction::where('event_id', $event_id)
-			->where('status', 'Paid')
-			->whereNotIn('payment_type', ['bank_transfer', 'credit_card'])
-			->count();
+		$eventConnectFee = 0;
 
-		$dana_lain = Transaction::where('event_id', $event_id)
-			->where('status', 'Paid')
-			->whereNotIn('payment_type', ['bank_transfer', 'credit_card'])
-			->sum('total_price') -
-			$biayaAdmin * $qty_lain;
 
-		// Pembayaran Lain : 3% pertransaksi / per tiket
-		$admin_lain = (3 / 100) * $dana_lain;
+		/*
+		|--------------------------------------------------------------------------
+		| DANA DITARIK
+		|--------------------------------------------------------------------------
+		*/
 
-		$total_dana_lain = $dana_lain - $admin_lain;
+		$danaDitarik = WithdrawData::where(
+			'event_id',
+			$eventId
+		)
+			->where(function ($query) {
 
-		//Pengurangan biaya admin penyelenggara
-		$eventConnectFee = $admin_bank_tf + $admin_credit_card + $admin_lain;
+				$query
+					->where('status', 'Sukses')
+					->orWhere('status', 'Proses');
 
-		// penarikan dana -> tambahkan yang statusnya hanya sukses dan berhasil, dan pending
-		$danaDitarik = WithdrawData::where('event_id', $event_id)->where(function ($query) {
-			$query->where('status', 'Sukses')
-				->orWhere('status', 'Proses');
-		})->sum('amount');
+			})
+			->sum('amount');
 
-		$danaBersih = $total_dana_bank_tf + $total_dana_credit_card + $total_dana_lain - $danaDitarik;
+
+		/*
+		|--------------------------------------------------------------------------
+		| DANA BERSIH
+		|--------------------------------------------------------------------------
+		|
+		| Dana creator = subtotal transaksi Paid
+		| dikurangi dana yang sudah ditarik.
+		|
+		*/
+
+		$danaBersih =
+			$danaTotal - $danaDitarik;
+
+
+		/*
+		|--------------------------------------------------------------------------
+		| RESPONSE
+		|--------------------------------------------------------------------------
+		*/
 
 		$data = [
-			'danaTotal' => $totalDana,
-			'peserta' => $totalPeserta,
-			'tiket' => $totalTiket,
-			'fee' => $eventConnectFee,
-			'danaDitarik' => $danaDitarik,
-			'danaBersih' => $danaBersih,
+
+			'danaTotal' =>
+				$danaTotal,
+
+			'peserta' =>
+				$totalPeserta,
+
+			'tiket' =>
+				$totalTiket,
+
+			'fee' =>
+				$eventConnectFee,
+
+			'danaDitarik' =>
+				$danaDitarik,
+
+			'danaBersih' =>
+				$danaBersih,
+
 		];
 
-		if ($request->from_request == 'withdraw') {
+
+		/*
+		|--------------------------------------------------------------------------
+		| WITHDRAW
+		|--------------------------------------------------------------------------
+		*/
+
+		if ($request->from_request === 'withdraw') {
+
 			return $data;
-		} else {
-			return response()->json(['data' => $data]);
+
 		}
+
+
+		/*
+		|--------------------------------------------------------------------------
+		| JSON
+		|--------------------------------------------------------------------------
+		*/
+
+		return response()->json([
+			'data' => $data
+		]);
 	}
+
 
 	public function eventCheckin(Request $request)
 	{
@@ -530,259 +956,775 @@ class DashboardController extends Controller
 			->make(true);
 	}
 
-	public function downloadExcel(Request $request, $id)
+	public function downloadExcel($id)
 	{
 		$user_id = auth()->user()->id;
 
 		//Cek yang download pembuat event atau bukan
-		$cekUser = Event::where('id', $id)->first();
-		if ($cekUser->user_id != $user_id) {
+		$event = Event::where('event_id', $id)->first();
+		$event_id = $event->id;
+
+		if ($event->user_id != $user_id) {
 
 			//Jika bukan jangan lanjutkan download
 			abort(404, 'Resource not found.');
 		}
 
-		//Dapatkan data transaksi / peserta
-		$participants = Transaction::with(['ticket', 'event'])->where('event_id', $id)
-			->orderBy('ticket_id', 'asc')
-			->orderBy('status')
+		// ==========================================================================
+		// DATA PARTICIPANT
+		// ==========================================================================
+
+		$participants = TransactionParticipant::with([
+			'transaction.event',
+			'transaction.ticket',
+			'forms.form',
+		])
+			->whereHas('transaction', function ($query) use ($event_id) {
+				$query->where('event_id', $event_id)->where('status', 'Paid');
+			})
+			->get()
+			->sortBy(function ($participant) {
+				return $participant->transaction?->ticket_id ?? 0;
+			})
+			->values();
+
+
+		// ==========================================================================
+		// DATA CUSTOM FORM
+		// ==========================================================================
+
+		$customForms = CustomForm::where('event_id', $event_id)
+			->orderBy('id')
 			->get();
 
-		//Data custom forms
-		$customForms = CustomForm::where('event_id', $id)->get();
 
-		// Mendapatkan instance kontroller saat membuat objek
+		// ==========================================================================
+		// TRANSACTION REPORT
+		// ==========================================================================
+
 		$dashboardController = new DashboardController();
 
-		// Panggil fungsi getTransactionReport untuk mendapatkan perhitungan data transaksi
-		$transaksi = $dashboardController->getTransactionReport(app('request')->merge(['event_id' => $id]));
-		$dataTransaksi = json_decode(json_encode($transaksi), true)['original']['data'];
+		$transaksi = $dashboardController->getTransactionReport(
+			app('request')->merge([
+				'event_id' => $event_id,
+				'from_request' => 'withdraw',
+			])
+		);
 
-		$danaTotal = number_format($dataTransaksi['danaTotal'], 0, ',', '.');
-		$danaDitarik = number_format($dataTransaksi['danaDitarik'], 0, ',', '.');
-		$fee = number_format($dataTransaksi['fee'], 0, ',', '.');
-		$danaBersih = number_format($dataTransaksi['danaBersih'], 0, ',', '.');
-		$peserta = number_format(count($participants), 0, ',', '.');
-		$tiket = number_format($dataTransaksi['tiket'], 0, ',', '.');
+		$dataTransaksi = $transaksi;
 
-		// Membuat objek Spreadsheet
+
+		// ==========================================================================
+		// DATA REKAP
+		// ==========================================================================
+
+		$danaTotal = number_format(
+			$dataTransaksi['danaTotal'],
+			0,
+			',',
+			'.'
+		);
+
+		$danaDitarik = number_format(
+			$dataTransaksi['danaDitarik'],
+			0,
+			',',
+			'.'
+		);
+
+		$fee = number_format(
+			$dataTransaksi['fee'],
+			0,
+			',',
+			'.'
+		);
+
+		$danaBersih = number_format(
+			$dataTransaksi['danaBersih'],
+			0,
+			',',
+			'.'
+		);
+
+
+		// ==========================================================================
+		// JUMLAH PESERTA
+		// ==========================================================================
+
+		$peserta = number_format(
+			$participants->count(),
+			0,
+			',',
+			'.'
+		);
+
+
+		// ==========================================================================
+		// JUMLAH TIKET
+		// ==========================================================================
+
+		$tiket = number_format(
+			$dataTransaksi['tiket'],
+			0,
+			',',
+			'.'
+		);
+
+		// ==========================================================================
+		// MEMBUAT OBJECT SPREADSHEET
+		// ==========================================================================
+
 		$spreadsheet = new Spreadsheet();
+
 		$sheet = $spreadsheet->getActiveSheet();
 
-		// Mengatur tinggi baris untuk baris pertama
+
+		// ==========================================================================
+		// STYLE AWAL
+		// ==========================================================================
+
 		$sheet->getRowDimension(1)->setRowHeight(10);
 		$sheet->getRowDimension(2)->setRowHeight(30);
 		$sheet->getRowDimension(3)->setRowHeight(25);
 		$sheet->getRowDimension(4)->setRowHeight(25);
 		$sheet->getRowDimension(5)->setRowHeight(20);
+
 		$sheet->getColumnDimension('A')->setWidth(3);
 
-		$startColumnForm = 9;
-		$lastColumn = count($customForms) + $startColumnForm - 1;
+
+		// ==========================================================================
+		// KOLOM
+		// ==========================================================================
+
+		$startColumnForm = 10; // J
+
+		$lastColumnIndex =
+			$startColumnForm + count($customForms) - 1;
+
+
+		// Helper untuk mengubah nomor kolom menjadi huruf.
+		// Tidak lagi menggunakan chr() karena bisa bermasalah
+		// kalau custom form lebih dari 26 kolom.
+
+		$lastColumn = Coordinate::stringFromColumnIndex(
+			$lastColumnIndex
+		);
+
+
+		// ==========================================================================
+		// BARIS
+		// ==========================================================================
 
 		$row = 6;
-		$lastRow = count($participants) + $row;
 
-		// Melakukan merge pada sel-sel tertentu
-		$sheet->mergeCells('B2:' . chr(65 + $lastColumn) . '2');
+		$lastRow = count($participants) + $row - 1;
 
-		$sheet->mergeCells('B' . $row - 3 . ':C' . $row - 3);
-		$sheet->mergeCells('B' . $row - 2 . ':C' . $row - 2);
 
-		$sheet->mergeCells('D' . $row - 3 . ':E' . $row - 3);
-		$sheet->mergeCells('D' . $row - 2 . ':E' . $row - 2);
+		// ==========================================================================
+		// MERGE
+		// ==========================================================================
 
-		$sheet->mergeCells('F' . $row - 3 . ':G' . $row - 3);
-		$sheet->mergeCells('F' . $row - 2 . ':G' . $row - 2);
+		$sheet->mergeCells(
+			'B2:' . $lastColumn . '2'
+		);
 
-		$sheet->mergeCells('H' . $row - 3 . ':' . chr(65 + $lastColumn) . $row - 2);
+		$sheet->mergeCells(
+			'B3:C3'
+		);
 
-		//Title event
-		$sheet->setCellValue('B2', $cekUser->title);
-		//Perhitungan data
-		$sheet->setCellValue('B' . $row - 3, 'Total eserta (' . $peserta . ')');
-		$sheet->setCellValue('B' . $row - 2, 'Total tiket (' . $tiket . ')');
+		$sheet->mergeCells(
+			'B4:C4'
+		);
 
-		$sheet->setCellValue('D' . $row - 3, 'Total pemasukan (Rp ' . $danaTotal . ')');
-		$sheet->setCellValue('D' . $row - 2, 'Total pencairan (Rp ' . $danaDitarik . ')');
+		$sheet->mergeCells(
+			'D3:E3'
+		);
 
-		$sheet->setCellValue('F' . $row - 3, 'Biaya layanan (Rp ' . $fee . ')');
-		$sheet->setCellValue('F' . $row - 2, 'Saldo Akhir (Rp ' . $danaBersih . ')');
+		$sheet->mergeCells(
+			'D4:E4'
+		);
 
-		// Data header
-		$sheet->setCellValue('B' . $row - 1, 'Ticket Pendaftaran');
-		$sheet->setCellValue('C' . $row - 1, 'ID');
-		$sheet->setCellValue('D' . $row - 1, 'Nama');
-		$sheet->setCellValue('E' . $row - 1, 'Email');
-		$sheet->setCellValue('F' . $row - 1, 'Tlp');
-		$sheet->setCellValue('G' . $row - 1, 'Biaya');
-		$sheet->setCellValue('H' . $row - 1, 'Status');
-		$sheet->setCellValue('I' . $row - 1, 'Pembayaran');
+		$sheet->mergeCells(
+			'F3:G3'
+		);
 
-		//Looping header dinamis berdasarkan custom form
+		$sheet->mergeCells(
+			'F4:G4'
+		);
+
+		$sheet->mergeCells(
+			'H3:' . $lastColumn . '4'
+		);
+
+
+		// ==========================================================================
+		// TITLE EVENT
+		// ==========================================================================
+
+		$sheet->setCellValue(
+			'B2',
+			$event->title
+		);
+
+
+		// ==========================================================================
+		// REKAP
+		// ==========================================================================
+
+		$sheet->setCellValue(
+			'B3',
+			'Total peserta (' . $peserta . ')'
+		);
+
+		$sheet->setCellValue(
+			'B4',
+			'Total tiket (' . $tiket . ')'
+		);
+
+		$sheet->setCellValue(
+			'D3',
+			'Total pemasukan (Rp ' . $danaTotal . ')'
+		);
+
+		$sheet->setCellValue(
+			'D4',
+			'Total pencairan (Rp ' . $danaDitarik . ')'
+		);
+
+		$sheet->setCellValue(
+			'F3',
+			'Biaya layanan (Rp ' . $fee . ')'
+		);
+
+		$sheet->setCellValue(
+			'F4',
+			'Saldo Akhir (Rp ' . $danaBersih . ')'
+		);
+
+
+		// ==========================================================================
+		// HEADER
+		// ==========================================================================
+
+		$sheet->setCellValue(
+			'B5',
+			'Ticket Pendaftaran'
+		);
+
+		$sheet->setCellValue(
+			'C5',
+			'ID'
+		);
+
+		$sheet->setCellValue(
+			'D5',
+			'Nama'
+		);
+
+		$sheet->setCellValue(
+			'E5',
+			'Email'
+		);
+
+		$sheet->setCellValue(
+			'F5',
+			'Tlp'
+		);
+
+		$sheet->setCellValue(
+			'G5',
+			'Biaya'
+		);
+
+		$sheet->setCellValue(
+			'H5',
+			'Status'
+		);
+
+		$sheet->setCellValue(
+			'I5',
+			'Pembayaran'
+		);
+
+
+		// ==========================================================================
+		// HEADER CUSTOM FORM
+		// ==========================================================================
+
 		$headerCustom = $startColumnForm;
-		foreach ($customForms as $value) {
-			// Gunakan huruf alfabet untuk menentukan nama kolom berdasarkan indeks
-			$columnName = chr(65 + $headerCustom);
-			$sheet->setCellValue($columnName . $row - 1, $value->form_name ?? '');
 
-			// Tingkatkan indeks kolom untuk langkah berikutnya
+		foreach ($customForms as $form) {
+
+			$columnName = Coordinate::stringFromColumnIndex(
+				$headerCustom
+			);
+
+			$sheet->setCellValue(
+				$columnName . '5',
+				$form->field_label ?? ''
+			);
+
 			$headerCustom++;
 		}
 
-		//Looping isi data transaksi atau peserta event
+
+		// ==========================================================================
+		// LOOP PESERTA
+		// ==========================================================================
+
 		foreach ($participants as $participant) {
-			if ($participant->total_price == 0 || $participant->total_price == '') {
-				$price = 0;
-			} else {
-				$price = $participant->total_price - config('app.biaya_admin');
-			}
 
-			//Looping data wajib
-			$sheet->setCellValue('B' . $row, $participant->ticket->ticket_name);
-			$sheet->setCellValue('C' . $row, $participant->transaction_id);
-			$sheet->setCellValue('D' . $row, $participant->name);
-			$sheet->setCellValue('E' . $row, $participant->email);
-			$sheet->setCellValue('F' . $row, $participant->phone);
-			$sheet->getStyle('F' . $row)->getNumberFormat()->setFormatCode('0');
-			$sheet->setCellValue('G' . $row, $price);
-			$sheet->getStyle('G' . $row)->getNumberFormat()->setFormatCode('#,##0');
-			$sheet->setCellValue('H' . $row, $participant->status);
-			$sheet->setCellValue('I' . $row, $participant->payment_type);
+			/*
+			|--------------------------------------------------------------------------
+			| TRANSACTION
+			|--------------------------------------------------------------------------
+			*/
 
-			//Looping data value custom form
+			$transaction = $participant->transaction;
+
+
+			/*
+			|--------------------------------------------------------------------------
+			| TICKET
+			|--------------------------------------------------------------------------
+			*/
+
+			$ticket = $transaction?->ticket;
+
+
+			/*
+			|--------------------------------------------------------------------------
+			| HARGA PESERTA
+			|--------------------------------------------------------------------------
+			|
+			| Harga participant berasal dari harga tiket.
+			|
+			| Jangan:
+			|
+			| total_price - biaya_admin
+			|
+			| karena total_price/grand_total adalah transaksi customer.
+			|
+			*/
+
+			$price = (float) (
+				$ticket?->price ?? 0
+			);
+
+
+			/*
+			|--------------------------------------------------------------------------
+			| DATA DASAR
+			|--------------------------------------------------------------------------
+			*/
+
+			$sheet->setCellValue(
+				'B' . $row,
+				$ticket?->ticket_name ?? '-'
+			);
+
+
+			/*
+			|--------------------------------------------------------------------------
+			| TRANSACTION CODE
+			|--------------------------------------------------------------------------
+			|
+			| TransactionParticipant sudah punya transaction_code,
+			| tetapi transaction_id tetap bisa digunakan sebagai ID transaksi.
+			|
+			*/
+
+			$sheet->setCellValue(
+				'C' . $row,
+				$participant->transaction_code
+					?? $transaction?->transaction_code
+					?? '-'
+			);
+
+
+			/*
+			|--------------------------------------------------------------------------
+			| PARTICIPANT
+			|--------------------------------------------------------------------------
+			*/
+
+			$sheet->setCellValue(
+				'D' . $row,
+				$participant->name ?? '-'
+			);
+
+			$sheet->setCellValue(
+				'E' . $row,
+				$participant->email ?? '-'
+			);
+
+			$sheet->setCellValue(
+				'F' . $row,
+				$participant->phone ?? '-'
+			);
+
+			$sheet->getStyle(
+				'F' . $row
+			)
+				->getNumberFormat()
+				->setFormatCode('0');
+
+
+			/*
+			|--------------------------------------------------------------------------
+			| HARGA TIKET
+			|--------------------------------------------------------------------------
+			*/
+
+			$sheet->setCellValue(
+				'G' . $row,
+				$price
+			);
+
+			$sheet->getStyle(
+				'G' . $row
+			)
+				->getNumberFormat()
+				->setFormatCode('#,##0');
+
+
+			/*
+			|--------------------------------------------------------------------------
+			| STATUS TRANSAKSI
+			|--------------------------------------------------------------------------
+			*/
+
+			$sheet->setCellValue(
+				'H' . $row,
+				$transaction?->status ?? '-'
+			);
+
+
+			/*
+			|--------------------------------------------------------------------------
+			| PAYMENT
+			|--------------------------------------------------------------------------
+			*/
+
+			$paymentMethod = $transaction?->paymentGatewayMethod?->method;
+
+			$paymentName =
+				$paymentMethod?->name
+				?? $transaction?->payment_type
+				?? '-';
+
+
+			$sheet->setCellValue(
+				'I' . $row,
+				$paymentName
+			);
+
+
+			/*
+			|--------------------------------------------------------------------------
+			| CUSTOM FORM
+			|--------------------------------------------------------------------------
+			|
+			| forms sudah di-load dari participant.
+			|
+			*/
+
+
 			$customColumnIndex = $startColumnForm;
-			foreach ($customForms as $value) {
-				$columnName = chr(65 + $customColumnIndex);
-				$data = TransactionForm::where('transaction_id', $participant->id)->where('form_id', $value->id)->first();
-				$sheet->setCellValue($columnName . $row, $data->form_value ?? '');
 
-				// Tingkatkan indeks kolom untuk langkah berikutnya
+			$forms = $participant->forms->keyBy('form_id');
+
+			foreach ($customForms as $form) {
+
+				$columnName = Coordinate::stringFromColumnIndex(
+					$customColumnIndex
+				);
+
+				$transactionForm = $forms->get($form->id);
+
+				$value = $transactionForm?->form_value ?? '';
+
+				$sheet->setCellValue(
+					$columnName . $row,
+					$value
+				);
+
 				$customColumnIndex++;
 			}
+
+
 			$row++;
 		}
 
+		// ==========================================================================
+		// STYLING
+		// ==========================================================================
 
-		//STYLING TABEL
-
-		$sheet->getStyle('B2:' . chr(65 + $lastColumn) . $lastRow)
+		$sheet->getStyle(
+			'B2:' . $lastColumn . $lastRow
+		)
 			->getAlignment()
-			->setVertical(Alignment::VERTICAL_CENTER);
+			->setVertical(
+				Alignment::VERTICAL_CENTER
+			);
 
-		$sheet->getStyle($row - 1)
-			->getAlignment()
-			->setVertical(Alignment::VERTICAL_CENTER);
 
-		$sheet->getStyle('B2:' . chr(65 + $lastColumn) . 2)
+		$sheet->getStyle(
+			'B2:' . $lastColumn . $lastRow
+		)
+			->getBorders()
+			->getInside()
+			->setBorderStyle(
+				Border::BORDER_DASHED
+			)
+			->setColor(
+				new Color('c4c4c4')
+			);
+
+
+		$sheet->getStyle(
+			'B2:' . $lastColumn . $lastRow
+		)
+			->getBorders()
+			->getOutline()
+			->setBorderStyle(
+				Border::BORDER_MEDIUM
+			);
+
+
+		// ==========================================================================
+		// HEADER EVENT
+		// ==========================================================================
+
+		$sheet->getStyle(
+			'B2:' . $lastColumn . '2'
+		)
 			->getFill()
-			->setFillType(Fill::FILL_SOLID)
+			->setFillType(
+				Fill::FILL_SOLID
+			)
 			->getStartColor()
 			->setARGB('4F81BD');
 
-		$sheet->getStyle('B5:' . chr(65 + $lastColumn) . 5)
-			->getFill()
-			->setFillType(Fill::FILL_SOLID)
-			->getStartColor()
-			->setARGB('9ee8ff');
 
-		$sheet->getStyle(2)
+		$sheet->getStyle(
+			'B2:' . $lastColumn . '2'
+		)
 			->getAlignment()
 			->setHorizontal('center');
 
-		$sheet->getStyle('B5:' . chr(65 + $lastColumn) . $lastRow)
+
+		// ==========================================================================
+		// HEADER TABLE
+		// ==========================================================================
+
+		$sheet->getStyle(
+			'B5:' . $lastColumn . '5'
+		)
+			->getFill()
+			->setFillType(
+				Fill::FILL_SOLID
+			)
+			->getStartColor()
+			->setARGB('9ee8ff');
+
+
+		$sheet->getStyle(
+			'B5:' . $lastColumn . '5'
+		)
+			->getBorders()
+			->getOutline()
+			->setBorderStyle(
+				Border::BORDER_MEDIUM
+			)
+			->setColor(
+				new Color('000000')
+			);
+
+
+		// ==========================================================================
+		// REKAP
+		// ==========================================================================
+
+		$sheet->getStyle(
+			'B3:' . $lastColumn . '4'
+		)
 			->getAlignment()
 			->setHorizontal('left');
 
-		$sheet->getStyle('B2:' . chr(65 + $lastColumn) . $lastRow)
-			->getBorders()
-			->getInside()
-			->setBorderStyle(Border::BORDER_DASHED)
-			->setColor(new Color('c4c4c4'));
 
-		$sheet->getStyle('B2:' . chr(65 + $lastColumn) . $lastRow)
-			->getBorders()
-			->getOutline()
-			->setBorderStyle(Border::BORDER_MEDIUM);
+		// ==========================================================================
+		// FONT REKAP
+		// ==========================================================================
 
-		$sheet->getStyle('B5:' . chr(65 + $lastColumn) . '5')
-			->getBorders()
-			->getOutline()
-			->setBorderStyle(Border::BORDER_MEDIUM)
-			->setColor(new Color('000000'));
+		$sheet->getStyle(
+			'B2:' . $lastColumn . '2'
+		)
+			->getFont()
+			->setBold(true)
+			->setSize(12);
 
-		$sheet->getStyle('B2:' . chr(65 + $lastColumn) . '2')
-			->getBorders()
-			->getOutline()
-			->setBorderStyle(Border::BORDER_MEDIUM)
-			->setColor(new Color('000000'));
 
-		# styling background baris konten
-		foreach (range(5, $lastRow) as $row) {
-			if ($row % 2 == 0) { // Check if row number is even
-				$sheet->getStyle('B' . $row . ':' . chr(65 + $lastColumn) . $row)
+		$sheet->getStyle(
+			'B3:' . $lastColumn . '4'
+		)
+			->getFont()
+			->setBold(true)
+			->setSize(11)
+			->getColor()
+			->setRGB('FFFFFF');
+
+
+		$sheet->getStyle(
+			'B3:' . $lastColumn . '4'
+		)
+			->getFill()
+			->setFillType(
+				Fill::FILL_SOLID
+			)
+			->getStartColor()
+			->setARGB('808080');
+
+
+		// ==========================================================================
+		// ALIGNMENT DATA
+		// ==========================================================================
+
+		$sheet->getStyle(
+			'B5:' . $lastColumn . $lastRow
+		)
+			->getAlignment()
+			->setHorizontal('left');
+
+
+		// ==========================================================================
+		// ZEBRA ROW
+		// ==========================================================================
+
+		for ($excelRow = 6; $excelRow <= $lastRow; $excelRow++) {
+
+			if ($excelRow % 2 === 0) {
+
+				$sheet->getStyle(
+					'B' . $excelRow . ':' . $lastColumn . $excelRow
+				)
 					->getFill()
-					->setFillType(Fill::FILL_SOLID)
+					->setFillType(
+						Fill::FILL_SOLID
+					)
 					->getStartColor()
-					->setARGB('ebeded'); // Set background color
+					->setARGB('ebeded');
 			}
 		}
 
 
+		// ==========================================================================
+		// COLUMN WIDTH
+		// ==========================================================================
 
-		// Mengatur lebar kolom otomatis sesuai dengan panjang karakter
 		foreach ($sheet->getColumnIterator() as $column) {
+
 			$columnIndex = $column->getColumnIndex();
-			// Pastikan kolom dimulai dari B dan seterusnya
-			if ($columnIndex < 'B') {
+
+			if ($columnIndex === 'A') {
 				continue;
 			}
 
-			// Mengatur lebar kolom A dan B menjadi 25
-			if ($columnIndex == 'B' || $columnIndex == 'C') {
+
+			if (
+				$columnIndex === 'B' ||
+				$columnIndex === 'C'
+			) {
+
 				$maxWidth = 26;
+
 			} else {
-				$maxWidth = 23; // Lebar maksimal untuk kolom lainnya
+
+				$maxWidth = 23;
 			}
 
-			$sheet->getColumnDimension($columnIndex)->setWidth($maxWidth);
 
-			// Mengatur wrap text untuk setiap sel di kolom
-			foreach ($sheet->getRowIterator() as $row) {
-				$cell = $sheet->getCell($columnIndex . $row->getRowIndex());
-				//$sheet->getStyle($cell->getCoordinate())->getAlignment()->setWrapText(true);
+			$sheet->getColumnDimension(
+				$columnIndex
+			)->setWidth($maxWidth);
 
-				if ($row->getRowIndex() == 2 || $row->getRowIndex() == 5) {
-					$sheet->getStyle($cell->getCoordinate())->getFont()->setBold(true);
-					$sheet->getStyle($cell->getCoordinate())->getFont()->setSize(12);
+
+			/*
+			|--------------------------------------------------------------------------
+			| FONT
+			|--------------------------------------------------------------------------
+			*/
+
+			foreach ($sheet->getRowIterator() as $excelRow) {
+
+				$rowIndex =
+					$excelRow->getRowIndex();
+
+				$cell =
+					$sheet->getCell(
+						$columnIndex . $rowIndex
+					);
+
+
+				if ($rowIndex === 2) {
+
+					$sheet->getStyle(
+						$cell->getCoordinate()
+					)
+						->getFont()
+						->setBold(true)
+						->setSize(12);
 				}
-				if ($row->getRowIndex() == 3 || $row->getRowIndex() == 4) {
-					$sheet->getStyle($cell->getCoordinate())->getFont()->setBold(true);
-					$sheet->getStyle($cell->getCoordinate())->getFont()->setSize(11);
-					$sheet->getStyle($cell->getCoordinate())->getFont()->getColor()->setRGB('FFFFFF');
 
-					$sheet->getStyle($cell->getCoordinate())->getFill()
-						->setFillType(Fill::FILL_SOLID)
-						->getStartColor()
-						->setARGB('808080'); // Set background color
+
+				if ($rowIndex === 5) {
+
+					$sheet->getStyle(
+						$cell->getCoordinate()
+					)
+						->getFont()
+						->setBold(true)
+						->setSize(12);
 				}
 			}
 		}
 
 
-		// Menyiapkan respons untuk file Excel
-		$writer = new Xlsx($spreadsheet);
+		// ==========================================================================
+		// DOWNLOAD
+		// ==========================================================================
 
-		// Nama file Excel yang akan didownload
-		$filename = 'Data peserta-' . time() . '.xlsx';
+		$writer = new Xlsx(
+			$spreadsheet
+		);
 
-		// Set header untuk menentukan jenis respons
-		header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-		header('Content-Disposition: attachment;filename="' . $filename . '"');
-		header('Cache-Control: max-age=0');
+		$filename =
+			'Data peserta-' .
+			time() .
+			'.xlsx';
 
-		// Mengirim file Excel ke browser
-		$writer->save('php://output');
+
+		header(
+			'Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+		);
+
+		header(
+			'Content-Disposition: attachment;filename="' .
+			$filename .
+			'"'
+		);
+
+		header(
+			'Cache-Control: max-age=0'
+		);
+
+
+		$writer->save(
+			'php://output'
+		);
+
+		exit;
+
 		//return response()->json(['success' => 'Sukses download']);
 	}
 

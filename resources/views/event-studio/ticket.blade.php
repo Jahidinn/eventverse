@@ -4,25 +4,29 @@
 
 <section id="ticket_step">
 
-    <span class="page-badge">
+    <!-- <span class="page-badge">
         Ticket
-    </span>
+    </span> -->
 
     <div class="page-header">
 
     <div class="page-header-left">
 
-        <h2 class="page-title">
-
-            Event Tickets
-
-        </h2>
-
-        <p class="page-subtitle">
-
-            Create one or more ticket types for your event.
-
-        </p>
+        <div class="ev-section">
+        <div class="ev-section-header">
+            <div>
+                <span class="ev-badge">
+                    TICKET MANAGEMENT
+                </span>
+                <!-- <h2 class="ev-title">
+                    Basic Information
+                </h2>
+                <p class="ev-subtitle">
+                    Start by introducing your event. Add a banner, event title and basic details that attendees will see first.
+                </p> -->
+            </div>
+        </div>
+    </div>
 
     </div>
 
@@ -261,7 +265,7 @@
 
                     <label class="ev-label">
 
-                        Sales Start
+                        Ticket Start
 
                     </label>
 
@@ -279,7 +283,7 @@
 
                     <label class="ev-label">
 
-                        Sales End
+                        Ticket End
 
                     </label>
 
@@ -349,605 +353,613 @@
 
 @include('event-studio.components.modal-confirm')
 
-
 <style>
-    /* =========================================================
-   TICKET
+/* =========================================================
+   TICKET GENERAL & PAGE HEADER
 ========================================================= */
 
-.page-header{
-
-    display:flex;
-
-    justify-content:space-between;
-
-    align-items:flex-start;
-
-    gap:24px;
-
-    margin-bottom:30px;
-
+.ev-section {
+    margin-bottom: 5px;
 }
 
-.page-header-left{
-
-    flex:1;
-
+.ev-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 8px 16px;
+    border-radius: 999px;
+    background: #EEF5FF;
+    color: #4495f9;
+    font-size: .78rem;
+    font-weight: 700;
+    margin-bottom: 18px;
 }
 
-.page-header-right{
-
-    flex-shrink:0;
-
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 24px;
+    margin-bottom: 30px;
 }
 
-.page-title{
-
-    margin:0 0 8px;
-
+.page-header-left {
+    flex: 1;
 }
 
-.page-subtitle{
+.page-header-right {
+    flex-shrink: 0;
+}
 
-    margin:0;
+.page-title {
+    margin: 0 0 8px;
+}
 
-    max-width:650px;
-
+.page-subtitle {
+    margin: 0;
+    max-width: 650px;
 }
 
 /* =========================================================
-   EMPTY
+   EMPTY STATE
 ========================================================= */
 
-.ev-ticket-empty{
-
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    justify-content:center;
-
-    text-align:center;
-
-    padding:80px 40px;
-
-    border:1px dashed #CBD5E1;
-    border-radius:22px;
-
-    background:#fff;
-
+.ev-ticket-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 80px 40px;
+    border: 1px dashed #CBD5E1;
+    border-radius: 22px;
+    background: #fff;
 }
 
-.ev-ticket-empty-icon{
-
-    width:84px;
-    height:84px;
-
-    border-radius:22px;
-
-    display:flex;
-    align-items:center;
-    justify-content:center;
-
-    background:#EEF2FF;
-
-    color:var(--primary);
-
-    font-size:34px;
-
-    margin-bottom:24px;
-
+.ev-ticket-empty-icon {
+    width: 84px;
+    height: 84px;
+    border-radius: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #EEF5FF;
+    color: #4495f9;
+    font-size: 34px;
+    margin-bottom: 24px;
 }
 
-.ev-ticket-empty h4{
-
-    margin:0;
-
-    font-size:24px;
-    font-weight:700;
-
+.ev-ticket-empty h4 {
+    margin: 0;
+    font-size: 24px;
+    font-weight: 700;
 }
 
-.ev-ticket-empty p{
-
-    margin:12px 0 28px;
-
-    color:#64748B;
-
-    max-width:460px;
-
-    line-height:1.7;
-
+.ev-ticket-empty p {
+    margin: 12px 0 28px;
+    color: #64748B;
+    max-width: 460px;
+    line-height: 1.7;
 }
 
 /* =========================================================
-   GRID
+   GRID (FULL WIDTH)
 ========================================================= */
 
-.ev-ticket-grid{
-
-    display:grid;
-
-    grid-template-columns:repeat(auto-fill,minmax(360px,1fr));
-
-    gap:24px;
-
+.ev-ticket-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
 }
 
-
 /* =========================================================
-   MOBILE
+   CARD TICKET (COMPACT & MODERN FULL-WIDTH)
 ========================================================= */
 
-@media(max-width:768px){
+.ev-ticket-card {
+    position: relative;
+    background: #fff;
+    border: 1px solid #E2E8F0;
+    border-radius: 16px;
+    padding: 16px 20px;
+    transition: .25s ease;
+}
 
-    .page-header{
+.ev-ticket-card:hover {
+    border-color: #CBD5E1;
+    box-shadow: 0 8px 24px rgba(15, 23, 42, .05);
+}
 
-        flex-direction:column;
-        align-items:stretch;
+/* CARD MENU & DROPDOWN */
+.ev-ticket-menu {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+}
 
+.ev-ticket-menu-btn {
+    width: 34px;
+    height: 34px;
+    border: none;
+    border-radius: 10px;
+    background: #F8FAFC;
+    color: #64748B;
+    cursor: pointer;
+    transition: background .2s;
+}
+
+.ev-ticket-menu-btn:hover {
+    background: #F1F5F9;
+    color: #0F172A;
+}
+
+.ev-ticket-dropdown {
+    position: absolute;
+    top: 40px;
+    right: 0;
+    width: 180px;
+    background: #FFF;
+    border: 1px solid #E2E8F0;
+    border-radius: 14px;
+    box-shadow: 0 16px 40px rgba(15, 23, 42, .08);
+    display: none;
+    overflow: hidden;
+    z-index: 20;
+}
+
+.ev-ticket-menu.open .ev-ticket-dropdown {
+    display: block;
+}
+
+.ev-ticket-dropdown button {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    border: none;
+    background: #FFF;
+    cursor: pointer;
+    text-align: left;
+    font-size: 13px;
+    color: #334155;
+}
+
+.ev-ticket-dropdown button:hover {
+    background: #F8FAFC;
+}
+
+.ev-ticket-dropdown hr {
+    margin: 0;
+    border: none;
+    border-top: 1px solid #EEF2F7;
+}
+
+.ev-ticket-dropdown .danger {
+    color: #EF4444;
+}
+
+/* CARD HEADER */
+.ev-ticket-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding-right: 36px;
+}
+
+.ev-ticket-icon {
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #EEF5FF;
+    color: #4495f9;
+    font-size: 18px;
+    flex-shrink: 0;
+}
+
+.ev-ticket-header h4 {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 700;
+    color: #0F172A;
+}
+
+.ev-ticket-header p {
+    margin: 2px 0 0;
+    color: #64748B;
+    font-size: 12.5px;
+    line-height: 1.4;
+}
+
+/* CARD PRICE */
+.ev-ticket-price {
+    margin: 12px 0;
+    font-size: 22px;
+    font-weight: 800;
+    color: #4495f9;
+}
+
+.ev-ticket-price.free {
+    color: #10B981;
+}
+
+/* CARD INFO GRID */
+.ev-ticket-info {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.ev-ticket-info div {
+    padding: 8px 12px;
+    border-radius: 10px;
+    background: #F8FAFC;
+    border: 1px solid #F1F5F9;
+}
+
+.ev-ticket-info small {
+    display: block;
+    color: #94A3B8;
+    margin-bottom: 2px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.ev-ticket-info strong {
+    font-size: 13.5px;
+    font-weight: 700;
+    color: #0F172A;
+}
+
+/* CARD SALE PERIOD */
+.ev-ticket-sale {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    border-radius: 10px;
+    background: #F8FAFC;
+    border: 1px solid #F1F5F9;
+    color: #475569;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.ev-ticket-sale i {
+    color: #4495f9;
+}
+
+/* CARD BUTTON BADGE */
+.ev-ticket-button {
+    margin-top: 10px;
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 12px;
+    border-radius: 999px;
+    background: #EEF5FF;
+    color: #4495f9;
+    font-size: 11.5px;
+    font-weight: 600;
+}
+
+/* =========================================================
+   MODAL TICKET (WIDE & CLEAN DESIGN)
+========================================================= */
+
+.ev-modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(15, 23, 42, 0.45);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    transition: all .2s ease;
+}
+
+.ev-modal-backdrop.show {
+    opacity: 1;
+    visibility: visible;
+}
+
+.ev-modal {
+    background: #ffffff;
+    width: 100%;
+    max-width: 780px; 
+    max-height: 90vh;
+    border-radius: 20px;
+    box-shadow: 0 20px 50px rgba(15, 23, 42, 0.15);
+    overflow-y: auto;
+    animation: modalShow .25s ease-out;
+}
+
+/* MODAL HEADER */
+.ev-modal-header {
+    padding: 24px 28px 20px;
+    border-bottom: 1px solid #F1F5F9;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+}
+
+.ev-modal-header h3 {
+    margin: 0;
+    font-size: 20px;
+    font-weight: 700;
+    color: #0F172A;
+}
+
+.ev-modal-header p {
+    margin: 4px 0 0;
+    font-size: 13.5px;
+    color: #64748B;
+    line-height: 1.5;
+}
+
+.ev-modal-close {
+    width: 36px;
+    height: 36px;
+    border: none;
+    border-radius: 10px;
+    background: #F8FAFC;
+    color: #64748B;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all .2s;
+}
+
+.ev-modal-close:hover {
+    background: #F1F5F9;
+    color: #0F172A;
+}
+
+/* MODAL FORM & INPUTS */
+.ev-modal form {
+    padding: 24px 28px;
+}
+
+.ev-field {
+    margin-bottom: 18px;
+}
+
+.ev-label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: #334155;
+    margin-bottom: 8px;
+}
+
+.ev-label span {
+    color: #EF4444;
+}
+
+/* FIX FONT TEXTAREA & INPUT SAMA PERSIS */
+.ev-input, 
+.ev-textarea {
+    width: 100%;
+    padding: 11px 16px;
+    border-radius: 12px;
+    border: 1px solid #CBD5E1;
+    background: #FFFFFF;
+    font-family: inherit; /* Menyamakan font family */
+    font-size: 14px;
+    letter-spacing: normal; /* Fix jarak huruf terlalu lebar */
+    color: #0F172A;
+    outline: none;
+    transition: border-color .2s, box-shadow .2s;
+}
+
+.ev-textarea {
+    resize: vertical;
+    min-height: 90px;
+    line-height: 1.5;
+}
+
+/* FIX FONT PLACEHOLDER KONSISTEN */
+.ev-input::placeholder,
+.ev-textarea::placeholder {
+    font-family: inherit;
+    font-size: 14px;
+    letter-spacing: normal;
+    color: #94A3B8;
+    opacity: 1;
+}
+
+.ev-input:focus, 
+.ev-textarea:focus {
+    border-color: #4495f9;
+    box-shadow: 0 0 0 3.5px rgba(68, 149, 249, 0.15);
+}
+
+/* FIX PREFIX "RP" Tanpa Spasi Putih */
+.ev-input-group {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.ev-input-group span {
+    position: absolute;
+    min-width: 55px; /* atur sesuai kebutuhan */
+    justify-content: center; /* biar teks “Rp” rata tengah */
+    left: 1px;
+    top: 1px;
+    bottom: 1px;
+    display: flex;
+    align-items: center;
+    padding: 0 12px;
+    font-size: 13.5px;
+    font-weight: 700;
+    color: #64748B;
+    background: #F8FAFC;
+    border-right: 1px solid #CBD5E1;
+    border-top-left-radius: 11px;
+    border-bottom-left-radius: 11px;
+    pointer-events: none;
+    z-index: 2;
+}
+
+.ev-input-group .ev-input {
+    padding-left: 65px; /* Diberi offset sesuai lebar kotak RP */
+}
+
+.ev-helper {
+    display: block;
+    margin-top: 6px;
+    font-size: 12px;
+    color: #94A3B8;
+}
+
+.ev-divider {
+    height: 1px;
+    background: #F1F5F9;
+    margin: 24px 0;
+}
+
+/* MODAL FORM GRIDS */
+.ev-grid-price {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr 1fr;
+    gap: 16px;
+}
+
+.ev-grid-3 {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+}
+
+.ev-grid-date {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+}
+
+/* MODAL FOOTER */
+.ev-modal-footer {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 1px solid #F1F5F9;
+}
+
+.ev-modal-footer .btn {
+    padding: 10px 22px;
+    font-size: 13.5px;
+    font-weight: 600;
+    border-radius: 12px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: all .2s;
+}
+
+.ev-modal-footer .btn-light {
+    background: #F1F5F9;
+    color: #475569;
+    border: none;
+}
+
+.ev-modal-footer .btn-light:hover {
+    background: #E2E8F0;
+    color: #0F172A;
+}
+
+.ev-modal-footer .btn-primary {
+    background: #4495f9;
+    color: #FFFFFF;
+    border: none;
+}
+
+.ev-modal-footer .btn-primary:hover {
+    background: #3182eb;
+}
+
+/* =========================================================
+   SCROLLBAR & UTILITIES
+========================================================= */
+
+.ev-modal::-webkit-scrollbar {
+    width: 8px;
+}
+
+.ev-modal::-webkit-scrollbar-thumb {
+    background: #CBD5E1;
+    border-radius: 999px;
+}
+
+.is-invalid {
+    border-color: #EF4444 !important;
+}
+
+.choices.is-invalid .choices__inner {
+    border-color: #EF4444 !important;
+}
+
+.ev-error {
+    margin-top: 6px;
+    color: #EF4444;
+    font-size: 12.5px;
+    font-weight: 500;
+}
+
+/* =========================================================
+   ANIMATIONS & RESPONSIVE
+========================================================= */
+
+@keyframes modalShow {
+    from {
+        opacity: 0;
+        transform: translateY(20px) scale(.98);
+    }
+    to {
+        opacity: 1;
+        transform: none;
+    }
+}
+
+@media (max-width: 768px) {
+    .page-header {
+        flex-direction: column;
+        align-items: stretch;
     }
 
-    .ev-ticket-grid{
-
-        grid-template-columns:1fr;
-
+    .ev-ticket-grid {
+        grid-template-columns: 1fr;
     }
-
-}
-
-
-
-/* =========================================
-   MOBILE
-========================================= */
-
-@media(max-width:768px){
 
     .ev-grid-price,
-    .ev-grid-date{
-
-        grid-template-columns:1fr;
-
+    .ev-grid-date,
+    .ev-grid-3 {
+        grid-template-columns: 1fr;
     }
 
-      .ev-grid-3{
-
-        grid-template-columns:1fr;
-
+    .ev-modal {
+        max-width: 100%;
+        border-radius: 20px;
     }
 
-}
-
-
-
-/* =========================================================
-   FOOTER
-========================================================= */
-
-.ev-modal-footer{
-
-    display:flex;
-    justify-content:flex-end;
-
-    gap:14px;
-
-    margin-top:30px;
-
-    padding-top:24px;
-
-    border-top:1px solid #EEF2F7;
-
-}
-
-/* =========================================================
-   SCROLL
-========================================================= */
-
-.ev-modal::-webkit-scrollbar{
-
-    width:8px;
-
-}
-
-.ev-modal::-webkit-scrollbar-thumb{
-
-    background:#CBD5E1;
-
-    border-radius:999px;
-
-}
-
-.is-invalid{
-
-    border-color:#EF4444 !important;
-
-}
-
-.choices.is-invalid .choices__inner{
-
-    border-color:#EF4444 !important;
-
-}
-
-.ev-error{
-
-    margin-top:8px;
-
-    color:#EF4444;
-
-    font-size:13px;
-
-    font-weight:500;
-
-}
-
-/* =========================================================
-   ANIMATION
-========================================================= */
-
-@keyframes modalShow{
-
-    from{
-
-        opacity:0;
-
-        transform:translateY(20px) scale(.98);
-
+    .ev-modal-header,
+    .ev-modal form {
+        padding: 20px;
     }
-
-    to{
-
-        opacity:1;
-
-        transform:none;
-
-    }
-
-}
-
-/* =========================================================
-   MOBILE
-========================================================= */
-
-@media(max-width:768px){
-
-    .ev-modal{
-
-        max-width:100%;
-
-        border-radius:20px;
-
-    }
-
-    .ev-modal-header{
-
-        padding:22px;
-
-    }
-
-    .ev-modal form{
-
-        padding:22px;
-
-    }
-
-    .ev-grid-3{
-
-        grid-template-columns:1fr;
-
-    }
-
-}
-</style>
-
-{{-- Ticket card style --}}
-
-
-<style>
-
-/* =========================================================
-   CARD
-========================================================= */
-
-.ev-ticket-card{
-
-    position:relative;
-
-    background:#fff;
-
-    border:1px solid #E2E8F0;
-    border-radius:22px;
-
-    padding:24px;
-
-    transition:.25s;
-
-}
-
-.ev-ticket-card:hover{
-
-    border-color:#CBD5E1;
-
-    box-shadow:0 16px 40px rgba(15,23,42,.06);
-
-    transform:translateY(-2px);
-
-}
-
-/* =========================================================
-   MENU
-========================================================= */
-
-.ev-ticket-menu{
-
-    position:absolute;
-
-    top:18px;
-    right:18px;
-
-}
-
-.ev-ticket-menu-btn{
-
-    width:38px;
-    height:38px;
-
-    border:none;
-
-    border-radius:12px;
-
-    background:#F8FAFC;
-
-    cursor:pointer;
-
-}
-
-.ev-ticket-dropdown{
-
-    position:absolute;
-
-    top:46px;
-    right:0;
-
-    width:180px;
-
-    background:#FFF;
-
-    border:1px solid #E2E8F0;
-
-    border-radius:14px;
-
-    box-shadow:0 16px 40px rgba(15,23,42,.08);
-
-    display:none;
-
-    overflow:hidden;
-
-    z-index:20;
-
-}
-
-.ev-ticket-menu.open .ev-ticket-dropdown{
-
-    display:block;
-
-}
-
-.ev-ticket-dropdown button{
-
-    width:100%;
-
-    display:flex;
-    align-items:center;
-    gap:12px;
-
-    padding:12px 16px;
-
-    border:none;
-
-    background:#FFF;
-
-    cursor:pointer;
-
-    text-align:left;
-
-}
-
-.ev-ticket-dropdown button:hover{
-
-    background:#F8FAFC;
-
-}
-
-.ev-ticket-dropdown hr{
-
-    margin:0;
-
-    border:none;
-
-    border-top:1px solid #EEF2F7;
-
-}
-
-.ev-ticket-dropdown .danger{
-
-    color:#EF4444;
-
-}
-
-/* =========================================================
-   HEADER
-========================================================= */
-
-.ev-ticket-header{
-
-    display:flex;
-    align-items:center;
-
-    gap:16px;
-
-}
-
-.ev-ticket-icon{
-
-    width:58px;
-    height:58px;
-
-    border-radius:16px;
-
-    display:flex;
-    align-items:center;
-    justify-content:center;
-
-    background:#EEF2FF;
-
-    color:var(--primary);
-
-    font-size:24px;
-
-    flex-shrink:0;
-
-}
-
-.ev-ticket-header h4{
-
-    margin:0;
-
-    font-size:20px;
-    font-weight:700;
-
-    color:#0F172A;
-
-}
-
-.ev-ticket-header p{
-
-    margin:6px 0 0;
-
-    color:#64748B;
-
-    font-size:14px;
-
-    line-height:1.6;
-
-}
-
-/* =========================================================
-   PRICE
-========================================================= */
-
-.ev-ticket-price{
-
-    margin:28px 0 22px;
-
-    font-size:34px;
-    font-weight:800;
-
-    color:var(--primary);
-
-}
-
-.ev-ticket-price.free{
-
-    color:#10B981;
-
-}
-
-/* =========================================================
-   INFO
-========================================================= */
-
-.ev-ticket-info{
-
-    display:grid;
-
-    grid-template-columns:repeat(2,1fr);
-
-    gap:18px;
-
-    margin-bottom:24px;
-
-}
-
-.ev-ticket-info div{
-
-    padding:16px;
-
-    border-radius:16px;
-
-    background:#F8FAFC;
-
-}
-
-.ev-ticket-info small{
-
-    display:block;
-
-    color:#94A3B8;
-
-    margin-bottom:8px;
-
-}
-
-.ev-ticket-info strong{
-
-    font-size:17px;
-    font-weight:700;
-
-}
-
-/* =========================================================
-   SALE
-========================================================= */
-
-.ev-ticket-sale{
-
-    display:flex;
-    align-items:center;
-
-    gap:10px;
-
-    padding:14px 16px;
-
-    border-radius:14px;
-
-    background:#F8FAFC;
-
-    color:#475569;
-
-    font-size:14px;
-
-}
-
-.ev-ticket-sale i{
-
-    color:var(--primary);
-
-}
-
-/* =========================================================
-   BUTTON LABEL
-========================================================= */
-
-.ev-ticket-button{
-
-    margin-top:18px;
-
-    display:inline-flex;
-
-    align-items:center;
-
-    padding:8px 14px;
-
-    border-radius:999px;
-
-    background:#EEF2FF;
-
-    color:var(--primary);
-
-    font-size:13px;
-    font-weight:600;
-
 }
 </style>
 

@@ -14,6 +14,8 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
 use App\Services\Payment\XenditService;
+use App\Services\Payment\MidtransService;
+use App\Services\EmailService;
 use App\Models\FeeRule;
 use App\Models\TransactionForm;
 use App\Models\TransactionParticipant;
@@ -30,6 +32,7 @@ class TransactionService
 {
     public function __construct(
         protected XenditService $xenditService,
+        protected MidtransService $midtransService,
         protected TicketService $ticketService,
         protected EmailService $emailService,
     ) {}
@@ -303,7 +306,10 @@ class TransactionService
     {
         $subtotal = $ticket->ticket_price * $quantity;
 
-        $platformFee = 0;
+        $platformFee = $this->calculateFeeRule(
+            'platform_fee',
+            $subtotal
+        );
 
         $paymentFee = 0;
 
@@ -402,7 +408,8 @@ class TransactionService
         ?int $exceptPaymentGatewayMethodId = null
     ): array
     {
-        $gateway = PaymentGateway::where('slug', 'xendit')->firstOrFail();
+        $active_payment_gateway = config('payment.payment_gateway');
+        $gateway = PaymentGateway::where('slug', $active_payment_gateway)->firstOrFail();
 
         return PaymentGatewayMethod::query()
             ->with([
@@ -479,7 +486,7 @@ class TransactionService
 
             });
 
-            // $this->emailService->sendTicket($transaction);
+            $this->emailService->sendPaid($transaction);
 
             return $transaction;
         }
@@ -490,7 +497,12 @@ class TransactionService
         |--------------------------------------------------------------------------
         */
 
-        return $this->createPayment($transaction);
+        $transaction = $this->createPayment($transaction);
+
+        $this->emailService->sendTransaction($transaction);
+
+        return $transaction;
+
     }
     
 
@@ -539,17 +551,124 @@ class TransactionService
         }
     }
 
-    private function createPayment(
-        Transaction $transaction
-    ): Transaction
-    {
-        $transaction->load(
-            'paymentGatewayMethod',
-            'ticket',
-        );
+    // private function createPayment(
+    //     Transaction $transaction
+    // ): Transaction
+    // {
+    //     $transaction->load(
+    //         'paymentGatewayMethod',
+    //         'ticket',
+    //     );
 
-        $payment = $this->xenditService
-            ->createPaymentRequest($transaction);
+    //     $payment = $this->xenditService
+    //         ->createPaymentRequest($transaction);
+
+    //     if (
+    //         empty($payment['payment_request_id']) ||
+    //         empty($payment['status'])
+    //     ) {
+    //         throw new Exception(
+    //             'Invalid Xendit payment request response.'
+    //         );
+    //     }
+
+    //     $expiredAt = data_get(
+    //         $payment,
+    //         'channel_properties.expires_at'
+    //     );
+
+    //     $transaction->update([
+
+    //         'payment_reference' => $payment['payment_request_id'],
+
+    //         'payment_payload' => $payment,
+
+    //         'expired_at' => $expiredAt
+    //             ? Carbon::parse($expiredAt)
+    //             : $transaction->expired_at,
+
+    //     ]);
+
+    //     return $transaction->fresh();
+    // }
+
+    private function createPayment(
+    Transaction $transaction
+): Transaction {
+
+    /*
+    |--------------------------------------------------------------------------
+    | LOAD RELATION
+    |--------------------------------------------------------------------------
+    */
+
+    $transaction->load([
+        'paymentGatewayMethod.gateway',
+        'paymentGatewayMethod.method',
+        'ticket',
+        'reservation',
+    ]);
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | GATEWAY AKTIF
+    |--------------------------------------------------------------------------
+    */
+
+    $gateway = config('payment.payment_gateway');
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | PASTIKAN PAYMENT METHOD SESUAI GATEWAY
+    |--------------------------------------------------------------------------
+    */
+
+    $methodGateway =
+        $transaction->paymentGatewayMethod
+            ?->gateway
+            ?->slug;
+
+    if ($methodGateway !== $gateway) {
+
+        throw new Exception(
+            "Payment method menggunakan gateway [{$methodGateway}], " .
+            "sedangkan gateway aktif adalah [{$gateway}]."
+        );
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | CREATE PAYMENT
+    |--------------------------------------------------------------------------
+    */
+
+    $payment = match ($gateway) {
+
+        'xendit' =>
+            $this->xenditService
+                ->createPaymentRequest($transaction),
+
+        'midtrans' =>
+            $this->midtransService
+                ->createPaymentRequest($transaction),
+
+        default =>
+            throw new Exception(
+                "Payment gateway [{$gateway}] tidak didukung."
+            ),
+    };
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | XENDIT
+    |--------------------------------------------------------------------------
+    */
+
+    if ($gateway === 'xendit') {
 
         if (
             empty($payment['payment_request_id']) ||
@@ -560,25 +679,88 @@ class TransactionService
             );
         }
 
+
         $expiredAt = data_get(
             $payment,
             'channel_properties.expires_at'
         );
 
+
         $transaction->update([
+            'payment_reference' =>
+                $payment['payment_request_id'],
 
-            'payment_reference' => $payment['payment_request_id'],
+            'payment_payload' =>
+                $payment,
 
-            'payment_payload' => $payment,
-
-            'expired_at' => $expiredAt
-                ? Carbon::parse($expiredAt)
-                : $transaction->expired_at,
-
+            'expired_at' =>
+                $expiredAt
+                    ? Carbon::parse($expiredAt)
+                    : $transaction
+                        ->reservation
+                        ->expired_at,
         ]);
-
-        return $transaction->fresh();
     }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | MIDTRANS
+    |--------------------------------------------------------------------------
+    */
+
+    if ($gateway === 'midtrans') {
+
+        if (
+            empty($payment['transaction_id']) ||
+            empty($payment['transaction_status'])
+        ) {
+
+            throw new Exception(
+                'Invalid Midtrans payment response: ' .
+                json_encode($payment)
+            );
+        }
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | MIDTRANS
+        |--------------------------------------------------------------------------
+        |
+        | transaction_id -> payment_reference
+        | order_id       -> transaction_code
+        |
+        */
+
+        $transaction->update([
+            'payment_reference' =>
+                $payment['transaction_id'],
+
+            'payment_payload' =>
+                $payment,
+
+            'expired_at' =>
+                $transaction
+                    ->reservation
+                    ->expired_at,
+        ]);
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | RETURN
+    |--------------------------------------------------------------------------
+    */
+
+    return $transaction->fresh([
+        'paymentGatewayMethod.gateway',
+        'paymentGatewayMethod.method',
+        'ticket',
+        'reservation',
+    ]);
+}
 
 
 
@@ -627,36 +809,22 @@ class TransactionService
 
 
         $transaction_data = [
-
             'transaction_code' => $this->generateUniqueCode(),
-
             'ticket_id' => $ticket->id,
-
+            'reservation_id' => $reservation->id,
             'event_id' => $ticket->event_id,
-
             'buyer_name' => $request->buyer['name'],
-
             'buyer_phone' => $request->buyer['phone'],
-
             'buyer_email' => $request->buyer['email'],
-
             'quantity' => $reservation->quantity,
-
             'subtotal' => $subtotal,
-
             'platform_fee' => $platformFee,
-
             'payment_fee' => $paymentFee,
-
             'grand_total' => $grandTotal,
-
             'currency' => 'IDR',
             'environment' => 'sandbox',
-
             'status' => 'Pending',
-
             'payment_gateway_method_id' => $paymentGatewayMethod->id,
-
             'user_id' => $request->is_login
                 ? $request->user_login_id
                 : null,
@@ -834,93 +1002,203 @@ class TransactionService
     }
 
     public function changePaymentMethod(
-        Transaction $transaction,
-        int $paymentGatewayMethodId,
-    ): Transaction
-        {
+    Transaction $transaction,
+    int $paymentGatewayMethodId
+): Transaction {
 
-        /*
-        |--------------------------------------------------------------------------
-        | Validation
-        |--------------------------------------------------------------------------
-        */
+    /*
+    |--------------------------------------------------------------------------
+    | LOAD DATA
+    |--------------------------------------------------------------------------
+    */
 
-        if ($transaction->status !== 'Pending') {
-            throw ValidationException::withMessages([
-                'transaction' => 'Transaksi tidak dapat diubah.',
-            ]);
-        }
+    $transaction->load([
+        'paymentGatewayMethod.gateway',
+        'paymentGatewayMethod.method',
+        'reservation',
+    ]);
 
-        if (
-            $transaction->expired_at &&
-            now()->greaterThan($transaction->expired_at)
-        ) {
-            throw ValidationException::withMessages([
-                'transaction' => 'Transaksi telah kedaluwarsa.',
-            ]);
-        }
 
-        /*
-        |--------------------------------------------------------------------------
-        | Same Payment Method
-        |--------------------------------------------------------------------------
-        */
+    /*
+    |--------------------------------------------------------------------------
+    | VALIDASI TRANSAKSI
+    |--------------------------------------------------------------------------
+    */
 
-        if (
-            $transaction->payment_gateway_method_id ===
-            $paymentGatewayMethodId
-        ) {
-            return $transaction;
-        }
+    if ($transaction->status !== 'Pending') {
+        throw ValidationException::withMessages([
+            'transaction' => 'Transaksi tidak dapat diubah.',
+        ]);
+    }
 
-        /*
-        |--------------------------------------------------------------------------
-        | Cancel Payment Request
-        |--------------------------------------------------------------------------
-        */
+    if (
+        $transaction->expired_at &&
+        now()->greaterThanOrEqualTo($transaction->expired_at)
+    ) {
+        throw ValidationException::withMessages([
+            'transaction' => 'Transaksi telah kedaluwarsa.',
+        ]);
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | GATEWAY AKTIF
+    |--------------------------------------------------------------------------
+    */
+
+    $activeGateway = config('payment.payment_gateway');
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | METHOD BARU
+    |--------------------------------------------------------------------------
+    */
+
+    $newPaymentGatewayMethod = PaymentGatewayMethod::with([
+        'gateway',
+        'method',
+    ])->findOrFail($paymentGatewayMethodId);
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | PASTIKAN METHOD SESUAI GATEWAY AKTIF
+    |--------------------------------------------------------------------------
+    */
+
+    $newGateway = $newPaymentGatewayMethod->gateway?->slug;
+
+    if ($newGateway !== $activeGateway) {
+        throw ValidationException::withMessages([
+            'payment_gateway_method_id' =>
+                'Metode pembayaran tidak sesuai dengan gateway aktif.',
+        ]);
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | METHOD SAMA
+    |--------------------------------------------------------------------------
+    */
+
+    if (
+        (int) $transaction->payment_gateway_method_id ===
+        (int) $newPaymentGatewayMethod->id
+    ) {
+        return $transaction->fresh([
+            'paymentGatewayMethod.gateway',
+            'paymentGatewayMethod.method',
+        ]);
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | CANCEL PAYMENT LAMA
+    |--------------------------------------------------------------------------
+    |
+    | WAJIB BERHASIL DAHULU.
+    |
+    */
+
+    if ($activeGateway === 'xendit') {
 
         if ($transaction->payment_reference) {
+
             $this->xenditService->cancelPaymentRequest(
                 $transaction->payment_reference
             );
         }
 
+    } elseif ($activeGateway === 'midtrans') {
+
         /*
         |--------------------------------------------------------------------------
-        | Update Payment Method
+        | MIDTRANS
         |--------------------------------------------------------------------------
+        |
+        | payment_reference = transaction_id Midtrans
+        | transaction_code  = order_id Midtrans
+        |
+        | Cancel menggunakan ORDER ID.
+        |
         */
 
-        $paymentGatewayMethod = PaymentGatewayMethod::with([
-            'method',
-        ])->findOrFail(
-            $paymentGatewayMethodId
-        );
-
-        $paymentFee = $this->calculatePaymentFee(
-            $paymentGatewayMethod,
-            $transaction->subtotal
-        );
-
-        $grandTotal = $transaction->subtotal
-            + $transaction->platform_fee
-            + $paymentFee;
-
-        $this->validateMinimumAmount(
-            $paymentGatewayMethod,
-            $grandTotal
-        );
-
-        $transaction->update([
-            'payment_gateway_method_id' => $paymentGatewayMethod->id,
-            'payment_fee' => $paymentFee,
-            'grand_total' => $grandTotal,
-        ]);
-
-        return $this->createPayment(
-            $transaction->fresh()
+        $this->midtransService->cancelPaymentRequest(
+            $transaction->transaction_code
         );
     }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | HITUNG PAYMENT FEE BARU
+    |--------------------------------------------------------------------------
+    */
+
+    $paymentFee = $this->calculatePaymentFee(
+        $newPaymentGatewayMethod,
+        $transaction->subtotal
+    );
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | HITUNG GRAND TOTAL BARU
+    |--------------------------------------------------------------------------
+    */
+
+    $grandTotal =
+        (float) $transaction->subtotal
+        + (float) $transaction->platform_fee
+        + (float) $paymentFee;
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | VALIDASI MINIMUM PAYMENT
+    |--------------------------------------------------------------------------
+    */
+
+    $this->validateMinimumAmount(
+        $newPaymentGatewayMethod,
+        $grandTotal
+    );
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | UPDATE PAYMENT METHOD
+    |--------------------------------------------------------------------------
+    */
+
+    $transaction->update([
+        'payment_gateway_method_id' => $newPaymentGatewayMethod->id,
+        'payment_fee' => $paymentFee,
+        'grand_total' => $grandTotal,
+
+        /*
+        | Payment lama sudah dibatalkan.
+        | createPayment() akan mengisi kembali.
+        */
+        'payment_reference' => null,
+        'payment_payload' => null,
+    ]);
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | CREATE PAYMENT BARU
+    |--------------------------------------------------------------------------
+    */
+
+    return $this->createPayment(
+        $transaction->fresh()
+    );
+}
 
     private function calculatePaymentFee(
         PaymentGatewayMethod $paymentGatewayMethod,

@@ -18,6 +18,14 @@
 
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+          <!-- cdnjs -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tabler-icons/3.46.0/tabler-icons.min.css">
+
+<!-- jsDelivr -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont/dist/tabler-icons.min.css">
+
+
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css">
     <link rel="stylesheet" href="https://unpkg.com/trix@2.1.15/dist/trix.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
@@ -682,7 +690,7 @@ BUTTON
 
     border-radius:16px;
 
-    background:linear-gradient(135deg,#5B7FFF,#6C63FF);
+    background:linear-gradient(135deg, #52aaf7, #498cf6);
 
     color:#fff;
 
@@ -1211,9 +1219,9 @@ ITEM
 
             135deg,
 
-            #4587f9,
+            #5ea9f8,
 
-            #4d8cf9
+            #3c97ff
 
         );
 
@@ -2015,7 +2023,7 @@ MOBILE DRAWER
                 <div class="menu-left">
 
                     <div class="menu-icon">
-                        <i class="fa-solid fa-circle-info"></i>
+                        <i class="ti ti-menu-deep"></i>
                     </div>
 
                 </div>
@@ -2044,7 +2052,7 @@ MOBILE DRAWER
 
                     <div class="menu-icon">
 
-                    <i class="fa-solid fa-location-dot"></i>
+                    <i class="ti ti-file-description"></i>
 
                     </div>
 
@@ -2068,13 +2076,76 @@ MOBILE DRAWER
 
             </a>
 
+            <!-- ON GOING DEVELOPMENT -->
+            <a href="{{ route('event-studio.facilities', $eventId) }}" class="menu-item {{ Request::is('event-studio/*/facilities*') ? 'active' : '' }}">
+
+                <div class="menu-left">
+
+                    <div class="menu-icon">
+
+                    <i class="ti ti-building-plus"></i>
+
+                    </div>
+
+                </div>
+
+                <div class="menu-content">
+
+                    <span class="menu-title">
+
+                        Facilities
+
+                    </span>
+
+                    <small>
+
+                        Facilities for participant
+
+                    </small>
+
+                </div>
+
+            </a>
+
+            <!-- ON GOING DEVELOPMENT -->
+            <a href="{{ route('event-studio.line-up', $eventId) }}" class="menu-item {{ Request::is('event-studio/*/line-up*') ? 'active' : '' }}">
+
+                <div class="menu-left">
+
+                    <div class="menu-icon">
+
+                    <i class="ti ti-user-up"></i>
+
+                    </div>
+
+                </div>
+
+                <div class="menu-content">
+
+                    <span class="menu-title">
+
+                        Line up
+
+                    </span>
+
+                    <small>
+
+                        Stage line up
+
+                    </small>
+
+                </div>
+
+            </a>
+
+
             <a href="{{ route('event-studio.ticket', $eventId) }}" class="menu-item {{ Request::is('event-studio/*/ticket*') ? 'active' : '' }}">
 
                 <div class="menu-left">
                     
                     <div class="menu-icon">
 
-                        <i class="fa-solid fa-ticket"></i>
+                        <i class="ti ti-ticket"></i>
 
                     </div>
                 </div>
@@ -2103,7 +2174,7 @@ MOBILE DRAWER
                     
                     <div class="menu-icon">
 
-                        <i class="fa-solid fa-file-lines"></i>
+                        <i class="ti ti-clipboard-text"></i>
 
                     </div>
                 </div>
@@ -2132,7 +2203,7 @@ MOBILE DRAWER
 
                     <div class="menu-icon">
 
-                        <i class="fa-solid fa-gear"></i>
+                        <i class="ti ti-checklist"></i>
 
                     </div>
                 </div>
@@ -2160,7 +2231,7 @@ MOBILE DRAWER
 
         <div class="sidebar-bottom">
 
-            <a href="" class="dashboard-btn">
+            <a href="/dashboard" class="dashboard-btn">
 
                 <i class="fa-solid fa-arrow-left"></i>
 

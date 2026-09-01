@@ -42,11 +42,11 @@
                 data-accordion="false">
                 <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
-                <li class="nav-header">MENU PESERTA</li>
+                <li class="nav-header">AS PARTICIPANT</li>
                 <li class="nav-item">
                     <a href="/dashboard" class="nav-link {{ Request::is('dashboard') ? 'active' : '' }}">
                         <i class="nav-icon nav-icon-custom mr-2 ti ti-layout-grid"></i>
-                        <p>Home</p>
+                        <p>Dashboard</p>
                     </a>
                 </li>
 
@@ -55,20 +55,20 @@
                         class="nav-link {{ Request::is('dashboard/myevent*') ? 'active' : '' }}">
                         <i class="nav-icon nav-icon-custom mr-2 ti ti-ticket"></i>
                         <p>
-                            Event diikuti
+                            Joined events
                             {{-- <span class="right badge badge-danger">New</span> --}}
                         </p>
                     </a>
                 </li>
 
 
-                <li class="nav-header">EVENT MANAGER</li>
+                <li class="nav-header">AS CREATOR</li>
 
                 <li class="nav-item">
                     <a href="/dashboard/manajemen-event"
                         class="nav-link {{ Request::is('dashboard/manajemen-event*') ? 'active' : '' }}">
                         <i class="nav-icon nav-icon-custom mr-2 ti ti-calendar-event"></i>
-                        <p>Manajemen Event</p>
+                        <p>Event management</p>
                     </a>
                 </li>
 
@@ -76,7 +76,7 @@
                     <a href="/dashboard/participant-data"
                         class="nav-link {{ Request::is('dashboard/participant-data*') ? 'active' : '' }}">
                         <i class="nav-icon nav-icon-custom mr-2 ti ti-users"></i>
-                        <p>Data Peserta</p>
+                        <p>Participant</p>
                     </a>
                 </li>
 
@@ -84,7 +84,7 @@
                     <a href="/dashboard/transaction-report"
                         class="nav-link {{ Request::is('dashboard/transaction-report*') ? 'active' : '' }}">
                         <i class="nav-icon nav-icon-custom mr-2 ti ti-file-dollar"></i>
-                        <p>Laporan Transaksi</p>
+                        <p>Transaction</p>
                     </a>
                 </li>
 
@@ -92,33 +92,33 @@
                     <a href="/dashboard/event-checkin"
                         class="nav-link {{ Request::is('dashboard/event-checkin*') ? 'active' : '' }}">
                         <i class="nav-icon nav-icon-custom mr-2 ti ti-user-check"></i>
-                        <p>Check in Peserta</p>
+                        <p>QR check in</p>
                     </a>
                 </li>
 
-                <li class="nav-header">ARTIKEL</li>
+                <li class="nav-header">OTHER MENU</li>
 
                 <li class="nav-item">
                     <a href="/dashboard/article"
                         class="nav-link {{ Request::is('dashboard/article*') ? 'active' : '' }}">
                         <i class="nav-icon nav-icon-custom mr-2 ti ti-news"></i>
-                        <p>Manajemen Artikel</p>
+                        <p>Article management</p>
                     </a>
                 </li>
 
-                <li class="nav-header">PROFIL</li>
+                <li class="nav-header">SETTINGS</li>
                 <li class="nav-item">
                     <a href="/dashboard/my-profile"
                         class="nav-link {{ Request::is('dashboard/my-profile*') ? 'active' : '' }}">
                         <i class="nav-icon nav-icon-custom mr-2 ti ti-user-cog"></i>
-                        <p class="text">Setting profil</p>
+                        <p class="text">Profile setting</p>
                     </a>
                 </li>
                 <li class="nav-item">
                     <a href="/dashboard/organization"
                         class="nav-link {{ Request::is('dashboard/organization*') ? 'active' : '' }}">
                         <i class="nav-icon nav-icon-custom mr-2 ti ti-users-group"></i>
-                        <p class="text">Organisasi</p>
+                        <p class="text">Organization</p>
                     </a>
                 </li>
 

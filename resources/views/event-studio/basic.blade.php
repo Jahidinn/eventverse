@@ -488,7 +488,7 @@
 
     background:#EEF5FF;
 
-    color:#4F8CFF;
+    color:#4495f9;
 
     font-size:.78rem;
 
@@ -591,7 +591,7 @@
 
     align-items:center;
 
-    color:#4F8CFF;
+    color:#4495f9;
 
     font-size:22px;
 
@@ -620,7 +620,7 @@
 
 .ev-upload-preview:hover{
 
-    border-color:#4F8CFF;
+    border-color:#4495f9;
 
     background:#F7FAFF;
 
@@ -729,7 +729,7 @@
 
     background:linear-gradient(135deg,#EEF5FF,#DDEAFF);
 
-    color:#4F8CFF;
+    color:#4495f9;
 
     font-size:28px;
 
@@ -745,7 +745,7 @@
 
     border-radius:14px;
 
-    background:linear-gradient(135deg,#4F8CFF,#6B63FF);
+    background:linear-gradient(135deg,#4495f9,#6B63FF);
 
     color:#fff;
 
@@ -954,7 +954,7 @@
 
 .ev-input:focus{
 
-    border-color:#4F8CFF;
+    border-color:#4495f9;
 
     box-shadow:0 0 0 4px rgba(79,140,255,.08);
 
@@ -978,7 +978,7 @@
 
 .ev-url-input:focus-within{
 
-    border-color:#4F8CFF;
+    border-color:#4495f9;
 
     box-shadow:0 0 0 4px rgba(79,140,255,.08);
 

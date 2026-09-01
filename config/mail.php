@@ -126,4 +126,33 @@ return [
 		],
 	],
 
+	'addresses' => [
+
+		'billing' => [
+			'address' => env('MAIL_BILLING_ADDRESS', 'billing@eventverse.id'),
+			'name' => 'Eventverse Billing',
+		],
+
+		'tickets' => [
+			'address' => env('MAIL_TICKETS_ADDRESS', 'tickets@eventverse.id'),
+			'name' => 'Eventverse Tickets',
+		],
+
+		'support' => [
+			'address' => env('MAIL_SUPPORT_ADDRESS', 'support@eventverse.id'),
+			'name' => 'Eventverse Support',
+		],
+
+		'info' => [
+			'address' => env('MAIL_INFO_ADDRESS', 'info@eventverse.id'),
+			'name' => 'Eventverse',
+		],
+
+		'noreply' => [
+			'address' => env('MAIL_NOREPLY_ADDRESS', 'noreply@eventverse.id'),
+			'name' => 'Eventverse',
+		],
+
+	],
+
 ];

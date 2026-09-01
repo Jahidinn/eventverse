@@ -287,84 +287,103 @@
 
             @php
 
-                //Biaya admin untuk customer
-                $biayaAdmin = config('app.biaya_admin');
+                /*
+                |--------------------------------------------------------------------------
+                | TRANSAKSI PAID
+                |--------------------------------------------------------------------------
+                */
 
-                //Total transaksi sukses
-                $totalPeserta = App\Models\Transaction::where('event_id', $event->id)
-                    ->where('status', 'Paid')
-                    ->count();
+                $paidTransactions = App\Models\Transaction::where('event_id', $event->id)
+                    ->where('status', 'Paid');
 
-                //Total biaya admin
-                $biayaAdminPeserta = $biayaAdmin * $totalPeserta;
 
-                //Total dana sebelum dikurangi biaya admin
-                $totalTransaksi = App\Models\Transaction::where('event_id', $event->id)
-                    ->where('status', 'Paid')
-                    ->sum('total_price');
+                /*
+                |--------------------------------------------------------------------------
+                | TOTAL PESERTA
+                |--------------------------------------------------------------------------
+                |
+                | Peserta sekarang berasal dari transaction_participants.
+                |
+                */
 
-                //Pengurangan total dana dikurangi biaya admin dari user
-                $totalDana = $totalTransaksi - $biayaAdminPeserta;
+                $totalPeserta = App\Models\TransactionParticipant::whereHas(
+                    'transaction',
+                    function ($query) use ($event) {
+                        $query->where('event_id', $event->id)
+                            ->where('status', 'Paid');
+                    }
+                )->count();
 
-                $totalTiket = App\Models\Ticket::where('event_id', $event->id)->count();
 
-                $qty_bank_tf = App\Models\Transaction::where('event_id', $event->id)
-                    ->where('status', 'Paid')
-                    ->where('payment_type', 'bank_transfer')
-                    ->count();
+                /*
+                |--------------------------------------------------------------------------
+                | TOTAL TIKET TERJUAL
+                |--------------------------------------------------------------------------
+                |
+                | Karena 1 participant = 1 tiket,
+                | jumlah participant Paid = jumlah tiket terjual.
+                |
+                */
 
-                $dana_bank_tf =
-                    App\Models\Transaction::where('event_id', $event->id)
-                        ->where('status', 'Paid')
-                        ->where('payment_type', 'bank_transfer')
-                        ->sum('total_price') -
-                    $biayaAdmin * $qty_bank_tf;
+                $totalTiketTerjual = $totalPeserta;
 
-                $admin_bank_tf = 4500 * $qty_bank_tf + (1.5 / 100) * $dana_bank_tf;
 
-                $total_dana_bank_tf = $dana_bank_tf - $admin_bank_tf;
+                /*
+                |--------------------------------------------------------------------------
+                | TOTAL PEMASUKAN
+                |--------------------------------------------------------------------------
+                |
+                | subtotal adalah nilai transaksi yang sudah dibayar customer.
+                |
+                | Biaya admin customer dan gateway sudah dibebankan ke customer,
+                | sehingga organizer tidak perlu mengurangi biaya tersebut lagi.
+                |
+                */
 
-                $qty_credit_card = App\Models\Transaction::where('event_id', $event->id)
-                    ->where('status', 'Paid')
-                    ->where('payment_type', 'credit_card')
-                    ->count();
+                $totalDana = (clone $paidTransactions)->sum('subtotal');
 
-                $dana_credit_card =
-                    App\Models\Transaction::where('event_id', $event->id)
-                        ->where('status', 'Paid')
-                        ->where('payment_type', 'credit_card')
-                        ->sum('total_price') -
-                    $biayaAdmin * $qty_credit_card;
 
-                $admin_credit_card = 2500 * $qty_credit_card + (3.5 / 100) * $dana_credit_card;
-
-                $total_dana_credit_card = $dana_credit_card - $admin_credit_card;
-
-                $qty_lain = App\Models\Transaction::where('event_id', $event->id)
-                    ->where('status', 'Paid')
-                    ->whereNotIn('payment_type', ['bank_transfer', 'credit_card'])
-                    ->count();
-
-                $dana_lain =
-                    App\Models\Transaction::where('event_id', $event->id)
-                        ->where('status', 'Paid')
-                        ->whereNotIn('payment_type', ['bank_transfer', 'credit_card'])
-                        ->sum('total_price') -
-                    $biayaAdmin * $qty_lain;
-
-                $admin_lain = (3 / 100) * $dana_lain;
-
-                $total_dana_lain = $dana_lain - $admin_lain;
-
-                $eventConnectFee = $admin_bank_tf + $admin_credit_card + $admin_lain;
+                /*
+                |--------------------------------------------------------------------------
+                | DANA DITARIK
+                |--------------------------------------------------------------------------
+                */
 
                 $danaDitarik = App\Models\WithdrawData::where('event_id', $event->id)
                     ->whereIn('status', ['Sukses', 'Proses'])
                     ->sum('amount');
 
-                $danaBersih = $total_dana_bank_tf + $total_dana_credit_card + $total_dana_lain - $danaDitarik;
+
+                /*
+                |--------------------------------------------------------------------------
+                | DANA TERSEDIA
+                |--------------------------------------------------------------------------
+                */
+
+                $danaBersih = $totalDana - $danaDitarik;
+
+
+                /*
+                |--------------------------------------------------------------------------
+                | TOTAL JENIS TIKET
+                |--------------------------------------------------------------------------
+                |
+                | Ini tetap jumlah jenis tiket yang dibuat pada event.
+                |
+                */
+
+                $totalTiket = App\Models\Ticket::where('event_id', $event->id)
+                    ->count();
+
+
+                /*
+                |--------------------------------------------------------------------------
+                | TITLE
+                |--------------------------------------------------------------------------
+                */
 
                 $title = $event->title;
+
                 if (strlen($title) > 61) {
                     $title = substr($title, 0, 61) . '...';
                 }
@@ -398,6 +417,7 @@
 
                     </div>
 
+
                     <div class="balance-card">
 
                         <div class="balance-label">
@@ -415,6 +435,7 @@
 
                     </div>
 
+
                     <div class="finance-toolbar">
 
                         <div class="finance-chip finance-chip-green">
@@ -422,22 +443,24 @@
                             <i class="ti ti-users ti-sm"></i>
 
                             <span class="mobile-hide">
-                                {{ number_format($totalPeserta,0,',','.') }}
+                                {{ number_format($totalPeserta, 0, ',', '.') }}
                                 Peserta
                             </span>
 
                         </div>
+
 
                         <div class="finance-chip finance-chip-blue">
 
                             <i class="ti ti-ticket ti-sm"></i>
 
                             <span class="mobile-hide">
-                                {{ number_format($totalTiket,0,',','.') }}
+                                {{ number_format($totalTiket, 0, ',', '.') }}
                                 Tiket
                             </span>
 
                         </div>
+
 
                         <button
                             type="button"
@@ -447,9 +470,12 @@
 
                             <i class="ti ti-history ti-sm"></i>
 
-                            <span class="mobile-hide">History</span>
+                            <span class="mobile-hide">
+                                History
+                            </span>
 
                         </button>
+
 
                         <button
                             type="button"
@@ -470,6 +496,8 @@
             </div>
 
         @endforeach
+
+        
 
         <div class="d-flex justify-content-center mt-4">
             {{ $listEvent->links() }}

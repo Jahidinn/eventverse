@@ -8,7 +8,10 @@ use App\Models\Ticket;
 use App\Models\CustomForm;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
+use Barryvdh\DomPDF\Facade\Pdf;
 use App\Services\TransactionService;
+use Illuminate\Support\Facades\DB;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 class TransactionController extends Controller
 {
@@ -48,76 +51,274 @@ class TransactionController extends Controller
 
     // App/Http/Controllers/TransactionController.php
 
-	public function show(Transaction $transaction)
-	{
-		$transaction->load([
-			'event',
-			'ticket',
-			'paymentGatewayMethod.method',
-		]);
+public function show(Transaction $transaction)
+{
+    $transaction->load([
+        'event',
+        'ticket',
+        'paymentGatewayMethod.method',
+        'paymentGatewayMethod.gateway',
+        'reservation',
+    ]);
 
-		if ($transaction->status === 'Paid') {
-			return redirect()->route(
-				'transaction.invoice',
-				$transaction->transaction_code
-			);
-		}
+    /*
+    |--------------------------------------------------------------------------
+    | PAID
+    |--------------------------------------------------------------------------
+    */
 
-		return view('transaction.show', [
-			'transaction' => $transaction,
-			'paymentDisplay' => $this->buildPaymentDisplay($transaction),
-		]);
-	}
+    if ($transaction->status === 'Paid') {
+        return redirect()->route(
+            'transaction.ticket',
+            $transaction->transaction_code
+        );
+    }
 
-	private function buildPaymentDisplay(Transaction $transaction): array
-	{
-		$payload = is_array($transaction->payment_payload)
-			? $transaction->payment_payload
-			: json_decode($transaction->payment_payload ?? '{}', true);
+    /*
+    |--------------------------------------------------------------------------
+    | PENDING TAPI SUDAH EXPIRED
+    |--------------------------------------------------------------------------
+    |
+    | Jangan biarkan halaman pembayaran tetap bisa dibuka
+    | setelah waktu pembayaran habis.
+    |
+    */
 
-		$display = [
-			'type' => 'default',
-			'title' => $transaction->paymentGatewayMethod->name,
-			'qr_value' => null,
-			'va_number' => null,
-			'deeplink_url' => null,
-		];
+    if (
+        $transaction->status === 'Pending' &&
+        $transaction->expired_at &&
+        now()->greaterThanOrEqualTo($transaction->expired_at)
+    ) {
 
-		foreach ($payload['actions'] ?? [] as $action) {
+        DB::transaction(function () use ($transaction) {
 
-			switch ($action['type'] ?? null) {
+            /*
+            |--------------------------------------------------------------------------
+            | Update transaction
+            |--------------------------------------------------------------------------
+            */
 
-				case 'PRESENT_TO_CUSTOMER':
+            $transaction->update([
+                'status' => 'Expired',
+            ]);
 
-					$display['type'] = 'qris';
-					$display['qr_value'] = $action['value'] ?? null;
+            /*
+            |--------------------------------------------------------------------------
+            | Expire reservation
+            |--------------------------------------------------------------------------
+            |
+            | Endpoint reservation.expire juga sebaiknya idempotent,
+            | sehingga aman dipanggil lebih dari sekali.
+            |
+            */
 
-					break;
+            $reservation = $transaction->reservation;
 
-				case 'DEEPLINK':
+            if (
+                $reservation &&
+                $reservation->status !== 'expired'
+            ) {
 
-				case 'MOBILE_PAYMENT':
+                $reservation->update([
+                    'status' => 'expired',
+                ]);
 
-					$display['type'] = 'redirect';
-					$display['deeplink_url'] = $action['value'] ?? null;
+                /*
+                |--------------------------------------------------------------------------
+                | Kembalikan stock
+                |--------------------------------------------------------------------------
+                |
+                | Sesuaikan bagian ini dengan struktur stock
+                | yang digunakan saat checkout.
+                |
+                */
 
-					break;
-			}
-		}
+                // Contoh jika reservation memiliki detail ticket:
+                //
+                // foreach ($reservation->items as $item) {
+                //     $item->ticket->increment(
+                //         'stock',
+                //         $item->quantity
+                //     );
+                // }
 
-		if (
-			isset($payload['account_number']) ||
-			isset($payload['va_number'])
-		) {
+            }
 
-			$display['type'] = 'virtual_account';
+        });
 
-			$display['va_number'] = $payload['account_number']
-				?? $payload['va_number'];
-		}
+        /*
+        |--------------------------------------------------------------------------
+        | KEMBALI KE EVENT
+        |--------------------------------------------------------------------------
+        */
 
-		return $display;
-	}
+        return redirect()->to(
+            url($transaction->event->slug)
+        );
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | PAYMENT DISPLAY
+    |--------------------------------------------------------------------------
+    */
+
+    return view('transaction.show', [
+        'transaction' => $transaction,
+        'paymentDisplay' => $this->buildPaymentDisplay($transaction),
+    ]);
+}
+
+private function buildPaymentDisplay(
+    Transaction $transaction
+): array {
+    $payload = is_array($transaction->payment_payload)
+        ? $transaction->payment_payload
+        : json_decode(
+            $transaction->payment_payload ?? '{}',
+            true
+        );
+
+    $gateway = $transaction
+        ->paymentGatewayMethod
+        ->gateway
+        ->slug ?? null;
+
+    $display = [
+        'type' => 'default',
+
+        'title' => $transaction
+            ->paymentGatewayMethod
+            ->name,
+
+        'qr_value' => null,
+
+        'va_number' => null,
+
+        'deeplink_url' => null,
+    ];
+
+    /*
+    |--------------------------------------------------------------------------
+    | XENDIT
+    |--------------------------------------------------------------------------
+    */
+    if ($gateway === 'xendit') {
+
+        foreach ($payload['actions'] ?? [] as $action) {
+
+            switch ($action['type'] ?? null) {
+
+                case 'PRESENT_TO_CUSTOMER':
+
+                    $display['type'] = 'qris';
+
+                    $display['qr_value'] =
+                        $action['value'] ?? null;
+
+                    break;
+
+                case 'DEEPLINK':
+                case 'MOBILE_PAYMENT':
+                case 'REDIRECT_CUSTOMER':
+
+                    $display['type'] = 'redirect';
+
+                    $display['deeplink_url'] =
+                        $action['value'] ?? null;
+
+                    break;
+            }
+        }
+
+        if (
+            isset($payload['account_number']) ||
+            isset($payload['va_number'])
+        ) {
+            $display['type'] = 'virtual_account';
+
+            $display['va_number'] =
+                $payload['account_number']
+                ?? $payload['va_number'];
+        }
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | MIDTRANS
+    |--------------------------------------------------------------------------
+    */
+    elseif ($gateway === 'midtrans') {
+
+        $paymentType = $payload['payment_type'] ?? null;
+
+        /*
+        |--------------------------------------------------------------------------
+        | Virtual Account
+        |--------------------------------------------------------------------------
+        */
+        if ($paymentType === 'bank_transfer') {
+
+            $vaNumber = data_get(
+                $payload,
+                'va_numbers.0.va_number'
+            );
+
+            $vaNumber ??=
+                $payload['permata_va_number'] ?? null;
+
+            if ($vaNumber) {
+                $display['type'] = 'virtual_account';
+
+                $display['va_number'] = $vaNumber;
+            }
+        }
+
+        /*
+        |--------------------------------------------------------------------------
+        | QRIS
+        |--------------------------------------------------------------------------
+        */
+        elseif ($paymentType === 'qris') {
+
+            $qrValue = $payload['qr_string'] ?? null;
+
+            if ($qrValue) {
+                $display['type'] = 'qris';
+
+                $display['qr_value'] = $qrValue;
+            }
+        }
+
+        /*
+        |--------------------------------------------------------------------------
+        | GoPay / ShopeePay
+        |--------------------------------------------------------------------------
+        */
+        elseif (
+            $paymentType === 'gopay' ||
+            $paymentType === 'shopeepay'
+        ) {
+
+            foreach ($payload['actions'] ?? [] as $action) {
+
+                if (
+                    ($action['name'] ?? null)
+                    === 'deeplink-redirect'
+                ) {
+                    $display['type'] = 'redirect';
+
+                    $display['deeplink_url'] =
+                        $action['url'] ?? null;
+
+                    break;
+                }
+            }
+        }
+    }
+
+    return $display;
+}
 
 	/**
 	 * Endpoint JSON untuk polling status transaksi via AJAX
@@ -126,7 +327,7 @@ class TransactionController extends Controller
 	{
 		return response()->json([
 			'status' => strtolower($transaction->status), // 'pending', 'paid', 'expired', dsb.
-			'redirect_url' => route('transaction.invoice', $transaction->transaction_code),
+			'redirect_url' => route('transaction.ticket', $transaction->transaction_code),
 			//ganti invoice
 		]);
 	}
@@ -171,6 +372,81 @@ class TransactionController extends Controller
 				),
 
 		]);
+	}
+
+
+	public function ticket(Transaction $transaction)
+	{
+		if ($transaction->status !== 'Paid') {
+			return redirect('/');
+		}
+
+		$transaction->load([
+			'event',
+			'ticket',
+			'participants',
+		]);
+
+		return view('apps.ticket', [
+			'transaction' => $transaction,
+			'event' => $transaction->event,
+			'ticket' => $transaction->ticket,
+			'participant' => $transaction->participants,
+		]);
+	}
+
+	public function downloadTicket(Transaction $transaction)
+	{
+		if ($transaction->status !== 'Paid') {
+			return redirect('/');
+		}
+
+		$transaction->load([
+			'event.org',
+			'event.individual',
+			'ticket',
+			'participants',
+		]);
+
+		$event = $transaction->event;
+		$ticket = $transaction->ticket;
+
+		// Event Banner Path
+		$bannerPath = 'storage/event-images/' . $event->image;
+		if (!empty($event->image) && file_exists(public_path($bannerPath))) {
+			$img = public_path($bannerPath);
+		} else {
+			$img = public_path('assets/default-img/event-images/def-no-img.png');
+		}
+
+		// Generate QR Code untuk setiap peserta
+		$participantQrcodes = [];
+		foreach ($transaction->participants as $participant) {
+			$ticketCode = $participant->ticket_code ?? $transaction->ticket_code ?? $transaction->transaction_code;
+			
+			$participantQrcodes[$participant->id] = base64_encode(
+				QrCode::format('svg')
+					->backgroundColor(255, 255, 255)
+					->color(15, 23, 42)
+					->size(110)
+					->errorCorrection('H')
+					->generate($ticketCode)
+			);
+		}
+
+		$data = [
+			'title'              => 'Digital Ticket - ' . $event->title,
+			'transaction'        => $transaction,
+			'event'              => $event,
+			'ticket'             => $ticket,
+			'participants'       => $transaction->participants,
+			'participantQrcodes' => $participantQrcodes,
+			'img'                => $img,
+		];
+
+		$pdf = Pdf::loadView('apps.ticket-pdf', $data);
+
+		return $pdf->download('ticket-' . $transaction->transaction_code . '.pdf');
 	}
 
 }

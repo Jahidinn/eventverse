@@ -154,9 +154,14 @@
                 @foreach ($dataEvent as $event)
 
                     @php
-                        $participant = \App\Models\Transaction::where('event_id', $event->id)
+                        $transactions = \App\Models\Transaction::where('event_id', $event->id)
+                            ->with('participants')
                             ->whereNotIn('status', ['Expired', 'Unpaid', 'Pending'])
-                            ->count();
+                            ->get();
+
+                        $totalPeserta = $transactions->sum(function ($transaction) {
+                            return $transaction->participants->count();
+                        });
 
                         $title = $event->title;
 
@@ -192,7 +197,7 @@
 
                                         <i class="ti ti-users"></i>
 
-                                        {{ $participant }} Peserta
+                                        {{ $totalPeserta }} Peserta
 
                                     </div>
 
@@ -201,8 +206,8 @@
                                         <button
                                             type="button"
                                             class="button-40 detail-peserta"
-                                            data-id="{{ $event->id }}"
-                                            data-participant="{{ $participant }}"
+                                            data-event_id="{{ $event->event_id }}"
+                                            data-participant="{{ $totalPeserta }}"
                                             data-title="{{ $event->title }}">
 
                                             <i class="ti ti-user-share"></i>
@@ -389,7 +394,7 @@
 
                             <button class="button-39 text-success download-participant-data">
                                 <i class="fas fa-file-excel"></i>
-                                Download Data
+                                Download Participant
                             </button>
                         </div>
                     </div>
@@ -453,12 +458,34 @@
                             <thead>
                                 <tr>
                                     <th style="min-width:30px">No</th>
-                                    <th style="min-width:150px">Name</th>
-                                    <th style="min-width:150px">Email</th>
-                                    <th style="min-width:150px">ID</th>
-                                    <th style="min-width:150px">Regist Date</th>
-                                    <th style="min-width:90px">Status</th>
-                                    <th style="min-width:110px">Detail</th>
+
+                                    <th style="min-width:150px">
+                                        Name
+                                    </th>
+
+                                    <th style="min-width:180px">
+                                        Email
+                                    </th>
+
+                                    <th style="min-width:150px">
+                                        Ticket
+                                    </th>
+
+                                    <th style="min-width:150px">
+                                        Transaction
+                                    </th>
+
+                                    <th style="min-width:150px">
+                                        Regist Date
+                                    </th>
+
+                                    <th style="min-width:90px">
+                                        Status
+                                    </th>
+
+                                    <th style="min-width:110px">
+                                        Detail
+                                    </th>
                                 </tr>
                             </thead>
 
@@ -473,63 +500,259 @@
     </section>
 
     <!-- Detail peserta transaksi -->
-    <div class="modal fade" id="detailTransaksiModal" tabindex="-1" aria-labelledby="detailTransaksiModalLabel"
-        aria-hidden="true">
+    <!-- Detail peserta transaksi -->
+    <div
+        class="modal fade"
+        id="detailTransaksiModal"
+        tabindex="-1"
+        aria-labelledby="detailTransaksiModalLabel"
+        aria-hidden="true"
+    >
         <div class="modal-dialog modal-lg">
+
             <div class="modal-content">
+
+                {{-- =========================================================
+                    HEADER
+                ========================================================== --}}
                 <div class="modal-header">
-                    <h5 class="modal-title" id="detailTransaksiModalLabel">Detail peserta</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+
+                    <div>
+
+                        <h5
+                            class="modal-title mb-1"
+                            id="detailTransaksiModalLabel"
+                        >
+                            Detail Peserta
+                        </h5>
+
+                        <div class="text-muted small">
+                            <i class="ti ti-calendar-event"></i>
+                            <span class="p-event"></span>
+                        </div>
+
+                    </div>
+
+                    <button
+                        type="button"
+                        class="close"
+                        data-dismiss="modal"
+                        aria-label="Close"
+                    >
                         <span aria-hidden="true">&times;</span>
                     </button>
+
                 </div>
+
+
+                {{-- =========================================================
+                    BODY
+                ========================================================== --}}
                 <div class="modal-body data-pendaftar">
-                    <div class="row">
-                        <div class="col-4">Nama <span class="float-right">:</span></div>
-                        <div class="col-8 pl-0"><b class="p-name"></b></div>
-                    </div>
-                    <div class="row mt-1">
-                        <div class="col-4">Email <span class="float-right">:</span></div>
-                        <div class="col-8 pl-0"><b class="p-email"></b></div>
-                    </div>
-                    <div class="row mt-1">
-                        <div class="col-4">No HP <span class="float-right">:</span></div>
-                        <div class="col-8 pl-0"><b class="p-phone"></b></div>
-                    </div>
-                    <div class="row mt-1">
-                        <div class="col-4">Tiket <span class="float-right">:</span></div>
-                        <div class="col-8 pl-0"><b class="p-ticket"></b></div>
-                    </div>
-                    <div class="row mt-1">
-                        <div class="col-4">Biaya <span class="float-right">:</span></div>
-                        <div class="col-8 pl-0"><b class="p-biaya"></b></div>
-                    </div>
-                    <div class="row mt-1">
-                        <div class="col-4">ID <span class="float-right">:</span></div>
-                        <div class="col-8 pl-0"><b class="p-id text-info"></b></div>
-                    </div>
-                    <div class="row mt-1">
-                        <div class="col-4">Status <span class="float-right">:</span></div>
-                        <div class="col-8 pl-0"><b class="p-status"></b></div>
-                    </div>
-                    <div class="row mt-1">
-                        <div class="col-4">Pembayaran <span class="float-right">:</span></div>
-                        <div class="col-8 pl-0"><b class="p-pembayaran"></b></div>
-                    </div>
-                    <hr>
-                    {{-- Value custom form --}}
-                    <div id="data-custom-form">
-                        <div class="row">
-                            <div class="col-4"><span></span> <span class="float-right">:</span></div>
-                            <div class="col-8 pl-0"><b></b></div>
+
+                    {{-- =====================================================
+                        EVENT
+                    ====================================================== --}}
+                    <div class="mb-4">
+
+                        <div class="p-3 bg-light rounded">
+
+                            <div
+                                class="small text-muted mb-1"
+                            >
+                                EVENT
+                            </div>
+
+                            <div
+                                class="font-weight-bold"
+                                style="font-size:16px;"
+                            >
+                                <span class="p-event">
+                                    -
+                                </span>
+                            </div>
+
                         </div>
+
                     </div>
+
+
+                    {{-- =====================================================
+                        DATA PESERTA
+                    ====================================================== --}}
+                    <h6 class="font-weight-bold mb-3">
+                        Data Peserta
+                    </h6>
+
+
+                    {{-- Nama --}}
+                    <div class="row">
+
+                        <div class="col-4">
+                            Nama
+                            <span class="float-right">:</span>
+                        </div>
+
+                        <div class="col-8 pl-0">
+                            <b class="p-name"></b>
+                        </div>
+
+                    </div>
+
+
+                    {{-- Email --}}
+                    <div class="row mt-2">
+
+                        <div class="col-4">
+                            Email
+                            <span class="float-right">:</span>
+                        </div>
+
+                        <div class="col-8 pl-0">
+                            <b class="p-email"></b>
+                        </div>
+
+                    </div>
+
+
+                    {{-- Phone --}}
+                    <div class="row mt-2">
+
+                        <div class="col-4">
+                            No HP
+                            <span class="float-right">:</span>
+                        </div>
+
+                        <div class="col-8 pl-0">
+                            <b class="p-phone"></b>
+                        </div>
+
+                    </div>
+
+
+                    {{-- Ticket --}}
+                    <div class="row mt-2">
+
+                        <div class="col-4">
+                            Tiket
+                            <span class="float-right">:</span>
+                        </div>
+
+                        <div class="col-8 pl-0">
+                            <b class="p-ticket"></b>
+                        </div>
+
+                    </div>
+
+
+                    <hr class="my-4">
+
+
+                    {{-- =====================================================
+                        INFORMASI TRANSAKSI
+                    ====================================================== --}}
+                    <h6 class="font-weight-bold mb-3">
+                        Informasi Transaksi
+                    </h6>
+
+
+                    {{-- ID --}}
+                    <div class="row">
+
+                        <div class="col-4">
+                            ID Transaksi
+                            <span class="float-right">:</span>
+                        </div>
+
+                        <div class="col-8 pl-0">
+                            <b class="p-id text-info"></b>
+                        </div>
+
+                    </div>
+
+
+                    {{-- Biaya --}}
+                    <div class="row mt-2">
+
+                        <div class="col-4">
+                            Biaya
+                            <span class="float-right">:</span>
+                        </div>
+
+                        <div class="col-8 pl-0">
+                            <b class="p-biaya"></b>
+                        </div>
+
+                    </div>
+
+
+                    {{-- Status --}}
+                    <div class="row mt-2">
+
+                        <div class="col-4">
+                            Status
+                            <span class="float-right">:</span>
+                        </div>
+
+                        <div class="col-8 pl-0">
+                            <b class="p-status"></b>
+                        </div>
+
+                    </div>
+
+
+                    {{-- Pembayaran --}}
+                    <div class="row mt-2">
+
+                        <div class="col-4">
+                            Pembayaran
+                            <span class="float-right">:</span>
+                        </div>
+
+                        <div class="col-8 pl-0">
+                            <b class="p-pembayaran"></b>
+                        </div>
+
+                    </div>
+
+
+                    <hr class="my-4">
+
+
+                    {{-- =====================================================
+                        CUSTOM FORM
+                    ====================================================== --}}
+                    <h6 class="font-weight-bold mb-3">
+                        Data Tambahan Peserta
+                    </h6>
+
+
+                    <div id="data-custom-form">
+
+                        {{-- Diisi oleh JavaScript --}}
+
+                    </div>
+
                 </div>
+
+
+                {{-- =========================================================
+                    FOOTER
+                ========================================================== --}}
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    {{-- <button type="button" class="btn btn-primary">Save changes</button> --}}
+
+                    <button
+                        type="button"
+                        class="btn btn-secondary"
+                        data-dismiss="modal"
+                    >
+                        Close
+                    </button>
+
                 </div>
+
             </div>
+
         </div>
     </div>
 

@@ -1,6 +1,10 @@
 <script>
+    document.addEventListener('DOMContentLoaded', () => {
+
     const form = document.getElementById('checkout-event');
     const button = document.getElementById('checkout-button');
+    console.log(form);
+
 
     const Toast = Swal.mixin({
         toast: true,
@@ -164,5 +168,7 @@
     //     }
 
     // }
+
+    });
 
 </script>

@@ -92,6 +92,8 @@ Route::middleware(['auth'])->group(function () {
 
 		Route::get('/{event_id}/basic', [EventStudioController::class, 'basic'])->name('basic');
 		Route::get('/{event_id}/detail', [EventStudioController::class, 'detail'])->name('detail');
+		Route::get('/{event_id}/facilities', [EventStudioController::class, 'facilites'])->name('facilities');
+		Route::get('/{event_id}/line-up', [EventStudioController::class, 'lineUp'])->name('line-up');
 		Route::get('/{event_id}/ticket', [EventStudioController::class, 'ticket'])->name('ticket');
 		Route::get('/{event_id}/form', [EventStudioController::class, 'form'])->name('form');
 		Route::get('/{event_id}/preview', [EventStudioController::class, 'preview'])->name('preview');
@@ -104,53 +106,7 @@ Route::middleware(['auth'])->group(function () {
 
 	});
 
-	Route::prefix('reservation')->name('reservation.')->group(function () {
-		Route::post('/', [ReservationController::class, 'store'])->name('store');
-		Route::patch('/{reservationCode}', [ReservationController::class, 'update'])->name('update');
-		Route::post('/{reservationCode}/expire', [ReservationController::class, 'expire'])->name('expire');
-	});
-
-	# CHECKOUT
-	Route::get('/checkout/{reservation_code}', [CheckoutController::class, 'create'])
-		->name('checkout.show');
-
-	Route::post('/checkout/validate', [CheckoutController::class, 'validateCheckout'])
-		->name('checkout.validate');
-
-	Route::post('/checkout/store', [CheckoutController::class, 'store'])
-		->name('checkout.store');
-
-	Route::get('/checkout/cleanup-sandbox', [CheckoutController::class, 'cleanupSandbox']);
-
-	Route::prefix('transaction')->name('transaction.')->group(function () {
-
-		Route::get(
-			'/{transaction:transaction_code}',
-			[TransactionController::class, 'show']
-		)->name('show');
-
-		Route::get(
-			'/{transaction:transaction_code}/check-status',
-			[TransactionController::class, 'checkStatus']
-		)->name('check-status');
-		
-		Route::post(
-			'/{transaction:transaction_code}/change-payment',
-			[TransactionController::class, 'changePayment']
-		)->name('change-payment');
-
-		Route::get(
-			'/{transaction:transaction_code}/payment-methods',
-			[TransactionController::class, 'paymentMethods']
-		)->name('payment-methods');
-
-		Route::get(
-			'/{transaction:transaction_code}/invoice',
-			[TransactionController::class, 'invoice']
-		)->name('invoice');
-
-	});
-
+	
 
 
 	// Rute-rute yang akan terkena middleware auth
@@ -327,7 +283,6 @@ Route::middleware(['auth'])->group(function () {
 	Route::get('/event/send-email/{transaction_code}', [TransactionController::class, 'sendEmail']);
 	Route::get('/event/redirect-invoice/{hash}', [TransactionController::class, 'redirectInvoice']);
 	Route::get('/generate-pdf', [PDFController::class, 'generatePDF']);
-	Route::get('/download-ticket', [PDFController::class, 'downloadTicket'])->name('ticket.download');
 });
 
 // Route::view('/email', 'apps.email-sandbox');
@@ -349,6 +304,65 @@ Route::get('/auth/forgot-password', [AuthController::class, 'forgotPasswordView'
 Route::post('/auth/forgot-password', [AuthController::class, 'forgotPassword'])->middleware('guest')->name('password.email');
 Route::get('/auth/reset-password/{token}', [AuthController::class, 'resetPasswordView'])->middleware('guest')->name('password.reset');
 Route::post('/auth/send-reset-password', [AuthController::class, 'resetPassword'])->middleware('guest')->name('password.update');
+
+
+
+Route::prefix('reservation')->name('reservation.')->group(function () {
+		Route::post('/', [ReservationController::class, 'store'])->name('store');
+		Route::patch('/{reservationCode}', [ReservationController::class, 'update'])->name('update');
+		Route::post('/{reservationCode}/expire', [ReservationController::class, 'expire'])->name('expire');
+	});
+
+	# CHECKOUT
+	Route::get('/checkout/{reservation_code}', [CheckoutController::class, 'create'])
+		->name('checkout.show');
+
+	Route::post('/checkout/validate', [CheckoutController::class, 'validateCheckout'])
+		->name('checkout.validate');
+
+	Route::post('/checkout/store', [CheckoutController::class, 'store'])
+		->name('checkout.store');
+
+	Route::get('/checkout/cleanup-sandbox', [CheckoutController::class, 'cleanupSandbox']);
+
+	Route::prefix('transaction')->name('transaction.')->group(function () {
+
+    Route::get(
+        	'/{transaction:transaction_code}',
+			[TransactionController::class, 'show']
+		)->name('show');
+
+		Route::get(
+			'/{transaction:transaction_code}/check-status',
+			[TransactionController::class, 'checkStatus']
+		)->name('check-status');
+
+		Route::post(
+			'/{transaction:transaction_code}/change-payment',
+			[TransactionController::class, 'changePayment']
+		)->name('change-payment');
+
+		Route::get(
+			'/{transaction:transaction_code}/payment-methods',
+			[TransactionController::class, 'paymentMethods']
+		)->name('payment-methods');
+
+		Route::get(
+			'/{transaction:transaction_code}/ticket',
+			[TransactionController::class, 'ticket']
+		)->name('ticket');
+
+		Route::get(
+			'/{transaction:transaction_code}/ticket/download',
+			[TransactionController::class, 'downloadTicket']
+		)->name('ticket.download');
+
+		Route::get(
+			'/{transaction:transaction_code}/invoice',
+			[TransactionController::class, 'invoice']
+		)->name('invoice');
+
+	});
 
 
 // Route::get('/test-event/{event:slug}', function (Event $event) {

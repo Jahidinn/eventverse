@@ -1,93 +1,199 @@
 <script>
     $(document).ready(function(e) {
+
         $('body').on('click', '.detail-peserta', function(e) {
+
             e.preventDefault();
-            var id = $(this).data("id");
 
-            $('.title-daftar-peserta').text($(this).data("title"))
-            $('.jumlah-peserta').text($(this).data("participant"))
-            $('.daftar-peserta').attr('hidden', false)
-            $('.daftar-event').attr('hidden', true)
+            var event_id = $(this).data("event_id");
 
-            $('.download-participant-data').attr('data-id', id);
+            $('.title-daftar-peserta').text(
+                $(this).data("title")
+            );
 
-            // Ajax datatable untuk menampilkan data peserta
+            $('.jumlah-peserta').text(
+                $(this).data("participant")
+            );
+
+            $('.daftar-peserta').attr('hidden', false);
+
+            $('.daftar-event').attr('hidden', true);
+
+            $('.download-participant-data')
+                .attr('data-id', event_id);
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | DATATABLE PESERTA
+            |--------------------------------------------------------------------------
+            */
+
             var dataPeserta = $('#data-peserta').DataTable({
-                "dom": 'rtip',
-                "bInfo": false,
+
+                dom: 'rtip',
+
+                bInfo: false,
+
                 processing: true,
-                serverside: true,
+
+                // JANGAN serverSide true
+                serverSide: false,
+
                 destroy: true,
+
                 ajax: {
-                    'type': 'GET',
-                    'url': '/dashboard/get-participant',
-                    'data': {
-                        id: id,
+                    type: 'GET',
+
+                    url: '/dashboard/get-participant',
+
+                    data: {
+                        event_id: event_id,
                     },
                 },
 
-                columns: [{
-                    data: 'DT_RowIndex',
-                    name: 'DT_RowIndex',
-                    orderable: false,
-                    searchable: false,
-                }, {
-                    data: 'name',
-                    name: 'name'
-                }, {
-                    data: 'email',
-                    name: 'email'
-                }, {
-                    data: 'transaction_id',
-                    name: 'transaction_id'
-                }, {
-                    data: 'transaction_date',
-                    name: 'transaction_date'
-                }, {
-                    data: 'transaction_status',
-                    name: 'transaction_status'
-                }, {
-                    data: 'transaction_action',
-                    name: 'transaction_action'
-                }]
+                columns: [
+
+                    {
+                        data: 'DT_RowIndex',
+                        name: 'DT_RowIndex',
+                        orderable: false,
+                        searchable: false,
+                    },
+
+                    {
+                        data: 'name',
+                        name: 'name'
+                    },
+
+                    {
+                        data: 'email',
+                        name: 'email'
+                    },
+
+                    {
+                            data: 'ticket_name',
+                            name: 'ticket_name',
+                        },
+
+                    {
+                        data: 'transaction_id',
+                        name: 'transaction_id'
+                    },
+
+                    {
+                        data: 'transaction_date',
+                        name: 'transaction_date'
+                    },
+
+                    {
+                        data: 'transaction_status',
+                        name: 'transaction_status'
+                    },
+
+                    {
+                        data: 'transaction_action',
+                        name: 'transaction_action'
+                    }
+
+                ]
+
             });
 
-            //Proses pencarian data
-            $('#search-participant').keyup(function() {
-                dataPeserta.search($(this).val()).draw();
 
-                if ($(this).val() != '') {
-                    var totalPesertaLabel = $(this).val();
-                    $('.result-label').text('Hasil Pencarian');
-                } else {
-                    $('.result-label').text('Peserta');
-                }
-            });
+            /*
+            |--------------------------------------------------------------------------
+            | SEARCH
+            |--------------------------------------------------------------------------
+            */
 
-            //Fungsi filter berdasarkan status
-            $('#get-filter').on('click', function(e) {
-                var status = $('#filter-value').val();
-                $('#filterModal').modal('hide')
-                dataPeserta.column(5).search(status).draw();
+            $('#search-participant')
+                .off('keyup')
+                .on('keyup', function() {
 
-                if (status == '') {
-                    var totalPesertaLabel = $(this).val();
-                    $('.result-label').text('Total Peserta');
-                } else {
-                    $('.result-label').text('Transaksi ' + status);
-                }
+                    var value = $(this).val();
 
-            })
+                    dataPeserta
+                        .search(value)
+                        .draw();
 
-            //
+                    if (value != '') {
+
+                        $('.result-label')
+                            .text('Hasil Pencarian');
+
+                    } else {
+
+                        $('.result-label')
+                            .text('Peserta');
+
+                    }
+
+                });
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | FILTER STATUS
+            |--------------------------------------------------------------------------
+            */
+
+            $('#get-filter')
+                .off('click')
+                .on('click', function(e) {
+
+                    e.preventDefault();
+
+                    var status = $('#filter-value').val();
+
+                    $('#filterModal').modal('hide');
+
+                    // STATUS = index 5
+                    dataPeserta
+                        .column(6)
+                        .search(status)
+                        .draw();
+
+
+                    if (status == '') {
+
+                        $('.result-label')
+                            .text('Total Peserta');
+
+                    } else {
+
+                        $('.result-label')
+                            .text(
+                                'Transaksi ' + status
+                            );
+
+                    }
+
+                });
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | UPDATE JUMLAH PESERTA
+            |--------------------------------------------------------------------------
+            */
+
             dataPeserta.on("draw", function() {
-                updateTotal = dataPeserta.rows({
-                    search: 'applied'
-                }).count();
-                $('.jumlah-peserta').text(updateTotal);
+
+                var updateTotal = dataPeserta
+                    .rows({
+                        search: 'applied'
+                    })
+                    .count();
+
+                $('.jumlah-peserta')
+                    .text(updateTotal);
+
             });
-        })
-    })
+
+        });
+
+    });
 
     // SELECT 2
     $(document).on('select2:open', () => {
@@ -109,52 +215,379 @@
     })
 
     //Fungsi proses detail transaksi
-    $('body').on('click', '.detail-transaksi', function(e) {
-        e.preventDefault();
-        var id = $(this).data("id");
-        var event_id = $(this).data("event_id");
-        var container = $('#data-custom-form')
-        container.empty();
+    // ==========================================================================
+// DETAIL PESERTA
+// ==========================================================================
 
-        $('.p-name').text($(this).data("nama"))
-        $('.p-email').text($(this).data("email"))
-        $('.p-phone').text($(this).data("phone"))
-        $('.p-ticket').text($(this).data("ticket"))
-        $('.p-biaya').text(numberWithCommas($(this).data("biaya")))
-        $('.p-status').text($(this).data("status"))
-        $('.p-id').text($(this).data("id_transaksi"))
-        $('.p-pembayaran').text($(this).data("pembayaran"))
+$('body').on('click', '.detail-transaksi', function (e) {
 
-        $.ajax({
-            url: '/dashboard/get-customform',
-            data: {
-                id: id,
-                event_id: event_id,
-            },
-            type: 'GET',
-            success: function(response) {
-                //Menyisipkan data custom form dengan looping
-                $.each(response.data, function(index, value) {
-                    var newData = $('<div class="row mt-1">' +
-                        '<div class="col-4">' +
-                        value.nama_form +
-                        '<span class="float-right">:</span>' +
-                        '</div>' +
-                        '<div class="col-8 pl-0 text-info">' +
-                        '<b>' + value.form_value + '</b>' +
-                        '</div>' +
-                        '</div>'
+    e.preventDefault();
+
+
+    // =========================================================================
+    // AMBIL DATA DARI BUTTON
+    // =========================================================================
+
+    let rawDetail = $(this).attr('data-detail');
+
+    if (!rawDetail) {
+
+        console.error(
+            'Data detail peserta tidak ditemukan.'
+        );
+
+        return;
+    }
+
+
+    let detail;
+
+    try {
+
+        detail = JSON.parse(rawDetail);
+
+    } catch (error) {
+
+        console.error(
+            'Gagal membaca data detail peserta:',
+            error
+        );
+
+        return;
+    }
+
+
+    let participant = detail.participant || {};
+    let transaction = detail.transaction || {};
+    let ticket = detail.ticket || {};
+    let event = detail.event || {};
+
+
+    // =========================================================================
+    // CONTAINER CUSTOM FORM
+    // =========================================================================
+
+    let container = $('#data-custom-form');
+
+    container.empty();
+
+
+    // =========================================================================
+    // EVENT
+    // =========================================================================
+
+    $('.p-event').text(
+        event.title || '-'
+    );
+
+
+    // =========================================================================
+    // DATA PESERTA
+    // =========================================================================
+
+    $('.p-name').text(
+        participant.name || '-'
+    );
+
+    $('.p-email').text(
+        participant.email || '-'
+    );
+
+    $('.p-phone').text(
+        participant.phone || '-'
+    );
+
+
+    // =========================================================================
+    // TICKET
+    // =========================================================================
+
+    $('.p-ticket').text(
+        ticket.ticket_name || '-'
+    );
+
+
+    // =========================================================================
+    // TRANSACTION
+    // =========================================================================
+
+    $('.p-id').text(
+        transaction.transaction_id ||
+        transaction.transaction_code ||
+        '-'
+    );
+
+
+    /*
+     * Harga
+     *
+     * transaction.price dari Blade sudah berupa:
+     * - GRATIS
+     * - atau harga setelah biaya admin
+     */
+
+    if (
+        transaction.price === 'GRATIS' ||
+        transaction.price === '' ||
+        transaction.price === null ||
+        typeof transaction.price === 'undefined'
+    ) {
+
+        $('.p-biaya').text('GRATIS');
+
+    } else {
+
+        $('.p-biaya').text(
+            numberWithCommas(transaction.price)
+        );
+
+    }
+
+
+    $('.p-status').text(
+        transaction.status || '-'
+    );
+
+    $('.p-pembayaran').text(
+        transaction.payment_type || '-'
+    );
+
+
+    // =========================================================================
+    // CUSTOM FORM PESERTA
+    // =========================================================================
+
+    let forms = participant.forms || [];
+
+
+    if (forms.length === 0) {
+
+        container.append(
+            $('<div>')
+                .addClass('text-muted')
+                .text('Tidak ada data tambahan.')
+        );
+
+    } else {
+
+
+        $.each(forms, function (index, value) {
+
+
+            let fieldType = (
+                value.field_type || ''
+            ).toLowerCase();
+
+
+            let label =
+                value.field_label || '-';
+
+
+            let formValue =
+                value.form_value || '';
+
+
+            let url =
+                value.url || '';
+
+
+            // =================================================================
+            // ROW
+            // =================================================================
+
+            let row = $(
+                '<div class="row mt-3"></div>'
+            );
+
+
+            // =================================================================
+            // LABEL
+            // =================================================================
+
+            let labelColumn = $(
+                '<div class="col-4"></div>'
+            );
+
+
+            labelColumn.text(label);
+
+
+            labelColumn.append(
+                $('<span>')
+                    .addClass('float-right')
+                    .text(':')
+            );
+
+
+            // =================================================================
+            // VALUE
+            // =================================================================
+
+            let valueColumn = $(
+                '<div class="col-8 pl-0"></div>'
+            );
+
+
+            // =================================================================
+            // IMAGE
+            // =================================================================
+
+            if (
+                fieldType === 'image' &&
+                url
+            ) {
+
+
+                let image = $('<img>');
+
+
+                image
+                    .attr('src', url)
+                    .attr('alt', label)
+                    .attr('loading', 'lazy')
+                    .css({
+
+                        'max-width': '250px',
+
+                        'max-height': '200px',
+
+                        'width': 'auto',
+
+                        'height': 'auto',
+
+                        'object-fit': 'contain',
+
+                        'display': 'block',
+
+                        'border-radius': '8px',
+
+                        'border':
+                            '1px solid #dee2e6',
+
+                        'padding': '4px'
+
+                    });
+
+
+                valueColumn.append(image);
+
+
+                // -------------------------------------------------------------
+                // LINK GAMBAR
+                // -------------------------------------------------------------
+
+                let imageLink = $('<a>');
+
+
+                imageLink
+                    .attr('href', url)
+                    .attr('target', '_blank')
+                    .attr(
+                        'rel',
+                        'noopener noreferrer'
+                    )
+                    .addClass(
+                        'small text-info d-inline-block mt-2'
+                    )
+                    .text('Lihat gambar');
+
+
+                valueColumn.append(
+                    imageLink
+                );
+
+            }
+
+
+            // =================================================================
+            // FILE
+            // =================================================================
+
+            else if (
+                fieldType === 'file' &&
+                url
+            ) {
+
+
+                let fileButton = $('<a>');
+
+
+                fileButton
+                    .attr('href', url)
+                    .attr('target', '_blank')
+                    .attr(
+                        'rel',
+                        'noopener noreferrer'
+                    )
+                    .addClass(
+                        'btn btn-sm btn-outline-info'
+                    )
+                    .html(
+                        '<i class="ti ti-file"></i> ' +
+                        'Lihat file'
                     );
 
-                    // Menyisipkan elemen baru ke dalam div
-                    container.append(newData);
-                });
+
+                valueColumn.append(
+                    fileButton
+                );
+
             }
+
+
+            // =================================================================
+            // TEXT / SELECT / TEXTAREA / NUMBER / DLL
+            // =================================================================
+
+            else {
+
+
+                let textValue = $('<b>');
+
+
+                textValue
+                    .addClass('text-info')
+                    .text(
+                        formValue || '-'
+                    );
+
+
+                valueColumn.append(
+                    textValue
+                );
+
+            }
+
+
+            // =================================================================
+            // APPEND
+            // =================================================================
+
+            row.append(
+                labelColumn
+            );
+
+            row.append(
+                valueColumn
+            );
+
+
+            container.append(
+                row
+            );
+
         });
 
-        //Show modal
-        $('#detailTransaksiModal').modal('show');
-    })
+    }
+
+
+    // =========================================================================
+    // SHOW MODAL
+    // =========================================================================
+
+    $('#detailTransaksiModal').modal('show');
+
+});
 
     //Format number
     function numberWithCommas(number) {

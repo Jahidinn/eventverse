@@ -45,6 +45,28 @@ class EventStudioController extends Controller
 			'theme' => Theme::all(),
 		]);
 	}
+    public function lineUp($event_id)
+	{
+
+    $event = Event::with('images')->where('event_id', $event_id)->firstOrFail();
+    dd('On dev');
+		return view('event-studio.detail', [
+            'event'    => $event,
+			'categories' => EventCategory::all(),
+			'theme' => Theme::all(),
+		]);
+	}
+    public function facilites($event_id)
+	{
+
+    $event = Event::with('images')->where('event_id', $event_id)->firstOrFail();
+    dd('On dev');
+		return view('event-studio.detail', [
+            'event'    => $event,
+			'categories' => EventCategory::all(),
+			'theme' => Theme::all(),
+		]);
+	}
 
     public function ticket($event_id)
 	{

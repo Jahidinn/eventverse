@@ -116,6 +116,7 @@
     box-shadow: 0 4px 10px rgba(0,0,0,0.05);
 }
 
+/* Update pada .va-number-box agar fleksibel di layar kecil */
 .va-number-box {
     background: #FFFFFF;
     border: 1px solid var(--border);
@@ -125,8 +126,46 @@
     align-items: center;
     gap: 16px;
     margin-top: 10px;
+    max-width: 100%; /* Memastikan tidak melebihi container utama */
+    box-sizing: border-box;
 }
-.va-number { font-size: 22px; font-weight: 800; letter-spacing: 1px; color: var(--primary); }
+
+/* Update pada .va-number agar nomor VA ter-wrap/mengecil saat di mobile */
+.va-number { 
+    font-size: 17px; 
+    font-weight: 800; 
+    letter-spacing: 1px; 
+    color: var(--primary);
+    word-break: break-all; /* Mencegah teks melimpah keluar container */
+    overflow-wrap: anywhere;
+}
+
+/* Tambahkan penyesuaian khusus tampilan Mobile (max-width: 768px) */
+@media (max-width: 768px) {
+    .progress-step span{ display:none!important; }
+    .progress-line{ width:20px!important; }
+    .checkout-card-body{ padding:18px!important; }
+    .action-buttons { flex-direction: column; }
+    .checkout-progress{ display: none !important; }
+
+    /* Perbaikan tampilan VA di layar HP */
+    .va-number-box {
+        flex-direction: column; /* Menumpuk nomor VA & tombol Salin secara vertikal */
+        gap: 10px;
+        padding: 12px;
+        width: 100%;
+    }
+
+    .va-number {
+        font-size: 16px; /* Mengecilkan sedikit ukuran font di HP */
+        letter-spacing: 0.5px;
+        text-align: center;
+    }
+
+    .copy-btn {
+        width: 100%; /* Tombol salin menjadi full-width di HP agar mudah ditekan */
+    }
+}
 
 .copy-btn {
     background: var(--primary-light);
@@ -350,13 +389,11 @@
     background:linear-gradient(135deg,#d4dce7,#dee7f6);
     color:#1e264d !important;
     text-decoration:none !important;
-    /* box-shadow:0 10px 25px rgba(0,102,255,.25); */
     transition:.25s ease;
 }
 
 .btn-open-app:hover{
     transform:translateY(-2px);
-    /* box-shadow:0 16px 35px rgba(0,102,255,.35); */
     color:#1e264d !important;
 }
 
@@ -411,59 +448,15 @@
         display: none !important;
     }
 }
-
-
 </style>
 
 @section('content')
-
-@php
-    $payload = is_array($transaction->payment_payload)
-        ? $transaction->payment_payload
-        : json_decode($transaction->payment_payload ?? '{}', true);
-
-    $channelCode = $payload['channel_code'] ?? null;
-
-    $qrValue = null;
-    $vaNumber = null;
-    $deeplinkUrl = null;
-
-    foreach ($payload['actions'] ?? [] as $action) {
-
-        switch ($action['type'] ?? '') {
-
-            case 'PRESENT_TO_CUSTOMER':
-
-                if ($channelCode === 'QRIS') {
-                    $qrValue = $action['value'] ?? null;
-                }
-
-                if (str_contains($channelCode ?? '', 'VIRTUAL_ACCOUNT')) {
-                    $vaNumber = $action['value'] ?? null;
-                }
-
-                break;
-
-            case 'DEEPLINK':
-            case 'MOBILE_PAYMENT':
-            case 'REDIRECT_CUSTOMER':
-
-                $deeplinkUrl = $action['value'] ?? null;
-
-                break;
-        }
-    }
-
-    // fallback jika Xendit mengirim field account_number
-    $vaNumber ??= $payload['account_number'] ?? null;
-@endphp
 
 <div class="bg-eventconnect header-hight"></div>
 
 <section class="checkout-section pt-4 pb-5">
     <div class="container">
 
-        <!-- Hero Header -->
         <div class="checkout-hero">
             <div class="checkout-title-box">
                 <i class="ti ti-credit-card"></i>
@@ -471,7 +464,6 @@
             </div>
         </div>
 
-        <!-- Progress Step Bar -->
         <div class="checkout-progress">
             <div class="progress-step">
                 <div class="progress-circle progress-done"><i class="ti ti-check"></i></div>
@@ -495,75 +487,107 @@
         </div>
 
         <div class="row justify-content-center">
-            <!-- Left Side: Main Payment Area -->
             <div class="col-lg-7">
                 <div class="checkout-card mb-4">
                     <div class="checkout-card-body">
 
-                        <!-- Header Info Kode & Metode -->
                         <div class="d-flex justify-content-between align-items-center pb-3 border-bottom">
                             <div>
                                 <small class="text-muted d-block">Kode Transaksi</small>
                                 <strong class="text-dark">{{ $transaction->transaction_code }}</strong>
                             </div>
-                            {{-- <div class="payment-method-badge">
-                                <i class="ti ti-wallet"></i>
-                                <span>{{ $transaction->paymentGatewayMethod->name ?? 'Payment Gateway' }}</span>
-                            </div> --}}
                         </div>
 
-                        <!-- 2. Dynamic Display Based on Payment Type -->
                         <div class="payment-display-area">
-                            @if($qrValue)
-                                <h6 class="fw-bold mb-2">Scan QRIS untuk Membayar</h6>
-                                {{-- <p class="text-muted small mb-3">Gunakan GoPay, OVO, Dana, ShopeePay, BCA, atau M-Banking Anda</p> --}}
-                                
+
+                            {{-- QRIS --}}
+                            @if(!empty($paymentDisplay['qr_value']))
+
+                                <h6 class="fw-bold mb-2">
+                                    Scan QRIS untuk Membayar
+                                </h6>
+
                                 <div class="my-3">
-                                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=250x250&data={{ urlencode($qrValue) }}" 
-                                         alt="QRIS Payment Code" 
-                                         class="qr-code-img">
-                                </div>
-                                <span class="badge badge-light text-dark border"><i class="ti ti-qrcode me-1"></i> Verifikasi Otomatis</span>
-
-                            @elseif($vaNumber)
-                                <h6 class="fw-bold mb-1">Nomor Virtual Account</h6>
-                                {{-- <p class="text-muted small mb-3">Transfer sesuai nominal ke nomor rekening di bawah ini:</p> --}}
-                                
-                                <div class="va-number-box">
-                                    <span class="va-number" id="vaText">{{ $vaNumber }}</span>
-                                    <button class="copy-btn" onclick="copyToClipboard('{{ $vaNumber }}')">
-                                        <i class="ti ti-copy"></i> Salin
-                                    </button>
+                                    <img
+                                        src="https://api.qrserver.com/v1/create-qr-code/?size=250x250&data={{ urlencode($paymentDisplay['qr_value']) }}"
+                                        alt="QRIS Payment Code"
+                                        class="qr-code-img"
+                                    >
                                 </div>
 
+                                <span class="badge badge-light text-dark border">
+                                    <i class="ti ti-qrcode me-1"></i>
+                                    Verifikasi Otomatis
+                                </span>
 
-                            @elseif($deeplinkUrl)
-                                <h6 class="fw-bold mb-2">Pembayaran E-Wallet</h6>
-                                {{-- <p class="text-muted small mb-3">Klik tombol di bawah untuk membuka aplikasi pembayaran Anda:</p> --}}
-                                
-                                <a href="{{ $deeplinkUrl }}"
-                                target="_blank"
-                                class="btn-open-app">
+                            {{-- VIRTUAL ACCOUNT --}}
+                            {{-- VIRTUAL ACCOUNT --}}
+                                @elseif(!empty($paymentDisplay['va_number']))
+
+                                    <h6 class="fw-bold mb-1">
+                                        Nomor Virtual Account
+                                    </h6>
+
+                                    <div class="va-number-box">
+
+                                        <span
+                                            class="va-number"
+                                            id="vaText"
+                                        >
+                                            {{ $paymentDisplay['va_number'] }}
+                                        </span>
+
+                                        <button
+                                            type="button"
+                                            class="copy-btn"
+                                            data-va="{{ $paymentDisplay['va_number'] }}"
+                                            onclick="copyToClipboard(this.dataset.va)"
+                                        >
+                                            <i class="ti ti-copy"></i>
+                                            Salin
+                                        </button>
+
+                                    </div>
+
+                            {{-- E-WALLET --}}
+                            @elseif(!empty($paymentDisplay['deeplink_url']))
+
+                                <h6 class="fw-bold mb-2">
+                                    Pembayaran E-Wallet
+                                </h6>
+
+                                <a
+                                    href="{{ $paymentDisplay['deeplink_url'] }}"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    class="btn-open-app"
+                                >
                                     <span class="btn-open-app-left">
-                                        {{-- <i class="ti ti-brand-google-play"></i> --}}
                                         <span>
                                             <small>Continue Payment</small>
-                                            
-                                            <strong>Open {{ strtoupper($transaction->paymentGatewayMethod?->method?->name) }}</strong>
+                                            <strong>
+                                                Open {{ strtoupper($transaction->paymentGatewayMethod?->method?->name ?? 'E-Wallet') }}
+                                            </strong>
                                         </span>
                                     </span>
 
                                     <i class="ti ti-arrow-up-right"></i>
                                 </a>
 
+                            {{-- DEFAULT --}}
                             @else
+
                                 <div class="py-3">
                                     <i class="ti ti-info-circle text-primary fs-1 mb-2"></i>
-                                    <h6 class="font-weight-bold">Instruksi Pembayaran</h6>
-                                    {{-- <p class="text-muted small">Silakan selesaikan pembayaran sesuai petunjuk pada layanan pembayaran yang dipilih.</p> --}}
+                                    <h6 class="font-weight-bold">
+                                        Instruksi Pembayaran
+                                    </h6>
                                 </div>
+
                             @endif
+
                         </div>
+
                         <div class="payment-option-card mb-4 text-center">
                             <div class="payment-left">
                                 @if($transaction->paymentGatewayMethod?->method?->icon)
@@ -579,7 +603,6 @@
                             </div>
                         </div>
 
-                        <!-- Total Tagihan -->
                         <div class="bg-light p-3 rounded mb-3">
                             <div class="d-flex justify-content-between align-items-center">
                                 <span class="text-muted font-weight-bold">Total Pembayaran</span>
@@ -587,14 +610,12 @@
                             </div>
                         </div>
 
-                        <!-- 1. Countdown Box -->
                         <div class="timer-box">
                             <div class="timer-title">Batas Waktu Pembayaran</div>
                             <div class="timer-countdown" id="countdown-timer">00:00:00</div>
                             <small class="text-muted d-block mt-1">Selesaikan sebelum <strong id="expire-time-formatted">{{ \Carbon\Carbon::parse($transaction->expired_at)->format('d M Y, H:i') }} WIB</strong></small>
                         </div>
 
-                        <!-- 3. Action Buttons -->
                         <div class="action-buttons">
                             <button class="btn-refresh py-2" id="btn-manual-refresh" onclick="checkPaymentStatus(true)">
                                 <i class="ti ti-refresh" id="refresh-icon"></i> Cek Status
@@ -609,7 +630,6 @@
                 </div>
             </div>
 
-            <!-- Right Side: Order Summary -->
             <div class="col-lg-5">
                 <div class="checkout-card">
                     <div class="checkout-card-body">
@@ -661,9 +681,6 @@
     </div>
 </section>
 
-<!-- ========================================================= -->
-<!-- MODAL GANTI PEMBAYARAN (BOOTSTRAP 4.6 COMPATIBLE) -->
-<!-- ========================================================= -->
 <div class="modal fade" id="checkoutConfirmModal" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="static">
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content rounded-lg border-0 shadow-lg">
@@ -672,7 +689,6 @@
                 <h5 class="modal-title font-weight-bold text-dark d-flex align-items-center gap-2">
                     <i class="ti ti-wallet text-primary me-2"></i> Ganti Metode Pembayaran
                 </h5>
-                <!-- Bootstrap 4 Close Button -->
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -680,13 +696,11 @@
 
             <div class="modal-body p-4" style="max-height: 75vh; overflow-y: auto;">
                 
-                <!-- CARD PILIH METODE PEMBAYARAN -->
                 <div class="payment-section-card">
                     <div class="payment-section-title">
                         <i class="ti ti-credit-card text-primary me-1"></i> Pilih Metode Pembayaran
                     </div>
 
-                    <!-- Loading State -->
                     <div id="payment-methods-loading" class="text-center py-4">
                         <div class="spinner-border text-primary" role="status">
                             <span class="sr-only">Memuat...</span>
@@ -694,13 +708,10 @@
                         <p class="text-muted small mt-2 mb-0">Memuat metode pembayaran...</p>
                     </div>
 
-                    <!-- Accordion Wrapper -->
                     <div id="paymentCategoriesAccordion" class="payment-accordion-wrapper d-none">
-                        <!-- Render via JS -->
-                    </div>
+                        </div>
                 </div>
 
-                <!-- Summary & Total -->
                 <div class="bg-light p-3 rounded mt-4 border">
                     <div class="d-flex justify-content-between align-items-center mb-1">
                         <span class="text-muted small font-weight-bold">Biaya Penanganan</span>
@@ -715,7 +726,6 @@
             </div>
 
             <div class="modal-footer border-top px-4 py-3">
-                <!-- Bootstrap 4 Modal Dismiss -->
                 <button type="button" class="btn btn-light font-weight-bold px-4" data-dismiss="modal">Batal</button>
                 <button type="button" class="btn btn-primary font-weight-bold px-4" id="btnSubmitCheckout" onclick="submitChangePayment()">
                     <span>Konfirmasi Perubahan</span>
@@ -727,125 +737,244 @@
     </div>
 </div>
 
-<!-- SweetAlert2 -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
-document.addEventListener("DOMContentLoaded", function () {
-    
-    // Countdown Timer
-    const expiredAtTime = new Date("{{ \Carbon\Carbon::parse($transaction->expired_at)->toIso8601String() }}").getTime();
-    const timerElement = document.getElementById("countdown-timer");
+/*
+|--------------------------------------------------------------------------
+| CONFIG & GLOBAL VARS
+|--------------------------------------------------------------------------
+*/
+const expiredAt = new Date(@json(\Carbon\Carbon::parse($transaction->expired_at)->toIso8601String()));
+const expireReservationUrl = @json(route('reservation.expire', ['reservationCode' => $transaction->reservation->reservation_code]));
+const eventUrl = @json(url($transaction->event->slug));
+const checkStatusUrl = @json(route('transaction.check-status', $transaction->transaction_code));
+const paymentMethodsUrl = @json(route('transaction.payment-methods', $transaction->transaction_code));
+const changePaymentUrl = @json(route('transaction.change-payment', $transaction->transaction_code));
+const csrfToken = @json(csrf_token());
 
-    function updateCountdown() {
-        const now = new Date().getTime();
-        const distance = expiredAtTime - now;
+let reservationExpired = false;
+let timerInterval = null;
+let statusInterval = null;
+let expireRequestRunning = false;
 
-        if (distance < 0) {
-            clearInterval(timerInterval);
-            if (timerElement) {
-                timerElement.innerHTML = "EXPIRED";
-                timerElement.classList.add("text-danger");
+/*
+|--------------------------------------------------------------------------
+| HELPER: COPY TO CLIPBOARD
+|--------------------------------------------------------------------------
+*/
+function copyToClipboard(text) {
+    if (!text) return;
+
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(function () {
+            if (typeof Swal !== 'undefined') {
+                Swal.fire({
+                    toast: true,
+                    position: 'top-end',
+                    icon: 'success',
+                    title: 'Nomor VA berhasil disalin',
+                    showConfirmButton: false,
+                    timer: 2000
+                });
+            } else {
+                alert('Nomor VA berhasil disalin!');
             }
-            
-            Swal.fire({
-                icon: 'error',
-                title: 'Waktu Pembayaran Habis',
-                text: 'Transaksi ini telah kadaluwarsa. Silakan lakukan pemesanan ulang.',
-                confirmButtonText: 'Pesan Lagi'
-            }).then(() => {
-                window.location.reload();
-            });
-            return;
-        }
-
-        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-        const hDisplay = hours < 10 ? "0" + hours : hours;
-        const mDisplay = minutes < 10 ? "0" + minutes : minutes;
-        const sDisplay = seconds < 10 ? "0" + seconds : seconds;
-
-        if (timerElement) {
-            timerElement.innerHTML = `${hDisplay}:${mDisplay}:${sDisplay}`;
-        }
+        }).catch(function(err) {
+            fallbackCopyTextToClipboard(text);
+        });
+    } else {
+        fallbackCopyTextToClipboard(text);
     }
+}
 
-    updateCountdown();
-    const timerInterval = setInterval(updateCountdown, 1000);
+function fallbackCopyTextToClipboard(text) {
+    const textArea = document.createElement("textarea");
+    textArea.value = text;
+    document.body.appendChild(textArea);
+    textArea.focus();
+    textArea.select();
+    try {
+        document.execCommand('copy');
+        if (typeof Swal !== 'undefined') {
+            Swal.fire({
+                toast: true,
+                position: 'top-end',
+                icon: 'success',
+                title: 'Nomor VA berhasil disalin',
+                showConfirmButton: false,
+                timer: 2000
+            });
+        }
+    } catch (err) {
+        console.error('Fallback copy failed', err);
+    }
+    document.body.removeChild(textArea);
+}
 
-    // Polling Status Transaksi
-    const checkStatusUrl = "{{ route('transaction.check-status', $transaction->transaction_code) }}";
+/*
+|--------------------------------------------------------------------------
+| REDIRECT & EXPIRE RESERVATION
+|--------------------------------------------------------------------------
+*/
+function redirectToEvent() {
+    window.location.href = eventUrl;
+}
 
-    window.checkPaymentStatus = function(isManual = false) {
-        const refreshIcon = document.getElementById("refresh-icon");
-        if (refreshIcon) refreshIcon.classList.add("spin-animation");
+async function expireReservation() {
+    if (expireRequestRunning) return;
+    expireRequestRunning = true;
 
-        fetch(checkStatusUrl, {
-            method: 'GET',
+    try {
+        const response = await fetch(expireReservationUrl, {
+            method: 'POST',
             headers: {
                 'X-Requested-With': 'XMLHttpRequest',
                 'Accept': 'application/json',
-            }
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (refreshIcon) refreshIcon.classList.remove("spin-animation");
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': csrfToken
+            },
+            body: JSON.stringify({})
+        });
 
-            if (data.status === 'paid' || data.status === 'Paid') {
+        const data = await response.json();
+
+        if (typeof Swal !== 'undefined') {
+            Swal.fire({
+                icon: 'error',
+                title: 'Waktu Habis',
+                text: 'Waktu reservasi Anda telah berakhir.',
+                timer: 2000,
+                showConfirmButton: false
+            }).then(() => {
+                redirectToEvent();
+            });
+        } else {
+            redirectToEvent();
+        }
+
+    } catch (error) {
+        console.error('Expire reservation error:', error);
+        expireRequestRunning = false;
+    }
+}
+
+function handleExpired() {
+    if (reservationExpired) return;
+    reservationExpired = true;
+
+    if (timerInterval) clearInterval(timerInterval);
+    if (statusInterval) clearInterval(statusInterval);
+
+    const timerElement = document.getElementById('countdown-timer');
+    if (timerElement) {
+        timerElement.innerHTML = 'EXPIRED';
+        timerElement.classList.add('text-danger');
+    }
+
+    expireReservation();
+}
+
+function updateCountdown() {
+    if (reservationExpired) return;
+
+    const now = new Date();
+    const diff = expiredAt.getTime() - now.getTime();
+
+    if (diff <= 0) {
+        handleExpired();
+        return;
+    }
+
+    const hours = Math.floor(diff / (1000 * 60 * 60));
+    const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+    const timerElement = document.getElementById('countdown-timer');
+    if (timerElement) {
+        timerElement.innerHTML = 
+            `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+    }
+}
+
+/*
+|--------------------------------------------------------------------------
+| CHECK PAYMENT STATUS
+|--------------------------------------------------------------------------
+*/
+async function checkPaymentStatus(isManual = false) {
+    if (reservationExpired) return;
+
+    const refreshIcon = document.getElementById('refresh-icon');
+    if (refreshIcon) refreshIcon.classList.add('spin-animation');
+
+    try {
+        const response = await fetch(checkStatusUrl, {
+            method: 'GET',
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest',
+                'Accept': 'application/json'
+            },
+            cache: 'no-store'
+        });
+
+        const data = await response.json();
+
+        if (data.status === 'paid' || data.status === 'Paid') {
+            if (statusInterval) clearInterval(statusInterval);
+
+            if (typeof Swal !== 'undefined') {
                 Swal.fire({
                     icon: 'success',
                     title: 'Pembayaran Berhasil!',
-                    text: 'Terima kasih, pembayaran Anda telah kami terima.',
-                    timer: 2000,
+                    text: 'Pembayaran Anda telah diterima.',
+                    timer: 1500,
                     showConfirmButton: false
-                }).then(() => {
+                }).then(function () {
                     window.location.href = data.redirect_url || data.url || window.location.href;
                 });
-            } else if (data.status === 'expired' || data.status === 'failed') {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Transaksi Gagal / Kadaluwarsa',
-                    text: 'Status transaksi Anda sudah tidak berlaku lagi.'
-                }).then(() => {
-                    window.location.reload();
-                });
-            } else if (isManual) {
+            } else {
+                window.location.href = data.redirect_url || data.url || window.location.href;
+            }
+            return;
+        }
+
+        if (data.status === 'expired' || data.status === 'failed') {
+            handleExpired();
+            return;
+        }
+
+        if (isManual) {
+            if (typeof Swal !== 'undefined') {
                 Swal.fire({
                     icon: 'info',
                     title: 'Belum Diterima',
-                    text: 'Pembayaran belum terdeteksi. Silakan selesaikan pembayaran Anda terlebih dahulu.',
+                    text: 'Pembayaran belum terdeteksi. Silakan selesaikan pembayaran terlebih dahulu.',
                     timer: 2500,
                     showConfirmButton: false
                 });
             }
-        })
-        .catch(error => {
-            if (refreshIcon) refreshIcon.classList.remove("spin-animation");
-            console.error("Polling error:", error);
-        });
-    };
+        }
 
-    setInterval(function() {
-        checkPaymentStatus(false);
-    }, 4000);
+    } catch (error) {
+        console.error('Payment status error:', error);
+    } finally {
+        if (refreshIcon) refreshIcon.classList.remove('spin-animation');
+    }
+}
 
-});
-
-// =========================================================
-// LOGIKA MODAL GANTI PEMBAYARAN (CARD ACCORDION METODE)
-// =========================================================
-const paymentMethodsUrl = "{{ route('transaction.payment-methods', $transaction->transaction_code) }}";
-const changePaymentUrl = "{{ route('transaction.change-payment', $transaction->transaction_code) }}";
-
+/*
+|--------------------------------------------------------------------------
+| PAYMENT CHECKOUT MODAL OBJECT
+|--------------------------------------------------------------------------
+*/
 const PaymentCheckoutModal = {
-    selectedPaymentMethodId: {{ $transaction->payment_gateway_method_id ?? 'null' }},
-    selectedFee: {{ $transaction->payment_fee ?? 0 }},
-    subtotal: {{ $transaction->subtotal ?? 0 }},
-    platformFee: {{ $transaction->platform_fee ?? 0 }},
+    selectedPaymentMethodId: @json($transaction->payment_gateway_method_id),
+    selectedFee: @json($transaction->payment_fee ?? 0),
+    subtotal: @json($transaction->subtotal ?? 0),
+    platformFee: @json($transaction->platform_fee ?? 0),
 
-    formatRupiah(num) {
+    formatRupiah: function (num) {
         return new Intl.NumberFormat('id-ID', {
             style: 'currency',
             currency: 'IDR',
@@ -853,29 +982,25 @@ const PaymentCheckoutModal = {
         }).format(Number(num || 0));
     },
 
-    recalculateTotal(paymentFee = 0) {
-        const grandTotal = this.subtotal + this.platformFee + paymentFee;
-        
+    recalculateTotal: function (paymentFee = 0) {
+        const grandTotal = Number(this.subtotal || 0) + Number(this.platformFee || 0) + Number(paymentFee || 0);
+
         const elemFee = document.getElementById('modalPaymentFee');
-        if (elemFee) {
-            elemFee.innerText = this.formatRupiah(paymentFee);
-        }
+        if (elemFee) elemFee.innerText = this.formatRupiah(paymentFee);
 
         const elemTotal = document.getElementById('modalGrandTotal');
-        if (elemTotal) {
-            elemTotal.innerText = this.formatRupiah(grandTotal);
-        }
+        if (elemTotal) elemTotal.innerText = this.formatRupiah(grandTotal);
     },
 
-    async renderPaymentCategories(categories) {
+    renderPaymentCategories: async function (categories) {
         let categoriesHtml = '';
 
         if (categories && categories.length > 0) {
             for (let index = 0; index < categories.length; index++) {
                 const cat = categories[index];
                 const isActive = index === 0 ? 'is-active' : '';
-
                 let methodsHtml = '';
+
                 if (cat.methods && cat.methods.length > 0) {
                     for (let mIdx = 0; mIdx < cat.methods.length; mIdx++) {
                         const method = cat.methods[mIdx];
@@ -886,10 +1011,10 @@ const PaymentCheckoutModal = {
 
                         if (method.fee_type === 'percent') {
                             feeCalculated = (this.subtotal * Number(method.fee_value)) / 100;
-                            feeDisplay = `+${method.fee_value}% (${this.formatRupiah(feeCalculated)})`;
+                            feeDisplay = '+' + method.fee_value + '% (' + this.formatRupiah(feeCalculated) + ')';
                         } else if (method.fee_type === 'fixed' && Number(method.fee_value) > 0) {
                             feeCalculated = Number(method.fee_value);
-                            feeDisplay = `+${this.formatRupiah(feeCalculated)}`;
+                            feeDisplay = '+' + this.formatRupiah(feeCalculated);
                         }
 
                         let isSelected = false;
@@ -904,15 +1029,14 @@ const PaymentCheckoutModal = {
 
                         methodsHtml += `
                             <div class="payment-option-card ${isSelected ? 'selected' : ''}" 
-                                data-method-id="${method.payment_gateway_method_id}" 
-                                data-fee="${feeCalculated}">
+                                 data-method-id="${method.payment_gateway_method_id}" 
+                                 data-fee="${feeCalculated}">
                                 <div class="payment-left">
                                     ${methodIconSrc ? `<img src="${methodIconSrc}" class="payment-logo-img" alt="${method.name}">` : ''}
                                     <span class="payment-name-text">${method.name}</span>
                                 </div>
                                 <span class="payment-fee-text">${feeDisplay}</span>
-                            </div>
-                        `;
+                            </div>`;
                     }
                 } else {
                     methodsHtml = '<div class="text-muted text-center py-2" style="font-size: 11px;">Tidak ada metode aktif.</div>';
@@ -931,19 +1055,19 @@ const PaymentCheckoutModal = {
                                 ${methodsHtml}
                             </div>
                         </div>
-                    </div>
-                `;
+                    </div>`;
             }
         }
 
         const accordionEl = document.getElementById('paymentCategoriesAccordion');
-        accordionEl.innerHTML = categoriesHtml;
+        if (!accordionEl) return;
 
+        accordionEl.innerHTML = categoriesHtml;
         this.recalculateTotal(this.selectedFee);
 
-        // Accordion click toggle
+        /* Bind Accordion Events */
         document.querySelectorAll('.payment-category-header').forEach(header => {
-            header.addEventListener('click', function() {
+            header.addEventListener('click', function () {
                 const card = this.closest('.payment-category-card');
                 document.querySelectorAll('.payment-category-card').forEach(c => {
                     if (c !== card) c.classList.remove('is-active');
@@ -952,13 +1076,14 @@ const PaymentCheckoutModal = {
             });
         });
 
-        // Payment option selection
+        /* Bind Method Selection Events */
         const self = this;
         document.querySelectorAll('.payment-option-card').forEach(option => {
-            option.addEventListener('click', function(e) {
+            option.addEventListener('click', function (e) {
                 e.stopPropagation();
                 document.querySelectorAll('.payment-option-card').forEach(o => o.classList.remove('selected'));
                 this.classList.add('selected');
+
                 self.selectedPaymentMethodId = this.getAttribute('data-method-id');
                 self.selectedFee = Number(this.getAttribute('data-fee') || 0);
                 self.recalculateTotal(self.selectedFee);
@@ -967,36 +1092,53 @@ const PaymentCheckoutModal = {
     }
 };
 
+/*
+|--------------------------------------------------------------------------
+| SVG CONVERTER
+|--------------------------------------------------------------------------
+*/
 async function getSvgDataUri(url) {
     if (!url) return '';
-    if (url.match(/\.(png|jpg|jpeg|webp)$/i)) return url;
+    if (/\.(png|jpg|jpeg|webp)$/i.test(url)) return url;
 
     try {
         const response = await fetch(url);
         if (!response.ok) return url;
+
         let svgText = await response.text();
         svgText = svgText.replace(/<script[\s\S]*?<\/script>/gi, '');
         if (!svgText.includes('xmlns=')) {
             svgText = svgText.replace('<svg', '<svg xmlns="http://www.w3.org/2000/svg"');
         }
+
         const base64 = btoa(unescape(encodeURIComponent(svgText)));
-        return `data:image/svg+xml;base64,${base64}`;
-    } catch (e) {
+        return 'data:image/svg+xml;base64,' + base64;
+    } catch (error) {
+        console.error('SVG error:', error);
         return url;
     }
 }
 
-// Buka Modal dengan Syntax jQuery (Bootstrap 4)
+/*
+|--------------------------------------------------------------------------
+| OPEN CHANGE PAYMENT MODAL
+|--------------------------------------------------------------------------
+*/
 function openChangePaymentModal() {
-    if (typeof $ !== 'undefined') {
+    if (typeof $ !== 'undefined' && $('#checkoutConfirmModal').length) {
         $('#checkoutConfirmModal').modal('show');
     } else {
-        document.getElementById('checkoutConfirmModal').classList.add('show');
-        document.getElementById('checkoutConfirmModal').style.display = 'block';
+        const modal = document.getElementById('checkoutConfirmModal');
+        if (modal) {
+            modal.classList.add('show');
+            modal.style.display = 'block';
+        }
     }
 
     const loadingEl = document.getElementById('payment-methods-loading');
     const accordionEl = document.getElementById('paymentCategoriesAccordion');
+
+    if (!loadingEl || !accordionEl) return;
 
     loadingEl.classList.remove('d-none');
     accordionEl.classList.add('d-none');
@@ -1014,92 +1156,123 @@ function openChangePaymentModal() {
         accordionEl.classList.remove('d-none');
         PaymentCheckoutModal.renderPaymentCategories(response.payment_categories || []);
     })
-    .catch(err => {
+    .catch(error => {
+        console.error(error);
         loadingEl.classList.add('d-none');
         accordionEl.classList.remove('d-none');
-        accordionEl.innerHTML = `<p class="text-center text-danger small py-3">Gagal memuat metode pembayaran.</p>`;
+        accordionEl.innerHTML = '<p class="text-center text-danger small py-3">Gagal memuat metode pembayaran.</p>';
     });
 }
 
+/*
+|--------------------------------------------------------------------------
+| SUBMIT CHANGE PAYMENT
+|--------------------------------------------------------------------------
+*/
 function submitChangePayment() {
-    if (!PaymentCheckoutModal.selectedPaymentMethodId) {
-        Swal.fire({
-            icon: 'warning',
-            title: 'Pilih Pembayaran',
-            text: 'Silakan pilih metode pembayaran terlebih dahulu.'
-        });
+    const modal = PaymentCheckoutModal;
+
+    if (!modal.selectedPaymentMethodId) {
+        if (typeof Swal !== 'undefined') {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Pilih Pembayaran',
+                text: 'Silakan pilih metode pembayaran terlebih dahulu.'
+            });
+        } else {
+            alert('Silakan pilih metode pembayaran terlebih dahulu.');
+        }
         return;
     }
 
     const submitBtn = document.getElementById('btnSubmitCheckout');
+    if (!submitBtn) return;
+
     submitBtn.disabled = true;
-    submitBtn.innerHTML = `<i class="ti ti-loader-2 spin-animation me-1"></i> Memproses...`;
+    submitBtn.innerHTML = '<i class="ti ti-loader-2 spin-animation me-1"></i> Memproses...';
 
     const formData = new FormData();
-    formData.append('_token', "{{ csrf_token() }}");
-    formData.append('payment_gateway_method_id', PaymentCheckoutModal.selectedPaymentMethodId);
+    formData.append('_token', csrfToken);
+    formData.append('payment_gateway_method_id', modal.selectedPaymentMethodId);
 
     fetch(changePaymentUrl, {
         method: 'POST',
         headers: {
             'X-Requested-With': 'XMLHttpRequest',
-            'Accept': 'application/json',
+            'Accept': 'application/json'
         },
         body: formData
     })
     .then(res => res.json())
     .then(response => {
         submitBtn.disabled = false;
-        submitBtn.innerHTML = `<span>Konfirmasi Perubahan</span> <i class="ti ti-arrow-right ms-1"></i>`;
+        submitBtn.innerHTML = '<span>Konfirmasi Perubahan</span><i class="ti ti-arrow-right ms-1"></i>';
 
         if (response.success || response.redirect_url || response.status === 'success') {
-            Swal.fire({
-                icon: 'success',
-                title: 'Berhasil!',
-                text: response.message || 'Metode pembayaran berhasil diubah.',
-                timer: 1500,
-                showConfirmButton: false
-            }).then(() => {
+            if (typeof Swal !== 'undefined') {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Berhasil!',
+                    text: response.message || 'Metode pembayaran berhasil diubah.',
+                    timer: 1500,
+                    showConfirmButton: false
+                }).then(function () {
+                    window.location.href = response.redirect_url || response.url || window.location.href;
+                });
+            } else {
                 window.location.href = response.redirect_url || response.url || window.location.href;
-            });
+            }
         } else {
-            Swal.fire({
-                icon: 'error',
-                title: 'Gagal',
-                text: response.message || 'Gagal mengubah metode pembayaran.'
-            });
+            if (typeof Swal !== 'undefined') {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Gagal',
+                    text: response.message || 'Gagal mengubah metode pembayaran.'
+                });
+            } else {
+                alert(response.message || 'Gagal mengubah metode pembayaran.');
+            }
         }
     })
     .catch(error => {
+        console.error(error);
         submitBtn.disabled = false;
-        submitBtn.innerHTML = `<span>Konfirmasi Perubahan</span> <i class="ti ti-arrow-right ms-1"></i>`;
+        submitBtn.innerHTML = '<span>Konfirmasi Perubahan</span><i class="ti ti-arrow-right ms-1"></i>';
 
-        Swal.fire({
-            icon: 'error',
-            title: 'Kesalahan Sistem',
-            text: 'Terjadi kesalahan saat memproses data. Silakan coba lagi.'
-        });
+        if (typeof Swal !== 'undefined') {
+            Swal.fire({
+                icon: 'error',
+                title: 'Kesalahan Sistem',
+                text: 'Terjadi kesalahan saat memproses data. Silakan coba lagi.'
+            });
+        }
     });
 }
 
-function copyToClipboard(text) {
-    navigator.clipboard.writeText(text).then(() => {
-        Swal.fire({
-            toast: true,
-            position: 'top-end',
-            icon: 'success',
-            title: 'Nomor VA berhasil disalin',
-            showConfirmButton: false,
-            timer: 2000
-        });
-    });
-}
+/*
+|--------------------------------------------------------------------------
+| INITIALIZATION ON DOM READY
+|--------------------------------------------------------------------------
+*/
+document.addEventListener('DOMContentLoaded', function () {
+    // Start countdown
+    timerInterval = setInterval(updateCountdown, 1000);
+    updateCountdown();
 
-document.addEventListener('DOMContentLoaded', async function () {
+    // Start status checking polling (every 4s)
+    statusInterval = setInterval(function () {
+        if (!reservationExpired) {
+            checkPaymentStatus(false);
+        }
+    }, 4000);
+
+    // Fetch logo icon payment method
     const icon = document.getElementById('payment-method-icon');
-
     if (icon) {
-        icon.src = await getSvgDataUri(@json($transaction->paymentGatewayMethod->method->icon_url));
+        const iconUrl = @json($transaction->paymentGatewayMethod?->method?->icon_url);
+        getSvgDataUri(iconUrl).then(function (src) {
+            if (src) icon.src = src;
+        });
     }
 });
 </script>

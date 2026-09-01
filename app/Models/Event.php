@@ -44,6 +44,11 @@ class Event extends Model
 		return $this->belongsTo(Theme::class, 'theme');
 	}
 
+	public function customForms()
+	{
+		return $this->hasMany(CustomForm::class, 'event_id');
+	}
+
 	// Metode lama, nanti akan dihapus
 	public function ticket()
 	{
@@ -60,11 +65,11 @@ class Event extends Model
 	}
 
 	public function images()
-{
-    return $this->hasMany(
-        EventImage::class,
-			'event_id',
-			'event_id'
-		)->orderBy('sort_order');
+	{
+		return $this->hasMany(
+			EventImage::class,
+				'event_id',
+				'event_id'
+			)->orderBy('sort_order');
+		}
 	}
-}

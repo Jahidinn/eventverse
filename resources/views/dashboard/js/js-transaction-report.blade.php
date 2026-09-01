@@ -112,7 +112,7 @@
             $(this).val(formattedValue);
             $('#jumlah-penarikan-fixed').val(inputValue);
 
-            if (parseInt(inputValue, 10) < limitWd) {
+            if (parseInt(inputValue, 10) <= limitWd) {
                 if (parseInt(inputValue, 10) < 10000) {
                     $('#submit-withdraw').attr('disabled', true)
                 } else {

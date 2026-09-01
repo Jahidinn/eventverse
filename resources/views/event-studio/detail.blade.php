@@ -6,17 +6,30 @@
 
     @csrf
 
-    <section>
+    <!-- <section>
 
         <span class="page-badge">
             Detail Event
         </span>
 
-        <p class="page-subtitle">
-            Fill in the detailed information of your event before publishing.
-        </p>
 
-    </section>
+    </section> -->
+
+    <div class="ev-section">
+        <div class="ev-section-header">
+            <div>
+                <span class="ev-badge">
+                    EVENT DETAIL
+                </span>
+                <!-- <h2 class="ev-title">
+                    Basic Information
+                </h2>
+                <p class="ev-subtitle">
+                    Start by introducing your event. Add a banner, event title and basic details that attendees will see first.
+                </p> -->
+            </div>
+        </div>
+    </div>
 
     <div class="ev-section">
 
@@ -27,8 +40,8 @@
         <div class="ev-field">
 
             <label class="ev-label">
-                Tema Event
-                <small>(Opsional)</small>
+                Theme
+                <small>(optional)</small>
             </label>
 
             <input
@@ -48,16 +61,16 @@
 
             <label class="ev-label">
 
-                Metode Pelaksanaan
+                Location type
                 <span>*</span>
 
             </label>
 
-            <p class="ev-helper">
+            <!-- <p class="ev-helper">
 
                 Tentukan bagaimana peserta mengikuti event Anda.
 
-            </p>
+            </p> -->
 
             <div class="ev-method-grid">
 
@@ -83,7 +96,7 @@
 
                             <p>
 
-                                Zoom, Google Meet, YouTube Live, dll.
+                                Zoom, Google Meet, dll...
 
                             </p>
 
@@ -117,7 +130,7 @@
 
                             <p>
 
-                                Gedung, Aula, Hotel, Convention Hall.
+                                Gedung, Convention Hall, dll...
 
                             </p>
 
@@ -145,23 +158,23 @@
 
                 <label class="ev-label">
 
-                    Tautan Ruang Meeting Virtual
+                    Access link
                     <span>*</span>
 
                 </label>
 
-                <p class="ev-helper">
+                <!-- <p class="ev-helper">
 
                     Masukkan URL Zoom, Google Meet, atau platform lainnya.
 
-                </p>
+                </p> -->
 
                 <input
                     type="text"
                     class="ev-input"
                     name="location_online"
                     value="{{ $event->location_online }}"
-                    placeholder="Masukkan link URL Zoom, Google Meet atau YouTube Live Stream">
+                    placeholder="Online link">
 
             </div>
 
@@ -181,7 +194,7 @@
 
                     <label class="ev-label">
 
-                        Provinsi <span>*</span>
+                        Province <span>*</span>
 
                     </label>
 
@@ -190,7 +203,7 @@
                         name="location_province"
                         class="ev-choices">
 
-                        <option value="">Pilih Provinsi</option>
+                        <option value="">Select province</option>
 
                     </select>
 
@@ -200,7 +213,7 @@
 
                     <label class="ev-label">
 
-                        Kota / Kabupaten <span>*</span>
+                        Regency / city <span>*</span>
 
                     </label>
 
@@ -209,7 +222,7 @@
                         name="location_city"
                         class="ev-choices">
 
-                        <option value="">Pilih Kota / Kabupaten</option>
+                        <option value="">Select regency/city</option>
 
                     </select>
 
@@ -221,7 +234,7 @@
 
                 <label class="ev-label">
 
-                    Detail Lokasi
+                    Location detail
                     <span>*</span>
 
                 </label>
@@ -244,7 +257,7 @@
 
             <label class="ev-label">
 
-                Tanggal Event
+                Event date
                 <span>*</span>
 
             </label>
@@ -253,9 +266,9 @@
 
                 <div class="ev-field">
 
-                    <label class="ev-small-label">
+                    <label class="ev-helper">
 
-                        Tanggal Mulai
+                        Start date
 
                     </label>
 
@@ -278,9 +291,9 @@
 
                 <div class="ev-field">
 
-                    <label class="ev-small-label">
+                    <label class="ev-helper">
 
-                        Tanggal Selesai
+                        End date
 
                     </label>
 
@@ -313,14 +326,14 @@
 
             <label class="ev-label">
 
-                Deskripsi Event
+                Event description
                 <span>*</span>
 
             </label>
 
             <p class="ev-helper">
 
-                Jelaskan informasi lengkap mengenai event.
+                Jelaskan lengkap mengenai event kamu!
 
             </p>
 
@@ -383,6 +396,34 @@
    DETAIL
 ======================================================*/
 
+.ev-section{
+
+    margin-bottom:5px;
+
+}
+
+.ev-badge{
+
+    display:inline-flex;
+
+    align-items:center;
+
+    padding:8px 16px;
+
+    border-radius:999px;
+
+    background:#EEF5FF;
+
+    color:#4495f9;
+
+    font-size:.78rem;
+
+    font-weight:700;
+
+    margin-bottom:18px;
+
+}
+
 .ev-field{
 
     margin-bottom:24px;
@@ -393,7 +434,7 @@
 
     display:block;
 
-    margin-bottom:6px;
+    margin-bottom:10px;
 
     font-size:15px;
 
@@ -465,7 +506,7 @@
 
     outline:none;
 
-    border-color:#4F7CFF;
+    border-color:#4495f9;
 
     box-shadow:0 0 0 4px rgba(79,124,255,.08);
 
@@ -529,9 +570,9 @@ ONLINE OFFLINE
 
 .ev-method-card input:checked+.ev-method-content{
 
-    border-color:#4F7CFF;
+    border-color: #4495f9;
 
-    background:#F8FAFF;
+    background: #F8FAFF;
 
     box-shadow:0 8px 24px rgba(79,124,255,.08);
 
@@ -613,7 +654,7 @@ ONLINE OFFLINE
 
 .ev-method-card input:checked+.ev-method-content .fa-circle-check{
 
-    color:#4F7CFF;
+    color:#4495f9;
 
 }
 
@@ -643,7 +684,7 @@ DATE
 
     transform:translateY(-50%);
 
-    color:#4F7CFF;
+    color:#4495f9;
 
     font-size:18px;
 
@@ -682,7 +723,7 @@ TRIX
 
 .ev-trix:focus-within{
 
-    border-color:#4F7CFF;
+    border-color:#4495f9;
 
     box-shadow:0 0 0 4px rgba(79,124,255,.08);
 
