@@ -231,13 +231,10 @@ class TicketService
             $ticketId
         );
 
-        if (
-            $ticket->reserved_quantity < $quantity
-        ) {
-            throw new Exception(
-                'Reserved ticket tidak mencukupi.'
-            );
-        }
+        $this->validateAvailability(
+            $ticket,
+            $quantity
+        );
 
         $ticket->decrement(
             'reserved_quantity',

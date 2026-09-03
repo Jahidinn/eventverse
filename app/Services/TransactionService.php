@@ -16,16 +16,16 @@ use Illuminate\Validation\ValidationException;
 use App\Services\Payment\XenditService;
 use App\Services\Payment\MidtransService;
 use App\Services\EmailService;
-use App\Models\FeeRule;
 use App\Models\TransactionForm;
 use App\Models\TransactionParticipant;
-use Carbon\Carbon;
-use Exception;
+use App\Models\FeeRule;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
+use Carbon\Carbon;
+use Exception;
 
 
 class TransactionService
@@ -39,20 +39,9 @@ class TransactionService
     
     public function validateCheckout(Request $request): array
     {
-        // $event = Event::findOrFail(
-        //     $request->event_id
-        // );
-
-        // $ticket = Ticket::where('id', $request->ticket_id)
-        //     ->where('event_id', $event->id)
-        //     ->firstOrFail();
-        $reservation = Reservation::with([
-            'event',
-            'ticket',
-        ])->where(
-            'reservation_code',
-            $request->reservation_code
-        )->firstOrFail();
+        $reservation = Reservation::with(['event', 'ticket',])
+            ->where('reservation_code', $request->reservation_code)
+            ->firstOrFail();
 
         if ($reservation->status !== 'Reserved') {
             throw ValidationException::withMessages([
@@ -61,9 +50,7 @@ class TransactionService
         }
 
         if ($reservation->expired_at->isPast()) {
-
-            app(ReservationService::class)
-                ->expire($reservation->reservation_code);
+            app(ReservationService::class)->expire($reservation->reservation_code);
 
             throw ValidationException::withMessages([
                 'reservation' => 'Reservation telah berakhir.',
@@ -84,10 +71,7 @@ class TransactionService
         //     $quantity
         // );
 
-        $this->validateParticipants(
-            $request,
-            $event
-        );
+        $this->validateParticipants($request, $event);
 
         return $this->buildSummary(
             $event,
@@ -97,11 +81,8 @@ class TransactionService
         );
     }
 
-    private function validateParticipants(
-        Request $request,
-        Event $event
-    ): void {
-
+    private function validateParticipants(Request $request, Event $event): void 
+    {
         $forms = CustomForm::where('event_id', $event->id)
             ->where('field_status', true)
             ->orderBy('sort_order')
@@ -111,11 +92,8 @@ class TransactionService
         $messages = [];
 
         foreach ($request->participants as $participantIndex => $participant) {
-
             foreach ($forms as $form) {
-
                 $field = "participants.$participantIndex.customForm.$form->id";
-
                 $rule = [];
 
                 /*
@@ -251,66 +229,34 @@ class TransactionService
 
                 $rules[$field] = $rule;
 
+
                 /*
                 |--------------------------------------------------------------------------
                 | Custom Message
                 |--------------------------------------------------------------------------
                 */
 
-                $messages["$field.required"] =
-                    "{$form->field_label} wajib diisi.";
-
-                $messages["$field.email"] =
-                    "{$form->field_label} harus berupa email.";
-
-                $messages["$field.numeric"] =
-                    "{$form->field_label} harus berupa angka.";
-
-                $messages["$field.date"] =
-                    "{$form->field_label} tidak valid.";
-
-                $messages["$field.image"] =
-                    "{$form->field_label} harus berupa gambar.";
-
-                $messages["$field.file"] =
-                    "{$form->field_label} harus berupa file.";
-
-                $messages["$field.in"] =
-                    "{$form->field_label} tidak valid.";
-
-                $messages["$field.*.in"] =
-                    "{$form->field_label} memiliki pilihan yang tidak valid.";
-
-                $messages["$field.max"] =
-                    "{$form->field_label} melebihi ukuran maksimum.";
-                $messages["$field.regex"] =
-                    "{$form->field_label} harus berupa nomor telepon yang valid.";
-
+                $messages["$field.required"] = "{$form->field_label} wajib diisi.";
+                $messages["$field.email"] = "{$form->field_label} harus berupa email.";
+                $messages["$field.numeric"] = "{$form->field_label} harus berupa angka.";
+                $messages["$field.date"] = "{$form->field_label} tidak valid.";
+                $messages["$field.image"] = "{$form->field_label} harus berupa gambar.";
+                $messages["$field.file"] = "{$form->field_label} harus berupa file.";
+                $messages["$field.in"] = "{$form->field_label} tidak valid.";
+                $messages["$field.*.in"] = "{$form->field_label} memiliki pilihan yang tidak valid.";
+                $messages["$field.max"] = "{$form->field_label} melebihi ukuran maksimum.";
+                $messages["$field.regex"] = "{$form->field_label} harus berupa nomor telepon yang valid.";
             }
 
         }
 
-        Validator::make(
-            $request->all(),
-            $rules,
-            $messages
-        )->validate();
+        Validator::make($request->all(), $rules, $messages)->validate();
     }
 
-    private function buildSummary(
-        Event $event,
-        Ticket $ticket,
-        int $quantity,
-        Request $request
-    ): array
+    private function buildSummary(Event $event, Ticket $ticket, int $quantity, Request $request): array
     {
         $subtotal = $ticket->ticket_price * $quantity;
-
-        $platformFee = $this->calculateFeeRule(
-            'platform_fee',
-            $subtotal
-        );
-
+        $platformFee = $this->calculateFeeRule('platform_fee', $subtotal);
         $paymentFee = 0;
 
         return [
@@ -342,7 +288,6 @@ class TransactionService
             'payment_categories' => $this->getPaymentMethods(),
 
             'quantity'      => $quantity,
-
             'subtotal'      => $subtotal,
             'platform_fee'  => $platformFee,
             'payment_fee'   => $paymentFee,
@@ -404,17 +349,12 @@ class TransactionService
             ->all();
     }
 
-    public function getPaymentMethods(
-        ?int $exceptPaymentGatewayMethodId = null
-    ): array
+    public function getPaymentMethods(?int $exceptPaymentGatewayMethodId = null): array
     {
         $active_payment_gateway = config('payment.payment_gateway');
         $gateway = PaymentGateway::where('slug', $active_payment_gateway)->firstOrFail();
 
-        return PaymentGatewayMethod::query()
-            ->with([
-                'method.category',
-            ])
+        return PaymentGatewayMethod::query()->with(['method.category',])
             ->where('payment_gateway_id', $gateway->id)
             ->where('is_active', true)
             ->when($exceptPaymentGatewayMethodId, function ($query) use ($exceptPaymentGatewayMethodId) {
@@ -592,9 +532,8 @@ class TransactionService
     //     return $transaction->fresh();
     // }
 
-    private function createPayment(
-    Transaction $transaction
-): Transaction {
+    private function createPayment(Transaction $transaction): Transaction 
+    {
 
     /*
     |--------------------------------------------------------------------------
@@ -693,12 +632,10 @@ class TransactionService
             'payment_payload' =>
                 $payment,
 
-            'expired_at' =>
-                $expiredAt
-                    ? Carbon::parse($expiredAt)
-                    : $transaction
-                        ->reservation
-                        ->expired_at,
+            'expired_at' => $expiredAt
+                ? Carbon::parse($expiredAt)->setTimezone(config('app.timezone'))
+                : $transaction->reservation->expired_at,
+
         ]);
     }
 

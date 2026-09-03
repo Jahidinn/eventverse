@@ -2344,7 +2344,6 @@
     grid-template-columns:repeat(auto-fill,minmax(180px,1fr));
 
     gap:18px;
-    margin-top: 30px;
 
 }
 

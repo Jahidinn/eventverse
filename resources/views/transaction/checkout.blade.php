@@ -938,6 +938,7 @@ label.upload-box {
     @include('transaction.scripts.participant-upload')
     @include('transaction.scripts.summary')
     @include('transaction.scripts.payment-confirmation')
+    
     <script>
         const expiredAt = new Date(
             document.getElementById('reservationExpiredAt').value

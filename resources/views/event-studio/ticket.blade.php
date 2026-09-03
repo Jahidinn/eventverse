@@ -13,20 +13,20 @@
     <div class="page-header-left">
 
         <div class="ev-section">
-        <div class="ev-section-header">
-            <div>
-                <span class="ev-badge">
-                    TICKET MANAGEMENT
-                </span>
-                <!-- <h2 class="ev-title">
-                    Basic Information
-                </h2>
-                <p class="ev-subtitle">
-                    Start by introducing your event. Add a banner, event title and basic details that attendees will see first.
-                </p> -->
+            <div class="ev-section-header">
+                <div>
+                    <span class="ev-badge">
+                        TICKET MANAGEMENT
+                    </span>
+                    <!-- <h2 class="ev-title">
+                        Basic Information
+                    </h2>
+                    <p class="ev-subtitle">
+                        Start by introducing your event. Add a banner, event title and basic details that attendees will see first.
+                    </p> -->
+                </div>
             </div>
         </div>
-    </div>
 
     </div>
 

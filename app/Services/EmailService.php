@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Mail\TransactionBillingMail;
+use App\Mail\TransactionPaidMail;
 use App\Models\Transaction;
 use Illuminate\Support\Facades\Mail;
 
