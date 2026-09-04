@@ -2,7 +2,7 @@
     $(document).ready(function(e) {
         $('body').on('click', '.detail-peserta', function(e) {
             e.preventDefault();
-            var id = $(this).data("id");
+            var event_id = $(this).data("event_id");
 
             $('.title-daftar-peserta').text($(this).data("title"))
             $('.jumlah-peserta').text($(this).data("participant"))
@@ -17,9 +17,10 @@
                 destroy: true,
                 ajax: {
                     'type': 'GET',
-                    'url': '/dashboard/get-participan-checkin',
+                    'url': '/dashboard/get-participant',
                     'data': {
-                        id: id,
+                        event_id: event_id,
+                        status: 'Paid'
                     },
                 },
 
@@ -30,11 +31,11 @@
                     data: 'email',
                     name: 'email'
                 }, {
-                    data: 'transaction_id',
-                    name: 'transaction_id'
+                    data: 'ticket_code',
+                    name: 'ticket_code'
                 }, {
-                    data: 'checkin_action',
-                    name: 'checkin_action'
+                    data: 'participant_checkin_action',
+                    name: 'participant_checkin_action'
                 }]
             });
 

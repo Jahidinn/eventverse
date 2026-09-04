@@ -304,8 +304,13 @@ class DashboardController extends Controller
 			'transaction.paymentGatewayMethod.method',
 			'forms.form',
 		])
-		->whereHas('transaction', function ($query) use ($event) {
+		->whereHas('transaction', function ($query) use ($event, $request) {
 			$query->where('event_id', $event->id);
+			// kalau ada request status, filter
+			if ($request->has('status')) {
+				$query->where('status', $request->status);
+			}
+
 		})
 		->latest();
 
@@ -372,6 +377,13 @@ class DashboardController extends Controller
 				->transaction
 				?->ticket
 				?->ticket_name ?? '-';
+
+		});
+
+		$dataTable->addColumn('ticket_code', function ($participant) {
+
+			return $participant
+				?->ticket_code ?? '-';
 
 		});
 
@@ -489,6 +501,20 @@ class DashboardController extends Controller
 			}
 		);
 
+		$dataTable->addColumn(
+			'participant_checkin_action',
+			function ($participant) {
+
+				return view(
+					'dashboard.components.column-action-checkin',
+					[
+						'participant' => $participant,
+					]
+				)->render();
+
+			}
+		);
+
 
 		/*
 		|--------------------------------------------------------------------------
@@ -501,6 +527,7 @@ class DashboardController extends Controller
 			->rawColumns([
 				'transaction_status',
 				'transaction_action',
+				'participant_checkin_action',
 			])
 
 			->make(true);
@@ -846,25 +873,25 @@ class DashboardController extends Controller
 		]);
 	}
 
-	public function getParticipantCheckin(Request $request)
-	{
-		if (!auth()->user()) {
-			return response()->json(['error' => 'Gagal!']);
-		}
+	// public function getParticipantCheckin(Request $request)
+	// {
+	// 	if (!auth()->user()) {
+	// 		return response()->json(['error' => 'Gagal!']);
+	// 	}
 
-		$dataParticipant = Transaction::with(['event', 'ticket'])
-			->where('event_id', $request->id)
-			->where('status', 'Paid')
-			->orderByRaw('id DESC')
-			->get();
+	// 	$dataParticipant = Transaction::with(['event', 'ticket'])
+	// 		->where('event_id', $request->id)
+	// 		->where('status', 'Paid')
+	// 		->orderByRaw('id DESC')
+	// 		->get();
 
-		return DataTables::of($dataParticipant)
-			->addIndexColumn()
-			->addColumn('checkin_action', function ($dataParticipant) {
-				return view('dashboard.components.column-action-checkin')->with(['data' => $dataParticipant]);
-			})
-			->make(true);
-	}
+	// 	return DataTables::of($dataParticipant)
+	// 		->addIndexColumn()
+	// 		->addColumn('checkin_action', function ($dataParticipant) {
+	// 			return view('dashboard.components.column-action-checkin')->with(['data' => $dataParticipant]);
+	// 		})
+	// 		->make(true);
+	// }
 
 	public function checkinProcess(Request $request)
 	{
@@ -872,20 +899,20 @@ class DashboardController extends Controller
 		$timestamp = Carbon::now()->timestamp;
 		$tanggalCheckin = Carbon::createFromTimestamp($timestamp)->format('Y-m-d H:i:s');
 
-		$checkinTransaction = Transaction::where('transaction_id', $request->id)->first();
+		$checkinTransaction = TransactionParticipant::where('id', $request->id)->first();
 
 		//Jika Tidak ada ID
 		if (!$checkinTransaction) {
-			return response()->json(['error' => 'Masukan ID dengan benar!']);
+			return response()->json(['error' => 'ID transaksi tidak ditemukan!']);
 		}
 
-		if (!empty($checkinTransaction->checkin)) {
-			return response()->json(['error' => 'Sudah di check in guys!']);
+		if (!empty($checkinTransaction->checked_in_at)) {
+			return response()->json(['error' => 'Sudah di check in!']);
 		}
 
 		//Jika ID ada
-		$checkinTransaction->update(['checkin' => $tanggalCheckin]);
-		return response()->json(['success' => 'Berhasil checkin!']);
+		$checkinTransaction->update(['checked_in_at' => $tanggalCheckin, 'checked_in_by' => auth()->user()->id]);
+		return response()->json(['success' => 'Successfully checked in!!']);
 	}
 
 	public function withdraw(Request $request)

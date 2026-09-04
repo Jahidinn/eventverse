@@ -226,17 +226,20 @@
             @foreach ($dataEvent as $event)
 
                 @php
+                    $transactions = \App\Models\Transaction::where('event_id', $event->id)
+                        ->with('participants')
+                        ->whereNotIn('status', ['Expired', 'Unpaid', 'Pending'])
+                        ->get();
+
+                    $totalPeserta = $transactions->sum(function ($transaction) {
+                        return $transaction->participants->count();
+                    });
 
                     $title = $event->title;
 
                     if(strlen($title) > 60){
                         $title = substr($title,0,60).'...';
                     }
-
-                    $participant = \App\Models\Transaction::where('event_id',$event->id)
-                        ->where('status','Paid')
-                        ->count();
-
                 @endphp
 
                 <div class="card checkin-card">
@@ -258,7 +261,7 @@
 
                             <i class="ti ti-users"></i>
 
-                            {{ number_format($participant,0,',','.') }}
+                            {{ $totalPeserta }}
                             Peserta
 
                         </div>
@@ -268,8 +271,7 @@
                             <button
                                 type="button"
                                 class="button-40 detail-peserta"
-                                data-id="{{ $event->id }}"
-                                data-participant="{{ $participant }}"
+                                data-event_id="{{ $event->event_id }}"
                                 data-title="{{ $event->title }}">
 
                                 <i class="fas fa-check-circle"></i>
