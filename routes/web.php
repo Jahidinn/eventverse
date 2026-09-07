@@ -18,6 +18,7 @@ use App\Http\Controllers\UserProfileController;
 use App\Http\Controllers\LocationController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\ReservationController;
+use App\Http\Controllers\FileController;
 use App\Models\Event;
 use GuzzleHttp\Promise\Create;
 use Illuminate\Support\Facades\DB;
@@ -34,15 +35,15 @@ use Illuminate\Support\Facades\DB;
 */
 
 # LOMBAESAI
-Route::get('/essay-announcement-2024', [ScoreController::class, 'index']);
-Route::get('/essay-announcement-2024/score', [ScoreController::class, 'score']);
-Route::get('/essay-announcement-2024/check-score', [ScoreController::class, 'getData']);
+// Route::get('/essay-announcement-2024', [ScoreController::class, 'index']);
+// Route::get('/essay-announcement-2024/score', [ScoreController::class, 'score']);
+// Route::get('/essay-announcement-2024/check-score', [ScoreController::class, 'getData']);
 
 # DOWNLOAD SERTIFIKAT
-Route::get('/essay-announcement-2024/certificate', [ScoreController::class, 'certificate']);
-Route::get('/essay-announcement-2024/check-file', [ScoreController::class, 'checkFile']);
-Route::get('/essay-announcement-2024/download', [ScoreController::class, 'downloadFile']);
-Route::redirect('/certificate-change-request', 'https://docs.google.com/spreadsheets/d/1B2IsxtTm92lD42ukBoQCzwUurHfN7ILrmsJ456csaOg/edit?usp=sharing', 301);
+// Route::get('/essay-announcement-2024/certificate', [ScoreController::class, 'certificate']);
+// Route::get('/essay-announcement-2024/check-file', [ScoreController::class, 'checkFile']);
+// Route::get('/essay-announcement-2024/download', [ScoreController::class, 'downloadFile']);
+// Route::redirect('/certificate-change-request', 'https://docs.google.com/spreadsheets/d/1B2IsxtTm92lD42ukBoQCzwUurHfN7ILrmsJ456csaOg/edit?usp=sharing', 301);
 
 Route::get('/login', [AuthController::class, 'login'])->name('login')->middleware('guest');
 Route::post('/login', [AuthController::class, 'autenticate']);
@@ -62,8 +63,8 @@ Route::get('/email/verify/{id}/{hash}', [AuthController::class, 'emailVerify'])-
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/home', [HomeController::class, 'index']);
 Route::get('/search', [HomeController::class, 'searchEvent']);
-Route::redirect('/ec-esai2024', '/ec-esai24');
-Route::redirect('/EC-ESAI2024', '/ec-esai24');
+// Route::redirect('/ec-esai2024', '/ec-esai24');
+// Route::redirect('/EC-ESAI2024', '/ec-esai24');
 
 Route::middleware(['auth'])->group(function () {
 
@@ -362,7 +363,21 @@ Route::prefix('reservation')->name('reservation.')->group(function () {
 			[TransactionController::class, 'invoice']
 		)->name('invoice');
 
+		Route::get(
+			'/{transaction:transaction_code}/invoice/download',
+			[TransactionController::class, 'downloadInvoice']
+		)->name('invoice.download');
+
+		Route::get(
+			'/{transaction:transaction_code}/invoice',
+			[TransactionController::class, 'invoice']
+		)->name('invoice');
+
 	});
+
+	# Handle file download dan view supaya tidak langsung ke storage
+	Route::get('/file/view/{filename}', [FileController::class, 'view'])->name('file.view');
+	Route::get('/file/download/{filename}', [FileController::class, 'download'])->name('file.download');
 
 
 // Route::get('/test-event/{event:slug}', function (Event $event) {

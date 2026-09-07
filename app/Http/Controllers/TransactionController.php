@@ -449,4 +449,56 @@ private function buildPaymentDisplay(
 		return $pdf->download('ticket-' . $transaction->transaction_code . '.pdf');
 	}
 
+    public function invoice(Transaction $transaction)
+    {
+        if ($transaction->status !== 'Paid') {
+            return redirect('/');
+        }
+
+        $transaction->load([
+            'event',
+            'ticket',
+            'participants',
+            'paymentGatewayMethod.method',
+            'paymentGatewayMethod.gateway',
+        ]);
+
+        return view('reports.invoice', [
+            'transaction' => $transaction,
+            'event' => $transaction->event,
+            'ticket' => $transaction->ticket,
+            'participant' => $transaction->participants,
+            'paymentGatewayMethod' => $transaction->paymentGatewayMethod,
+        ]);
+    }
+
+    public function downloadInvoice(Transaction $transaction)
+    {
+        if ($transaction->status !== 'Paid' || !$transaction->invoice_number) {
+            return redirect('/');
+        }
+
+        $transaction->load([
+            'event',
+            'ticket',
+            'participants',
+            'paymentGatewayMethod.method',
+            'paymentGatewayMethod.gateway',
+        ]);
+
+        $pdf = Pdf::loadView('reports.invoice-pdf', [
+            'transaction' => $transaction,
+            'event' => $transaction->event,
+            'ticket' => $transaction->ticket,
+            'participant' => $transaction->participants,
+            'paymentGatewayMethod' => $transaction->paymentGatewayMethod,
+        ]);
+
+        $pdf->setPaper('a4', 'portrait');
+
+        return $pdf->download(
+            $transaction->invoice_number . '.pdf'
+        );
+    }
+
 }

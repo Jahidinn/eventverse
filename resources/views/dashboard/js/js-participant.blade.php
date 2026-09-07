@@ -427,112 +427,60 @@ $('body').on('click', '.detail-transaksi', function (e) {
                 '<div class="col-8 pl-0"></div>'
             );
 
-
-            // =================================================================
             // IMAGE
-            // =================================================================
-
-            if (
-                fieldType === 'image' &&
-                url
-            ) {
-
-
-                let image = $('<img>');
-
-
-                image
+            if (fieldType === 'image' && url) {
+                let image = $('<img>')
                     .attr('src', url)
                     .attr('alt', label)
                     .attr('loading', 'lazy')
+                    .addClass('img-thumbnail mb-2')
                     .css({
-
                         'max-width': '250px',
-
                         'max-height': '200px',
-
-                        'width': 'auto',
-
-                        'height': 'auto',
-
-                        'object-fit': 'contain',
-
-                        'display': 'block',
-
-                        'border-radius': '8px',
-
-                        'border':
-                            '1px solid #dee2e6',
-
-                        'padding': '4px'
-
+                        'object-fit': 'contain'
                     });
-
 
                 valueColumn.append(image);
 
+                // Button group untuk View & Download
+                let btnGroup = $('<div>').addClass('btn-group btn-group-sm mt-2');
 
-                // -------------------------------------------------------------
-                // LINK GAMBAR
-                // -------------------------------------------------------------
-
-                let imageLink = $('<a>');
-
-
-                imageLink
+                let viewBtn = $('<a>')
                     .attr('href', url)
                     .attr('target', '_blank')
-                    .attr(
-                        'rel',
-                        'noopener noreferrer'
-                    )
-                    .addClass(
-                        'small text-info d-inline-block mt-2'
-                    )
-                    .text('Lihat gambar');
+                    .addClass('btn btn-outline-info')
+                    .html('<i class="ti ti-eye"></i> View');
+
+                let downloadBtn = $('<a>')
+                    .attr('href', value.download_url)
+                    .addClass('btn btn-outline-success')
+                    .html('<i class="ti ti-download"></i> Download');
+
+                btnGroup.append(viewBtn).append(downloadBtn);
+                valueColumn.append(btnGroup);
+}
 
 
-                valueColumn.append(
-                    imageLink
-                );
-
-            }
-
-
-            // =================================================================
             // FILE
-            // =================================================================
+            else if (fieldType === 'file' && url) {
+                let btnGroup = $('<div>').addClass('btn-group btn-group-sm');
 
-            else if (
-                fieldType === 'file' &&
-                url
-            ) {
-
-
-                let fileButton = $('<a>');
-
-
-                fileButton
+                let viewBtn = $('<a>')
                     .attr('href', url)
                     .attr('target', '_blank')
-                    .attr(
-                        'rel',
-                        'noopener noreferrer'
-                    )
-                    .addClass(
-                        'btn btn-sm btn-outline-info'
-                    )
-                    .html(
-                        '<i class="ti ti-file"></i> ' +
-                        'Lihat file'
-                    );
+                    .addClass('btn btn-outline-info')
+                    .html('<i class="ti ti-eye"></i> View');
 
+                let downloadBtn = $('<a>')
+                    .attr('href', value.download_url)
+                    .addClass('btn btn-outline-success')
+                    .html('<i class="ti ti-download"></i> Download');
 
-                valueColumn.append(
-                    fileButton
-                );
-
+                btnGroup.append(viewBtn).append(downloadBtn);
+                valueColumn.append(btnGroup);
             }
+
+
 
 
             // =================================================================

@@ -66,9 +66,9 @@ class DashboardController extends Controller
 			return response()->json(['error' => 'Gagal!']);
 		}
 		$user_id = auth()->user()->id;
-		$transaction = Transaction::with(['event', 'ticket'])
-			->where('is_login', 1)
-			->where('user_login_id', $user_id)
+		
+		$transaction = Transaction::with(['event', 'ticket', 'participants.forms'])
+			->where('user_id', $user_id)
 			->orderByRaw('id DESC');
 
 
@@ -1458,26 +1458,39 @@ class DashboardController extends Controller
 
 
 			$customColumnIndex = $startColumnForm;
-
 			$forms = $participant->forms->keyBy('form_id');
 
 			foreach ($customForms as $form) {
-
-				$columnName = Coordinate::stringFromColumnIndex(
-					$customColumnIndex
-				);
-
+				$columnName = Coordinate::stringFromColumnIndex($customColumnIndex);
 				$transactionForm = $forms->get($form->id);
-
 				$value = $transactionForm?->form_value ?? '';
 
-				$sheet->setCellValue(
-					$columnName . $row,
-					$value
-				);
+				if (in_array($form->field_type, ['image', 'file']) && $value) {
+					// $value = "form-images/EVHW25DBSYJMHRTVO-001-25.png"
+					$filename = basename($value); // ambil nama file saja
+
+					$downloadUrl = route('file.download', $filename);
+					$viewUrl     = route('file.view', $filename);
+
+					// kolom download
+					// $sheet->setCellValue(
+					// 	$columnName . $row,
+					// 	'=HYPERLINK("'.$downloadUrl.'","Download")'
+					// );
+
+					// kolom view (misalnya di kolom berikutnya)
+					$sheet->setCellValue(
+						Coordinate::stringFromColumnIndex($customColumnIndex) . $row,
+						'=HYPERLINK("'.$viewUrl.'","Download")'
+					);
+				} else {
+					$sheet->setCellValue($columnName . $row, $value);
+				}
+
 
 				$customColumnIndex++;
 			}
+
 
 
 			$row++;

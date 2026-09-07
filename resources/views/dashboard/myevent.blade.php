@@ -323,17 +323,18 @@
 
                             <button
                                 type="button"
-                                class="button-39 text-info info-myevent"
+                                class="button-39 info-myevent"
                                 data-id="{{ $myevent->id }}"
                                 data-event="{{ $myevent->event->id }}"
                                 title="Detail">
 
-                                <i class="ti ti-list ti-sm"></i>
+                                <i class="ti ti-list ti-sm"></i> 
+                                <span class="action-text">Detail</span>
                                 {{-- <span class="action-text">Detail</span> --}}
 
                             </button>
 
-                            @if ($myevent->event->end_date > $tanggalHariIni)
+                            {{-- @if ($myevent->event->end_date > $tanggalHariIni)
 
                                 <button
                                     type="button"
@@ -341,7 +342,6 @@
                                     disabled>
 
                                     <i class="ti ti-edit ti-sm"></i>
-                                    {{-- <span class="action-text">Edit</span> --}}
 
                                 </button>
 
@@ -354,16 +354,15 @@
                                     data-event="{{ $myevent->event->id }}">
 
                                     <i class="ti ti-edit ti-sm"></i>
-                                    {{-- <span class="action-text">Edit</span> --}}
 
                                 </button>
 
-                            @endif
+                            @endif --}}
 
                             <button
                                 type="button"
-                                class="button-39 detail-myevent"
-                                data-id="{{ $myevent->id }}">
+                                class="button-39 invoice-myevent"
+                                data-transaction_code="{{ $myevent->transaction_code }}">
 
                                 <i class="ti ti-file-description ti-sm"></i>
                                 <span class="action-text">Invoice</span>
@@ -373,7 +372,7 @@
                             <button
                                 type="button"
                                 class="button-39 ticket-myevent"
-                                data-id="{{ $myevent->id }}">
+                                data-transaction_code="{{ $myevent->transaction_code }}">
 
                                 <i class="ti ti-ticket ti-sm"></i>
                                 <span class="action-text">Ticket</span>
@@ -418,7 +417,7 @@
                             <button
                                 type="button"
                                 class="button-39 lanjutkan-transaksi"
-                                data-id="{{ $myevent->id }}">
+                                data-transaction_code="{{ $myevent->transaction_code }}">
 
                                 <i class="ti ti-cash ti-sm"></i>
                                 <span class="action-text">Bayar</span>
@@ -427,17 +426,17 @@
 
                             <button
                                 type="button"
-                                class="button-39 text-info detail-myevent"
+                                class="button-39 detail-myevent"
                                 data-id="{{ $myevent->id }}">
 
                                 <i class="ti ti-list ti-sm"></i>
-                                {{-- <span class="action-text">Detail</span> --}}
+                                <span class="action-text">Detail</span>
 
                             </button>
 
                         @elseif($myevent->status == 'Expired')
 
-                            <button
+                            {{-- <button
                                 type="button"
                                 class="button-39 text-info detail-myevent"
                                 data-id="{{ $myevent->id }}">
@@ -445,7 +444,7 @@
                                 <i class="ti ti-list ti-sm"></i>
                                 <span class="action-text">Detail</span>
 
-                            </button>
+                            </button> --}}
 
                         @endif
 

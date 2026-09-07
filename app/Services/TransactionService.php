@@ -467,10 +467,7 @@ class TransactionService
         });
     }
 
-    private function validateMinimumAmount(
-        PaymentGatewayMethod $paymentGatewayMethod,
-        float $grandTotal
-    ): void
+    private function validateMinimumAmount(PaymentGatewayMethod $paymentGatewayMethod, float $grandTotal): void
     {
         if (
             $paymentGatewayMethod->fee_min !== null &&
@@ -743,7 +740,6 @@ class TransactionService
             $paymentGatewayMethod,
             $grandTotal
         );
-
 
         $transaction_data = [
             'transaction_code' => $this->generateUniqueCode(),
@@ -1137,10 +1133,7 @@ class TransactionService
     );
 }
 
-    private function calculatePaymentFee(
-        PaymentGatewayMethod $paymentGatewayMethod,
-        float $subtotal
-    ): float
+    private function calculatePaymentFee(PaymentGatewayMethod $paymentGatewayMethod, float $subtotal): float
     {
         if ($paymentGatewayMethod->fee_type === 'fixed') {
             return $paymentGatewayMethod->fee_value;
@@ -1148,19 +1141,15 @@ class TransactionService
 
         $fee = ($subtotal * $paymentGatewayMethod->fee_value) / 100;
 
-        if (
-            $paymentGatewayMethod->fee_min &&
-            $fee < $paymentGatewayMethod->fee_min
-        ) {
-            $fee = $paymentGatewayMethod->fee_min;
-        }
+        // if ($paymentGatewayMethod->fee_min && $fee < $paymentGatewayMethod->fee_min)
+        // {
+        //     $fee = $paymentGatewayMethod->fee_min;
+        // }
 
-        if (
-            $paymentGatewayMethod->fee_max &&
-            $fee > $paymentGatewayMethod->fee_max
-        ) {
-            $fee = $paymentGatewayMethod->fee_max;
-        }
+        // if ($paymentGatewayMethod->fee_max && $fee > $paymentGatewayMethod->fee_max) 
+        // {
+        //     $fee = $paymentGatewayMethod->fee_max;
+        // }
 
         return ceil($fee);
     }

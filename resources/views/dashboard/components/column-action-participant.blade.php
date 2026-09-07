@@ -90,9 +90,13 @@
                     $formValue
                 ) {
 
-                    $url = \Illuminate\Support\Facades\Storage::url(
-                        $formValue
-                    );
+                    $filename = basename($formValue);
+
+                    // arahkan ke route view
+                    $url = route('file.view', $filename);
+
+                    // kalau mau sekalian download, bisa tambahkan field lain
+                    $downloadUrl = route('file.download', $filename);
 
                 }
 
@@ -117,6 +121,8 @@
                     'form_value' => $formValue,
 
                     'url' => $url,
+                    
+                    'download_url'=> $downloadUrl ?? null,
 
                 ];
 
