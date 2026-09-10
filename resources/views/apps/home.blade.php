@@ -125,7 +125,7 @@
     </section> --}}
 
     <section class="why-us pt-0 pb-2 px-2">
-        <div class="mt-1 mb-3">
+        <div class="mt-3 mb-3">
 
             <form class="search-modern" method="GET" action="/search">
                 <i class="ti ti-search search-icon"></i>

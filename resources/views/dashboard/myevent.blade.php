@@ -323,9 +323,8 @@
 
                             <button
                                 type="button"
-                                class="button-39 info-myevent"
-                                data-id="{{ $myevent->id }}"
-                                data-event="{{ $myevent->event->id }}"
+                                class="button-39 detail-myevent"
+                                data-transaction_code="{{ $myevent->transaction_code }}"
                                 title="Detail">
 
                                 <i class="ti ti-list ti-sm"></i> 

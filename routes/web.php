@@ -349,6 +349,11 @@ Route::prefix('reservation')->name('reservation.')->group(function () {
 		)->name('payment-methods');
 
 		Route::get(
+			'/{transaction:transaction_code}/detail',
+			[TransactionController::class, 'detail']
+		)->name('transaction.detail');
+
+		Route::get(
 			'/{transaction:transaction_code}/ticket',
 			[TransactionController::class, 'ticket']
 		)->name('ticket');

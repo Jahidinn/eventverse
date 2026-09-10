@@ -374,6 +374,30 @@ private function buildPaymentDisplay(
 		]);
 	}
 
+    public function detail(Transaction $transaction)
+    {
+        if ($transaction->status !== 'Paid') {
+            return redirect('/');
+        }
+
+        $transaction->load([
+            'event',
+            'ticket',
+            'participants',
+            'participants.forms.form',
+            'paymentGatewayMethod.method',
+            'paymentGatewayMethod.gateway',
+        ]);
+
+        return view('reports.transaction-detail', [
+            'transaction' => $transaction,
+            'event' => $transaction->event,
+            'ticket' => $transaction->ticket,
+            'participants' => $transaction->participants,
+            'paymentGatewayMethod' => $transaction->paymentGatewayMethod,
+        ]);
+    }
+
 
 	public function ticket(Transaction $transaction)
 	{
