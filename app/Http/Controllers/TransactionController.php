@@ -589,9 +589,10 @@ private function buildPaymentDisplay(
 
         if ($participant) {
             if (strtolower($participant->email) !== $email) {
+                #Email tidak sesuai dengan data peserta
                 return response()->json([
                     'success' => false,
-                    'message' => 'Email tidak sesuai dengan data peserta.',
+                    'message' => 'Data tidak ditemukan. Periksa kembali kode dan email Anda.',
                 ], 404);
             }
 

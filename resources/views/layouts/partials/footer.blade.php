@@ -29,17 +29,17 @@
                 <h4 class="text-xs font-bold text-[#0f172a] uppercase tracking-wider">Company</h4>
                 <ul class="space-y-2 text-sm text-[#64748b]">
                     <li><a href="/about-us" class="hover:text-[#2282ff] transition-colors">About</a></li>
-                    <li><a href="/contact" class="hover:text-[#2282ff] transition-colors">Contact</a></li>
+                    <li><a href="/contact-us" class="hover:text-[#2282ff] transition-colors">Contact</a></li>
                 </ul>
 
                 <div class="flex items-center gap-2 mt-3">
-                    <a href="https://instagram.com/eventverse" target="_blank" rel="noopener noreferrer" class="text-[#64748b] hover:text-[#2282ff] transition-colors">
+                    <a href="https://instagram.com/eventverse_id" target="_blank" rel="noopener noreferrer" class="text-[#64748b] hover:text-[#2282ff] transition-colors">
                         <i class="ti ti-brand-instagram text-xl"></i>
                     </a>
-                    <a href="https://instagram.com/eventverse" target="_blank" rel="noopener noreferrer" class="text-[#64748b] hover:text-[#2282ff] transition-colors">
+                    <a href="https://instagram.com/info.lomba.beasiswa" target="_blank" rel="noopener noreferrer" class="text-[#64748b] hover:text-[#2282ff] transition-colors">
                         <i class="ti ti-brand-instagram text-xl"></i>
                     </a>
-                    <a href="https://wa.me/6281234567890" target="_blank" rel="noopener noreferrer" class="text-[#64748b] hover:text-[#2282ff] transition-colors">
+                    <a href="https://wa.me/6282133553002" target="_blank" rel="noopener noreferrer" class="text-[#64748b] hover:text-[#2282ff] transition-colors">
                         <i class="ti ti-brand-whatsapp text-xl"></i>
                     </a>
                 </div>
@@ -61,8 +61,8 @@
             <div class="space-y-3">
                 <h4 class="text-xs font-bold text-[#0f172a] uppercase tracking-wider">INFORMATION</h4>
                 <ul class="space-y-2 text-sm text-[#64748b]">
-                    <li><a href="/manage-events" class="hover:text-[#2282ff] transition-colors">Faq</a></li>
-                    <li><a href="/create-event" class="hover:text-[#2282ff] transition-colors">Pricing</a></li>
+                    <li><a href="/faq" class="hover:text-[#2282ff] transition-colors">Faq</a></li>
+                    <li><a href="/pricing" class="hover:text-[#2282ff] transition-colors">Pricing</a></li>
                     <li><a href="/pricing" class="hover:text-[#2282ff] transition-colors">Terms and Conditions</a></li>
                     <li><a href="/pricing" class="hover:text-[#2282ff] transition-colors">Privacy Policy</a></li>
                     <li><a href="/pricing" class="hover:text-[#2282ff] transition-colors">Guidelines</a></li>

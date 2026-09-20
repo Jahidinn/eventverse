@@ -5,8 +5,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>@yield('title', 'Eventverse.id - Your Event Partner')</title>
+    <title>@yield('title', 'Eventverse.id - Your event partner')</title>
     <meta name="csrf-token" content="{{ csrf_token() }}">
+
+    <!-- Favicons -->
+    <link href="{{ asset('assets/img/eventverse-icon.png') }}" rel="icon">
+    <link href="{{ asset('assets/img/eventverse-apple-icon.png') }}" rel="apple-touch-icon">
 
     <meta name="description" content="@yield('meta_description', 'Discover events, activities, competitions, and experiences happening around you.')">
 

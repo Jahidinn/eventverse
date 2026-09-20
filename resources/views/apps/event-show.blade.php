@@ -7,7 +7,7 @@
 
 <div class="py-4 lg:py-6 bg-[#f8fafc]">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 lg:gap-5 relative">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 lg:gap-5 relative max-lg:pb-28">
 
             {{-- ========================================================= --}}
             {{-- LEFT CONTENT --}}
@@ -240,12 +240,20 @@
                 <div class="sticky-sidebar space-y-4">
 
                     {{-- REGISTER CARD --}}
-                    <div class="bg-white border-[1.5px] border-[#ebf3ff] rounded-xl shadow-[0_2px_14px_-2px_rgba(15,23,42,0.05)]">
-                        <div class="p-4 sm:p-5">
-                            <div class="flex justify-between items-start mb-4">
-                                <div>
-                                    <small class="block text-[11px] font-semibold text-[#64748b]">Mulai Dari</small>
-                                    <h3 class="text-xl sm:text-2xl font-extrabold text-[#2282ff] m-0">
+                    <div class="bg-white border-[1.5px] border-[#ebf3ff] rounded-xl shadow-[0_2px_14px_-2px_rgba(15,23,42,0.05)]
+                                max-lg:fixed max-lg:bottom-0 max-lg:left-0 max-lg:right-0 max-lg:z-40
+                                max-lg:rounded-t-2xl max-lg:rounded-b-none
+                                max-lg:border-x max-lg:border-t max-lg:border-b-0
+                                max-lg:shadow-[0_-8px_25px_rgba(0,0,0,0.12)]"
+                        data-sticky-register>
+                        <div class="p-4 sm:p-5 max-lg:flex max-lg:items-center max-lg:gap-3 max-lg:p-3.5">
+
+                            <div class="flex justify-between items-start mb-4 max-lg:mb-0 max-lg:block max-lg:flex-1 min-w-0">
+                                <div class="min-w-0">
+                                    <small class="block text-[11px] font-semibold text-[#64748b] max-lg:text-[10px] max-lg:mb-0.5">
+                                        Mulai Dari
+                                    </small>
+                                    <h3 class="text-xl sm:text-2xl font-extrabold text-[#2282ff] m-0 leading-tight max-lg:text-lg truncate">
                                         @if($isFree)
                                             Gratis
                                         @else
@@ -253,33 +261,35 @@
                                         @endif
                                     </h3>
                                 </div>
-                                <div class="text-right">
+                                <div class="text-right max-lg:hidden">
                                     <span class="inline-block bg-[#ebf3ff] text-[#2282ff] text-[11px] font-bold px-2.5 py-1.5 rounded-full">
                                         {{ $ticketData->count() }} Pilihan Tiket
                                     </span>
                                 </div>
                             </div>
 
-                            @php
-                                $registrationClosed = false;
-                                if (!blank($detailEvent->registration_end)) {
-                                    $registrationClosed = now()->gt($detailEvent->registration_end);
-                                }
-                            @endphp
+                            <div class="max-lg:shrink-0">
+                                @php
+                                    $registrationClosed = false;
+                                    if (!blank($detailEvent->registration_end)) {
+                                        $registrationClosed = now()->gt($detailEvent->registration_end);
+                                    }
+                                @endphp
 
-                            @if($registrationClosed)
-                                <button class="bg-[#e2e8f0] text-[#94a3b8] cursor-not-allowed flex items-center justify-center gap-2 w-full h-12 rounded-xl font-bold text-sm" disabled>
-                                    <i class="ti ti-lock text-lg"></i>
-                                    <span>Pendaftaran Ditutup</span>
-                                </button>
-                            @else
-                                <button type="button"
-                                        class="flex items-center justify-center gap-2 w-full h-12 rounded-xl font-bold text-sm text-white bg-gradient-to-br from-[#2282ff] to-[#02559b] shadow-[0_4px_14px_rgba(34,130,255,0.35)] hover:-translate-y-0.5 hover:shadow-[0_6px_20px_rgba(34,130,255,0.45)] transition-all"
-                                        data-modal-target="ticketSelectModal">
-                                    <span>Daftar Sekarang</span>
-                                    <i class="ti ti-arrow-right text-lg"></i>
-                                </button>
-                            @endif
+                                @if($registrationClosed)
+                                    <button class="bg-[#e2e8f0] text-[#94a3b8] cursor-not-allowed flex items-center justify-center gap-2 w-full h-12 max-lg:h-11 rounded-xl max-lg:px-5 font-bold text-sm" disabled>
+                                        <i class="ti ti-lock text-lg"></i>
+                                        <span>Pendaftaran Ditutup</span>
+                                    </button>
+                                @else
+                                    <button type="button"
+                                            class="flex items-center justify-center gap-2 w-full max-lg:w-auto max-lg:px-5 h-12 max-lg:h-11 rounded-xl font-bold text-sm text-white bg-gradient-to-br from-[#2282ff] to-[#02559b] shadow-[0_4px_14px_rgba(34,130,255,0.35)] hover:-translate-y-0.5 hover:shadow-[0_6px_20px_rgba(34,130,255,0.45)] transition-all"
+                                            data-modal-target="ticketSelectModal">
+                                        <span>Daftar Sekarang</span>
+                                        <i class="ti ti-arrow-right text-lg"></i>
+                                    </button>
+                                @endif
+                            </div>
                         </div>
                     </div>
 
@@ -521,7 +531,7 @@
 <div id="shareQrModal" class="fixed inset-0 z-[100] hidden" data-modal>
     <div class="absolute inset-0 bg-black/50 backdrop-blur-sm" data-modal-close="shareQrModal"></div>
 
-    <div class="relative flex items-center justify-center min-h-screen p-4 pointer-events-none">
+    <div class="relative flex items-start sm:items-center justify-center min-h-screen p-4 pt-[10vh] sm:pt-4 pointer-events-none">
         <div class="pointer-events-auto bg-white rounded-xl shadow-2xl w-full max-w-sm overflow-hidden">
 
             <div class="px-4 py-3.5 flex justify-between items-center border-b border-[#e2e8f0]">
@@ -534,7 +544,7 @@
             </div>
 
             <div class="p-5 text-center">
-                <div class="inline-block p-3 bg-white rounded-lg border border-[#e2e8f0]">
+                <div class="inline-block p-3 bg-white rounded-lg border border-[#e2e8f0] max-w-full qr-code-box">
                     {!! $qrlink !!}
                 </div>
                 <div class="mt-3">
@@ -563,7 +573,7 @@
 <div id="shareModal" class="fixed inset-0 z-[100] hidden" data-modal>
     <div class="absolute inset-0 bg-black/50 backdrop-blur-sm" data-modal-close="shareModal"></div>
 
-    <div class="relative flex items-center justify-center min-h-screen p-4 pointer-events-none">
+    <div class="relative flex items-start sm:items-center justify-center min-h-screen p-4 pt-[10vh] sm:pt-4 pointer-events-none">
         <div class="pointer-events-auto bg-white rounded-xl shadow-2xl w-full max-w-md overflow-hidden">
 
             <div class="px-4 py-3.5 flex justify-between items-center border-b border-[#e2e8f0]">
@@ -619,8 +629,8 @@
                     <label class="block text-[11px] font-semibold text-[#64748b] mb-1.5">Link Event</label>
                     <div class="flex gap-2">
                         <input type="text" readonly value="{{ $shareUrl }}"
-                               class="flex-1 px-3 py-2.5 text-xs text-[#0f172a] bg-[#f8fafc] border border-[#e2e8f0] rounded-lg outline-none"
-                               id="shareUrlInput">
+                            class="flex-1 min-w-0 px-3 py-2.5 text-xs text-[#0f172a] bg-[#f8fafc] border border-[#e2e8f0] rounded-lg outline-none"
+                            id="shareUrlInput">
                         <button type="button"
                                 class="copyButton px-3.5 py-2.5 rounded-lg bg-[#2282ff] hover:bg-[#1b6cd6] text-white text-xs font-semibold transition-colors shrink-0">
                             Copy
@@ -656,6 +666,25 @@
 
     @media (max-width: 991px) {
         .sticky-sidebar { position: relative; top: 0; }
+    }
+
+    /* Sembunyikan register card saat modal terbuka */
+    body.modal-open [data-sticky-register] {
+        display: none !important;
+    }
+
+    /* Constrain QR SVG supaya tidak overflow di mobile */
+    .qr-code-box svg {
+        max-width: 100%;
+        height: auto;
+        display: block;
+    }
+
+    /* Rekap: register sticky hanya di mobile */
+    @media (min-width: 992px) {
+        [data-sticky-register] {
+            position: static !important;
+        }
     }
 </style>
 
