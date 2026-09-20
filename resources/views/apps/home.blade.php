@@ -1,672 +1,169 @@
-@extends('layouts.main')
+{{-- resources/views/home.blade.php --}}
+@extends('layouts.app')
+
+@section('title', 'Eventverse.id - Your Event Partner')
+@section('meta_description', 'Discover events, activities, competitions, and experiences happening around you.')
 
 @section('content')
-    {{-- banner --}}
-    {{-- <section class="banner">
-        <div class="wrapper">
-            <div class="banner-carousel">
-                <div class="box-image">
-                    <img src="{{ asset('assets/img/service-details-1.jpg') }}" alt="First slide">
-                </div>
 
-                <div class="box-image"> <img src="{{ asset('assets/img/service-details-2.jpg') }}" alt="Second slide"></div>
-                <div class="box-image"> <img src="{{ asset('assets/img/service-details-3.jpg') }}" alt="Third slide"></div>
-                <div class="box-image"> <img src="{{ asset('assets/img/service-details-4.jpg') }}" alt="Third slide"></div>
-            </div>
-        </div>
-    </section> --}}
+@php
+    $cities = ['All locations', 'Jakarta', 'Bandung', 'Surabaya', 'Semarang', 'Yogyakarta', 'Bali', 'Medan'];
+@endphp
 
-    {{-- <div class="header-wave">
-        <!--Content before waves-->
-        <div class="inner-header flex">
-            <div class="wave-content w-100">
-                <div class="">
-                    <h1><span class="text_1">Buat event cuma 1x klik? bisa dong!</span><span class="text_2">Cari event
-                            favoritmu di sini!</span>
-                    </h1>
-                </div>
-                <div class="pt-2">
-                    <a href="/event/create" class="button-21">Create event</a>
-                    <a href="/search" class="button-1"><i class="fas fa-search"></i> Cari event</a>
-                </div>
-            </div>
+{{-- ================= 2. BANNER / HERO ================= --}}
+<section class="relative overflow-hidden bg-white border-b border-[#e2e8f0] py-12 md:py-16">
 
-        </div>
+    {{-- Abstract Background --}}
+    <div class="pointer-events-none absolute inset-0 overflow-hidden">
 
-        <!--Waves Container-->
-        <div>
-            <svg class="waves" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-                viewBox="0 24 150 28" preserveAspectRatio="none" shape-rendering="auto">
-                <defs>
-                    <path id="gentle-wave" d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z" />
-                </defs>
-                <g class="parallax">
-                    <use xlink:href="#gentle-wave" x="48" y="0" fill="rgba(255,255,255,0.7" />
-                    <use xlink:href="#gentle-wave" x="48" y="3" fill="rgba(255,255,255,0.5)" />
-                    <use xlink:href="#gentle-wave" x="48" y="5" fill="rgba(255,255,255,0.3)" />
-                    <use xlink:href="#gentle-wave" x="48" y="7" fill="#fff" />
-                </g>
-            </svg>
-        </div>
-        <!--Waves end-->
+        {{-- Main blue glow - LEFT --}}
+        <div class="absolute -top-40 -left-40 w-[560px] h-[560px] rounded-full bg-[#2282ff]/[0.11] blur-3xl"></div>
 
-    </div>
-    <!--Header ends--> --}}
+        {{-- Secondary blue glow - LEFT / CENTER --}}
+        <div class="absolute top-[32%] -left-24 w-[420px] h-[420px] rounded-full bg-[#60a5fa]/[0.08] blur-3xl"></div>
 
+        {{-- Soft blue transition toward center --}}
+        <div class="absolute top-[10%] left-[22%] w-[300px] h-[300px] rounded-full bg-[#2282ff]/[0.035] blur-3xl"></div>
 
-    {{-- ============================= --}}
-    {{-- Featured Event Banner --}}
-    {{-- ============================= --}}
+        {{-- Soft decorative circle --}}
+        <div class="absolute top-16 left-[28%] w-40 h-40 rounded-full border border-[#2282ff]/[0.09]"></div>
 
-@if(count($heroBanners))
-<section class="featured-banner-section">
+        {{-- Small decorative dot --}}
+        <div class="absolute top-28 left-[31%] w-3 h-3 rounded-full bg-[#2282ff]/25"></div>
 
-    <div class="swiper featuredSwiper">
-
-        <div class="swiper-wrapper">
-
-            @foreach($heroBanners as $banner)
-
-                <div class="swiper-slide">
-
-                    <a href="{{ $banner['link'] }}" class="featured-banner-card">
-
-                        <img
-                            src="{{ $banner['image'] }}"
-                            class="featured-banner-image"
-                            loading="lazy">
-
-                        <div class="featured-overlay"></div>
-
-                        {{-- <span class="featured-detail-btn">
-
-                            {{ $banner['button_text'] }}
-
-                            <i class="ti ti-arrow-right"></i>
-
-                        </span> --}}
-
-                    </a>
-
-                </div>
-
-            @endforeach
-
-        </div>
-
-        <div class="swiper-pagination"></div>
-
-        <div class="featured-prev">
-            <i class="ti ti-chevron-left"></i>
-        </div>
-
-        <div class="featured-next">
-            <i class="ti ti-chevron-right"></i>
-        </div>
+        {{-- Bottom decorative shape --}}
+        <div class="absolute bottom-8 left-[36%] w-24 h-24 rounded-[2rem] border border-[#2282ff]/[0.07] rotate-12"></div>
 
     </div>
 
-</section>
+    {{-- Content --}}
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
-@endif
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center">
 
+            {{-- =====================================================
+                LEFT CONTENT
+            ====================================================== --}}
+            <div class="lg:col-span-7 space-y-6 lg:space-y-8">
 
-    {{-- Form Pencarian --}}
-    {{-- <section class="why-us pt-4 pb-4 px-2">
-        <div class="container px-0 my-shadow2" data-aos="fade-up" date-aos-delay="200">
-            <div class="d-flex flex-column justify-content-center py-5">
-                <form class="form-search" method="get" action="/search">
-                    @csrf
-                    <input type="search" name="key" placeholder="Cari event kesukaan kamu ...">
-                    <button class="button btn-success" type="submit">Cari</button>
-                </form>
-            </div>
-        </div>
-    </section> --}}
+                {{-- Featured Event Badge --}}
+                <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#ebf3ff] text-[#2282ff] text-xs font-semibold border border-[#2282ff]/20">
 
-    <section class="why-us pt-0 pb-2 px-2">
-        <div class="mt-3 mb-3">
+                    <svg class="w-3.5 h-3.5"
+                         fill="none"
+                         stroke="currentColor"
+                         stroke-width="2"
+                         viewBox="0 0 24 24">
+                        <path stroke-linecap="round"
+                              stroke-linejoin="round"
+                              d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456zM16.894 20.567L16.5 21.75l-.394-1.183a2.25 2.25 0 00-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 001.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 001.423 1.423l1.183.394-1.183.394a2.25 2.25 0 00-1.423 1.423z"/>
+                    </svg>
 
-            <form class="search-modern" method="GET" action="/search">
-                <i class="ti ti-search search-icon"></i>
-
-                <input
-                    type="search"
-                    name="key"
-                    placeholder="Cari event, seminar, lomba, workshop..."
-                    autocomplete="off">
-
-                <button type="submit">
-                    <i class="ti ti-search ti-sm"></i> Cari
-                </button>
-            </form>
-
-        </div>
-    </section>
-
-    {{-- Event terbaru --}}
-    <section class="event-terbaru-section pt-2 p-0">
-        <div class="section-title pb-0">
-            <h2 class="mt-0">Event Terbaru</h2>
-        </div>
-
-        <div class="container-fluid event-terbaru pt-0 mt-0">
-            @foreach ($eventTerbaru as $terbaru)
-                <div class="col-md-4 mt-0">
-                    <a href="/{{ $terbaru->slug }}">
-                        <div class="card profile-card-5 shadow">
-
-                            @php
-                                if ($terbaru->image == '' || $terbaru->image == null) {
-                                    $imgTerbaru = 'assets/default-img/event-images/def-img.png';
-                                } else {
-                                    $imgPath = 'storage/event-images/' . $terbaru->image;
-
-                                    // Memeriksa apakah file ada
-                                    if (file_exists(public_path($imgPath))) {
-                                        $imgTerbaru = 'storage/event-images/' . $terbaru->image;
-                                    } else {
-                                        $imgTerbaru = 'assets/default-img/event-images/def-img.png';
-                                        // Jika file tidak ada, ganti dengan default
-                                    }
-                                }
-
-                            @endphp
-
-                            <div class="card-img-block rounded">
-                                <img class="card-img-top" src="{{ asset($imgTerbaru) }}" alt="Card image cap">
-                            </div>
-                            <div class="card-body pt-0">
-
-                                {{-- Title / Judul --}}
-                                @php
-                                    if (strlen($terbaru->title) > 50) {
-                                        $title_terbaru = substr($terbaru->title, 0, 50) . ' ...';
-                                    } else {
-                                        $title_terbaru = $terbaru->title;
-                                    }
-                                @endphp
-
-                                <div style="height: 45px">
-                                    <h5 class="card-title pb-0 mb-0">{{ $title_terbaru }}</h5>
-                                </div>
-
-                                <hr class="mb-1 mt-1">
-
-                                {{-- LOKASI --}}
-                                <small class="location"><i class="fas fa-map-marker-alt mr-2"></i>
-                                    {{ $terbaru->location_jenis == 'Offline' ? ucwords(strtolower($terbaru->location_city)) : $terbaru->location_jenis }}</small>
-                                <br>
-
-                                {{-- TANGGAL EVENT --}}
-                                <small>
-                                    <i class="fas fa-clock mr-2"></i>
-                                    {{ $terbaru->start_date->format('dd-mm-Y') == $terbaru->end_date->format('dd-mm-Y') ? $terbaru->end_date->format('d M Y') : $terbaru->start_date->format('d M Y') . ' - ' . $terbaru->end_date->format('d M Y') }}</small>
-                                <hr class="mb-1 mt-1">
-
-                                {{-- PRICE --}}
-                                <div class="alert alert-success mt-3" role="alert">
-                                    <small>
-                                        <strong><i class="fas fa-tag"></i>
-                                            @if ($terbaru->ticket->isNotEmpty() && $terbaru->ticket->first()->ticket_price !== null)
-                                                {{ $terbaru->ticket->first()->ticket_price == 0 ? 'GRATIS!' : 'Rp ' . number_format($terbaru->ticket->first()->ticket_price, 0, ',', '.') }}
-                                            @else
-                                                <span>Tidak tersedia</span>
-                                            @endif
-                                        </strong>
-                                    </small>
-                                </div>
-
-                                <hr class="mb-1 mt-1">
-
-                                {{-- ORGANISASI --}}
-                                @php
-                                    if ($terbaru->organizer == 'org') {
-                                        $penyelenggara = $terbaru->org->org_name ?? '';
-                                    } elseif ($terbaru->organizer == 'individual') {
-                                        $penyelenggara = $terbaru->individual->name ?? '';
-                                    } else {
-                                        $penyelenggara = '';
-                                    }
-
-                                @endphp
-
-                                <div class="text-center">
-                                    <small class="event-user text-secondary">
-                                        {{ $penyelenggara }}</small>
-                                </div>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-            @endforeach
-        </div>
-    </section>
-
-    <section class="event-category-section my-0 py-4">
-
-        <div class="container">
-
-            <div class="section-title">
-                <h2>Kategori Event</h2>
-            </div>
-
-        </div>
-
-        <div class="category-wrapper">
-
-            <button
-                type="button"
-                class="category-prev">
-
-                <i class="ti ti-chevron-left"></i>
-
-            </button>
-
-            <div class="container">
-
-                <div class="category-slider">
-
-                    @foreach($categories as $category)
-
-                        <a href="#" class="category-item">
-
-                            <div class="category-icon">
-
-                                <i class="{{ $category->icon }}"></i>
-
-                            </div>
-
-                            <span>{{ $category->name }}</span>
-
-                        </a>
-
-                    @endforeach
-
+                    <span>eventverse.id</span>
                 </div>
 
-            </div>
 
-            <button
-                type="button"
-                class="category-next">
+                {{-- Heading --}}
+                <div class="space-y-3">
 
-                <i class="ti ti-chevron-right"></i>
+                    <h2 class="text-3xl sm:text-2xl lg:text-3xl font-extrabold text-[#0f172a] tracking-tight leading-[1.15]">
+                        The universe of
+                        <span class="text-[#2282ff]">events</span>
+                    </h2>
 
-            </button>
-
-        </div>
-
-    </section>
-
-    {{-- Penawaran --}}
-    <section class="event-terbaru-setion pt-4 p-0 bg-eventconnect">
-        <div class="container evnt-terbaru pt-0 mt-0 text-white text-center">
-            <div class="py-5">
-                <h6>Jaidikan event kamu lebih keren di eventverse !!!</h6> <a class="button-21" href="/event/create">
-                    <small><strong>BUAT EVENT SEKARANG</strong> <i class="fas fa-rocket"></i></small></a>
-            </div>
-        </div>
-    </section>
-
-
-    {{-- Event Populer --}}
-    <section class="event-terbaru-section bg-soft pt-4 p-0">
-        <div class="section-title pb-0">
-            <h2 class="mt-0">Event Populer</h2>
-        </div>
-
-        <div class="container-fluid event-terbaru pt-0 mt-0">
-            @foreach ($eventPopuler as $populer)
-                <div class="col-md-4 mt-0">
-                    <a href="/{{ $populer->slug }}">
-                        <div class="card profile-card-5 shadow">
-
-                            @php
-                                if ($populer->image == '' || $populer->image == null) {
-                                    //Jika gambar kosong
-                                    $imgPopuler = 'assets/default-img/event-images/def-img.png';
-                                } else {
-                                    $imgPath = 'storage/event-images/' . $populer->image;
-
-                                    // Memeriksa apakah file ada
-                                    if (file_exists(public_path($imgPath))) {
-                                        $imgPopuler = 'storage/event-images/' . $populer->image;
-                                    } else {
-                                        // Jika file tidak ada, ganti dengan default
-                                        $imgPopuler = 'assets/default-img/event-images/def-img.png';
-                                    }
-                                }
-                            @endphp
-
-                            <div class="card-img-block rounded">
-                                <img class="card-img-top" src="{{ asset($imgPopuler) }}" alt="Card image cap">
-                            </div>
-
-                            {{-- INFO LAIN --}}
-                            <div class="card-body pt-0">
-
-                                {{-- Title / Judul --}}
-                                @php
-                                    if (strlen($populer->title) > 50) {
-                                        $title_populer = substr($populer->title, 0, 50) . ' ...';
-                                    } else {
-                                        $title_populer = $populer->title;
-                                    }
-                                @endphp
-                                <div style="height: 45px">
-                                    <h5 class="card-title pb-0 mb-0">{{ $title_populer }}</h5>
-                                </div>
-
-                                <hr class="mb-1 mt-1">
-
-                                {{-- Lokasi --}}
-                                <small class="location">
-                                    <i class="fas fa-map-marker-alt mr-2"></i>
-                                    {{ $populer->location_jenis == 'Offline' ? ucwords(strtolower($populer->location_city)) : $populer->location_jenis }}</small>
-                                <br>
-
-                                {{-- Tanggal event --}}
-                                <small>
-                                    <i class="fas fa-clock mr-2"></i>
-                                    {{ $populer->start_date->format('dd-mm-Y') == $populer->end_date->format('dd-mm-Y') ? $populer->end_date->format('d M Y') : $populer->start_date->format('d M Y') . ' - ' . $populer->end_date->format('d M Y') }}</small>
-                                <hr class="mb-1 mt-1">
-
-                                {{-- Harga --}}
-                                <div class="alert alert-info mt-3" role="alert">
-                                    <small>
-                                        <strong><i class="fas fa-tag"></i>
-                                            {{ $populer->ticket->first()->ticket_price == 0 ? 'GRATIS!' : ' Rp ' . number_format($populer->ticket->first()->ticket_price, 0, ',', '.') }}</strong>
-                                    </small>
-                                </div>
-
-                                <hr class="mb-1 mt-1">
-
-                                {{-- Penyelenggara --}}
-                                @php
-                                    if ($populer->organizer == 'org') {
-                                        $penyelenggara_populer = $populer->org->org_name ?? '';
-                                    } elseif ($populer->organizer == 'individual') {
-                                        $penyelenggara_populer = $populer->individual->name ?? '';
-                                    } else {
-                                        $penyelenggara_populer = '';
-                                    }
-                                @endphp
-
-                                <div class="text-center">
-                                    <small class="event-user">
-                                        {{ $penyelenggara_populer }}
-                                    </small>
-                                </div>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-            @endforeach
-        </div>
-    </section>
-
-    {{-- Event pilihan --}}
-    @if(!$eventPilihan->isEmpty())
-    <section class="event-terbaru-section section-bg pt-4 p-0 bg-soft">
-        <div class="section-title pb-0">
-            <h2 class="mt-0">Event Pilihan</h2>
-        </div>
-
-        @if($eventPilihan->isEmpty())
-
-            <style>
-                .empty-state{
-                        background:#fff;
-                        border-radius:20px;
-                        padding:30px;
-                        text-align:center;
-                        box-shadow:0 4px 20px rgba(0,0,0,.05);
-                    }
-            </style>
-
-            <div class="container empty-state mx-auto mt-4">
-
-                <h5>Belum ada event pilihan 🎉</h5>
-
-                <p class="text-muted mb-3">
-                    Promosikan eventmu sekarang!.
-                </p>
-
-                <a href="/event/create" class="button-40">
-                    Promosikan Event
-                </a>
-
-            </div>
-
-        @endif
-
-        <div class="container-fluid event-terbaru pt-0 mt-0">
-
-            @foreach ($eventPilihan as $pilihan)
-                <div class="col-md-4 mt-0">
-                    <a href="/{{ $pilihan->slug }}">
-                        <div class="card profile-card-5 shadow">
-
-                            @php
-                                if ($pilihan->image == '' || $pilihan->image == null) {
-                                    //Jika gambar kosong
-                                    $imgPilihan = 'assets/default-img/event-images/def-img.png';
-                                } else {
-                                    $imgPath = 'storage/event-images/' . $pilihan->image;
-
-                                    // Memeriksa apakah file ada
-                                    if (file_exists(public_path($imgPath))) {
-                                        $imgPilihan = 'storage/event-images/' . $pilihan->image;
-                                    } else {
-                                        // Jika file tidak ada, ganti dengan default
-                                        $imgPilihan = 'assets/default-img/event-images/def-img.png';
-                                    }
-                                }
-                            @endphp
-
-                            <div class="card-img-block rounded">
-                                <img class="card-img-top" src="{{ asset($imgPilihan) }}" alt="Card image cap">
-                            </div>
-
-                            {{-- Isi data --}}
-                            <div class="card-body pt-0">
-
-                                {{-- Title / judul --}}
-                                @php
-                                    if (strlen($pilihan->title) > 50) {
-                                        $title_pilihan = substr($pilihan->title, 0, 50) . ' ...';
-                                    } else {
-                                        $title_pilihan = $pilihan->title;
-                                    }
-                                @endphp
-
-                                <div style="height: 45px">
-                                    <h5 class="card-title pb-0 mb-0">{{ $title_pilihan }}</h5>
-                                </div>
-
-                                <hr class="mb-1 mt-1">
-
-                                {{-- Lokasi --}}
-                                <small class="location">
-                                    <i class="fas fa-map-marker-alt mr-2"></i>
-                                    {{ $pilihan->location_jenis == 'Offline' ? ucwords(strtolower($pilihan->location_city)) : $pilihan->location_jenis }}</small>
-                                <br>
-                                {{-- Tanggal event --}}
-                                <small>
-                                    <i class="fas fa-clock mr-2"></i>
-                                    {{ $pilihan->start_date->format('dd-mm-Y') == $pilihan->end_date->format('dd-mm-Y') ? $pilihan->end_date->format('d M Y') : $pilihan->start_date->format('d M Y') . ' - ' . $pilihan->end_date->format('d M Y') }}</small>
-
-
-                                {{-- Harga tiket --}}
-                                <div class="alert alert-info mt-3" role="alert">
-                                    <small>
-                                        <strong><i class="fas fa-tag"></i>
-                                            {{ $pilihan->ticket->first()->ticket_price == 0 ? 'GRATIS!' : ' Rp ' . number_format($pilihan->ticket->first()->ticket_price, 0, ',', '.') }}</strong>
-                                    </small>
-                                </div>
-
-                                <hr class="mt-1 mb-1">
-
-                                {{-- Penyelenggara --}}
-                                @php
-                                    if ($pilihan->organizer == 'org') {
-                                        $penyelenggara_pilihan = $pilihan->org->org_name ?? '';
-                                    } elseif ($pilihan->organizer == 'individual') {
-                                        $penyelenggara_pilihan = $pilihan->individual->name ?? '';
-                                    } else {
-                                        $penyelenggara_pilihan = '';
-                                    }
-                                @endphp
-                                <div class="text-center">
-                                    <small class="event-user">
-                                        {{ $penyelenggara_pilihan }}
-                                    </small>
-                                </div>
-
-                            </div>
-                        </div>
-                    </a>
-                </div>
-            @endforeach
-        </div>
-    </section>
-    @endif
-
-
-   <!-- =========================================
-    WHY EVENTVERSE
-========================================= -->
-
-<section class="ev-why py-4 mb-4">
-
-    <div class="container">
-
-        <!-- =========================
-                SECTION TITLE
-        ========================== -->
-
-        <div class="ev-title">
-
-            <span class="ev-badge">
-
-                <i class="ti ti-sparkles"></i>
-
-                Eventverse.id
-
-            </span>
-
-            <h4>
-
-                Semua kebutuhan event dalam satu platform
-
-            </h4>
-
-            <p>
-
-                Eventverse.id membantu komunitas, organisasi, institusi pendidikan, perusahaan, hingga event organizer mengelola event secara profesional mulai dari registrasi peserta, ticketing, pembayaran, QR Code Check-In, manajemen participant, hingga laporan event dalam satu dashboard modern.
-
-            </p>
-
-        </div>
-
-        <!-- =========================
-                CONTENT
-        ========================== -->
-
-        <div class="ev-wrapper">
-
-            <!-- =====================================
-                        LEFT SIDE
-            ====================================== -->
-
-            <div class="ev-left">
-
-                <div class="ev-section-title">
-
-                    <h4>
-                        Mengapa Memilih Eventverse?
-                    </h4>
-
-                    <p>
-
-                        Semua kebutuhan penyelenggaraan event tersedia
-                        dalam satu platform modern sehingga kamu dapat
-                        fokus menghadirkan pengalaman terbaik bagi peserta!
-
+                    <p class="text-base sm:text-md text-[#64748b] leading-relaxed max-w-2xl">
+                        Discover a variety of events, competitions, concerts, and experiences happening around you.
                     </p>
 
                 </div>
 
-                <div class="ev-feature-list">
 
-                    <!-- ==================== -->
+                {{-- Search --}}
+                <div class="pt-1 w-full">
 
-                    <div class="ev-feature">
-                        <div class="ev-icon">
-                            <i class="ti ti-ticket"></i>
+                    <form
+                        action="/search"
+                        method="GET"
+                        class="flex items-center w-full p-1.5 rounded-2xl bg-white border border-[#e2e8f0] shadow-[0_8px_30px_rgba(34,130,255,0.08)] focus-within:border-[#2282ff]/40 focus-within:shadow-[0_8px_30px_rgba(34,130,255,0.12)] transition-all"
+                    >
+
+                        {{-- Search Icon --}}
+                        <div class="flex items-center justify-center w-11 h-11 shrink-0 text-[#64748b]">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                <circle cx="11" cy="11" r="7"></circle>
+                                <path stroke-linecap="round" stroke-linejoin="round" d="m20 20-4-4"/>
+                            </svg>
                         </div>
-                        <div>
-                            <h4>100% Gratis!</h4>
+
+                        {{-- Input --}}
+                        <input
+                            type="text"
+                            name="key"
+                            placeholder="Search events, cities, or categories..."
+                            class="flex-1 min-w-0 px-2 py-3 text-sm text-[#0f172a] placeholder:text-[#94a3b8] bg-transparent border-0 outline-none focus:ring-0"
+                        >
+
+                        {{-- Search Button --}}
+                        <button
+                            type="submit"
+                            class="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-[#2282ff] hover:bg-[#1b6cd6] text-white text-sm font-semibold shadow-sm transition-all hover:-translate-y-0.5 shrink-0"
+                        >
+                            <span>Search</span>
+
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="m9 18 6-6-6-6"/>
+                            </svg>
+                        </button>
+
+                    </form>
+
+                </div>
+
+
+                {{-- Supporting Info --}}
+                <div class="pt-4 border-t border-[#e2e8f0] grid grid-cols-1 sm:grid-cols-3 gap-4">
+
+                    {{-- Free --}}
+                    <div class="flex items-center gap-3">
+                        <div class="w-9 h-9 rounded-lg bg-[#ecfdf5] text-emerald-600 flex items-center justify-center shrink-0">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                        </div>
+
+                        <div class="flex flex-col">
+                            <span class="text-sm font-bold text-[#0f172a]">100% Free</span>
+                            <span class="text-xs text-[#64748b]">manage your event for free</span>
                         </div>
                     </div>
 
-                    <div class="ev-feature">
-                        <div class="ev-icon">
-                            <i class="ti ti-ticket"></i>
+
+                    {{-- Easy Management --}}
+                    <div class="flex items-center gap-3">
+                        <div class="w-9 h-9 rounded-lg bg-[#ecfdf5] text-emerald-600 flex items-center justify-center shrink-0">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
                         </div>
-                        <div>
-                            <h4>Modern event management & ticketing</h4>
+
+                        <div class="flex flex-col">
+                            <span class="text-sm font-bold text-[#0f172a]">Easy amanegement</span>
+                            <span class="text-xs text-[#64748b]">simple & powerful</span>
                         </div>
                     </div>
 
-                    <div class="ev-feature">
-                        <div class="ev-icon">
-                            <i class="ti ti-ticket"></i>
-                        </div>
-                        <div>
-                            <h4>Payment modern terintegrasi</h4>
-                        </div>
-                    </div>
 
-                    <div class="ev-feature">
-                        <div class="ev-icon">
-                            <i class="ti ti-qrcode"></i>
-                        </div>
-                        <div>
-                            <h4>QR code check in</h4>
-                        </div>
-                    </div>
-
-                    <div class="ev-feature">
-                        <div class="ev-icon">
-                            <i class="ti ti-users-group"></i>
-                        </div>
-                        <div>
-                            <h4>Multi organizer</h4>
-                        </div>
-                    </div>
-
-                    <!-- ==================== -->
-
-                    <div class="ev-feature">
-                        <div class="ev-icon">
-                            <i class="ti ti-mail"></i>
+                    {{-- Digital Tickets --}}
+                    <div class="flex items-center gap-3">
+                        <div class="w-9 h-9 rounded-lg bg-[#ecfdf5] text-emerald-600 flex items-center justify-center shrink-0">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
                         </div>
 
-                        <div>
-                            <h4>Email & Notifikasi Otomatis</h4>
-                        </div>
-                    </div>
-
-                    <!-- ==================== -->
-
-                    <div class="ev-feature">
-                        <div class="ev-icon">
-                            <i class="ti ti-chart-line"></i>
-                        </div>
-                        <div>
-                            <h4>Laporan & Analitik Real-Time</h4>
+                        <div class="flex flex-col">
+                            <span class="text-sm font-bold text-[#0f172a]">Secure payment</span>
+                            <span class="text-xs text-[#64748b]">multiple payment methods</span>
                         </div>
                     </div>
 
@@ -674,31 +171,177 @@
 
             </div>
 
-            <!-- RIGHT SIDE DIMULAI PADA BAGIAN 2 -->
-                        <!-- =====================================
-                        RIGHT SIDE
-            ====================================== -->
 
-            <div class="ev-right">
+            {{-- =====================================================
+                RIGHT FEATURED EVENT SLIDER
+            ====================================================== --}}
+            <div class="lg:col-span-5">
 
-                <div class="ev-dashboard">
+                <div id="featured-slider" class="relative group">
 
-                    <div class="ev-topbar">
+                    {{-- Soft blue glow --}}
+                    <div class="absolute -inset-2 rounded-[1.5rem] bg-[#2282ff]/[0.06] blur-xl"></div>
 
-                        <span></span>
-                        <span></span>
-                        <span></span>
+                    {{-- Slider --}}
+                    <div class="relative overflow-hidden rounded-2xl border border-[#e2e8f0] bg-white shadow-[0_10px_35px_rgba(34,130,255,0.10)]">
+
+                        <div id="featured-track" class="flex transition-transform duration-700 ease-in-out">
+
+                            @foreach($heroBanners as $index => $banner)
+
+                                @php
+                                    if (empty($banner->image)) {
+                                        $banner_image = 'assets/default-img/event-images/def-img.png';
+                                    } else {
+                                        $imgPath = 'storage/event-images/' . $banner->image;
+
+                                        $banner_image = file_exists(public_path($imgPath))
+                                            ? $imgPath
+                                            : 'assets/default-img/event-images/def-img.png';
+                                    }
+                                @endphp
+
+                                <article class="featured-slide min-w-full">
+                                    <a
+                                        href="/{{ $banner->slug }}"
+                                        class="group flex flex-col bg-white rounded-2xl border border-[#e2e8f0] shadow-xs hover:shadow-md hover:border-[#cbd5e1] hover:-translate-y-1 transition-all duration-200 overflow-hidden cursor-pointer"
+                                    >
+
+                                        {{-- Image --}}
+                                        <div class="relative aspect-[16/10] w-full overflow-hidden bg-slate-100">
+
+                                            <img src="{{ $banner_image }}"
+                                                 alt="{{ $banner->title }}"
+                                                 class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+
+                                            {{-- Overlay --}}
+                                            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+
+                                            {{-- Category --}}
+                                            <div class="absolute top-4 left-4">
+                                                <span class="inline-flex items-center px-3 py-1 rounded-md text-xs font-bold uppercase tracking-wider bg-[#2282ff] text-white shadow-sm">
+                                                    {{ $banner->category->name }}
+                                                </span>
+                                            </div>
+
+                                            {{-- Event Info --}}
+                                            @php
+                                                if ($banner->organizer == 'org') {
+                                                    $penyelenggara = $banner->org->org_name ?? '';
+                                                } elseif ($banner->organizer == 'individual') {
+                                                    $penyelenggara = $banner->individual->name ?? '';
+                                                } else {
+                                                    $penyelenggara = '';
+                                                }
+                                            @endphp
+
+                                            <div class="absolute bottom-4 left-4 right-4 text-white">
+
+                                                <div class="text-xs uppercase tracking-wider text-sky-200">
+                                                    {{ $penyelenggara }}
+                                                </div>
+
+                                                <h3 class="text-lg sm:text-xl font-bold text-white mt-1">
+                                                    {{ $banner->title }}
+                                                </h3>
+
+                                            </div>
+
+                                        </div>
+
+
+                                        {{-- Bottom Info --}}
+                                        <div class="p-4 bg-white flex items-center justify-between border-t border-[#e2e8f0]">
+
+                                            <div class="space-y-1 text-xs text-[#64748b]">
+
+                                                <div class="flex items-center gap-1.5">
+                                                    <span>📅</span>
+                                                    <span>
+                                                        {{ $banner->start_date->format('d-m-Y') == $banner->end_date->format('d-m-Y')
+                                                            ? $banner->end_date->format('d M Y')
+                                                            : $banner->start_date->format('d M Y') . ' - ' . $banner->end_date->format('d M Y')
+                                                        }}
+                                                    </span>
+                                                </div>
+
+                                                <div class="flex items-center gap-1.5">
+                                                    <span>📍</span>
+                                                    <span>
+                                                        {{ $banner->location_jenis == 'Offline'
+                                                            ? ucwords(strtolower($banner->location_city))
+                                                            : $banner->location_jenis
+                                                        }}
+                                                    </span>
+                                                </div>
+
+                                            </div>
+
+
+                                            <div class="text-right">
+
+                                                <span class="text-[11px] font-medium text-[#64748b] block">
+                                                    Starts from
+                                                </span>
+
+                                                <span class="text-base font-bold text-[#2282ff]">
+                                                    {{ $banner->ticket->first()->ticket_price == 0
+                                                        ? 'GRATIS!'
+                                                        : 'Rp ' . number_format($banner->ticket->first()->ticket_price, 0, ',', '.')
+                                                    }}
+                                                </span>
+
+                                            </div>
+
+                                        </div>
+
+                                    </a>
+                                </article>
+
+                            @endforeach
+
+                        </div>
+
+
+                        {{-- Previous --}}
+                        <button type="button"
+                                id="featured-prev"
+                                aria-label="Previous event"
+                                class="absolute left-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-white/95 text-[#0f172a] shadow-md border border-[#e2e8f0] flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200 hover:bg-white">
+
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/>
+                            </svg>
+
+                        </button>
+
+
+                        {{-- Next --}}
+                        <button type="button"
+                                id="featured-next"
+                                aria-label="Next event"
+                                class="absolute right-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-white/95 text-[#0f172a] shadow-md border border-[#e2e8f0] flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200 hover:bg-white">
+
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
+                            </svg>
+
+                        </button>
 
                     </div>
 
-                    <div class="ev-screen">
+                    {{-- Dots --}}
+                    <div id="featured-dots" class="flex items-center justify-center gap-1.5 mt-4">
 
-                        <!-- nanti ganti screenshot dashboard -->
+                        @foreach($heroBanners as $index => $banner)
 
-                        <img
-                            src="/assets/img/dashboard-ss.png"
-                            class="ev-dashboard-image"
-                            alt="Dashboard Eventverse">
+                            <button type="button"
+                                    data-slide="{{ $index }}"
+                                    aria-label="Go to slide {{ $index + 1 }}"
+                                    class="featured-dot h-1.5 rounded-full transition-all duration-300 {{ $index === 0 ? 'w-7 bg-[#2282ff]' : 'w-1.5 bg-[#cbd5e1]' }}">
+                            </button>
+
+                        @endforeach
 
                     </div>
 
@@ -710,1125 +353,466 @@
 
     </div>
 
-
 </section>
 
-<style> 
-    /* =====================================================
-    WHY EVENTVERSE
-===================================================== */
 
-.ev-why{
+{{-- ================= 5. RECENT EVENTS ================= --}}
+<section id="events" class="py-12 md:py-10 bg-[#f8fafc]">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex flex-col sm:flex-row sm:items-end justify-between mb-8 gap-4">
+            <div class="mb-5">
+                <h3 class="text-xl sm:text-2xl font-bold tracking-[-0.03em] text-[#0f172a]">
+                    <span class="text-[#2282ff]">Recent</span>
+                    events
+                </h3>
+
+                <p class="mt-1.5 text-sm text-[#64748b] tracking-tight">
+                    Discover the latest events added to eventverse
+                </p>
+            </div>
+            <a href="/events" class="inline-flex items-center gap-1.5 text-sm font-semibold text-[#2282ff] hover:text-[#1b6cd6] group">
+                <span>View All</span>
+                <span class="transition-transform group-hover:translate-x-1">→</span>
+            </a>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            @foreach ($eventTerbaru as $event)
+
+                @php
+                    if (empty($event['image'])) {
+                        $imgTerbaru = 'assets/default-img/event-images/def-img.png';
+                    } else {
+                        $imgPath = 'storage/event-images/' . $event['image'];
+
+                        $imgTerbaru = file_exists(public_path($imgPath))
+                            ? $imgPath
+                            : 'assets/default-img/event-images/def-img.png';
+                    }
+                @endphp
+
+                <a
+                    href="/{{ $event->slug }}"
+                    class="group flex flex-col bg-white rounded-2xl border border-[#e2e8f0] shadow-xs hover:shadow-md hover:border-[#cbd5e1] hover:-translate-y-1 transition-all duration-200 overflow-hidden cursor-pointer"
+                >
+                    {{-- Event Image --}}
+                    <div class="relative aspect-[16/9] w-full overflow-hidden bg-slate-100">
+                        <img
+                            src="{{ $imgTerbaru }}"
+                            alt="{{ $event->title }}"
+                            class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                        >
+                        <div class="absolute top-3 left-3">
+                            <span class="px-2.5 py-1 rounded-md text-[10px] sm:text-[11px] font-bold uppercase tracking-wider bg-white/90 text-[#0f172a] border border-[#e2e8f0] shadow-xs backdrop-blur-xs">
+                                {{ strtoupper($event->category->name) }}
+                            </span>
+                        </div>
+                    </div>
+
+                    {{-- Card Body --}}
+                    <div class="p-3 sm:p-4 flex-1 flex flex-col justify-between">
+                        <div>
+                            <h3 class="text-sm sm:text-base font-bold text-[#0f172a] group-hover:text-[#2282ff] transition-colors line-clamp-2 leading-snug">
+                                {{ $event->title }}
+                            </h3>
+
+                            <div class="mt-2 space-y-1 text-[11px] sm:text-xs text-[#64748b]">
+                                <div class="flex items-center gap-1.5">
+                                    <span>
+                                        📅
+                                        {{ $event->start_date->format('d-m-Y') == $event->end_date->format('d-m-Y')
+                                            ? $event->end_date->format('d M Y')
+                                            : $event->start_date->format('d M Y') . ' - ' . $event->end_date->format('d M Y')
+                                        }}
+                                    </span>
+                                </div>
+                                <div class="flex items-center gap-1.5 truncate">
+                                    <span>
+                                        📍
+                                        {{ $event->location_jenis == 'Offline'
+                                            ? ucwords(strtolower($event->location_city))
+                                            : $event->location_jenis
+                                        }}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        {{-- Footer --}}
+                        <div class="mt-3 pt-2 border-t border-[#e2e8f0] flex items-center justify-between">
+                            <div>
+                                <span class="text-[10px] sm:text-[11px] text-[#64748b] block font-medium">
+                                    Start from
+                                </span>
+
+                                @if ($event->ticket->isNotEmpty() && $event->ticket->first()->ticket_price !== null)
+                                    <span class="text-sm sm:text-base font-bold {{ $event->ticket->first()->ticket_price == 0 ? 'text-emerald-600' : 'text-[#2282ff]' }}">
+                                        {{ $event->ticket->first()->ticket_price == 0
+                                            ? 'GRATIS!'
+                                            : 'Rp ' . number_format($event->ticket->first()->ticket_price, 0, ',', '.')
+                                        }}
+                                    </span>
+                                @else
+                                    <span class="text-sm font-semibold text-[#64748b]">
+                                        Tidak tersedia
+                                    </span>
+                                @endif
+                            </div>
+
+                            <span class="text-[11px] sm:text-xs font-semibold text-[#0f172a] group-hover:text-[#2282ff] transition-colors">
+                                Get Ticket →
+                            </span>
+                        </div>
+                    </div>
+                </a>
+
+            @endforeach
+        </div>
+    </div>
+</section>
+
+{{-- ================= 4. SEARCH EVENT ================= --}}
+<section class="py-3 bg-white border-y border-[#e2e8f0]">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="max-w-4xl mx-auto">
+            {{-- Form search bisa diaktifkan kembali jika diperlukan --}}
+        </div>
+    </div>
+</section>
+
+
+{{-- ================= 3. EVENT CATEGORIES ================= --}}
+<section id="categories" class="py-10 md:py-12 bg-[#f8fafc]">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+        {{-- Section Header --}}
+        <div class="mb-5">
+            <h2 class="text-xl sm:text-2xl font-bold tracking-[-0.03em] text-[#0f172a]">
+                Explore
+                <span class="text-[#2282ff]">categories</span>
+            </h2>
+
+            <p class="mt-1.5 text-sm text-[#64748b] tracking-tight">
+                Find events that match your interests.
+            </p>
+        </div>
+
+        {{-- Category Slider --}}
+        <div id="category-slider" class="group">
+
+            <div class="flex items-center gap-3">
+
+                {{-- Previous Button --}}
+                <button
+                    type="button"
+                    id="category-prev"
+                    class="hidden sm:flex flex-none w-9 h-9 rounded-full bg-white/95 text-[#0f172a] shadow-md border border-[#e2e8f0] items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200 hover:bg-white hover:text-[#2282ff]"
+                    aria-label="Previous categories"
+                >
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/>
+                    </svg>
+                </button>
+
+                {{-- Category Track --}}
+                <div
+                    id="category-track"
+                    class="flex-1 flex gap-3 sm:gap-4 overflow-x-auto scroll-smooth py-2 pb-6"
+                >
+                    @foreach ($categories as $category)
+                        <a href="/search?category={{ $category->id }}"
+                           class="flex-none w-[85px] sm:w-[145px] group/category flex flex-col items-center justify-center text-center p-2 sm:p-4 rounded-xl border border-[#e2e8f0] bg-white hover:border-[#2282ff]/50 hover:bg-[#ebf3ff]/40 hover:-translate-y-0.5 shadow-sm transition-all duration-200">
+
+                            {{-- Icon --}}
+                            <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-[#f8fafc] text-[#2282ff] flex items-center justify-center mb-2 sm:mb-3 group-hover/category:bg-white group-hover/category:scale-105 transition-all duration-200">
+                                <i class="{{ $category->icon }} text-lg sm:text-xl"></i>
+                            </div>
+
+                            {{-- Category Name --}}
+                            <span class="text-xs sm:text-sm font-semibold tracking-tight text-[#0f172a] group-hover/category:text-[#2282ff] line-clamp-2">
+                                {{ $category->name }}
+                            </span>
+                        </a>
+                    @endforeach
+                </div>
+
+                {{-- Next Button --}}
+                <button
+                    type="button"
+                    id="category-next"
+                    class="hidden sm:flex flex-none w-9 h-9 rounded-full bg-white/95 text-[#0f172a] shadow-md border border-[#e2e8f0] items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200 hover:bg-white hover:text-[#2282ff]"
+                    aria-label="Next categories"
+                >
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
+                    </svg>
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+</section>
+
+
+{{-- ================= 7. POPULAR EVENTS ================= --}}
+<section id="popular" class="py-12 md:py-16 bg-white border-t border-[#e2e8f0]">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex flex-col sm:flex-row sm:items-end justify-between mb-8 gap-4">
+            <div class="mb-5">
+                <h3 class="text-xl sm:text-2xl font-bold tracking-[-0.03em] text-[#0f172a]">
+                    <span class="text-[#2282ff]">Popular</span>
+                    events
+                </h3>
+
+                <p class="mt-1.5 text-sm text-[#64748b] tracking-tight">
+                    Events people are interested in right now
+                </p>
+            </div>
+            <a href="/popular-events" class="inline-flex items-center gap-1.5 text-sm font-semibold text-[#2282ff] hover:text-[#1b6cd6] group">
+                <span>View All</span>
+                <span class="transition-transform group-hover:translate-x-1">→</span>
+            </a>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            @foreach ($eventPopuler as $popularEvent)
+
+                @php
+                    if (empty($popularEvent['image'])) {
+                        $popularImg = 'assets/default-img/event-images/def-img.png';
+                    } else {
+                        $imgPath = 'storage/event-images/' . $popularEvent['image'];
+
+                        $popularImg = file_exists(public_path($imgPath))
+                            ? $imgPath
+                            : 'assets/default-img/event-images/def-img.png';
+                    }
+                @endphp
+
+                <a
+                    href="/{{ $popularEvent->slug }}"
+                    class="group flex flex-col bg-white rounded-2xl border border-[#e2e8f0] shadow-xs hover:shadow-md hover:border-[#cbd5e1] hover:-translate-y-1 transition-all duration-200 overflow-hidden cursor-pointer"
+                >
+
+                    <div class="relative aspect-[16/9] w-full overflow-hidden bg-slate-100">
+                        <img src="{{ $popularImg }}" alt="{{ $popularEvent->title }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+
+                        <div class="absolute top-3 left-3 right-3 flex items-center justify-between">
+                            <span class="px-2.5 py-1 rounded-md text-[11px] font-bold uppercase tracking-wider bg-white/90 text-[#0f172a] border border-[#e2e8f0] shadow-xs">
+                                {{ strtoupper($popularEvent->category->name) }}
+                            </span>
+                            <button type="button" class="p-2 rounded-full bg-white/90 text-slate-600 hover:text-rose-600 shadow-xs transition-colors" aria-label="Favorite">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z"/>
+                                </svg>
+                            </button>
+                        </div>
+
+                        @if (!empty($popularEvent->visitor))
+                            <div class="absolute bottom-2.5 left-3">
+                                <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-[11px] font-semibold bg-[#0f172a]/85 text-white backdrop-blur-xs">
+                                    🔥 {{ $popularEvent->visitor }}
+                                </span>
+                            </div>
+                        @endif
+                    </div>
+
+                    <div class="p-4 flex-1 flex flex-col justify-between">
+                        <div>
+                            <h3 class="text-base font-bold text-[#0f172a] group-hover:text-[#2282ff] transition-colors line-clamp-2 leading-snug">
+                                {{ $popularEvent->title }}
+                            </h3>
+                            <div class="mt-2.5 space-y-1 text-xs text-[#64748b]">
+                                <div>
+                                    📅 {{ $popularEvent->start_date->format('d-m-Y') == $popularEvent->end_date->format('d-m-Y')
+                                            ? $popularEvent->end_date->format('d M Y')
+                                            : $popularEvent->start_date->format('d M Y') . ' - ' . $popularEvent->end_date->format('d M Y')
+                                        }}
+                                </div>
+                                <div class="truncate">
+                                    📍 {{ $popularEvent->location_jenis == 'Offline'
+                                            ? ucwords(strtolower($popularEvent->location_city))
+                                            : $popularEvent->location_jenis
+                                        }}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-4 pt-3 border-t border-[#e2e8f0] flex items-center justify-between">
+                            <div>
+                                <span class="text-[11px] text-[#64748b] block font-medium">Start from</span>
+
+                                @if ($popularEvent->ticket->isNotEmpty() && $popularEvent->ticket->first()->ticket_price !== null)
+                                    <span class="text-sm sm:text-base font-bold {{ $popularEvent->ticket->first()->ticket_price == 0 ? 'text-emerald-600' : 'text-[#2282ff]' }}">
+                                        {{ $popularEvent->ticket->first()->ticket_price == 0
+                                            ? 'GRATIS!'
+                                            : 'Rp ' . number_format($popularEvent->ticket->first()->ticket_price, 0, ',', '.')
+                                        }}
+                                    </span>
+                                @else
+                                    <span class="text-sm font-semibold text-[#64748b]">
+                                        Tidak tersedia
+                                    </span>
+                                @endif
+                            </div>
+                            <span class="text-xs font-semibold text-[#0f172a] group-hover:text-[#2282ff] transition-colors">
+                                Get Ticket →
+                            </span>
+                        </div>
+                    </div>
+                </a>
+            @endforeach
+        </div>
+    </div>
+</section>
+
+
+{{-- ================= 8. BROWSE ALL EVENTS CTA ================= --}}
+<section class="py-14 bg-[#f8fafc] border-t border-[#e2e8f0]">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <h2 class="text-2xl sm:text-3xl font-bold text-[#0f172a] tracking-tight">Looking for something else?</h2>
+        <p class="text-sm sm:text-base text-[#64748b] mt-2 max-w-lg mx-auto">
+            Explore all events available on Eventverse.
+        </p>
+        <div class="mt-6">
+            <a href="/all-events" class="inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-xl text-sm sm:text-base font-semibold text-white bg-[#2282ff] hover:bg-[#1b6cd6] shadow-md shadow-[#2282ff]/20 transition-all hover:-translate-y-0.5">
+                <span>View All Events</span>
+                <span>→</span>
+            </a>
+        </div>
+    </div>
+</section>
 
-    position: relative;
-
-    overflow:visible;
-
-    padding: 0px 0;
-
-    background:
-        radial-gradient(circle at top right,
-        rgba(37,99,235,.06),
-        transparent 35%),
-        linear-gradient(
-        180deg,
-        #ffffff 0%,
-        #f8fbff 100%);
-
-}
-
-/* ====================================== */
-
-.ev-why::before{
-
-    content:"";
-
-    position:absolute;
-
-    width:450px;
-
-    height:450px;
-
-    left:-180px;
-
-    top:-180px;
-
-    border-radius:50%;
-
-    background:#2563eb;
-
-    opacity:.05;
-
-    filter:blur(120px);
-
-}
-
-.ev-why::after{
-
-    content:"";
-
-    position:absolute;
-
-    width:350px;
-
-    height:350px;
-
-    right:-120px;
-
-    bottom:-120px;
-
-    border-radius:50%;
-
-    background:#3b82f6;
-
-    opacity:.04;
-
-    filter:blur(100px);
-
-}
-
-/* ====================================== */
-
-.ev-why .container{
-
-    position:relative;
-
-    z-index:2;
-
-}
-
-/* =====================================================
-    SECTION TITLE
-===================================================== */
-
-.ev-title{
-
-    max-width:850px;
-
-    margin:0 auto 80px;
-
-    text-align:center;
-
-}
-
-.ev-badge{
-
-    display:inline-flex;
-
-    align-items:center;
-
-    gap:10px;
-
-    padding:10px 20px;
-
-    border-radius:999px;
-
-    background:#eef4ff;
-
-    color:#2563eb;
-
-    font-size:14px;
-
-    font-weight:600;
-
-    margin-bottom:24px;
-
-}
-
-.ev-badge i{
-
-    font-size:18px;
-
-}
-
-.ev-title h4{
-
-    font-size:22px;
-
-    line-height:1.15;
-
-    font-weight:800;
-
-    color:#0f172a;
-
-    letter-spacing:-1px;
-
-    margin-bottom:24px;
-
-}
-
-.ev-title p{
-
-    max-width:760px;
-
-    margin:auto;
-
-    font-size:15px;
-
-    line-height:1.6;
-
-    color:#64748b;
-
-}
-
-/* =====================================================
-    CONTENT
-===================================================== */
-
-.ev-wrapper{
-
-    display:grid;
-
-    grid-template-columns:1.1fr .9fr;
-
-    gap:70px;
-
-    align-items:start;
-
-}
-
-/* =====================================================
-    LEFT
-===================================================== */
-
-.ev-left{
-
-    min-width:0;
-
-}
-
-/* =====================================================
-    RIGHT
-===================================================== */
-
-.ev-right{
-
-    position:sticky;
-
-    top:100px;
-
-    align-self:start;
-
-}
-
-/* =====================================================
-    Smooth Animation
-===================================================== */
-
-.ev-title,
-.ev-left,
-.ev-right{
-
-    animation:fadeUp .7s ease;
-
-}
-
-@keyframes fadeUp{
-
-    from{
-
-        opacity:0;
-
-        transform:translateY(35px);
-
-    }
-
-    to{
-
-        opacity:1;
-
-        transform:none;
-
-    }
-
-}
-
-/* =====================================================
-    LEFT CONTENT
-===================================================== */
-
-.ev-section-title{
-
-    margin-bottom:45px;
-
-}
-
-.ev-section-title h4{
-
-    font-size:22px;
-
-    font-weight:800;
-
-    color:#0f172a;
-
-    letter-spacing:-.5px;
-
-    margin-bottom:15px;
-
-}
-
-.ev-section-title p{
-
-    max-width:560px;
-
-    color:#64748b;
-
-    line-height:1.9;
-
-    font-size:16px;
-
-}
-
-/* =====================================================
-    FEATURE LIST
-===================================================== */
-
-.ev-feature-list{
-
-    display:flex;
-
-    flex-direction:column;
-
-    gap:16px;
-
-}
-
-/* =====================================================
-    FEATURE ITEM
-===================================================== */
-
-.ev-feature{
-
-    display:flex;
-
-    align-items:center;
-
-    gap:20px;
-
-    padding:15px 24px;
-
-    background:#fff;
-
-    border-radius:20px;
-
-    border:1px solid #edf2f7;
-
-    transition:.35s;
-
-    position:relative;
-
-}
-
-
-
-.ev-feature:hover{
-
-    transform:translateY(-6px);
-
-    border-color:#bfdbfe;
-
-    box-shadow:
-        0 18px 45px rgba(15,23,42,.08);
-
-}
-
-/* =====================================================
-    ICON
-===================================================== */
-
-.ev-icon{
-
-    width:39px;
-
-    height:39px;
-
-    min-width:39px;
-
-    border-radius:15px;
-
-    display:flex;
-
-    align-items:center;
-
-    justify-content:center;
-
-    background:
-        linear-gradient(
-            135deg,
-            #3b82f6,
-            #2563eb
-        );
-
-    color:#fff;
-
-    font-size:20px;
-
-    transition:.3s;
-
-    box-shadow:
-        0 12px 30px rgba(37,99,235,.20);
-
-}
-
-.ev-feature:hover .ev-icon{
-
-    transform:scale(1.08) rotate(-4deg);
-
-}
-
-/* =====================================================
-    TEXT
-===================================================== */
-
-.ev-feature h4{
-
-    margin:0px;
-
-    color:#0f172a;
-
-    font-size:15px;
-
-    font-weight:500;
-
-}
-
-.ev-feature p{
-
-    margin:0;
-
-    color:#64748b;
-
-    font-size:15px;
-
-    line-height:1.8;
-
-}
-
-/* =====================================================
-    SMALL BLUE BAR
-===================================================== */
-
-.ev-feature::before{
-
-    content:"";
-
-    position:absolute;
-
-    left:0;
-
-    top:22px;
-
-    bottom:22px;
-
-    width:4px;
-
-    border-radius:20px;
-
-    background:transparent;
-
-    transition:.3s;
-
-}
-
-.ev-feature:hover::before{
-
-    background:#2563eb;
-
-}
-
-/* =====================================================
-    SPACING
-===================================================== */
-
-.ev-feature:last-child{
-
-    margin-bottom:0;
-
-}
-
-/* =====================================================
-    RIGHT SIDE
-===================================================== */
-
-.ev-right{
-
-    display:flex;
-
-    flex-direction:column;
-
-    gap:35px;
-
-}
-
-/* =====================================================
-    DASHBOARD
-===================================================== */
-
-.ev-dashboard{
-
-    background:#fff;
-
-    border-radius:28px;
-
-    overflow:hidden;
-
-    border:1px solid #e5e7eb;
-
-    box-shadow:
-        0 25px 60px rgba(15,23,42,.10);
-
-    transition:.35s;
-
-}
-
-.ev-dashboard:hover{
-
-    transform:translateY(-8px);
-
-    box-shadow:
-        0 35px 80px rgba(15,23,42,.14);
-
-}
-
-.ev-topbar{
-
-    height:54px;
-
-    display:flex;
-
-    align-items:center;
-
-    gap:10px;
-
-    padding:0 24px;
-
-    background:#f8fafc;
-
-    border-bottom:1px solid #edf2f7;
-
-}
-
-.ev-topbar span{
-
-    width:12px;
-
-    height:12px;
-
-    border-radius:50%;
-
-    background:#cbd5e1;
-
-}
-
-.ev-screen{
-
-    position:relative;
-
-    padding:10px;
-
-    min-height:420px;
-
-    display:flex;
-
-    align-items:center;
-
-    justify-content:center;
-
-    background: #eff1f6;
-
-}
-
-/* =====================================================
-    PLACEHOLDER
-===================================================== */
-
-.ev-placeholder{
-
-    text-align:center;
-
-    max-width:420px;
-
-}
-
-.ev-placeholder i{
-
-    font-size:70px;
-
-    color:#2563eb;
-
-    margin-bottom:20px;
-
-}
-
-.ev-placeholder h3{
-
-    font-size:28px;
-
-    font-weight:800;
-
-    color:#0f172a;
-
-    margin-bottom:12px;
-
-}
-
-.ev-placeholder p{
-
-    color:#64748b;
-
-    line-height:1.8;
-
-}
-
-/* nanti ketika pakai screenshot */
-
-.ev-dashboard-image{
-
-    width:100%;
-
-    border-radius:12px;
-
-    display:block;
-
-}
-
-/* =====================================================
-    ABOUT
-===================================================== */
-
-.ev-about{
-
-    background:#fff;
-
-    border-radius:24px;
-
-    padding:35px;
-
-    border:1px solid #edf2f7;
-
-    box-shadow:
-        0 10px 35px rgba(15,23,42,.05);
-
-}
-
-.ev-about-badge{
-
-    display:inline-flex;
-
-    align-items:center;
-
-    gap:8px;
-
-    padding:8px 16px;
-
-    border-radius:999px;
-
-    background:#eef4ff;
-
-    color:#2563eb;
-
-    font-size:14px;
-
-    font-weight:600;
-
-    margin-bottom:20px;
-
-}
-
-.ev-about h3{
-
-    font-size:34px;
-
-    font-weight:800;
-
-    line-height:1.25;
-
-    color:#0f172a;
-
-    margin-bottom:18px;
-
-}
-
-.ev-about p{
-
-    color:#64748b;
-
-    line-height:1.9;
-
-    margin-bottom:18px;
-
-}
-
-/* =====================================================
-    HIGHLIGHT
-===================================================== */
-
-.ev-highlight{
-
-    margin-top:30px;
-
-    display:grid;
-
-    grid-template-columns:repeat(2,minmax(180px,1fr));
-
-    gap:16px;
-
-}
-
-.ev-highlight div{
-
-    display:flex;
-
-    align-items:center;
-
-    gap:10px;
-
-    color:#334155;
-
-    font-weight:500;
-
-}
-
-.ev-highlight i{
-
-    width:26px;
-
-    height:26px;
-
-    border-radius:50%;
-
-    display:flex;
-
-    align-items:center;
-
-    justify-content:center;
-
-    background:#ecfdf5;
-
-    color:#16a34a;
-
-    font-size:13px;
-
-    flex-shrink:0;
-
-}
-
-/* =====================================================
-    BUTTONS
-===================================================== */
-
-.ev-buttons{
-
-    display:flex;
-
-    gap:16px;
-
-    margin-top:35px;
-
-    flex-wrap:wrap;
-
-}
-
-.button-outline{
-
-    background:#fff;
-
-    color:#2563eb;
-
-    border:1px solid #bfdbfe;
-
-}
-
-.button-outline:hover{
-
-    background:#2563eb;
-
-    color:#fff;
-
-}
-
-/* =====================================================
-    RESPONSIVE
-===================================================== */
-
-@media (max-width:1200px){
-
-    .ev-wrapper{
-
-        grid-template-columns:1fr;
-
-        gap:60px;
-
-    }
-
-    .ev-right{
-
-        position:relative;
-
-        top:0;
-
-    }
-
-    .ev-title{
-
-        margin-bottom:60px;
-
-    }
-
-}
-
-/* ====================================== */
-
-@media (max-width:992px){
-
-    .ev-why{
-
-        padding:90px 0;
-
-    }
-
-    .ev-title h2{
-
-        font-size:42px;
-
-    }
-
-    .ev-section-title h3{
-
-        font-size:30px;
-
-    }
-
-    .ev-about h3{
-
-        font-size:30px;
-
-    }
-
-    .ev-screen{
-
-        min-height:360px;
-
-    }
-
-}
-
-/* ====================================== */
-
-@media (max-width:768px){
-
-    .ev-why{
-
-        padding:70px 0;
-
-    }
-
-    .ev-title{
-
-        margin-bottom:45px;
-
-    }
-
-    .ev-title h2{
-
-        font-size:34px;
-
-    }
-
-    .ev-title p{
-
-        font-size:16px;
-
-        line-height:1.8;
-
-    }
-
-    .ev-wrapper{
-
-        gap:45px;
-
-    }
-
-    .ev-feature{
-
-        padding:18px;
-
-        gap:16px;
-
-    }
-
-    .ev-icon{
-
-        width:52px;
-
-        height:52px;
-
-        min-width:52px;
-
-        font-size:22px;
-
-        border-radius:16px;
-
-    }
-
-    .ev-feature h4{
-
-        font-size:17px;
-
-    }
-
-    .ev-feature p{
-
-        font-size:14px;
-
-    }
-
-    .ev-dashboard{
-
-        border-radius:22px;
-
-    }
-
-    .ev-screen{
-
-        min-height:280px;
-
-        padding:25px;
-
-    }
-
-    .ev-placeholder i{
-
-        font-size:54px;
-
-    }
-
-    .ev-placeholder h3{
-
-        font-size:22px;
-
-    }
-
-    .ev-about{
-
-        padding:28px;
-
-    }
-
-    .ev-about h3{
-
-        font-size:26px;
-
-    }
-
-    .ev-highlight{
-
-        grid-template-columns:1fr;
-
-        gap:14px;
-
-    }
-
-    .ev-buttons{
-
-        flex-direction:column;
-
-    }
-
-    .ev-buttons .button-40{
-
-        width:100%;
-
-        justify-content:center;
-
-    }
-
-}
-
-/* ====================================== */
-
-@media (max-width:480px){
-
-    .ev-badge{
-
-        font-size:13px;
-
-    }
-
-    .ev-title h2{
-
-        font-size:28px;
-
-    }
-
-    .ev-title p{
-
-        font-size:15px;
-
-    }
-
-    .ev-section-title h3{
-
-        font-size:26px;
-
-    }
-
-    .ev-about h3{
-
-        font-size:24px;
-
-    }
-
-    .ev-feature{
-
-        border-radius:18px;
-
-    }
-
-}
-
-/* =====================================================
-    SMOOTH ANIMATION
-===================================================== */
-
-.ev-feature,
-.ev-dashboard,
-.ev-about{
-
-    transition:
-        transform .35s ease,
-        box-shadow .35s ease,
-        border-color .35s ease;
-
-}
-
-/* =====================================================
-    OPTIONAL SCROLL ANIMATION
-===================================================== */
-
-.ev-feature{
-
-    opacity:0;
-
-    transform:translateY(30px);
-
-    animation:evFadeUp .6s forwards;
-
-}
-
-.ev-feature:nth-child(1){ animation-delay:.05s; }
-.ev-feature:nth-child(2){ animation-delay:.10s; }
-.ev-feature:nth-child(3){ animation-delay:.15s; }
-.ev-feature:nth-child(4){ animation-delay:.20s; }
-.ev-feature:nth-child(5){ animation-delay:.25s; }
-.ev-feature:nth-child(6){ animation-delay:.30s; }
-.ev-feature:nth-child(7){ animation-delay:.35s; }
-.ev-feature:nth-child(8){ animation-delay:.40s; }
-.ev-feature:nth-child(9){ animation-delay:.45s; }
-.ev-feature:nth-child(10){ animation-delay:.50s; }
-.ev-feature:nth-child(11){ animation-delay:.55s; }
-.ev-feature:nth-child(12){ animation-delay:.60s; }
-
-@keyframes evFadeUp{
-
-    to{
-
-        opacity:1;
-
-        transform:translateY(0);
-
-    }
-
-}
-
-/* =====================================================
-    IMAGE
-===================================================== */
-
-.ev-dashboard-image{
-
-    width:100%;
-
-    display:block;
-
-    border-radius:12px;
-
-}
-</style>
-
-
-    @push('home-js')
-
-    <script>
-        new Swiper(".featuredSwiper",{
-
-    loop:true,
-
-    centeredSlides:true,
-
-    slidesPerView:"auto",
-
-    spaceBetween:0,
-
-    speed:700,
-
-    grabCursor:true,
-
-    autoplay:{
-        delay:5000,
-        disableOnInteraction:false
-    },
-
-    pagination:{
-        el:".swiper-pagination",
-        clickable:true
-    },
-
-    navigation:{
-        nextEl:".featured-next",
-        prevEl:".featured-prev"
-    }
-
-});
-
-document.addEventListener("DOMContentLoaded", () => {
-
-    const slider = document.querySelector(".category-slider");
-
-    const prev = document.querySelector(".category-prev");
-
-    const next = document.querySelector(".category-next");
-
-    if (!slider) return;
-
-    const amount = 500;
-
-    next.addEventListener("click", () => {
-
-        slider.scrollBy({
-
-            left: amount,
-
-            behavior: "smooth"
-
-        });
-
-    });
-
-    prev.addEventListener("click", () => {
-
-        slider.scrollBy({
-
-            left: -amount,
-
-            behavior: "smooth"
-
-        });
-
-    });
-
-});
-    </script>
-        
-    @endpush
 @endsection
+
+
+@push('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+
+    /* =========================================================
+       FEATURED SLIDER
+    ========================================================= */
+    const slider = document.getElementById('featured-slider');
+    const track = document.getElementById('featured-track');
+    const slides = document.querySelectorAll('.featured-slide');
+    const dots = document.querySelectorAll('.featured-dot');
+    const prev = document.getElementById('featured-prev');
+    const next = document.getElementById('featured-next');
+
+    if (slider && track && slides.length > 1) {
+
+        let current = 0;
+        let autoplay = null;
+
+        function updateSlider() {
+            track.style.transform = `translateX(-${current * 100}%)`;
+
+            dots.forEach((dot, index) => {
+                if (index === current) {
+                    dot.classList.remove('w-1.5', 'bg-[#cbd5e1]');
+                    dot.classList.add('w-7', 'bg-[#2282ff]');
+                } else {
+                    dot.classList.remove('w-7', 'bg-[#2282ff]');
+                    dot.classList.add('w-1.5', 'bg-[#cbd5e1]');
+                }
+            });
+        }
+
+        function goToSlide(index) {
+            current = (index + slides.length) % slides.length;
+            updateSlider();
+            restartAutoplay();
+        }
+
+        function nextSlide() { goToSlide(current + 1); }
+        function previousSlide() { goToSlide(current - 1); }
+
+        function startAutoplay() {
+            stopAutoplay();
+            autoplay = setInterval(function () {
+                current = (current + 1) % slides.length;
+                updateSlider();
+            }, 5000);
+        }
+
+        function stopAutoplay() {
+            if (autoplay) {
+                clearInterval(autoplay);
+                autoplay = null;
+            }
+        }
+
+        function restartAutoplay() {
+            stopAutoplay();
+            startAutoplay();
+        }
+
+        next?.addEventListener('click', nextSlide);
+        prev?.addEventListener('click', previousSlide);
+
+        dots.forEach(function (dot) {
+            dot.addEventListener('click', function () {
+                goToSlide(Number(this.dataset.slide));
+            });
+        });
+
+        slider.addEventListener('mouseenter', stopAutoplay);
+        slider.addEventListener('mouseleave', startAutoplay);
+
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        slider.addEventListener('touchstart', function (event) {
+            touchStartX = event.changedTouches[0].screenX;
+            stopAutoplay();
+        }, { passive: true });
+
+        slider.addEventListener('touchend', function (event) {
+            touchEndX = event.changedTouches[0].screenX;
+            const distance = touchEndX - touchStartX;
+
+            if (Math.abs(distance) > 50) {
+                if (distance < 0) nextSlide();
+                else previousSlide();
+            }
+
+            startAutoplay();
+        }, { passive: true });
+
+        updateSlider();
+        startAutoplay();
+    }
+
+
+    /* =========================================================
+       CATEGORY SLIDER
+    ========================================================= */
+    const catTrack = document.getElementById('category-track');
+    const catPrev = document.getElementById('category-prev');
+    const catNext = document.getElementById('category-next');
+
+    if (catTrack && catPrev && catNext) {
+
+        function getScrollAmount() {
+            const card = catTrack.querySelector('a');
+            if (!card) return 500;
+
+            const gap = window.innerWidth >= 640 ? 16 : 12;
+            return (card.offsetWidth + gap) * 3;
+        }
+
+        catNext.addEventListener('click', function () {
+            catTrack.scrollBy({ left: getScrollAmount(), behavior: 'smooth' });
+        });
+
+        catPrev.addEventListener('click', function () {
+            catTrack.scrollBy({ left: -getScrollAmount(), behavior: 'smooth' });
+        });
+    }
+
+});
+</script>
+@endpush

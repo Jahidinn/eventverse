@@ -325,58 +325,50 @@ Route::prefix('reservation')->name('reservation.')->group(function () {
 		->name('checkout.store');
 
 	Route::get('/checkout/cleanup-sandbox', [CheckoutController::class, 'cleanupSandbox']);
-
 	Route::prefix('transaction')->name('transaction.')->group(function () {
 
-    Route::get(
-        	'/{transaction:transaction_code}',
-			[TransactionController::class, 'show']
-		)->name('show');
+		// ─── Check Registration (path statis, tanpa binding) ───
+		Route::post('/check-registration', [TransactionController::class, 'checkRegistration'])
+			->name('check-registration');
 
-		Route::get(
-			'/{transaction:transaction_code}/check-status',
-			[TransactionController::class, 'checkStatus']
-		)->name('check-status');
+		// ─── Semua route dengan binding transaction_code ───
+		Route::prefix('{transaction:transaction_code}')->group(function () {
 
-		Route::post(
-			'/{transaction:transaction_code}/change-payment',
-			[TransactionController::class, 'changePayment']
-		)->name('change-payment');
+			// Edit & Update Participants — letakkan DI ATAS route '/'
+			Route::get('/edit-participants', [TransactionController::class, 'editParticipants'])
+				->name('edit-participants');
 
-		Route::get(
-			'/{transaction:transaction_code}/payment-methods',
-			[TransactionController::class, 'paymentMethods']
-		)->name('payment-methods');
+			Route::patch('/update-participants', [TransactionController::class, 'updateParticipants'])
+				->name('update-participants');
 
-		Route::get(
-			'/{transaction:transaction_code}/detail',
-			[TransactionController::class, 'detail']
-		)->name('transaction.detail');
+			// ─── Existing routes ───
+			Route::get('/', [TransactionController::class, 'show'])
+				->name('show');
 
-		Route::get(
-			'/{transaction:transaction_code}/ticket',
-			[TransactionController::class, 'ticket']
-		)->name('ticket');
+			Route::get('/check-status', [TransactionController::class, 'checkStatus'])
+				->name('check-status');
 
-		Route::get(
-			'/{transaction:transaction_code}/ticket/download',
-			[TransactionController::class, 'downloadTicket']
-		)->name('ticket.download');
+			Route::post('/change-payment', [TransactionController::class, 'changePayment'])
+				->name('change-payment');
 
-		Route::get(
-			'/{transaction:transaction_code}/invoice',
-			[TransactionController::class, 'invoice']
-		)->name('invoice');
+			Route::get('/payment-methods', [TransactionController::class, 'paymentMethods'])
+				->name('payment-methods');
 
-		Route::get(
-			'/{transaction:transaction_code}/invoice/download',
-			[TransactionController::class, 'downloadInvoice']
-		)->name('invoice.download');
+			Route::get('/detail', [TransactionController::class, 'detail'])
+				->name('detail');
 
-		Route::get(
-			'/{transaction:transaction_code}/invoice',
-			[TransactionController::class, 'invoice']
-		)->name('invoice');
+			Route::get('/ticket', [TransactionController::class, 'ticket'])
+				->name('ticket');
+
+			Route::get('/ticket/download', [TransactionController::class, 'downloadTicket'])
+				->name('ticket.download');
+
+			Route::get('/invoice', [TransactionController::class, 'invoice'])
+				->name('invoice');
+
+			Route::get('/invoice/download', [TransactionController::class, 'downloadInvoice'])
+				->name('invoice.download');
+		});
 
 	});
 

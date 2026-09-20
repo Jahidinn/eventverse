@@ -1,8 +1,8 @@
-@extends('layouts.main')
+@extends('layouts.app')
+
+@section('title', 'Transaction Detail - ' . $transaction->transaction_code)
 
 @section('content')
-
-<div class="bg-eventconnect header-hight"></div>
 
 @php
 
@@ -11,7 +11,6 @@
     | PENYELENGGARA
     |--------------------------------------------------------------------------
     */
-
     if ($event->organizer == 'org') {
         $penyelenggara = $event->org->org_name ?? '';
     } elseif ($event->organizer == 'individual') {
@@ -20,2075 +19,469 @@
         $penyelenggara = '';
     }
 
-
     /*
     |--------------------------------------------------------------------------
-    | EVENT IMAGE
+    | EVENT IMAGE (dengan cache-busting)
     |--------------------------------------------------------------------------
     */
-
     $imageExist = $event->image &&
-        file_exists(
-            public_path('storage/event-images/' . $event->image)
-        );
+        file_exists(public_path('storage/event-images/' . $event->image));
 
     if ($imageExist) {
-        $eventImagePath = asset(
-            'storage/event-images/' . $event->image
-        );
+        $imagePath = 'storage/event-images/' . $event->image;
+        $fullPath  = public_path($imagePath);
+        $eventImagePath = asset($imagePath) . '?v=' . filemtime($fullPath);
     } else {
-        $eventImagePath = asset(
-            'assets/default-img/event-images/def-no-img.png'
-        );
+        $eventImagePath = asset('assets/default-img/event-images/def-no-img.png');
     }
-
 
     /*
     |--------------------------------------------------------------------------
     | EVENT DATE
     |--------------------------------------------------------------------------
     */
-
     if ($event->start_date == $event->end_date) {
-
-        $eventDate = date(
-            'd M Y',
-            strtotime($event->start_date)
-        );
-
+        $eventDate = date('d M Y', strtotime($event->start_date));
     } else {
-
-        $eventDate =
-            date(
-                'd M Y',
-                strtotime($event->start_date)
-            )
-            . ' - ' .
-            date(
-                'd M Y',
-                strtotime($event->end_date)
-            );
-
+        $eventDate = date('d M Y', strtotime($event->start_date))
+            . ' - ' . date('d M Y', strtotime($event->end_date));
     }
 
-
     /*
     |--------------------------------------------------------------------------
-    | STATUS
+    | STATUS & TOTAL
     |--------------------------------------------------------------------------
     */
-
-    $status = strtoupper(
-        $transaction->status ?? '-'
-    );
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | TOTAL
-    |--------------------------------------------------------------------------
-    */
-
-    $subtotal = (float) (
-        $transaction->subtotal ?? 0
-    );
-
-    $grandTotal = (float) (
-        $transaction->grand_total ?? 0
-    );
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | PARTICIPANTS
-    |--------------------------------------------------------------------------
-    */
-
+    $status = strtoupper($transaction->status ?? '-');
+    $subtotal = (float) ($transaction->subtotal ?? 0);
+    $grandTotal = (float) ($transaction->grand_total ?? 0);
     $totalParticipants = $participants->count();
+
+    /*
+    |--------------------------------------------------------------------------
+    | CUSTOM FORMS CHECK
+    |--------------------------------------------------------------------------
+    */
+    $hasParticipantForms = $participants->contains(
+        fn ($participant) => $participant->forms && $participant->forms->count()
+    );
 
 @endphp
 
 
-<section class="transaction-detail-page">
+<section class="bg-[#f8fafc] min-h-screen pt-5 pb-14">
+<div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
 
-    <div class="transaction-detail-container">
+    {{-- ==================== TOP ACTIONS ==================== --}}
+    <div class="flex flex-col sm:flex-row sm:justify-end gap-2 mb-4">
+        <a href="{{ route('transaction.invoice', $transaction->transaction_code) }}"
+           class="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-white border-[1.5px] border-[#e2e8f0] text-sm font-semibold text-[#0f172a] hover:border-[#c2dcff] hover:bg-[#f8fbff] hover:text-[#2282ff] transition-all">
+            <i class="ti ti-file-invoice text-base"></i>
+            <span>Invoice</span>
+        </a>
 
-        {{-- =====================================================
-             ACTION
-        ====================================================== --}}
-
-        <div class="detail-actions">
-
-            <a
-                href="{{ route(
-                    'transaction.invoice',
-                    $transaction->transaction_code
-                ) }}"
-                class="btn-secondary"
-            >
-                <i class="ti ti-file-invoice"></i>
-                Invoice
-            </a>
-
-            <a
-                href="{{ route(
-                    'transaction.invoice.download',
-                    $transaction->transaction_code
-                ) }}"
-                class="btn-primary"
-            >
-                <i class="ti ti-file-type-pdf"></i>
-                Download PDF
-            </a>
-
-        </div>
+        <a href="{{ route('transaction.invoice.download', $transaction->transaction_code) }}"
+           class="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-[#2282ff] text-white text-sm font-semibold shadow-[0_4px_14px_rgba(34,130,255,0.3)] hover:bg-[#1b6cd6] hover:-translate-y-0.5 hover:shadow-[0_6px_18px_rgba(34,130,255,0.4)] transition-all">
+            <i class="ti ti-file-type-pdf text-base"></i>
+            <span>Download PDF</span>
+        </a>
+    </div>
 
 
-        {{-- =====================================================
-             TRANSACTION HEADER
-        ====================================================== --}}
-
-        <div class="transaction-header-card">
+    {{-- ==================== TRANSACTION HEADER ==================== --}}
+    <div class="bg-white border border-[#e2e8f0] rounded-2xl shadow-[0_4px_20px_-4px_rgba(15,23,42,0.06)] p-5 sm:p-7 mb-4">
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
 
             <div>
-
-                <div class="eyebrow">
-                    TRANSACTION DETAIL
+                <div class="text-[10px] font-extrabold tracking-[0.08em] text-[#94a3b8] uppercase mb-1.5">
+                    Transaction Detail
                 </div>
-
-                <h1>
+                <h1 class="text-lg sm:text-xl font-extrabold text-[#0f172a] m-0 tracking-tight break-all">
                     {{ $transaction->transaction_code }}
                 </h1>
-
-                <div class="transaction-date">
+                <div class="text-xs text-[#94a3b8] mt-1.5">
                     {{ $transaction->created_at?->format('d M Y, H:i') }}
                 </div>
-
             </div>
 
-
-            <div class="transaction-status">
-
-                <span class="status-dot"></span>
-
+            <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#ecfdf3] border border-[#bbf7d0] text-[10px] font-extrabold tracking-wide text-[#15803d] w-fit">
+                <span class="w-1.5 h-1.5 rounded-full bg-[#22c55e]"></span>
                 {{ $status }}
-
-            </div>
+            </span>
 
         </div>
+    </div>
 
 
-        {{-- =====================================================
-             EVENT
-        ====================================================== --}}
+    {{-- ==================== EVENT CARD ==================== --}}
+    <div class="bg-white border border-[#e2e8f0] rounded-2xl shadow-[0_4px_20px_-4px_rgba(15,23,42,0.06)] p-5 sm:p-6 mb-4">
+        <div class="text-[13px] font-bold text-[#273247] mb-4">Event</div>
 
-        <div class="detail-card event-card">
+        <div class="flex flex-col sm:flex-row gap-4 sm:gap-5">
+            <img src="{{ $eventImagePath }}"
+                 alt="{{ $event->title }}"
+                 class="w-full sm:w-[120px] h-[160px] sm:h-[90px] object-cover rounded-xl border border-[#edf0f5] shrink-0">
 
-            <div class="card-title">
-                Event
-            </div>
+            <div class="min-w-0 flex-1">
+                <h2 class="text-[15px] sm:text-base font-bold text-[#1d2738] m-0 mb-3 leading-snug">
+                    {{ $event->title }}
+                </h2>
 
-            <div class="event-wrapper">
-
-                <img
-                    src="{{ $eventImagePath }}"
-                    alt="{{ $event->title }}"
-                    class="event-image"
-                >
-
-                <div class="event-content">
-
-                    <h2>
-                        {{ $event->title }}
-                    </h2>
-
-                    <div class="event-meta">
-
-                        <div>
-                            <i class="ti ti-calendar"></i>
-
-                            <span>
-                                {{ $eventDate }}
-                            </span>
-                        </div>
-
-
-                        <div>
-
-                            <i class="ti ti-map-pin"></i>
-
-                            <span>
-
-                                @if(strtolower($event->location_jenis) == 'online')
-
-                                    Online Event
-
-                                @else
-
-                                    {{ $event->location_detail }}
-
-                                    @if($event->location_city)
-                                        ({{ $event->location_city }})
-                                    @endif
-
+                <div class="flex flex-col gap-2 text-xs text-[#64748b]">
+                    <div class="flex items-start gap-2">
+                        <i class="ti ti-calendar text-[#2282ff] text-sm shrink-0 mt-0.5"></i>
+                        <span>{{ $eventDate }}</span>
+                    </div>
+                    <div class="flex items-start gap-2">
+                        <i class="ti ti-map-pin text-[#2282ff] text-sm shrink-0 mt-0.5"></i>
+                        <span>
+                            @if(strtolower($event->location_jenis) == 'online')
+                                Online Event
+                            @else
+                                {{ $event->location_detail }}
+                                @if($event->location_city)
+                                    ({{ $event->location_city }})
                                 @endif
-
-                            </span>
-
-                        </div>
-
-
-                        <div>
-
-                            <i class="ti ti-user"></i>
-
-                            <span>
-                                {{ $penyelenggara ?: '-' }}
-                            </span>
-
-                        </div>
-
+                            @endif
+                        </span>
                     </div>
-
+                    <div class="flex items-start gap-2">
+                        <i class="ti ti-user text-[#2282ff] text-sm shrink-0 mt-0.5"></i>
+                        <span>{{ $penyelenggara ?: '-' }}</span>
+                    </div>
                 </div>
-
             </div>
+        </div>
+    </div>
 
+
+    {{-- ==================== TRANSACTION + BUYER ==================== --}}
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+
+        {{-- Transaction Info --}}
+        <div class="bg-white border border-[#e2e8f0] rounded-2xl shadow-[0_4px_20px_-4px_rgba(15,23,42,0.06)] p-5 sm:p-6">
+            <div class="text-[13px] font-bold text-[#273247] mb-4">Transaction Information</div>
+
+            <div class="flex flex-col divide-y divide-[#f0f2f6]">
+                <div class="flex justify-between items-start gap-4 py-2.5 first:pt-0 text-xs">
+                    <span class="text-[#7a8495] shrink-0">Transaction Number</span>
+                    <strong class="text-[#273247] text-right break-all">{{ $transaction->transaction_code }}</strong>
+                </div>
+                <div class="flex justify-between items-start gap-4 py-2.5 text-xs">
+                    <span class="text-[#7a8495] shrink-0">Invoice Number</span>
+                    <strong class="text-[#2282ff] text-right break-all">{{ $transaction->invoice_number ?? '-' }}</strong>
+                </div>
+                <div class="flex justify-between items-start gap-4 py-2.5 text-xs">
+                    <span class="text-[#7a8495] shrink-0">Transaction Date</span>
+                    <strong class="text-[#273247] text-right">{{ $transaction->created_at?->format('d M Y, H:i') }}</strong>
+                </div>
+                @if($transaction->paid_at)
+                    <div class="flex justify-between items-start gap-4 py-2.5 text-xs">
+                        <span class="text-[#7a8495] shrink-0">Paid At</span>
+                        <strong class="text-[#273247] text-right">{{ $transaction->paid_at->format('d M Y, H:i') }}</strong>
+                    </div>
+                @endif
+                <div class="flex justify-between items-start gap-4 py-2.5 last:pb-0 text-xs">
+                    <span class="text-[#7a8495] shrink-0">Status</span>
+                    <strong class="text-[#16a34a] uppercase text-right">{{ $status }}</strong>
+                </div>
+            </div>
         </div>
 
+        {{-- Buyer Info --}}
+        <div class="bg-white border border-[#e2e8f0] rounded-2xl shadow-[0_4px_20px_-4px_rgba(15,23,42,0.06)] p-5 sm:p-6">
+            <div class="text-[13px] font-bold text-[#273247] mb-4">Buyer Information</div>
 
-        {{-- =====================================================
-             TRANSACTION INFORMATION
-        ====================================================== --}}
+            <div class="text-base font-bold text-[#1d2738] mb-4">
+                {{ $transaction->buyer_name ?? '-' }}
+            </div>
 
-        <div class="two-column">
+            <div class="flex flex-col gap-2.5 text-xs text-[#64748b]">
+                <div class="flex items-center gap-2">
+                    <i class="ti ti-mail text-[#2282ff] text-sm shrink-0"></i>
+                    <span class="break-all">{{ $transaction->buyer_email ?? '-' }}</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <i class="ti ti-phone text-[#2282ff] text-sm shrink-0"></i>
+                    <span>{{ $transaction->buyer_phone ?? '-' }}</span>
+                </div>
+            </div>
+        </div>
 
-            {{-- TRANSACTION --}}
+    </div>
 
-            <div class="detail-card">
 
-                <div class="card-title">
-                    Transaction Information
+    {{-- ==================== TICKET PURCHASE ==================== --}}
+    <div class="bg-white border border-[#e2e8f0] rounded-2xl shadow-[0_4px_20px_-4px_rgba(15,23,42,0.06)] p-5 sm:p-6 mb-4">
+        <div class="text-[13px] font-bold text-[#273247] mb-4">Ticket Purchase</div>
+
+        <div class="flex items-center justify-between gap-4 p-4 rounded-xl bg-[#f8fafc] border border-[#e7ebf2]">
+            <div>
+                <div class="text-sm font-bold text-[#1d2738]">{{ $ticket->ticket_name ?? '-' }}</div>
+                <div class="text-[10px] text-[#929bab] mt-1">Event Ticket</div>
+            </div>
+            <div class="flex items-center gap-3 shrink-0">
+                <span class="text-[10px] text-[#8993a5]">Quantity</span>
+                <strong class="min-w-[32px] h-8 px-2 inline-flex items-center justify-center rounded-lg bg-[#dbeafe] text-[#1d4ed8] text-xs font-bold">
+                    {{ $totalParticipants }}
+                </strong>
+            </div>
+        </div>
+    </div>
+
+
+    {{-- ==================== PAYMENT ==================== --}}
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+
+        {{-- Payment Info --}}
+        <div class="bg-white border border-[#e2e8f0] rounded-2xl shadow-[0_4px_20px_-4px_rgba(15,23,42,0.06)] p-5 sm:p-6">
+            <div class="text-[13px] font-bold text-[#273247] mb-4">Payment Information</div>
+
+            <div class="flex flex-col divide-y divide-[#f0f2f6]">
+                <div class="flex justify-between items-start gap-4 py-2.5 first:pt-0 text-xs">
+                    <span class="text-[#7a8495] shrink-0">Payment Method</span>
+                    <strong class="text-[#273247] text-right">{{ $paymentGatewayMethod?->method?->name ?? '-' }}</strong>
+                </div>
+                <div class="flex justify-between items-start gap-4 py-2.5 text-xs">
+                    <span class="text-[#7a8495] shrink-0">Payment Gateway</span>
+                    <strong class="text-[#273247] text-right">{{ $paymentGatewayMethod?->gateway?->name ?? '-' }}</strong>
+                </div>
+                <div class="flex justify-between items-start gap-4 py-2.5 last:pb-0 text-xs">
+                    <span class="text-[#7a8495] shrink-0">Payment Status</span>
+                    <strong class="text-[#16a34a] uppercase text-right">{{ $status }}</strong>
+                </div>
+            </div>
+        </div>
+
+        {{-- Payment Summary --}}
+        <div class="bg-white border border-[#e2e8f0] rounded-2xl shadow-[0_4px_20px_-4px_rgba(15,23,42,0.06)] p-5 sm:p-6">
+            <div class="text-[13px] font-bold text-[#273247] mb-4">Payment Summary</div>
+
+            <div class="p-4 rounded-xl bg-[#f8fafc] border border-[#e7ebf2]">
+                <div class="flex justify-between items-center gap-4 text-xs text-[#697386]">
+                    <span>Subtotal</span>
+                    <strong class="text-[#273247]">Rp {{ number_format($subtotal, 0, ',', '.') }}</strong>
                 </div>
 
-                <div class="detail-list">
+                <div class="h-px bg-[#dfe4ec] my-3.5"></div>
 
-                    <div class="detail-row">
+                <div class="flex justify-between items-center gap-4">
+                    <span class="text-xs font-bold text-[#273247]">Total Paid</span>
+                    <strong class="text-lg font-extrabold text-[#1d4ed8]">
+                        Rp {{ number_format($grandTotal, 0, ',', '.') }}
+                    </strong>
+                </div>
+            </div>
+        </div>
 
-                        <span>
-                            Transaction Number
-                        </span>
+    </div>
 
-                        <strong>
-                            {{ $transaction->transaction_code }}
-                        </strong>
 
+    {{-- ==================== PARTICIPANTS ==================== --}}
+    <div class="bg-white border border-[#e2e8f0] rounded-2xl shadow-[0_4px_20px_-4px_rgba(15,23,42,0.06)] p-5 sm:p-6 mb-4">
+
+        <div class="text-[13px] font-bold text-[#273247] mb-1">Participants</div>
+        <div class="text-[10px] text-[#8993a5] mb-4">
+            {{ $totalParticipants }} participant(s) registered in this transaction.
+        </div>
+
+        <div class="flex flex-col divide-y divide-[#f0f2f6]">
+            @forelse($participants as $index => $participant)
+                @php
+                    $participantTicketCode = $participant->ticket_code
+                        ?? $transaction->ticket_code
+                        ?? $transaction->transaction_code;
+                @endphp
+
+                <div class="flex justify-between items-start gap-4 py-3.5 first:pt-0 last:pb-0">
+
+                    {{-- Left: name + email --}}
+                    <div class="min-w-0 flex-1">
+                        <div class="text-[10px] font-bold text-[#9aa4b4] uppercase tracking-wider mb-1">
+                            Peserta {{ str_pad($index + 1, 2, '0', STR_PAD_LEFT) }}
+                        </div>
+                        <div class="text-xs font-semibold text-[#273247] truncate">
+                            {{ $participant->name ?? '-' }}
+                        </div>
+                        @if($participant->email)
+                            <div class="text-[10px] text-[#9aa4b4] mt-0.5 truncate">
+                                {{ $participant->email }}
+                            </div>
+                        @endif
                     </div>
 
+                    {{-- Right: ticket code + e-ticket button --}}
+                    <div class="shrink-0 flex flex-col items-end gap-2">
+                        <div class="text-right">
+                            <div class="text-[9px] text-[#9aa4b4] uppercase tracking-wider">Ticket Code</div>
+                            <div class="text-[10px] font-mono text-[#536075] break-all mt-0.5 max-w-[180px]">
+                                {{ $participantTicketCode }}
+                            </div>
+                        </div>
 
-                    <div class="detail-row">
-
-                        <span>
-                            Invoice Number
-                        </span>
-
-                        <strong class="blue-text">
-                            {{ $transaction->invoice_number ?? '-' }}
-                        </strong>
-
+                        <a href="{{ route('transaction.ticket', $transaction->transaction_code) }}"
+                        class="inline-flex items-center gap-1 px-2.5 py-1 rounded-md bg-[#eff6ff] border border-[#dbeafe] text-[#2282ff] text-[10px] font-bold hover:bg-[#2282ff] hover:text-white hover:border-[#2282ff] transition-all">
+                            <i class="ti ti-ticket text-xs"></i>
+                            <span>E-ticket</span>
+                        </a>
                     </div>
 
+                </div>
+            @empty
+                <div class="py-4 text-center text-xs text-[#94a3b8]">
+                    No participants found.
+                </div>
+            @endforelse
+        </div>
 
-                    <div class="detail-row">
-
-                        <span>
-                            Transaction Date
-                        </span>
-
-                        <strong>
-                            {{ $transaction->created_at?->format('d M Y, H:i') }}
-                        </strong>
-
-                    </div>
+    </div>
 
 
-                    @if($transaction->paid_at)
+    {{-- ==================== CUSTOM FORMS ==================== --}}
+    @if($hasParticipantForms)
 
-                        <div class="detail-row">
+        <div class="bg-white border border-[#e2e8f0] rounded-2xl shadow-[0_4px_20px_-4px_rgba(15,23,42,0.06)] p-5 sm:p-6 mb-4">
 
-                            <span>
-                                Paid At
-                            </span>
+            <div class="text-[13px] font-bold text-[#273247] mb-4">Participant Information</div>
 
-                            <strong>
-                                {{ $transaction->paid_at->format('d M Y, H:i') }}
-                            </strong>
+            <div class="flex flex-col divide-y divide-[#edf0f5]">
+                @foreach($participants as $participant)
+                    @if($participant->forms?->count())
 
+                        <div class="py-4 first:pt-0 last:pb-0">
+
+                            {{-- Participant name --}}
+                            <div class="flex items-center gap-2 mb-3">
+                                <div class="w-6 h-6 rounded-md bg-[#ebf3ff] text-[#2282ff] flex items-center justify-center text-[10px] font-bold shrink-0">
+                                    {{ strtoupper(substr($participant->name ?? '?', 0, 1)) }}
+                                </div>
+                                <div class="text-xs font-bold text-[#273247] truncate">
+                                    {{ $participant->name ?? '-' }}
+                                </div>
+                            </div>
+
+                            {{-- Fields --}}
+                            <div class="flex flex-col divide-y divide-[#f0f2f6]">
+                                @foreach($participant->forms as $form)
+                                    @php
+                                        $customForm = $form->form;
+                                        $fieldLabel = $customForm?->field_label ?? $form->field_label ?? 'Field';
+                                        $fieldType = strtolower($customForm?->field_type ?? '');
+                                        $value = $form->form_value;
+                                        $isImage = $fieldType === 'image';
+                                        $isFile = $fieldType === 'file';
+
+                                        $fileUrl = null;
+                                        if ($value) {
+                                            $relPath = ltrim($value, '/');
+                                            $fullPath = public_path('storage/' . $relPath);
+                                            $fileUrl = asset('storage/' . $relPath)
+                                                . (file_exists($fullPath) ? '?v=' . filemtime($fullPath) : '');
+                                        }
+                                        $fileName = $value ? basename($value) : null;
+                                    @endphp
+
+                                    {{-- ============ TEXT / EMPTY ============ --}}
+                                    @if(!$value || (!$isImage && !$isFile))
+                                        <div class="flex justify-between items-start gap-4 py-2.5 first:pt-0 last:pb-0 text-xs">
+                                            <span class="text-[#7a8495] shrink-0">{{ $fieldLabel }}</span>
+                                            @if(!$value)
+                                                <strong class="text-[#9ca3af]">-</strong>
+                                            @else
+                                                <strong class="text-[#273247] font-semibold text-right break-words sm:max-w-[60%]">
+                                                    {{ $value }}
+                                                </strong>
+                                            @endif
+                                        </div>
+
+                                    {{-- ============ IMAGE ============ --}}
+                                    @elseif($isImage)
+                                        <div class="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-3 py-3 first:pt-0 last:pb-0">
+                                            <span class="text-xs text-[#7a8495] shrink-0 sm:pt-1">{{ $fieldLabel }}</span>
+
+                                            <div class="flex flex-col gap-2.5 w-full sm:w-auto sm:items-end">
+                                                {{-- Preview --}}
+                                                <a href="{{ $fileUrl }}"
+                                                target="_blank"
+                                                class="group block w-full sm:w-[130px] h-[180px] sm:h-[95px] rounded-xl overflow-hidden border-2 border-[#e5e9f0] bg-[#f8fafc] shrink-0 hover:border-[#2282ff] hover:shadow-[0_4px_16px_rgba(34,130,255,0.15)] transition-all">
+                                                    <img src="{{ $fileUrl }}"
+                                                        alt="{{ $fieldLabel }}"
+                                                        loading="lazy"
+                                                        class="w-full h-full object-cover block group-hover:scale-105 transition-transform duration-300">
+                                                </a>
+
+                                                {{-- Actions --}}
+                                                <div class="grid grid-cols-2 gap-2 w-full sm:w-auto sm:flex sm:items-center">
+                                                    <a href="{{ $fileUrl }}"
+                                                    target="_blank"
+                                                    class="inline-flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-lg bg-white border border-[#e2e8f0] text-[#273247] text-xs font-semibold hover:border-[#2282ff] hover:text-[#2282ff] hover:bg-[#f0f6ff] hover:-translate-y-px transition-all">
+                                                        <i class="ti ti-eye text-sm"></i>
+                                                        <span>View</span>
+                                                    </a>
+
+                                                    <a href="{{ $fileUrl }}"
+                                                    download="{{ $fileName }}"
+                                                    class="inline-flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-lg bg-[#2282ff] text-white text-xs font-semibold shadow-[0_2px_8px_rgba(34,130,255,0.25)] hover:bg-[#1b6cd6] hover:shadow-[0_4px_14px_rgba(34,130,255,0.4)] hover:-translate-y-px transition-all">
+                                                        <i class="ti ti-download text-sm"></i>
+                                                        <span>Download</span>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    {{-- ============ FILE ============ --}}
+                                    @elseif($isFile)
+                                        <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 py-3 first:pt-0 last:pb-0">
+                                            <span class="text-xs text-[#7a8495] shrink-0">{{ $fieldLabel }}</span>
+
+                                            <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 w-full sm:w-auto">
+                                                {{-- File info --}}
+                                                <div class="flex items-center gap-2.5 px-3.5 py-2.5 rounded-lg bg-[#f8fafc] border border-[#e5e9f0] min-w-0 sm:max-w-[240px]">
+                                                    <div class="w-9 h-9 rounded-md bg-[#ebf3ff] text-[#2282ff] flex items-center justify-center text-lg shrink-0">
+                                                        <i class="ti ti-file"></i>
+                                                    </div>
+                                                    <div class="min-w-0 flex-1">
+                                                        <div class="text-xs font-semibold text-[#1d2738] truncate" title="{{ $fileName }}">
+                                                            {{ $fileName }}
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                {{-- Download --}}
+                                                <a href="{{ $fileUrl }}"
+                                                download="{{ $fileName }}"
+                                                class="inline-flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-lg bg-[#2282ff] text-white text-xs font-semibold shadow-[0_2px_8px_rgba(34,130,255,0.25)] hover:bg-[#1b6cd6] hover:shadow-[0_4px_14px_rgba(34,130,255,0.4)] hover:-translate-y-px transition-all">
+                                                    <i class="ti ti-download text-sm"></i>
+                                                    <span>Download</span>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    @endif
+                                @endforeach
+                            </div>
                         </div>
 
                     @endif
-
-
-                    <div class="detail-row">
-
-                        <span>
-                            Status
-                        </span>
-
-                        <strong class="paid-text">
-                            {{ $status }}
-                        </strong>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-
-            {{-- BUYER --}}
-
-            <div class="detail-card">
-
-                <div class="card-title">
-                    Buyer Information
-                </div>
-
-                <div class="buyer-detail">
-
-                    <div class="buyer-name">
-                        {{ $transaction->buyer_name ?? '-' }}
-                    </div>
-
-                    <div class="buyer-contact">
-
-                        <div>
-                            <i class="ti ti-mail"></i>
-                            {{ $transaction->buyer_email ?? '-' }}
-                        </div>
-
-                        <div>
-                            <i class="ti ti-phone"></i>
-                            {{ $transaction->buyer_phone ?? '-' }}
-                        </div>
-
-                    </div>
-
-                </div>
-
+                @endforeach
             </div>
 
         </div>
 
-
-        {{-- =====================================================
-             TICKET
-        ====================================================== --}}
-
-        <div class="detail-card">
-
-            <div class="card-title">
-                Ticket Purchase
-            </div>
-
-            <div class="ticket-purchase">
-
-                <div>
-
-                    <div class="ticket-name">
-                        {{ $ticket->ticket_name ?? '-' }}
-                    </div>
-
-                    <div class="ticket-type">
-                        Event Ticket
-                    </div>
-
-                </div>
+    @endif
 
 
-                <div class="ticket-quantity">
-
-                    <span>
-                        Quantity
-                    </span>
-
-                    <strong>
-                        {{ $totalParticipants }}
-                    </strong>
-
-                </div>
-
-            </div>
-
+    {{-- ==================== FOOTER ==================== --}}
+    <div class="flex flex-col sm:flex-row justify-between gap-4 pt-3 px-1 text-[10px] text-[#8b95a5]">
+        <div class="flex flex-col gap-0.5">
+            <strong class="text-[11px] text-[#4b5563]">Eventverse</strong>
+            <span>Event Management & Ticketing</span>
         </div>
-
-
-        {{-- =====================================================
-             PAYMENT
-        ====================================================== --}}
-
-        <div class="two-column">
-
-            <div class="detail-card">
-
-                <div class="card-title">
-                    Payment Information
-                </div>
-
-                <div class="detail-list">
-
-                    <div class="detail-row">
-
-                        <span>
-                            Payment Method
-                        </span>
-
-                        <strong>
-                            {{ $paymentGatewayMethod?->method?->name ?? '-' }}
-                        </strong>
-
-                    </div>
-
-
-                    <div class="detail-row">
-
-                        <span>
-                            Payment Gateway
-                        </span>
-
-                        <strong>
-                            {{ $paymentGatewayMethod?->gateway?->name ?? '-' }}
-                        </strong>
-
-                    </div>
-
-
-                    <div class="detail-row">
-
-                        <span>
-                            Payment Status
-                        </span>
-
-                        <strong class="paid-text">
-                            {{ $status }}
-                        </strong>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-
-            <div class="detail-card">
-
-                <div class="card-title">
-                    Payment Summary
-                </div>
-
-                <div class="price-summary">
-
-                    <div>
-
-                        <span>
-                            Subtotal
-                        </span>
-
-                        <strong>
-                            Rp {{ number_format(
-                                $subtotal,
-                                0,
-                                ',',
-                                '.'
-                            ) }}
-                        </strong>
-
-                    </div>
-
-
-                    <div class="summary-divider"></div>
-
-
-                    <div class="grand-total">
-
-                        <span>
-                            Total Paid
-                        </span>
-
-                        <strong>
-                            Rp {{ number_format(
-                                $grandTotal,
-                                0,
-                                ',',
-                                '.'
-                            ) }}
-                        </strong>
-
-                    </div>
-
-                </div>
-
-            </div>
-
+        <div class="sm:max-w-[400px] sm:text-right leading-relaxed">
+            Transaction information shown on this page is based on the completed payment transaction.
         </div>
-
-
-        {{-- =====================================================
-             PARTICIPANTS
-        ====================================================== --}}
-
-        <div class="detail-card participants-card">
-
-            <div class="participants-heading">
-
-                <div>
-
-                    <div class="card-title">
-                        Participants
-                    </div>
-
-                    <div class="card-description">
-                        {{ $totalParticipants }}
-                        participant(s) registered in this transaction.
-                    </div>
-
-                </div>
-
-            </div>
-
-
-            <div class="participants-list">
-
-                @forelse($participants as $index => $participant)
-
-                    @php
-
-                        $participantTicketCode =
-                            $participant->ticket_code ??
-                            $transaction->ticket_code ??
-                            $transaction->transaction_code;
-
-                    @endphp
-
-
-                    <div class="participant-item">
-
-                        <div class="participant-number">
-                            {{ str_pad(
-                                $index + 1,
-                                2,
-                                '0',
-                                STR_PAD_LEFT
-                            ) }}
-                        </div>
-
-
-                        <div class="participant-main">
-
-                            <div class="participant-name">
-                                {{ $participant->name ?? '-' }}
-                            </div>
-
-                            @if($participant->email)
-
-                                <div class="participant-email">
-                                    {{ $participant->email }}
-                                </div>
-
-                            @endif
-
-                        </div>
-
-
-                        <div class="participant-ticket">
-
-                            <span>
-                                Ticket Code
-                            </span>
-
-                            <strong>
-                                {{ $participantTicketCode }}
-                            </strong>
-
-                        </div>
-
-
-                        {{-- E-TICKET --}}
-
-                        <div>
-
-                            <a
-                                href="{{ route(
-                                    'transaction.ticket',
-                                    $transaction->transaction_code
-                                ) }}"
-                                class="participant-action"
-                            >
-                                E-ticket
-                            </a>
-
-                        </div>
-
-                    </div>
-
-                @empty
-
-                    <div class="empty-state">
-                        No participants found.
-                    </div>
-
-                @endforelse
-
-            </div>
-
-        </div>
-
-        {{-- =====================================================
-    CUSTOM FORM
-====================================================== --}}
-
-@php
-
-    $hasParticipantForms = $participants->contains(
-        fn ($participant) =>
-            $participant->forms &&
-            $participant->forms->count()
-    );
-
-@endphp
-
-
-@if($hasParticipantForms)
-
-    <div class="detail-card">
-
-        <div class="card-title">
-            Participant Information
-        </div>
-
-        <div class="forms-wrapper">
-
-            @foreach($participants as $participant)
-
-                @if($participant->forms?->count())
-
-                    <div class="participant-form-block">
-
-                        <div class="form-participant-name">
-                            {{ $participant->name ?? '-' }}
-                        </div>
-
-
-                        @foreach($participant->forms as $form)
-
-                            @php
-
-                                $customForm = $form->form;
-
-                                $fieldLabel =
-                                    $customForm?->field_label
-                                    ?? $form->field_label
-                                    ?? 'Field';
-
-                                $fieldType = strtolower(
-                                    $customForm?->field_type ?? ''
-                                );
-
-                                $value = $form->form_value;
-
-                                $isImage = $fieldType === 'image';
-                                $isFile = $fieldType === 'file';
-
-                                $fileUrl = $value
-                                    ? asset('storage/' . ltrim($value, '/'))
-                                    : null;
-
-                                $fileName = $value
-                                    ? basename($value)
-                                    : null;
-
-                            @endphp
-
-
-                            <div class="form-row">
-
-                                <span>
-                                    {{ $fieldLabel }}
-                                </span>
-
-
-                                {{-- FIELD KOSONG --}}
-
-                                @if(!$value)
-
-                                    <strong class="form-empty">
-                                        -
-                                    </strong>
-
-
-                                {{-- IMAGE --}}
-
-                                @elseif($isImage)
-
-                                    <div class="form-file-wrapper form-file-right">
-
-                                        <div class="form-file-preview">
-                                            <img
-                                                src="{{ $fileUrl }}"
-                                                alt="{{ $fieldLabel }}"
-                                                loading="lazy"
-                                            >
-                                        </div>
-
-                                        <div class="form-file-actions">
-                                            <a
-                                                href="{{ $fileUrl }}"
-                                                target="_blank"
-                                                class="btn-file-action btn-view"
-                                            >
-                                                <i class="ti ti-eye"></i>
-                                                View
-                                            </a>
-
-                                            <a
-                                                href="{{ $fileUrl }}"
-                                                download="{{ $fileName }}"
-                                                class="btn-file-action btn-download"
-                                            >
-                                                <i class="ti ti-download"></i>
-                                                Download
-                                            </a>
-                                        </div>
-
-                                    </div>
-
-
-                                {{-- FILE --}}
-
-                                @elseif($isFile)
-
-                                    <div class="form-file-wrapper form-file-right">
-
-                                        <div class="form-file-info">
-                                            <div class="form-file-icon">
-                                                <i class="ti ti-file"></i>
-                                            </div>
-
-                                            <div class="form-file-name">
-                                                {{ $fileName }}
-                                            </div>
-                                        </div>
-
-                                        <div class="form-file-actions">
-                                            <a
-                                                href="{{ $fileUrl }}"
-                                                download="{{ $fileName }}"
-                                                class="btn-file-action btn-download"
-                                            >
-                                                <i class="ti ti-download"></i>
-                                                Download
-                                            </a>
-                                        </div>
-
-                                    </div>
-
-
-                                {{-- FIELD BIASA --}}
-
-                                @else
-
-                                    <strong>
-                                        {{ $value }}
-                                    </strong>
-
-                                @endif
-
-                            </div>
-
-                        @endforeach
-
-                    </div>
-
-                @endif
-
-            @endforeach
-
-        </div>
-
     </div>
 
-@endif
-
-
-        {{-- =====================================================
-             FOOTER
-        ====================================================== --}}
-
-        <div class="detail-footer">
-
-            <div>
-
-                <strong>
-                    Eventverse
-                </strong>
-
-                <span>
-                    Event Management & Ticketing
-                </span>
-
-            </div>
-
-
-            <div class="footer-note">
-                Transaction information shown on this page is based
-                on the completed payment transaction.
-            </div>
-
-        </div>
-
-    </div>
-
+</div>
 </section>
-
-
-<style>
-
-    .transaction-detail-page {
-
-        font-family: Inter, sans-serif;
-
-        min-height: 100vh;
-
-        padding: 35px 15px 60px;
-
-        background:
-            linear-gradient(
-                180deg,
-                #edf4ff 0%,
-                #f7faff 100%
-            );
-
-        color: #172033;
-    }
-
-
-    .transaction-detail-container {
-
-        width: 100%;
-
-        max-width: 980px;
-
-        margin: 0 auto;
-    }
-
-
-    /* =====================================================
-       ACTION
-    ====================================================== */
-
-    .detail-actions {
-
-        display: flex;
-
-        justify-content: flex-end;
-
-        gap: 10px;
-
-        margin-bottom: 16px;
-    }
-
-
-    .btn-primary,
-    .btn-secondary {
-
-        display: inline-flex;
-
-        align-items: center;
-
-        justify-content: center;
-
-        gap: 8px;
-
-        padding: 10px 16px;
-
-        border-radius: 8px;
-
-        font-size: 13px;
-
-        font-weight: 600;
-
-        text-decoration: none;
-
-        transition: .2s ease;
-    }
-
-
-    .btn-primary {
-
-        color: #fff;
-
-        background: #2563eb;
-
-        border: 1px solid #2563eb;
-    }
-
-
-    .btn-primary:hover {
-
-        color: #fff;
-
-        background: #1d4ed8;
-    }
-
-
-    .btn-secondary {
-
-        color: #374151;
-
-        background: #fff;
-
-        border: 1px solid #dce2eb;
-    }
-
-
-    .btn-secondary:hover {
-
-        color: #1d4ed8;
-
-        border-color: #bfdbfe;
-
-        background: #f8fbff;
-    }
-
-
-    /* =====================================================
-       HEADER
-    ====================================================== */
-
-    .transaction-header-card {
-
-        display: flex;
-
-        align-items: center;
-
-        justify-content: space-between;
-
-        gap: 20px;
-
-        padding: 28px 32px;
-
-        margin-bottom: 18px;
-
-        background: #fff;
-
-        border: 1px solid #e4e9f2;
-
-        border-radius: 14px;
-
-        box-shadow:
-            0 12px 35px rgba(24, 48, 88, .06);
-    }
-
-
-    .eyebrow {
-
-        margin-bottom: 7px;
-
-        color: #8993a5;
-
-        font-size: 10px;
-
-        font-weight: 700;
-
-        letter-spacing: .8px;
-    }
-
-
-    .transaction-header-card h1 {
-
-        margin: 0;
-
-        color: #172033;
-
-        font-size: 21px;
-
-        font-weight: 800;
-
-        letter-spacing: -.4px;
-    }
-
-
-    .transaction-date {
-
-        margin-top: 6px;
-
-        color: #8993a5;
-
-        font-size: 11px;
-    }
-
-
-    .transaction-status {
-
-        display: inline-flex;
-
-        align-items: center;
-
-        gap: 7px;
-
-        padding: 7px 12px;
-
-        color: #15803d;
-
-        background: #ecfdf3;
-
-        border: 1px solid #bbf7d0;
-
-        border-radius: 999px;
-
-        font-size: 10px;
-
-        font-weight: 700;
-    }
-
-
-    .status-dot {
-
-        width: 7px;
-
-        height: 7px;
-
-        border-radius: 50%;
-
-        background: #22c55e;
-    }
-
-
-    /* =====================================================
-       CARD
-    ====================================================== */
-
-    .detail-card {
-
-        margin-bottom: 18px;
-
-        padding: 24px;
-
-        background: #fff;
-
-        border: 1px solid #e4e9f2;
-
-        border-radius: 12px;
-
-        box-shadow:
-            0 8px 25px rgba(24, 48, 88, .04);
-    }
-
-
-    .card-title {
-
-        margin-bottom: 17px;
-
-        color: #273247;
-
-        font-size: 13px;
-
-        font-weight: 700;
-    }
-
-
-    .card-description {
-
-        margin-top: -9px;
-
-        margin-bottom: 17px;
-
-        color: #8993a5;
-
-        font-size: 10px;
-    }
-
-
-    /* =====================================================
-       EVENT
-    ====================================================== */
-
-    .event-wrapper {
-
-        display: flex;
-
-        align-items: center;
-
-        gap: 18px;
-    }
-
-
-    .event-image {
-
-        width: 110px;
-
-        height: 85px;
-
-        flex: 0 0 110px;
-
-        object-fit: cover;
-
-        border-radius: 9px;
-
-        border: 1px solid #edf0f5;
-    }
-
-
-    .event-content h2 {
-
-        margin: 0 0 10px;
-
-        color: #1d2738;
-
-        font-size: 17px;
-
-        line-height: 1.35;
-
-        font-weight: 700;
-    }
-
-
-    .event-meta {
-
-        display: flex;
-
-        flex-direction: column;
-
-        gap: 7px;
-
-        color: #687386;
-
-        font-size: 11px;
-    }
-
-
-    .event-meta div {
-
-        display: flex;
-
-        align-items: flex-start;
-
-        gap: 8px;
-    }
-
-
-    .event-meta i {
-
-        color: #2563eb;
-
-        font-size: 14px;
-    }
-
-
-    /* =====================================================
-       TWO COLUMN
-    ====================================================== */
-
-    .two-column {
-
-        display: grid;
-
-        grid-template-columns: 1fr 1fr;
-
-        gap: 18px;
-    }
-
-
-    /* =====================================================
-       DETAIL LIST
-    ====================================================== */
-
-    .detail-list {
-
-        display: flex;
-
-        flex-direction: column;
-    }
-
-
-    .detail-row {
-
-        display: flex;
-
-        align-items: flex-start;
-
-        justify-content: space-between;
-
-        gap: 25px;
-
-        padding: 10px 0;
-
-        border-bottom: 1px solid #f0f2f6;
-
-        color: #7a8495;
-
-        font-size: 11px;
-    }
-
-
-    .detail-row:last-child {
-
-        border-bottom: none;
-
-        padding-bottom: 0;
-    }
-
-
-    .detail-row:first-child {
-
-        padding-top: 0;
-    }
-
-
-    .detail-row strong {
-
-        color: #273247;
-
-        font-size: 11px;
-
-        text-align: right;
-    }
-
-
-    .blue-text {
-
-        color: #2563eb !important;
-    }
-
-
-    .paid-text {
-
-        color: #16a34a !important;
-
-        text-transform: uppercase;
-    }
-
-
-    /* =====================================================
-       BUYER
-    ====================================================== */
-
-    .buyer-name {
-
-        margin-bottom: 15px;
-
-        color: #1d2738;
-
-        font-size: 17px;
-
-        font-weight: 700;
-    }
-
-
-    .buyer-contact {
-
-        display: flex;
-
-        flex-direction: column;
-
-        gap: 10px;
-
-        color: #687386;
-
-        font-size: 11px;
-    }
-
-
-    .buyer-contact div {
-
-        display: flex;
-
-        align-items: center;
-
-        gap: 8px;
-    }
-
-
-    .buyer-contact i {
-
-        color: #2563eb;
-
-        font-size: 14px;
-    }
-
-
-    /* =====================================================
-       TICKET
-    ====================================================== */
-
-    .ticket-purchase {
-
-        display: flex;
-
-        align-items: center;
-
-        justify-content: space-between;
-
-        gap: 20px;
-
-        padding: 17px;
-
-        background: #f8fafc;
-
-        border: 1px solid #e7ebf2;
-
-        border-radius: 9px;
-    }
-
-
-    .ticket-name {
-
-        color: #1d2738;
-
-        font-size: 14px;
-
-        font-weight: 700;
-    }
-
-
-    .ticket-type {
-
-        margin-top: 4px;
-
-        color: #929bab;
-
-        font-size: 10px;
-    }
-
-
-    .ticket-quantity {
-
-        display: flex;
-
-        align-items: center;
-
-        gap: 12px;
-    }
-
-
-    .ticket-quantity span {
-
-        color: #8993a5;
-
-        font-size: 10px;
-    }
-
-
-    .ticket-quantity strong {
-
-        display: flex;
-
-        align-items: center;
-
-        justify-content: center;
-
-        min-width: 32px;
-
-        height: 32px;
-
-        border-radius: 7px;
-
-        color: #1d4ed8;
-
-        background: #dbeafe;
-
-        font-size: 12px;
-    }
-
-
-    /* =====================================================
-       PRICE
-    ====================================================== */
-
-    .price-summary {
-
-        padding: 17px;
-
-        border: 1px solid #e7ebf2;
-
-        border-radius: 9px;
-
-        background: #f8fafc;
-    }
-
-
-    .price-summary > div:first-child {
-
-        display: flex;
-
-        justify-content: space-between;
-
-        gap: 20px;
-
-        color: #697386;
-
-        font-size: 11px;
-    }
-
-
-    .price-summary > div:first-child strong {
-
-        color: #273247;
-    }
-
-
-    .summary-divider {
-
-        height: 1px;
-
-        margin: 14px 0;
-
-        background: #dfe4ec;
-    }
-
-
-    .grand-total {
-
-        display: flex;
-
-        justify-content: space-between;
-
-        align-items: center;
-
-        gap: 20px;
-    }
-
-
-    .grand-total span {
-
-        color: #273247;
-
-        font-size: 12px;
-
-        font-weight: 700;
-    }
-
-
-    .grand-total strong {
-
-        color: #1d4ed8;
-
-        font-size: 18px;
-
-        font-weight: 800;
-    }
-
-
-    /* =====================================================
-       PARTICIPANTS
-    ====================================================== */
-
-    .participants-heading {
-
-        margin-bottom: 18px;
-    }
-
-
-    .participants-list {
-
-        border: 1px solid #e7ebf2;
-
-        border-radius: 9px;
-
-        overflow: hidden;
-    }
-
-
-    .participant-item {
-
-        display: grid;
-
-        grid-template-columns: 40px 1fr 190px 90px;
-
-        gap: 15px;
-
-        align-items: center;
-
-        padding: 16px;
-
-        border-bottom: 1px solid #edf0f5;
-    }
-
-
-    .participant-item:last-child {
-
-        border-bottom: none;
-    }
-
-
-    .participant-number {
-
-        color: #9aa4b4;
-
-        font-size: 11px;
-
-        font-weight: 700;
-    }
-
-
-    .participant-name {
-
-        color: #273247;
-
-        font-size: 12px;
-
-        font-weight: 600;
-    }
-
-
-    .participant-email {
-
-        margin-top: 4px;
-
-        color: #9aa4b4;
-
-        font-size: 10px;
-    }
-
-
-    .participant-ticket {
-
-        display: flex;
-
-        flex-direction: column;
-
-        gap: 3px;
-    }
-
-
-    .participant-ticket span {
-
-        color: #9aa4b4;
-
-        font-size: 9px;
-
-        text-transform: uppercase;
-
-        letter-spacing: .5px;
-    }
-
-
-    .participant-ticket strong {
-
-        color: #536075;
-
-        font-family: monospace;
-
-        font-size: 10px;
-
-        word-break: break-all;
-    }
-
-
-    .participant-action {
-
-        display: inline-flex;
-
-        align-items: center;
-
-        justify-content: center;
-
-        padding: 7px 10px;
-
-        color: #2563eb;
-
-        background: #eff6ff;
-
-        border: 1px solid #dbeafe;
-
-        border-radius: 7px;
-
-        font-size: 10px;
-
-        font-weight: 600;
-
-        text-decoration: none;
-    }
-
-
-    .participant-action:hover {
-
-        color: #1d4ed8;
-
-        background: #dbeafe;
-    }
-
-
-    /* =====================================================
-       FORMS
-    ====================================================== */
-
-    .participant-form-block {
-
-        padding: 16px 0;
-
-        border-bottom: 1px solid #edf0f5;
-    }
-
-
-    .participant-form-block:first-child {
-
-        padding-top: 0;
-    }
-
-
-    .participant-form-block:last-child {
-
-        padding-bottom: 0;
-
-        border-bottom: none;
-    }
-
-
-    .form-participant-name {
-
-        margin-bottom: 10px;
-
-        color: #273247;
-
-        font-size: 12px;
-
-        font-weight: 700;
-    }
-
-
-    .form-row {
-
-        display: flex;
-
-        justify-content: space-between;
-
-        gap: 30px;
-
-        padding: 7px 0;
-
-        color: #7a8495;
-
-        font-size: 10px;
-    }
-
-
-    .form-row strong {
-
-        max-width: 60%;
-
-        color: #374151;
-
-        text-align: right;
-
-        word-break: break-word;
-    }
-
-
-    /* =====================================================
-       FOOTER
-    ====================================================== */
-
-    .detail-footer {
-
-        display: flex;
-
-        justify-content: space-between;
-
-        gap: 30px;
-
-        padding: 10px 5px 0;
-
-        color: #8b95a5;
-
-        font-size: 9px;
-    }
-
-
-    .detail-footer > div:first-child {
-
-        display: flex;
-
-        flex-direction: column;
-
-        gap: 3px;
-    }
-
-
-    .detail-footer strong {
-
-        color: #4b5563;
-
-        font-size: 10px;
-    }
-
-
-    .footer-note {
-
-        max-width: 400px;
-
-        text-align: right;
-
-        line-height: 1.5;
-    }
-
-    .form-empty {
-        color: #9ca3af;
-    }
-
-    .form-file-image {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        flex-wrap: wrap;
-    }
-
-    .form-image-preview {
-        display: block;
-        width: 90px;
-        height: 65px;
-        border-radius: 8px;
-        overflow: hidden;
-        border: 1px solid #e5e7eb;
-        background: #f3f4f6;
-    }
-
-    .form-image-preview img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        display: block;
-    }
-
-    .form-file-actions {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-    }
-
-    .form-file-download {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        min-width: 0;
-    }
-
-    .form-file-icon {
-        width: 34px;
-        height: 34px;
-        border-radius: 7px;
-        background: #f3f4f6;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: #6b7280;
-        flex-shrink: 0;
-    }
-
-    .form-file-name {
-        max-width: 250px;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-        color: #374151;
-        font-size: 13px;
-    }
-
-    @media (max-width: 768px) {
-
-        .form-row {
-            flex-direction: column;
-            align-items: flex-start;
-            gap: 8px;
-        }
-
-        .form-file-download {
-            width: 100%;
-        }
-
-        .form-file-download .participant-action {
-            margin-left: auto;
-        }
-
-    }
-
-    /* =====================================================
-   FORM FILE & IMAGE - ENHANCED
-====================================================== */
-
-.form-file-wrapper {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    gap: 10px;
-    max-width: 100%;
-}
-
-/* Khusus untuk image agar tetap proporsional */
-.form-file-wrapper.form-file-right {
-    align-items: flex-end;
-}
-
-/* PREVIEW IMAGE */
-.form-file-preview {
-    width: 120px;
-    height: 90px;
-    border-radius: 10px;
-    overflow: hidden;
-    border: 2px solid #e5e9f0;
-    background: #f8fafc;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
-    transition: border-color 0.2s;
-    flex-shrink: 0;
-}
-
-.form-file-preview:hover {
-    border-color: #2563eb;
-}
-
-.form-file-preview img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-}
-
-/* FILE INFO */
-.form-file-info {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 8px 14px 8px 10px;
-    background: #f8fafc;
-    border: 1px solid #e5e9f0;
-    border-radius: 8px;
-    min-width: 200px;
-    max-width: 100%;
-}
-
-.form-file-icon {
-    width: 32px;
-    height: 32px;
-    border-radius: 6px;
-    background: #eff6ff;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #2563eb;
-    flex-shrink: 0;
-    font-size: 16px;
-}
-
-.form-file-name {
-    color: #1d2738;
-    font-size: 12px;
-    font-weight: 500;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
-
-/* MODERN BUTTON ACTIONS */
-.form-file-actions {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    flex-wrap: wrap;
-    justify-content: flex-end;
-}
-
-.btn-file-action {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
-    padding: 7px 16px;
-    border-radius: 8px;
-    font-size: 11px;
-    font-weight: 600;
-    text-decoration: none;
-    transition: all 0.2s ease;
-    cursor: pointer;
-    border: 1px solid transparent;
-}
-
-.btn-file-action i {
-    font-size: 14px;
-}
-
-/* Button View */
-.btn-view {
-    color: #1d4ed8;
-    background: #eff6ff;
-    border-color: #bfdbfe;
-}
-
-.btn-view:hover {
-    color: #1e40af;
-    background: #dbeafe;
-    border-color: #93c5fd;
-    transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.15);
-}
-
-/* Button Download */
-.btn-download {
-    color: #065f46;
-    background: #ecfdf5;
-    border-color: #a7f3d0;
-}
-
-.btn-download:hover {
-    color: #047857;
-    background: #d1fae5;
-    border-color: #6ee7b7;
-    transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(5, 150, 105, 0.15);
-}
-
-/* RESPONSIVE */
-@media (max-width: 768px) {
-    .form-row {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 8px;
-    }
-
-    .form-row strong {
-        max-width: 100%;
-        text-align: left;
-    }
-
-    .form-file-wrapper {
-        width: 100%;
-        align-items: flex-start !important;
-    }
-
-    .form-file-preview {
-        width: 100%;
-        height: 140px;
-    }
-
-    .form-file-info {
-        width: 100%;
-        min-width: unset;
-    }
-
-    .form-file-actions {
-        width: 100%;
-        justify-content: flex-start;
-    }
-
-    .btn-file-action {
-        flex: 1;
-        min-width: 80px;
-    }
-}
-
-
-    /* =====================================================
-       RESPONSIVE
-    ====================================================== */
-
-    @media (max-width: 768px) {
-
-        .transaction-detail-page {
-
-            padding: 20px 10px 40px;
-        }
-
-
-        .detail-actions {
-
-            justify-content: stretch;
-
-            flex-direction: column-reverse;
-        }
-
-
-        .btn-primary,
-        .btn-secondary {
-
-            width: 100%;
-        }
-
-
-        .transaction-header-card {
-
-            align-items: flex-start;
-
-            flex-direction: column;
-
-            padding: 22px;
-        }
-
-
-        .detail-card {
-
-            padding: 20px;
-        }
-
-
-        .two-column {
-
-            grid-template-columns: 1fr;
-        }
-
-
-        .event-wrapper {
-
-            align-items: flex-start;
-
-            flex-direction: column;
-        }
-
-
-        .event-image {
-
-            width: 100%;
-
-            height: 160px;
-
-            flex-basis: auto;
-        }
-
-
-        .participant-item {
-
-            grid-template-columns: 30px 1fr;
-
-            gap: 10px;
-        }
-
-
-        .participant-ticket,
-        .participant-item > div:last-child {
-
-            grid-column: 2;
-        }
-
-
-        .participant-ticket {
-
-            margin-top: 3px;
-        }
-
-
-        .detail-footer {
-
-            flex-direction: column;
-        }
-
-
-        .footer-note {
-
-            max-width: none;
-
-            text-align: left;
-        }
-
-    }
-
-</style>
 
 @endsection

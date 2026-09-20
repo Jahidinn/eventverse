@@ -28,39 +28,37 @@ class HomeController extends Controller
 
 		$events = Event::query()
 			// ->where('selected_event', 1)
+			->with('penyelenggara', 'ticket')
 			->latest()
 			->take(5)
 			->get();
 
-		foreach ($events as $event) {
+		// foreach ($events as $event) {
 
-			$image = asset('assets/default-img/event-images/def-img.png');
+		// 	$image = asset('assets/default-img/event-images/def-img.png');
 
-			if ($event->image) {
+		// 	if ($event->image) {
 
-				$path = public_path("storage/event-images/{$event->image}");
+		// 		$path = public_path("storage/event-images/{$event->image}");
 
-				if (file_exists($path)) {
+		// 		if (file_exists($path)) {
 
-					$image = asset("storage/event-images/{$event->image}");
+		// 			$image = asset("storage/event-images/{$event->image}");
 
-				}
+		// 		}
 
-			}
+		// 	}
 
-			$heroBanners->push([
+		// 	$heroBanners->push([
+		// 		'title' => $event->title,
+		// 		'image' => $image,
+		// 		'link' => route('event.show', $event->slug),
+		// 		'button_text' => 'Lihat Event',
+		// 		'sort' => 2,
 
-				'image' => $image,
+		// 	]);
 
-				'link' => route('event.show', $event->slug),
-
-				'button_text' => 'Lihat Event',
-
-				'sort' => 2,
-
-			]);
-
-		}
+		// }
 
 		/*
 		|--------------------------------------------------------------------------
@@ -96,7 +94,7 @@ class HomeController extends Controller
 		|--------------------------------------------------------------------------
 		*/
 
-		$heroBanners = $heroBanners
+		$heroBanners = $events
 			->sortBy('sort')
 			->values();
 
@@ -111,12 +109,12 @@ class HomeController extends Controller
 
 			'eventTerbaru' => Event::with('penyelenggara', 'ticket')
 				->latest()
-				->take(10)
+				->take(8)
 				->get(),
 
 			'eventPopuler' => Event::with('penyelenggara', 'ticket')
 				->orderByDesc('visitor')
-				->take(10)
+				->take(8)
 				->get(),
 
 			'eventPilihan' => Event::with('penyelenggara', 'ticket')
@@ -164,7 +162,7 @@ class HomeController extends Controller
 		];
 		$sorts = ['Terbaru', 'Terlama'];
 
-		return view('apps.search-page', [
+		return view('apps.event-search', [
 			'eventTerbaru' => $resultEvent,
 			'cities' => Cities::all(),
 			'categories' => EventCategory::all(),

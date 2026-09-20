@@ -1,798 +1,135 @@
-@extends('layouts.main')
-
-<style>
-/* ===========================================================
-   EVENTCONNECT COMPLETE CHECKOUT THEME & OVERRIDES
-   =========================================================== */
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
-
-/* Reset & Font Global */
-.checkout-section, 
-.checkout-section * {
-    font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif !important;
-    box-sizing: border-box !important;
-}
-
-:root {
-    --primary: #0066FF;
-    --primary-hover: #0052CC;
-    --primary-light: #F0F6FF;
-    --primary-border: #C2DCFF;
-    --success: #10B981;
-    --danger: #EF4444;
-    --bg: #F8FAFC;
-    --card: #FFFFFF;
-    --text: #0F172A;
-    --muted: #64748B;
-    --border: #E2E8F0;
-    --border-light: #F1F5F9;
-    --radius-sm: 10px;
-    --radius-md: 14px;
-    --radius-lg: 20px;
-}
-
-.checkout-section {
-    background: var(--bg) !important;
-    min-height: 100vh;
-}
-
-/* 1. HERO TITLE & PROGRESS BAR */
-.checkout-hero { text-align: center !important; margin-bottom: 24px !important; }
-.checkout-title { font-size: 26px !important; font-weight: 800 !important; color: var(--text) !important; letter-spacing: -0.5px !important; }
-
-.checkout-progress {
-    display: flex !important;
-    justify-content: center !important;
-    align-items: center !important;
-    gap: 12px !important;
-    margin-bottom: 32px !important;
-}
-.progress-step { display: flex !important; align-items: center !important; gap: 8px !important; font-size: 13px !important; font-weight: 600 !important; color: var(--muted) !important; }
-.progress-circle { width: 36px !important; height: 36px !important; border-radius: 50% !important; display: flex !important; align-items: center !important; justify-content: center !important; font-weight: 700 !important; font-size: 13px !important; }
-.progress-done { background: #DCFCE7 !important; color: var(--success) !important; }
-.progress-active { background: var(--primary) !important; color: #FFFFFF !important; box-shadow: 0 4px 12px rgba(0,102,255,.25) !important; }
-.progress-wait { background: #E2E8F0 !important; color: #94A3B8 !important; }
-.progress-line { width: 45px !important; height: 2px !important; background: #E2E8F0 !important; }
-
-/* 2. CARD WRAPPER */
-.checkout-card {
-    background: var(--card) !important;
-    border: 1px solid var(--border) !important;
-    border-radius: var(--radius-lg) !important;
-    overflow: hidden !important;
-    box-shadow: 0 10px 25px -5px rgba(15,23,42,.04) !important;
-}
-.checkout-card-body { padding: 26px !important; }
-.checkout-section-title { font-size: 18px !important; font-weight: 800 !important; color: var(--text) !important; margin-bottom: 20px !important; }
-
-/* 3. USER PROFILE CARD (PEMESAN) */
-.checkout-user-card {
-    display: flex !important;
-    align-items: center !important;
-    gap: 14px !important;
-    padding: 14px 16px !important;
-    margin-bottom: 22px !important;
-    background: var(--primary-light) !important;
-    border: 1px solid var(--primary-border) !important;
-    border-radius: var(--radius-md) !important;
-}
-.user-avatar {
-    width: 42px !important; height: 42px !important;
-    border-radius: 50% !important; background: var(--primary) !important;
-    color: #fff !important; display: flex !important; align-items: center !important;
-    justify-content: center !important; font-weight: 700 !important; font-size: 15px !important;
-}
-.user-name { font-size: 14px !important; font-weight: 700 !important; color: var(--text) !important; }
-.user-email { font-size: 12.5px !important; color: var(--muted) !important; margin-top: 1px !important; }
-
-/* 4. FORM INPUTS & LABELS (MENG-OVERRIDE BOOTSTRAP) */
-.form-group, .checkout-field { margin-bottom: 20px !important; }
-.checkout-label {
-    display: block !important;
-    font-size: 13px !important;
-    font-weight: 700 !important;
-    color: #334155 !important;
-    margin-bottom: 6px !important;
-}
-
-.checkout-input, 
-.form-control.checkout-input {
-    width: 100% !important;
-    height: 46px !important;
-    padding: 0 14px !important;
-    border: 1.5px solid #CBD5E1 !important;
-    border-radius: var(--radius-sm) !important;
-    background: #FFFFFF !important;
-    font-size: 13.5px !important;
-    color: var(--text) !important;
-    outline: none !important;
-    box-shadow: none !important;
-    transition: all 0.2s ease !important;
-}
-.checkout-input:focus, 
-.form-control.checkout-input:focus {
-    border-color: var(--primary) !important;
-    box-shadow: 0 0 0 3px rgba(0, 102, 255, 0.12) !important;
-}
-.checkout-input[readonly] {
-    background-color: #F1F5F9 !important;
-    color: #64748B !important;
-}
-
-.option-group{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
-    gap:12px;
-}
-
-.option-card{
-    position:relative;
-    display:flex;
-    align-items:center;
-    gap:12px;
-    padding:14px 16px;
-    border:1.5px solid var(--border);
-    border-radius:12px;
-    background:#fff;
-    cursor:pointer;
-    transition:.2s ease;
-}
-
-.option-card:hover{
-    border-color:var(--primary);
-    background:var(--primary-light);
-}
-
-.option-card input{
-    width:18px;
-    height:18px;
-    accent-color:var(--primary);
-    margin:0;
-    flex-shrink:0;
-}
-
-.option-card span{
-    flex:1;
-    font-size:13.5px;
-    font-weight:600;
-    color:var(--text);
-}
-
-.option-card:has(input:checked){
-    border-color:var(--primary);
-    background:var(--primary-light);
-    box-shadow:0 0 0 3px rgba(0,102,255,.12);
-}
-
-.image-preview{
-    display:block;
-    width:100%;
-    max-width:220px;
-    height:160px;
-    object-fit:cover;
-    margin-top:12px;
-    border:1px solid var(--border);
-    border-radius:var(--radius-sm);
-    background:#F8FAFC;
-    box-shadow:0 2px 8px rgba(15,23,42,.05);
-}
-
-.checkout-textarea{
-    min-height:120px !important;
-    height:120px !important;
-    padding:12px 14px !important;
-    resize:vertical !important;
-    line-height:1.6 !important;
-}
-
-/* Choices.js */
-.choices{
-    margin:0 !important;
-}
-
-.choices__inner{
-    min-height:46px !important;
-    height:46px !important;
-    padding:0 14px !important;
-    border:1.5px solid #CBD5E1 !important;
-    border-radius:var(--radius-sm) !important;
-    background:#FFF !important;
-    display:flex !important;
-    align-items:center !important;
-}
-
-.choices__list--single{
-    padding:0 !important;
-}
-
-.choices[data-type*="select-one"]::after{
-    right:14px !important;
-}
-
-.choices.is-focused .choices__inner{
-    border-color:var(--primary) !important;
-    box-shadow:0 0 0 3px rgba(0,102,255,.12) !important;
-}
-
-/* 5. FIX PHONE INPUT (intl-tel-input v25) */
-.iti {
-    width: 100% !important;
-    display: block !important;
-}
-.iti .checkout-input{
-    padding-left:50px !important;
-}
-
-.iti__dropdown-content {
-    border-radius: 10px !important;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1) !important;
-    border: 1px solid #E2E8F0 !important;
-    z-index: 99 !important;
-}
-
-/* 6. TICKET QUANTITY COUNTER */
-.ticket-qty {
-    display: inline-flex !important;
-    align-items: center !important;
-    justify-content: space-between !important;
-    background: #F1F5F9 !important;
-    border: 1px solid var(--border) !important;
-    padding: 4px !important;
-    border-radius: var(--radius-sm) !important;
-    width: 130px !important;
-}
-.qty-btn {
-    width: 34px !important; height: 34px !important;
-    border: none !important; border-radius: 6px !important;
-    background: #FFFFFF !important; font-size: 14px !important;
-    font-weight: 700 !important; color: var(--text) !important;
-    cursor: pointer !important; display: flex !important;
-    align-items: center !important; justify-content: center !important;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.08) !important;
-    padding: 0 !important; margin: 0 !important;
-}
-.qty-btn:hover { background: var(--primary) !important; color: #FFF !important; }
-.qty-input {
-    width: 45px !important; height: 34px !important;
-    border: none !important; background: transparent !important;
-    text-align: center !important; font-size: 15px !important;
-    font-weight: 700 !important; color: var(--text) !important;
-    outline: none !important; padding: 0 !important; margin: 0 !important;
-}
-
-/* 7. CARD PESERTA (PARTICIPANT CARD) */
-.participant-card {
-    background: #FFFFFF !important;
-    border: 1.5px solid var(--border) !important;
-    border-radius: var(--radius-md) !important;
-    padding: 22px !important;
-    margin-bottom: 20px !important;
-    box-shadow: 0 2px 8px rgba(15,23,42,.03) !important;
-}
-.participant-header {
-    display: flex !important;
-    justify-content: space-between !important;
-    align-items: center !important;
-    padding-bottom: 16px !important;
-    margin-bottom: 20px !important;
-    border-bottom: 1px solid var(--border-light) !important;
-    gap: 12px !important;
-}
-.participant-title { font-size: 16px !important; font-weight: 800 !important; color: var(--text) !important; margin: 0 !important; }
-.participant-desc { font-size: 12.5px !important; color: var(--muted) !important; margin: 2px 0 0 0 !important; }
-
-/* Checkbox "Samakan Data Pemesan" */
-.participant-copy-box, 
-.participant-copy-box.form-check {
-    display: inline-flex !important;
-    align-items: center !important;
-    gap: 8px !important;
-    padding: 6px 14px !important;
-    background: var(--primary-light) !important;
-    border: 1px solid var(--primary-border) !important;
-    border-radius: 30px !important;
-    margin: 0 !important; min-height: auto !important;
-}
-.participant-copy-box input[type="checkbox"], 
-.participant-copy-box .form-check-input {
-    width: 15px !important; height: 15px !important;
-    margin: 0 !important; padding: 0 !important;
-    float: none !important; position: static !important;
-    cursor: pointer !important; accent-color: var(--primary) !important;
-}
-.participant-copy-box label, 
-.participant-copy-box .form-check-label {
-    font-size: 12px !important; font-weight: 700 !important;
-    color: var(--primary) !important; margin: 0 !important;
-    padding: 0 !important; cursor: pointer !important;
-    white-space: nowrap !important; display: inline-block !important;
-}
-
-/* Select Option Dropdown Fix */
-.participant-card select,
-.participant-card select.form-control,
-.participant-card .ev-select {
-    width: 100% !important;
-    height: 46px !important;
-    padding: 0 36px 0 14px !important;
-    border: 1.5px solid #CBD5E1 !important;
-    border-radius: var(--radius-sm) !important;
-    background: #FFFFFF url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%3C64748B' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") no-repeat right 14px center !important;
-    font-size: 13.5px !important;
-    color: var(--text) !important;
-    appearance: none !important;
-    outline: none !important;
-}
-
-/* 8. FIX FILE & IMAGE UPLOAD BOX */
-.upload-field-wrapper input[type="file"] {
-    position: absolute !important;
-    width: 1px !important;
-    height: 1px !important;
-    padding: 0 !important;
-    margin: -1px !important;
-    overflow: hidden !important;
-    clip: rect(0, 0, 0, 0) !important;
-    border: 0 !important;
-}
-
-.upload-box, 
-label.upload-box {
-    display: flex !important;
-    align-items: center !important;
-    gap: 14px !important;
-    padding: 14px 16px !important;
-    border: 1.5px dashed var(--primary-border) !important;
-    border-radius: var(--radius-sm) !important;
-    background: var(--primary-light) !important;
-    cursor: pointer !important;
-    margin: 0 !important;
-    width: 100% !important;
-    transition: all 0.2s ease !important;
-}
-.upload-box:hover {
-    border-color: var(--primary) !important;
-    background: #E6F0FF !important;
-}
-.upload-icon {
-    width: 40px !important; height: 40px !important;
-    border-radius: 8px !important; background: #FFFFFF !important;
-    color: var(--primary) !important; display: flex !important;
-    align-items: center !important; justify-content: center !important;
-    font-size: 20px !important; flex-shrink: 0 !important;
-    box-shadow: 0 2px 4px rgba(0,102,255,0.08) !important;
-}
-.upload-content {
-    display: flex !important;
-    flex-direction: column !important;
-    gap: 2px !important;
-    overflow: hidden !important;
-}
-.upload-content strong,
-.upload-content .upload-title {
-    display: block !important;
-    font-size: 13px !important;
-    color: var(--text) !important;
-    font-weight: 700 !important;
-    white-space: nowrap !important;
-    overflow: hidden !important;
-    text-overflow: ellipsis !important;
-}
-.upload-content small,
-.upload-content .upload-subtitle {
-    display: block !important;
-    font-size: 11.5px !important;
-    color: var(--muted) !important;
-}
-
-.checkout-note {
-    margin-top: 16px !important;
-    padding: 12px 14px !important;
-    border-radius: var(--radius-sm) !important;
-    border: 1px solid #FDE68A !important;
-    background: #FFFBEA !important;
-    color: #92400E !important;
-    font-size: 12px !important;
-    line-height: 1.5 !important;
-}
-
-/* 9. SUMMARY CARD & SIDEBAR STICKY FIX */
-
-/* PERBAIKAN 1: Mencegah Flexbox Bootstrap memaksa tinggi kolom kanan sama dengan kolom kiri */
-.col-lg-5 {
-    align-self: flex-start !important;
-}
-.col-lg-5{
-    align-self:flex-start;
-}
-
-/* PERBAIKAN 2: Penyesuaian Sticky Sidebar */
-.summary-sidebar-wrapper.fixed{
-    position: fixed;
-    top: 90px;
-    width: 370px;
-}
-
-.summary-sidebar-wrapper.bottom{
-    position: absolute;
-    bottom: 0;
-}
-
-.summary-cover { width: 100% !important; height: 160px !important; object-fit: cover !important; }
-.summary-content { padding: 22px !important; }
-.summary-title { font-size: 18px !important; font-weight: 800 !important; color: var(--text) !important; margin-bottom: 10px !important; line-height: 1.3 !important; }
-.summary-meta { display: flex !important; align-items: center !important; gap: 8px !important; font-size: 13px !important; color: var(--muted) !important; margin-bottom: 8px !important; }
-
-.ticket-box {
-    margin-top: 16px !important;
-    background: var(--bg) !important;
-    border: 1px solid var(--border-light) !important;
-    border-radius: var(--radius-sm) !important;
-    padding: 12px 14px !important;
-    font-size: 13px !important;
-}
-
-/* CARD KHUSUS AKSI CHECKOUT (COUNTDOWN, TOTAL, BUTTON) */
-.sticky-checkout-action {
-    background: var(--card) !important;
-    border: 1px solid var(--border) !important;
-    border-radius: var(--radius-lg) !important;
-    padding: 22px !important;
-    margin-top: 16px !important;
-    box-shadow: 0 10px 25px -5px rgba(15,23,42,.04) !important;
-}
-
-.price-box { 
-    margin-top: 0 !important; 
-    padding-top: 0 !important; 
-    border-top: none !important; 
-}
-.price-box small { color: var(--muted) !important; font-size: 12px !important; display: block !important; }
-.price-amount { font-size: 28px !important; font-weight: 800 !important; color: var(--primary) !important; margin-top: 2px !important; letter-spacing: -0.5px !important; }
-
-.trust-card { margin-top: 16px !important; background: #ECFDF5 !important; border: 1px solid #A7F3D0 !important; border-radius: var(--radius-sm) !important; padding: 12px 14px !important; }
-.trust-item { display: flex !important; align-items: center !important; gap: 8px !important; color: #065F46 !important; font-size: 12px !important; font-weight: 600 !important; }
-.trust-item + .trust-item { margin-top: 6px !important; }
-
-/* Checkbox Persetujuan Syarat & Ketentuan */
-.summary-sidebar-wrapper .form-check {
-    display: flex !important;
-    align-items: center !important;
-    gap: 10px !important;
-    padding: 20 !important;
-    margin-top: 10px !important;
-    min-height: auto !important;
-    font-size: 13px !important;
-
-}
-.summary-sidebar-wrapper.form-check-input {
-    width: 16px !important; height: 16px !important;
-    margin: 0 !important; padding: 0 !important;
-    float: none !important; position: static !important;
-    accent-color: var(--primary) !important;
-    cursor: pointer !important; flex-shrink: 0 !important;
-}
-.summary-sidebar-wrapper.form-check-label {
-    font-size: 13px !important; color: var(--text) !important;
-    margin: 0 !important; cursor: pointer !important;
-}
-
-/* Tombol Pembayaran */
-.checkout-pay-btn {
-    width: 100% !important;
-    height: 48px !important;
-    border: none !important;
-    border-radius: var(--radius-sm) !important;
-    background: var(--primary) !important;
-    color: #FFF !important;
-    font-size: 14.5px !important;
-    font-weight: 700 !important;
-    cursor: pointer !important;
-    transition: all 0.2s ease !important;
-    box-shadow: 0 4px 14px rgba(0,102,255,.25) !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    gap: 8px !important;
-}
-.checkout-pay-btn:hover { background: var(--primary-hover) !important; transform: translateY(-1px) !important; box-shadow: 0 6px 18px rgba(0,102,255,.35) !important; }
-
-.reservation-countdown{
-    display:flex !important;
-    align-items:center;
-    justify-content:center;
-    gap:8px;
-    margin:0 0 16px 0 !important;
-    padding:10px 18px;
-    background:#FFF7ED;
-    border:1px solid #FED7AA;
-    color:#C2410C;
-    border-radius:999px;
-    font-size:14px;
-    font-weight:700;
-    width: 100% !important;
-}
-
-.reservation-countdown.expired{
-    background:#FEF2F2;
-    border-color:#FECACA;
-    color:#DC2626;
-}
-
-/* Responsive Adjustments (Mobile Sticky Bottom Bar Fix) */
-@media(max-width: 991px) {
-    .summary-sidebar-wrapper { 
-        position: relative !important; 
-        top: 0 !important; 
-        margin-top: 24px !important; 
-    }
-    
-    /* .sticky-checkout-action {
-        position: -webkit-sticky !important;
-        position: sticky !important;
-        bottom: 0 !important;
-        z-index: 1000 !important;
-        margin-top: 20px !important;
-        border-radius: var(--radius-lg) var(--radius-lg) 0 0 !important;
-        box-shadow: 0 -10px 25px rgba(15,23,42,.1) !important;
-        background: #FFFFFF !important;
-    } */
-}
-
-@media (max-width: 991.98px) {
-
-    .sticky-checkout-action{
-        position: fixed !important;
-        left: 0 !important;
-        right: 0 !important;
-        bottom: 0 !important;
-        z-index: 1050 !important;
-
-        background: #fff !important;
-        padding: 16px !important;
-
-        border-top: 1px solid #e9ecef !important;
-        box-shadow: 0 -6px 20px rgba(0,0,0,.08) !important;
-    }
-
-    /* Supaya isi halaman tidak tertutup sticky */
-    .checkout-page{
-        padding-bottom: 260px;
-    }
-
-    /* Countdown tidak perlu ditampilkan di sticky mobile */
-    .sticky-checkout-action .reservation-countdown{
-        display: none;
-    }
-
-    /* Harga dan tombol */
-    .sticky-checkout-action .price-box{
-        margin-bottom: 12px;
-    }
-
-    .sticky-checkout-action .checkout-pay-btn{
-        width: 100%;
-    }
-
-}
-
-
-/* Mobile */
-@media (max-width: 991.98px){
-
-    .price-box{
-        display:flex;
-        justify-content:space-between;
-        align-items:center;
-        text-align:left;
-        padding:0 0 12px;
-        margin-bottom:12px;
-        border-bottom:1px solid #eee;
-    }
-
-    .price-box small{
-        display:inline;
-        margin:0;
-        font-size:14px;
-        color:#6c757d;
-    }
-
-    .price-amount{
-        display:inline;
-        margin:0;
-        font-size:22px;
-        font-weight:700;
-        line-height:1;
-    }
-
-}
-
-@media(max-width: 768px) {
-    .checkout-card-body, .summary-content { padding: 18px !important; }
-    .progress-step span { display: none !important; }
-    .progress-line { width: 20px !important; }
-    .participant-header { flex-direction: column !important; align-items: flex-start !important; }
-    .participant-copy-box { width: 100% !important; justify-content: center !important; }
-}
-</style>
+@extends('layouts.app')
 
 @section('content')
-<div class="bg-eventconnect header-hight"></div>
 
-<section class="checkout-section pt-4 pb-5">
-<div class="container">
+<section class="checkout-section bg-[#f8fafc] pt-4 pb-5"
+        x-data="checkoutPage({
+        expiredAt: '{{ $reservation->expired_at->toIso8601String() }}',
+        eventUrl: '{{ url($event->slug) }}',
+        expireUrl: '{{ route('reservation.expire', ['reservationCode' => $reservation->reservation_code]) }}',
+        updateUrl: '{{ route('reservation.update', ['reservationCode' => $reservation->reservation_code]) }}',
+        csrf: '{{ csrf_token() }}',
+        initialQty: {{ $reservation->quantity }},
+        maxQty: {{ (int) ($maxQty ?? 999999) }},
+        ticketPrice: {{ $ticket->ticket_price }}
+    })"
+         x-init="init()">
 
-    <div class="checkout-hero">
-        <div class="checkout-title">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+    {{-- HERO TITLE --}}
+    <div class="text-center mb-5">
+        <h1 class="text-xl sm:text-2xl font-extrabold text-[#0f172a] tracking-tight m-0">
             Selesaikan Pemesanan
-        </div>
-
-        <input
-            type="hidden"
-            id="reservationExpiredAt"
-            value="{{ $reservation->expired_at->toIso8601String() }}">
+        </h1>
+        <input type="hidden" id="reservationExpiredAt" :value="expiredAtIso">
     </div>
 
-    <div class="checkout-progress">
-        <div class="progress-step">
-            <div class="progress-circle progress-done">
+    {{-- PROGRESS BAR --}}
+    <div class="flex justify-center items-center gap-2 sm:gap-3 mb-7">
+        <div class="flex items-center gap-2">
+            <div class="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-[#dcfce7] text-[#16a34a] flex items-center justify-center font-bold text-xs sm:text-sm">
                 <i class="ti ti-check"></i>
             </div>
-            <span>Pilih Tiket</span>
+            <span class="hidden sm:inline text-xs font-semibold text-[#64748b]">Pilih Tiket</span>
         </div>
-
-        <div class="progress-line"></div>
-
-        <div class="progress-step">
-            <div class="progress-circle progress-active">
-                2
-            </div>
-            <span>Data Peserta</span>
+        <div class="w-6 sm:w-10 h-0.5 bg-[#e2e8f0]"></div>
+        <div class="flex items-center gap-2">
+            <div class="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-[#2282ff] text-white flex items-center justify-center font-bold text-xs sm:text-sm shadow-[0_4px_12px_rgba(34,130,255,0.25)]">2</div>
+            <span class="hidden sm:inline text-xs font-semibold text-[#0f172a]">Data Peserta</span>
         </div>
-
-        <div class="progress-line"></div>
-
-        <div class="progress-step">
-            <div class="progress-circle progress-wait">
-                3
-            </div>
-            <span>Pembayaran</span>
+        <div class="w-6 sm:w-10 h-0.5 bg-[#e2e8f0]"></div>
+        <div class="flex items-center gap-2">
+            <div class="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-[#e2e8f0] text-[#94a3b8] flex items-center justify-center font-bold text-xs sm:text-sm">3</div>
+            <span class="hidden sm:inline text-xs font-semibold text-[#64748b]">Pembayaran</span>
         </div>
-
-        <div class="progress-line"></div>
-
-        <div class="progress-step">
-            <div class="progress-circle progress-wait">
-                4
-            </div>
-            <span>Tiket</span>
+        <div class="w-6 sm:w-10 h-0.5 bg-[#e2e8f0]"></div>
+        <div class="flex items-center gap-2">
+            <div class="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-[#e2e8f0] text-[#94a3b8] flex items-center justify-center font-bold text-xs sm:text-sm">4</div>
+            <span class="hidden sm:inline text-xs font-semibold text-[#64748b]">Tiket</span>
         </div>
     </div>
 
-    <form
-        method="POST"
-        enctype="multipart/form-data"
-        id="checkout-event">
-
+    <form method="POST" enctype="multipart/form-data" id="checkout-event">
         @csrf
+        <div class="checkout-page grid grid-cols-1 lg:grid-cols-12 gap-5 relative
+            pb-[220px] lg:pb-0">
 
-        <div class="row g-4 position-relative">
+            {{-- ==================== LEFT: FORM ==================== --}}
+            <div class="lg:col-span-7 space-y-5">
 
-            {{-- FORM LEFT --}}
-            <div class="col-lg-7">
+                <div class="bg-white border border-[#e2e8f0] rounded-2xl shadow-[0_2px_14px_-2px_rgba(15,23,42,0.05)]">
+                    <div class="p-5 sm:p-6">
 
-                <div class="checkout-card">
-                    <div class="checkout-card-body">
-
-                        <div class="checkout-section-title">
-                            Data Pemesan
-                        </div>
+                        <h2 class="text-base font-extrabold text-[#0f172a] m-0 mb-5">Data Pemesan</h2>
 
                         @if(auth()->check())
-                        <div class="checkout-user-card">
-                            <div class="user-avatar">
+                        <div class="flex items-center gap-3.5 p-3.5 mb-5 bg-[#ebf3ff] border border-[#c2dcff] rounded-xl">
+                            <div class="w-10 h-10 rounded-full bg-[#2282ff] text-white flex items-center justify-center font-bold text-sm shrink-0">
                                 {{ strtoupper(substr(auth()->user()->name,0,1)) }}
                             </div>
-
-                            <div>
-                                <div class="user-name">
-                                    {{ auth()->user()->name }}
-                                </div>
-                                <div class="user-email">
-                                    {{ auth()->user()->email }}
-                                </div>
+                            <div class="min-w-0">
+                                <div class="text-sm font-bold text-[#0f172a] truncate">{{ auth()->user()->name }}</div>
+                                <div class="text-xs text-[#64748b] truncate">{{ auth()->user()->email }}</div>
                             </div>
                         </div>
                         @endif
 
-                        <input type="hidden" name="is_login" id="is_login"
-                            value="{{ auth()->check() ? 1 : 0 }}">
+                        <input type="hidden" name="is_login" id="is_login" value="{{ auth()->check() ? 1 : 0 }}">
+                        <input type="hidden" name="user_login_id" id="user_login_id" value="{{ auth()->check() ? auth()->user()->id : '0' }}">
 
-                        <input type="hidden" name="user_login_id" id="user_login_id"
-                            value="{{ auth()->check() ? auth()->user()->id : '0' }}">
-
-                        <div class="form-group mb-3">
-                            <label for="buyerName" class="checkout-label">
-                                Nama Lengkap <span class="text-danger">*</span>
+                        <div class="mb-4">
+                            <label for="buyerName" class="block text-[13px] font-bold text-[#334155] mb-1.5">
+                                Nama Lengkap <span class="text-rose-500">*</span>
                             </label>
-
-                            <input
-                                class="form-control checkout-input"
-                                name="buyer[name]"
-                                id="buyerName"
-                                type="text"
-                                placeholder="Masukkan nama lengkap"
-                                required
-                                autocomplete="on"
-                                {{ auth()->check() ? 'readonly' : '' }}
-                                value="{{ auth()->check() ? auth()->user()->name : '' }}">
+                            <input class="w-full h-11 px-3.5 border-[1.5px] border-[#cbd5e1] rounded-lg bg-white text-sm text-[#0f172a] outline-none transition-all focus:border-[#2282ff] focus:ring-[3px] focus:ring-[#2282ff]/12 read-only:bg-[#f1f5f9] read-only:text-[#64748b]"
+                                   name="buyer[name]" id="buyerName" type="text" placeholder="Masukkan nama lengkap"
+                                   required autocomplete="on"
+                                   {{ auth()->check() ? 'readonly' : '' }}
+                                   value="{{ auth()->check() ? auth()->user()->name : '' }}">
                         </div>
 
-                        <div class="form-group mb-3">
-                            <label for="buyerEmail" class="checkout-label">
-                                Email <span class="text-danger">*</span>
+                        <div class="mb-4">
+                            <label for="buyerEmail" class="block text-[13px] font-bold text-[#334155] mb-1.5">
+                                Email <span class="text-rose-500">*</span>
                             </label>
-
-                            <input
-                                class="form-control checkout-input"
-                                name="buyer[email]"
-                                type="email"
-                                placeholder="example@email.com"
-                                id="buyerEmail"
-                                required
-                                autocomplete="on"
-                                {{ auth()->check() ? 'readonly' : '' }}
-                                value="{{ auth()->check() ? auth()->user()->email : '' }}">
+                            <input class="w-full h-11 px-3.5 border-[1.5px] border-[#cbd5e1] rounded-lg bg-white text-sm text-[#0f172a] outline-none transition-all focus:border-[#2282ff] focus:ring-[3px] focus:ring-[#2282ff]/12 read-only:bg-[#f1f5f9] read-only:text-[#64748b]"
+                                   name="buyer[email]" id="buyerEmail" type="email" placeholder="example@email.com"
+                                   required autocomplete="on"
+                                   {{ auth()->check() ? 'readonly' : '' }}
+                                   value="{{ auth()->check() ? auth()->user()->email : '' }}">
                         </div>
 
-                        <div class="form-group mb-3">
-                            <label for="buyerPhone" class="checkout-label">
-                                Nomor HP <span class="text-danger">*</span>
+                        <div class="mb-4">
+                            <label for="buyerPhone" class="block text-[13px] font-bold text-[#334155] mb-1.5">
+                                Nomor HP <span class="text-rose-500">*</span>
                             </label>
-
-                            <input
-                                class="form-control checkout-input"
-                                name="buyer[phone]"
-                                type="text"
-                                id="buyerPhone"
-                                placeholder="+62 821 3355 3002"
-                                value="+62"
-                                required>
+                            <input class="w-full h-11 px-3.5 border-[1.5px] border-[#cbd5e1] rounded-lg bg-white text-sm text-[#0f172a] outline-none transition-all focus:border-[#2282ff] focus:ring-[3px] focus:ring-[#2282ff]/12"
+                                   name="buyer[phone]" id="buyerPhone" type="text"
+                                   placeholder="+62 821 3355 3002" value="+62" required>
                         </div>
 
-                        <div class="checkout-field">
-                            <label class="checkout-label">
-                                Jumlah Tiket
-                            </label>
-
-                            <div class="ticket-qty">
-                                <button
-                                    type="button"
-                                    class="qty-btn"
-                                    id="qtyMinus">
+                        {{-- QTY --}}
+                        <div class="mb-5">
+                            <label class="block text-[13px] font-bold text-[#334155] mb-1.5">Jumlah Tiket</label>
+                            <div class="inline-flex items-center justify-between bg-[#f1f5f9] border border-[#e2e8f0] p-1 rounded-lg w-[130px]">
+                                <button type="button" id="qtyMinus" @click="decrementQty()"
+                                        class="w-8 h-8 bg-white rounded-md flex items-center justify-center text-[#0f172a] font-bold text-sm shadow-sm hover:bg-[#2282ff] hover:text-white disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                                        :disabled="qty <= 1">
                                     <i class="ti ti-minus"></i>
                                 </button>
-
-                                <input
-                                    id="ticketQty"
-                                    class="qty-input"
-                                    type="number"
-                                    min="1"
-                                    value="{{ $reservation->quantity }}"
-                                    readonly>
-
-                                <button
-                                    type="button"
-                                    class="qty-btn"
-                                    id="qtyPlus">
+                                <input id="ticketQty" class="w-11 h-8 bg-transparent text-center font-bold text-[15px] text-[#0f172a] outline-none"
+                                       type="number" min="1" :value="qty" readonly>
+                                <button type="button" id="qtyPlus" @click="incrementQty()"
+                                        class="w-8 h-8 bg-white rounded-md flex items-center justify-center text-[#0f172a] font-bold text-sm shadow-sm hover:bg-[#2282ff] hover:text-white transition-colors">
                                     <i class="ti ti-plus"></i>
                                 </button>
                             </div>
                         </div>
 
-                        <hr class="my-4">
+                        <hr class="my-5 border-[#e2e8f0]">
 
-                        <div class="checkout-note mt-4">
+                        <div class="p-3 rounded-lg border border-[#fde68a] bg-[#fffbeb] text-xs text-[#92400e] leading-relaxed">
                             Form dapat di ubah jika registrasi menggunakan akun!
                         </div>
 
@@ -803,134 +140,110 @@ label.upload-box {
 
             </div>
 
-            {{-- SUMMARY RIGHT --}}
-            <div class="col-lg-5">
-                
-                {{-- Pembungkus Sticky Sidebar --}}
-                <div class="summary-sidebar-wrapper">
-                
+            {{-- ==================== RIGHT: SUMMARY ==================== --}}
+            <div class="lg:col-span-5">
+                <div class="summary-sidebar-wrapper space-y-4 lg:sticky lg:top-20 lg:self-start">
 
-                    {{-- Card Informasi Event & Tiket --}}
-                    <div class="checkout-card summary-card">
-                        <img
-                            src="{{ asset('storage/event-images/' . $event->image) }}"
-                            class="summary-cover">
+                    {{-- CARD INFO EVENT --}}
+                    <div class="bg-white border border-[#e2e8f0] rounded-2xl shadow-[0_2px_14px_-2px_rgba(15,23,42,0.05)] overflow-hidden">
+                        <img src="{{ asset('storage/event-images/' . $event->image) }}"
+                             class="w-full h-40 object-cover" alt="{{ $event->title }}">
 
-                        <div class="summary-content">
-                            <div class="summary-title">
-                                {{ $event->title }}
-                            </div>
+                        <div class="p-5">
+                            <h3 class="text-base font-extrabold text-[#0f172a] m-0 mb-2.5 leading-snug">{{ $event->title }}</h3>
 
-                            <div class="summary-meta">
+                            <div class="flex items-center gap-2 text-[13px] text-[#64748b] mb-2">
                                 <i class="ti ti-user"></i>
-                                {{ $event->penyelenggara->name }}
+                                <span>{{ $event->penyelenggara->name }}</span>
                             </div>
 
-                            <div class="summary-meta">
-                                <i class="ti ti-map-pin"></i>
-
-                                @if(strtolower($event->location_jenis)=='online')
-                                    Online
-                                @else
-                                    {{ $event->location_detail }}
-                                    <br>
-                                    {{ $event->location_city }},
-                                    {{ $event->province->name }}
-                                @endif
+                            <div class="flex items-start gap-2 text-[13px] text-[#64748b] mb-4">
+                                <i class="ti ti-map-pin mt-0.5"></i>
+                                <span>
+                                    @if(strtolower($event->location_jenis)=='online')
+                                        Online
+                                    @else
+                                        {{ $event->location_detail }}<br>
+                                        {{ $event->location_city }}, {{ $event->province->name }}
+                                    @endif
+                                </span>
                             </div>
 
-                            <div class="ticket-box">
-                                <strong>
-                                    {{ $ticket->ticket_name }}
-                                </strong>
-                                <br>
-                                <small class="text-muted" id="summaryQty">
-                                    Qty 1 Ticket
-                                </small>
+                            <div class="p-3.5 rounded-lg bg-[#f8fafc] border border-[#f1f5f9] text-sm">
+                                <strong class="text-[#0f172a]">{{ $ticket->ticket_name }}</strong><br>
+                                <small class="text-[#64748b]" id="summaryQty" x-text="`Qty ${qty} Ticket`"></small>
                             </div>
 
-                            <div class="trust-card">
-                                <div class="trust-item">
+                            <div class="mt-4 p-3.5 rounded-lg bg-[#ecfdf5] border border-[#a7f3d0] space-y-1.5">
+                                <div class="flex items-center gap-2 text-xs font-semibold text-[#065f46]">
                                     <i class="ti ti-shield-check"></i> Secure payment
                                 </div>
-
-                                <div class="trust-item">
+                                <div class="flex items-center gap-2 text-xs font-semibold text-[#065f46]">
                                     <i class="ti ti-ticket"></i> Verify and generate tickets automatically
                                 </div>
                             </div>
 
-                            <!-- 3. Persetujuan Syarat & Ketentuan -->
-                            <div class="form-check">
-                                <input
-                                    type="checkbox"
-                                    class="form-check-input"
-                                    id="persetujuan"
-                                    required>
-
-                                <label
-                                    class="form-check-label"
-                                    for="persetujuan">
+                            <div class="flex items-center gap-2.5 mt-4">
+                                <input type="checkbox" id="persetujuan" required
+                                       class="w-4 h-4 accent-[#2282ff] cursor-pointer shrink-0">
+                                <label for="persetujuan" class="text-[13px] text-[#0f172a] cursor-pointer">
                                     Saya setuju dengan <strong>Syarat & Ketentuan</strong>
                                 </label>
                             </div>
                         </div>
                     </div>
 
-                    {{-- CARD KHUSUS: COUNTDOWN + TOTAL PRICE + ACTION BUTTON (Sticky) --}}
-                    <div class="sticky-checkout-action">
-                        
-                        <!-- 1. Countdown Pindah ke Atas Total Harga -->
-                        <div class="reservation-countdown" id="reservationCountdown">
+                    {{-- STICKY ACTION --}}
+                    <div class="sticky-checkout-action
+                        fixed bottom-0 left-0 right-0 z-50
+                        lg:static lg:z-auto
+                        bg-white border-t border-[#e2e8f0]
+                        lg:border lg:rounded-2xl
+                        rounded-t-2xl
+                        shadow-[0_-6px_20px_rgba(0,0,0,0.08)] lg:shadow-[0_2px_14px_-2px_rgba(15,23,42,0.05)]
+                        p-4 pb-[calc(1rem+env(safe-area-inset-bottom))] lg:p-5 lg:pb-5">
+
+                        <div class="reservation-countdown flex items-center justify-center gap-2 mb-4 px-4 py-2.5 border rounded-full text-sm font-bold w-full transition-colors"
+                             :class="expired
+                                 ? 'bg-[#fef2f2] border-[#fecaca] text-[#dc2626]'
+                                 : 'bg-[#fff7ed] border-[#fed7aa] text-[#c2410c]'"
+                             id="reservationCountdown">
                             <i class="ti ti-clock"></i>
-                            <span id="countdownText">Memuat sisa waktu...</span>
+                            <span id="countdownText" x-text="countdownText"></span>
                         </div>
 
-                        <!-- 2. Price Box -->
                         <div class="price-box">
-                            <small>Total Pembayaran</small>
-                            <div class="price-amount" id="summaryPrice">
+                            <small class="block text-xs text-[#64748b]">Total Pembayaran</small>
+                            <div class="text-2xl font-extrabold text-[#2282ff] mt-0.5 tracking-tight"
+                                 id="summaryPrice"
+                                 x-text="formatRupiah(qty * ticketPrice)">
                                 Rp {{ number_format($ticket->ticket_price,0,',','.') }}
                             </div>
                         </div>
 
-                        <input
-                            type="hidden"
-                            name="reservation_code"
-                            value="{{ $reservation->reservation_code }}">
+                        <input type="hidden" name="reservation_code" value="{{ $reservation->reservation_code }}">
+                        <input type="hidden" id="quantity" name="quantity" :value="qty">
+                        <input type="hidden" id="ticketPrice" :value="ticketPrice">
+                        <input type="hidden" id="totalPrice" name="totalPrice" :value="qty * ticketPrice">
 
-                        <input
-                            type="hidden"
-                            id="quantity"
-                            name="quantity" value="{{ $reservation->quantity }}">
-                        <input type="hidden" id="ticketPrice" value="{{ $ticket->ticket_price }}">
-                        <input type="hidden" id="totalPrice" name="totalPrice" value="{{ $ticket->ticket_price }}">
-
-                        <!-- 4. Tombol Lanjut ke Pembayaran -->
-                        <button
-                            type="submit"
-                            id="checkout-button"
-                            class="checkout-pay-btn mt-3">
+                        <button type="submit" id="checkout-button"
+                                class="mt-3 w-full h-12 flex items-center justify-center gap-2 rounded-lg font-bold text-sm text-white bg-gradient-to-br from-[#2282ff] to-[#02559b] shadow-[0_4px_14px_rgba(34,130,255,0.35)] hover:-translate-y-0.5 hover:shadow-[0_6px_20px_rgba(34,130,255,0.45)] transition-all">
                             <i class="ti ti-credit-card"></i>
-                            Lanjut ke Pembayaran
+                            <span>Lanjut ke Pembayaran</span>
                         </button>
-
                     </div>
 
                 </div>
-
             </div>
-
         </div>
-
     </form>
-
 </div>
 </section>
 
-<!-- Modal konfirmasi checkout -->
 @include('transaction.payment-confirmation')
 
-{{-- NEW script --}}
+@endsection
+
 @push('transaction-scripts')
     @include('transaction.scripts.participant-init')
     @include('transaction.scripts.participant')
@@ -938,84 +251,210 @@ label.upload-box {
     @include('transaction.scripts.participant-upload')
     @include('transaction.scripts.summary')
     @include('transaction.scripts.payment-confirmation')
-    
-    <script>
-        const expiredAt = new Date(
-            document.getElementById('reservationExpiredAt').value
-        );
 
-        const countdownText = document.getElementById('countdownText');
-        const countdownBox = document.getElementById('reservationCountdown');
+<script>
+/* =========================================================
+   GLOBAL HELPERS
+========================================================= */
+function formatRupiah(num) {
+    return new Intl.NumberFormat('id-ID', {
+        style: 'currency', currency: 'IDR', maximumFractionDigits: 0
+    }).format(Number(num || 0));
+}
 
-        let reservationExpired = false;
+function showToast(icon, title, options = {}) {
+    if (typeof window.toast === 'undefined') {
+        console.warn('[toast] Toastry tidak ter-load. Fallback ke alert().');
+        alert(title);
+        return;
+    }
 
-        const timer = setInterval(async function () {
+    const map = {
+        success: 'success',
+        error:   'error',
+        warning: 'warning',
+        info:    'info',
+    };
 
-            if (reservationExpired) {
+    const method = map[icon] || 'info';
+
+    const payload = {
+        description: options.description || undefined,
+        duration: options.duration !== undefined ? options.duration : 4000,
+    };
+
+    // Kalau butuh tombol OK (seperti SweetAlert)
+    if (options.withButton) {
+        payload.duration = 0; // tidak auto-dismiss
+        payload.action = {
+            label: options.buttonLabel || 'OK',
+            onClick() {
+                if (typeof options.onClick === 'function') options.onClick();
+            },
+        };
+    }
+
+    if (typeof window.toast[method] === 'function') {
+        window.toast[method](title, payload);
+    } else {
+        alert(title);
+    }
+}
+
+window.openCheckoutModal = function (summary, formData) {
+    window.dispatchEvent(new CustomEvent('open-checkout-modal', {
+        detail: { summary, formData }
+    }));
+};
+
+
+/* =========================================================
+   ALPINE: checkoutPage
+========================================================= */
+document.addEventListener('alpine:init', () => {
+
+    Alpine.data('checkoutPage', (config) => ({
+        qty: config.initialQty,
+        maxQty: config.maxQty,
+        ticketPrice: config.ticketPrice,
+        expiredAtIso: config.expiredAt,
+        countdownText: 'Memuat sisa waktu...',
+        expired: false,
+        timerId: null,
+        updatingQty: false,
+
+        init() {
+            this.startCountdown(config);
+
+            // Dispatch qty awal supaya participant langsung dirender
+            this.$nextTick(() => {
+                window.dispatchEvent(new CustomEvent('qty-changed', {
+                    detail: { qty: this.qty }
+                }));
+            });
+        },
+
+        async incrementQty() {
+            if (this.updatingQty) return;
+
+            if (this.qty >= this.maxQty) {
+                showToast('warning', `Maksimal ${this.maxQty} tiket tersedia.`);
                 return;
             }
 
-            const now = new Date();
-            const diff = expiredAt - now;
+            await this.updateQty(this.qty + 1);
+        },
 
-            if (diff <= 0) {
+        async decrementQty() {
+            if (this.updatingQty) return;
 
-                reservationExpired = true;
+            if (this.qty <= 1) {
+                showToast('warning', 'Minimal pembelian 1 tiket.');
+                return;
+            }
 
-                clearInterval(timer);
+            await this.updateQty(this.qty - 1);
+        },
 
-                countdownBox.classList.add('expired');
+        
 
-                countdownText.innerHTML = 'Reservation telah berakhir';
+        async updateQty(newQty) {
+            if (!config.updateUrl || config.updateUrl.includes('undefined')) {
+                console.error('updateUrl tidak valid:', config.updateUrl);
+                showToast('error', 'URL update reservasi tidak valid.');
+                return;
+            }
 
-                try {
+            this.updatingQty = true;
 
-                    await $.ajax({
-                        url: "{{ route('reservation.expire', ['reservationCode' => $reservation->reservation_code]) }}",
-                        type: "POST",
-                        dataType: "json",
-                        data: {
-                            _token: "{{ csrf_token() }}"
-                        }
-                    });
+            try {
+                const res = await fetch(config.updateUrl, {
+                    method: 'PATCH',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': config.csrf,
+                        'Accept': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest',
+                    },
+                    body: JSON.stringify({ quantity: newQty }),
+                // ... sisa kode sama
+                });
 
-                    Toast.fire({
-                        icon: 'error',
-                        title: 'Waktu reservasi telah habis.'
-                    });
+                const data = await res.json();
+                if (!res.ok) throw data;
 
-                    setTimeout(function () {
+                this.qty = Number(data.quantity);
 
-                        window.location.href = "{{ url($event->slug) }}";
+                window.dispatchEvent(new CustomEvent('qty-changed', {
+                    detail: { qty: this.qty }
+                }));
 
-                    }, 2000);
+            } catch (err) {
+                let message = 'Terjadi kesalahan pada server.';
+                if (err.errors) message = Object.values(err.errors)[0][0];
+                else if (err.message) message = err.message;
 
-                } catch (xhr) {
+                showToast('error', message);
 
-                    console.error(xhr);
+            } finally {
+                this.updatingQty = false;
+            }
+        },
 
-                    Toast.fire({
-                        icon: 'error',
-                        title: xhr.responseJSON?.message ??
-                            'Gagal mengakhiri reservation. Silakan refresh halaman.'
-                    });
+        startCountdown({ expiredAt, eventUrl, expireUrl, csrf }) {
+            // Guard: kalau sudah pernah jalan, jangan bikin timer baru
+            if (this._countdownStarted) return;
+            this._countdownStarted = true;
 
-                    reservationExpired = false;
+            const end = new Date(expiredAt);
+            let handled = false;
 
+            const tick = async () => {
+                // Guard: kalau sudah handle expiry, stop total
+                if (handled) return;
+
+                const diff = end - new Date();
+
+                if (diff <= 0) {
+                    handled = true;
+                    this.timerId = null;
+                    this.expired = true;
+                    this.countdownText = 'Reservation telah berakhir';
+
+                    try {
+                        await fetch(expireUrl, {
+                            method: 'POST',
+                            headers: {
+                                'X-CSRF-TOKEN': csrf,
+                                'Accept': 'application/json',
+                                'X-Requested-With': 'XMLHttpRequest',
+                            },
+                        });
+
+                        showToast('error', 'Waktu reservasi telah habis.');
+                        setTimeout(() => window.location.href = eventUrl, 2000);
+
+                    } catch (e) {
+                        console.error(e);
+                        showToast('error', 'Gagal mengakhiri reservation.');
+                    }
+                    return;
                 }
 
-                return;
-            }
+                const m = Math.floor(diff / 60000);
+                const s = Math.floor((diff % 60000) / 1000);
+                this.countdownText = `Selesaikan pembayaran dalam ${m}:${String(s).padStart(2, '0')}`;
 
-            const minutes = Math.floor(diff / 60000);
-            const seconds = Math.floor((diff % 60000) / 1000);
+                // Chain timeout berikutnya
+                this.timerId = setTimeout(tick, 1000);
+            };
 
-            countdownText.innerHTML =
-                `Selesaikan pembayaran dalam ${minutes}:${String(seconds).padStart(2, '0')}`;
+            tick();
+        },
+    }));
 
-        }, 1000);
-        
-    </script>
+    
+
+});
+</script>
 @endpush
-
-@endsection

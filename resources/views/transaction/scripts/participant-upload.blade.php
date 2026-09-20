@@ -1,212 +1,123 @@
 <script>
-    $(function () {
+/* =========================================================
+   UPLOAD FILE / IMAGE
+========================================================= */
+document.addEventListener('change', function (e) {
+    if (!e.target.matches('.upload-box input[type=file]')) return;
 
-        /*
-        |--------------------------------------------------------------------------
-        | Upload File / Image
-        |--------------------------------------------------------------------------
-        */
+    const input = e.target;
+    const file = input.files[0];
 
-        $(document).on('change', '.upload-box input[type=file]', function () {
-
-            const input = this;
-
-            const file = input.files[0];
-
-            if (!file) {
-
-                resetUpload(input);
-
-                return;
-
-            }
-
-            const uploadBox = $(input).closest('.upload-box');
-
-            const isImage = uploadBox.hasClass('image-upload');
-
-            /*
-            |--------------------------------------------------------------------------
-            | Validation
-            |--------------------------------------------------------------------------
-            */
-
-            const validation = validateFile(input, file);
-
-            if (!validation.valid) {
-
-                Swal.fire({
-
-                    icon: 'error',
-
-                    title: 'Upload Gagal',
-
-                    text: validation.message
-
-                });
-
-                resetUpload(input);
-
-                return;
-
-            }
-
-            /*
-            |--------------------------------------------------------------------------
-            | Success UI
-            |--------------------------------------------------------------------------
-            */
-
-            const size = formatFileSize(file.size);
-
-            uploadBox
-                .addClass('uploaded')
-                .removeClass('upload-error');
-
-            uploadBox.find('.upload-content strong')
-                .text(file.name);
-
-            uploadBox.find('.upload-content small')
-                .text(size);
-
-            /*
-            |--------------------------------------------------------------------------
-            | Image Preview
-            |--------------------------------------------------------------------------
-            */
-
-            if (isImage) {
-
-                previewImage(input, file);
-
-            }
-
-        });
-
-    });
-
-    function validateFile(input, file) {
-
-        const accept = $(input).attr('accept');
-
-        /*
-        |--------------------------------------------------------------------------
-        | Extension Validation
-        |--------------------------------------------------------------------------
-        */
-
-        if (accept) {
-
-            const allowed = accept
-                .split(',')
-                .map(ext => ext.replace('.', '').trim().toLowerCase());
-
-            const extension = file.name
-                .split('.')
-                .pop()
-                .toLowerCase();
-
-            if (!allowed.includes(extension)) {
-
-                return {
-
-                    valid: false,
-
-                    message: 'Format file tidak diperbolehkan.'
-
-                };
-
-            }
-
-        }
-
-        /*
-        |--------------------------------------------------------------------------
-        | Max Size (10 MB)
-        |--------------------------------------------------------------------------
-        */
-
-        const maxSize = 10 * 1024 * 1024;
-
-        if (file.size > maxSize) {
-
-            return {
-
-                valid: false,
-
-                message: 'Ukuran file maksimal 10 MB.'
-
-            };
-
-        }
-
-        return {
-
-            valid: true
-
-        };
-
+    if (!file) {
+        resetUpload(input);
+        return;
     }
 
-    function previewImage(input, file) {
+    const uploadBox = input.closest('.upload-box');
+    const isImage = uploadBox.classList.contains('image-upload');
 
-        const reader = new FileReader();
+    const validation = validateFile(input, file);
 
-        const preview = $(input)
-            .closest('.checkout-field')
-            .find('.image-preview');
-
-        reader.onload = function (e) {
-
-            preview
-                .attr('src', e.target.result)
-                .fadeIn(150);
-
-        };
-
-        reader.readAsDataURL(file);
-
+    if (!validation.valid) {
+        showToast('error', validation.message);
+        resetUpload(input);
+        return;
     }
 
-    function resetUpload(input) {
+    const size = formatFileSize(file.size);
 
-        input.value = '';
+    uploadBox.classList.add('uploaded');
+    uploadBox.classList.remove('upload-error');
 
-        const uploadBox = $(input).closest('.upload-box');
+    const strong = uploadBox.querySelector('.upload-content strong');
+    const small = uploadBox.querySelector('.upload-content small');
 
-        uploadBox
-            .removeClass('uploaded')
-            .removeClass('upload-error');
+    if (strong) strong.textContent = file.name;
+    if (small) small.textContent = size;
 
-        uploadBox.find('.upload-content strong')
-            .text('Upload File');
+    if (isImage) previewImage(input, file);
+});
 
-        uploadBox.find('.upload-content small')
-            .text('Belum ada file dipilih');
 
-        uploadBox
-            .closest('.checkout-field')
-            .find('.image-preview')
-            .hide()
-            .attr('src', '');
+/* =========================================================
+   VALIDATION
+========================================================= */
+function validateFile(input, file) {
+    const accept = input.getAttribute('accept');
 
-    }
+    if (accept) {
+        const allowed = accept.split(',')
+            .map(ext => ext.replace('.', '').trim().toLowerCase());
+        const extension = file.name.split('.').pop().toLowerCase();
 
-    function formatFileSize(bytes) {
-
-        if (bytes < 1024) {
-
-            return bytes + ' B';
-
+        if (!allowed.includes(extension)) {
+            return { valid: false, message: 'Format file tidak diperbolehkan.' };
         }
-
-        if (bytes < 1024 * 1024) {
-
-            return (bytes / 1024).toFixed(1) + ' KB';
-
-        }
-
-        return (bytes / 1024 / 1024).toFixed(2) + ' MB';
-
     }
+
+    const maxSize = 10 * 1024 * 1024;
+
+    if (file.size > maxSize) {
+        return { valid: false, message: 'Ukuran file maksimal 10 MB.' };
+    }
+
+    return { valid: true };
+}
+
+
+/* =========================================================
+   IMAGE PREVIEW
+========================================================= */
+function previewImage(input, file) {
+    const preview = input.closest('.checkout-field')?.querySelector('.image-preview');
+    if (!preview) return;
+
+    const reader = new FileReader();
+
+    reader.onload = function (e) {
+        preview.src = e.target.result;
+        preview.style.display = 'block';
+    };
+
+    reader.readAsDataURL(file);
+}
+
+
+/* =========================================================
+   RESET
+========================================================= */
+function resetUpload(input) {
+    input.value = '';
+
+    const uploadBox = input.closest('.upload-box');
+    if (!uploadBox) return;
+
+    uploadBox.classList.remove('uploaded', 'upload-error');
+
+    const strong = uploadBox.querySelector('.upload-content strong');
+    const small = uploadBox.querySelector('.upload-content small');
+
+    if (strong) {
+        strong.textContent = uploadBox.classList.contains('image-upload')
+            ? 'Upload Gambar'
+            : 'Upload File';
+    }
+    if (small) small.textContent = 'Belum ada file dipilih';
+
+    const preview = uploadBox.closest('.checkout-field')?.querySelector('.image-preview');
+    if (preview) {
+        preview.style.display = 'none';
+        preview.src = '';
+    }
+}
+
+
+/* =========================================================
+   FORMAT SIZE
+========================================================= */
+function formatFileSize(bytes) {
+    if (bytes < 1024) return bytes + ' B';
+    if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+    return (bytes / 1024 / 1024).toFixed(2) + ' MB';
+}
 </script>

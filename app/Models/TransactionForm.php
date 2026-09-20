@@ -19,4 +19,9 @@ class TransactionForm extends Model
 	{
 		return $this->belongsTo(Transaction::class, 'transaction_id');
 	}
+
+	public function participant()
+	{
+		return $this->belongsTo(TransactionParticipant::class, 'participant_id');
+	}
 }

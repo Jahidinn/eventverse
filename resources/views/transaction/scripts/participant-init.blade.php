@@ -1,184 +1,119 @@
 <script>
-    function initParticipantComponents() {
+/* =========================================================
+   INIT THIRD-PARTY COMPONENTS (Choices, Flatpickr, intlTelInput)
+========================================================= */
+function initParticipantComponents() {
 
-        /*
-        |--------------------------------------------------------------------------
-        | Choices
-        |--------------------------------------------------------------------------
-        */
+    /* ---------- Choices ---------- */
+    document.querySelectorAll('.ev-select').forEach(function (el) {
+        if (el._choices) return;
 
-        $('.ev-select').each(function () {
+        el._choices = new Choices(el, {
+            searchEnabled: false,
+            shouldSort: false,
+            itemSelectText: '',
+            allowHTML: false,
+        });
+    });
 
-            if ($(this).data('choices')) return;
+    /* ---------- Flatpickr: Date ---------- */
+    document.querySelectorAll('.date-picker').forEach(function (el) {
+        if (el._flatpickr) return;
 
-            const choice = new Choices(this, {
+        flatpickr(el, {
+            dateFormat: 'd M Y',
+            allowInput: true,
+        });
+    });
 
-                searchEnabled: false,
+    /* ---------- Flatpickr: Time ---------- */
+    document.querySelectorAll('.time-picker').forEach(function (el) {
+        if (el._flatpickr) return;
 
-                shouldSort: false,
+        flatpickr(el, {
+            enableTime: true,
+            noCalendar: true,
+            dateFormat: 'H:i',
+            time_24hr: true,
+        });
+    });
 
-                itemSelectText: '',
+    /* ---------- intlTelInput ---------- */
+    document.querySelectorAll('.phone-input').forEach(function (el) {
+        if (el._iti) return;
 
-                allowHTML: false
+        const iti = window.intlTelInput(el, {
+              initialCountry: 'id',
+            countryOrder: ['id'],
+            separateDialCode: false,
+            strictMode: true,
+            numberDisplayFormat: 'E164',
 
-            });
+            placeholderNumberPolicy: 'OFF',
 
-            $(this).data('choices', choice);
+            // ← pengganti utilsScript
+            loadUtils: () => import('https://cdn.jsdelivr.net/npm/intl-tel-input@29.2.3/dist/js/utils.js'),
 
+            // Styling Tailwind (opsional, kalau mau seragam)
+            classNames: {
+                container: '!w-full',
+                input: '!w-full !h-11 !border-[1.5px] !border-[#cbd5e1] !rounded-lg !bg-white !text-sm !text-[#0f172a] !outline-none focus:!border-[#2282ff]',
+            },
         });
 
-
-        /*
-        |--------------------------------------------------------------------------
-        | Flatpickr Date
-        |--------------------------------------------------------------------------
-        */
-
-        $('.date-picker').each(function(){
-
-            if(this._flatpickr) return;
-
-            flatpickr(this,{
-
-                dateFormat:"d M Y",
-
-                allowInput:true
-
-            });
-
-        });
+        iti.setNumber('+62');
+        el._iti = iti;
+    });
+}
 
 
-        /*
-        |--------------------------------------------------------------------------
-        | Flatpickr Time
-        |--------------------------------------------------------------------------
-        */
+/* =========================================================
+   PHONE PREFIX HANDLER (+62 enforcement)
+========================================================= */
+function enforcePhonePrefix(input) {
+    if (input.value.startsWith('+62')) return;
 
-        $('.time-picker').each(function(){
+    let num = input.value.replace(/\D/g, '');
+    num = num.replace(/^62/, '');
+    num = num.replace(/^0/, '');
+    input.value = '+62' + num;
+}
 
-            if(this._flatpickr) return;
+function lockCursorAfterPrefix(input) {
+    if (input.selectionStart < 3) input.setSelectionRange(3, 3);
+}
 
-            flatpickr(this,{
+/* ---------- Buyer phone (special — no .phone-input class) ---------- */
+const buyerPhone = document.getElementById('buyerPhone');
 
-                enableTime:true,
+if (buyerPhone) {
+    buyerPhone.value = '+62';
 
-                noCalendar:true,
+    buyerPhone.addEventListener('input', function () { enforcePhonePrefix(this); });
+    buyerPhone.addEventListener('click', function () { lockCursorAfterPrefix(this); });
+    buyerPhone.addEventListener('keydown', function (e) {
+        if ((e.key === 'Backspace' && this.selectionStart <= 3) ||
+            (e.key === 'Delete' && this.selectionStart < 3)) {
+            e.preventDefault();
+        }
+    });
+}
 
-                dateFormat:"H:i",
-
-                time_24hr:true
-
-            });
-
-        });
-
-
-        /*
-        |--------------------------------------------------------------------------
-        | Phone
-        |--------------------------------------------------------------------------
-        */
-
-        $('.phone-input').each(function(){
-
-            if($(this).data('iti')) return;
-
-            const iti = window.intlTelInput(this,{
-
-                initialCountry:"id",
-
-                preferredCountries:["id"],
-
-                separateDialCode:false,
-
-                strictMode:true,
-
-                utilsScript:"https://cdn.jsdelivr.net/npm/intl-tel-input@25.3.1/build/js/utils.js"
-
-            });
-            iti.setNumber("+62");
-
-            $(this).data('iti',iti);
-
-        });
-
-    }
-
-    const buyerPhone = document.getElementById('buyerPhone');
-
-// Default
-buyerPhone.value = '+62';
-
-// Saat mengetik
-buyerPhone.addEventListener('input', function () {
-
-    // Jika +62 hilang, kembalikan lagi
-    if (!this.value.startsWith('+62')) {
-
-        // Ambil hanya angka yang diketik user
-        let number = this.value.replace(/\D/g, '');
-
-        // Hilangkan 62 atau 0 di depan jika ada
-        number = number.replace(/^62/, '');
-        number = number.replace(/^0/, '');
-
-        this.value = '+62' + number;
-    }
-
+/* ---------- Delegation untuk .phone-input (termasuk yg baru dirender) ---------- */
+document.addEventListener('input', function (e) {
+    if (e.target.matches('.phone-input')) enforcePhonePrefix(e.target);
 });
 
-// Cegah cursor masuk ke depan +62
-buyerPhone.addEventListener('click', function () {
-
-    if (this.selectionStart < 3) {
-        this.setSelectionRange(3, 3);
-    }
-
+document.addEventListener('click', function (e) {
+    if (e.target.matches('.phone-input')) lockCursorAfterPrefix(e.target);
 });
 
-buyerPhone.addEventListener('keydown', function (e) {
+document.addEventListener('keydown', function (e) {
+    if (!e.target.matches('.phone-input')) return;
 
-    // Tidak boleh backspace/delete pada +62
-    if (
-        (e.key === 'Backspace' && this.selectionStart <= 3) ||
-        (e.key === 'Delete' && this.selectionStart < 3)
-    ) {
+    if ((e.key === 'Backspace' && e.target.selectionStart <= 3) ||
+        (e.key === 'Delete' && e.target.selectionStart < 3)) {
         e.preventDefault();
     }
-
-});
-
-$(document).on('input', '.phone-input', function () {
-
-    if (!this.value.startsWith('+62')) {
-
-        let number = this.value.replace(/\D/g, '');
-
-        number = number.replace(/^62/, '');
-        number = number.replace(/^0/, '');
-
-        this.value = '+62' + number;
-    }
-
-});
-
-$(document).on('click', '.phone-input', function () {
-
-    if (this.selectionStart < 3) {
-        this.setSelectionRange(3, 3);
-    }
-
-});
-
-$(document).on('keydown', '.phone-input', function (e) {
-
-    if (
-        (e.key === 'Backspace' && this.selectionStart <= 3) ||
-        (e.key === 'Delete' && this.selectionStart < 3)
-    ) {
-        e.preventDefault();
-    }
-
 });
 </script>
