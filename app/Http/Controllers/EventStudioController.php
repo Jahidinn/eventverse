@@ -301,6 +301,19 @@ class EventStudioController extends Controller
 
                 break;
 
+            case 'form_settings':
+
+                $request->validate([
+                    'allow_edit_form' => 'required|boolean',
+                ]);
+
+                $event->allow_edit_form = $request->boolean('allow_edit_form');
+
+                $event->save();
+
+                break;
+                
+
             case 'ticket':
                 break;
 

@@ -572,7 +572,7 @@ private function buildPaymentDisplay(
                     'status_valid' => $transaction->status === 'Paid',
 
                     // ✅ INI YANG DIUBAH — arahkan ke edit-participants
-                    'edit_url'     => $transaction->status === 'Paid'
+                    'edit_url'     => ($transaction->status === 'Paid' && $transaction->event->allow_edit_form == 1)
                         ? route('transaction.edit-participants', $transaction->transaction_code)
                         : null,
                 ],
@@ -617,7 +617,8 @@ private function buildPaymentDisplay(
                     'status_valid' => $participant->transaction->status === 'Paid',
 
                     // ✅ Arahkan ke edit-participants pakai PARENT transaction code
-                    'edit_url'     => $participant->transaction->status === 'Paid'
+                    'edit_url'     => ($participant->transaction->status === 'Paid'
+                                        && $participant->transaction->event->allow_edit_form == 1)
                         ? route('transaction.edit-participants', $parentCode)
                         : null,
                 ],
@@ -655,6 +656,10 @@ private function buildPaymentDisplay(
         abort(403, 'Hanya transaksi dengan status Paid yang dapat diedit.');
     }
 
+    if ($transaction->event->allow_edit_form != 1) {
+        abort(403, 'Event ini tidak mengizinkan perubahan data peserta.');
+    }
+
     // ─── Load relasi ───
     $transaction->load([
         'event',
@@ -684,6 +689,13 @@ private function buildPaymentDisplay(
         return response()->json([
             'success' => false,
             'message' => 'Hanya transaksi dengan status Paid yang dapat diedit.',
+        ], 403);
+    }
+
+    if ($transaction->event->allow_edit_form != 1) {
+        return response()->json([
+            'success' => false,
+            'message' => 'Event ini tidak mengizinkan perubahan data peserta.',
         ], 403);
     }
 

@@ -8,7 +8,7 @@
 
        
 
-                    <div class="ev-section">
+        <div class="ev-section">
             <div class="ev-section-header">
                 <div>
                     <span class="ev-badge">
@@ -39,13 +39,131 @@
 
     </div>
 
+    {{-- =========================================================
+        FORM SETTINGS
+    ========================================================= --}}
+
+    <form id="formSettings">
+
+        @csrf
+
+        <div class="ev-form-setting">
+
+            <div class="ev-form-setting-header">
+
+                <div class="ev-form-setting-icon">
+                    <i class="fa-solid fa-user-pen"></i>
+                </div>
+
+                <div>
+                    <h3>Registration form settings</h3>
+
+                    {{-- <p>
+                        Control whether attendees can update their registration
+                        information after completing payment.
+                    </p> --}}
+                </div>
+
+            </div>
+
+
+            <div class="ev-form-setting-options">
+
+                {{-- ALLOW EDIT --}}
+                <label class="ev-setting-option">
+
+                    <input
+                        type="radio"
+                        name="allow_edit_form"
+                        value="1"
+                        {{ ($event->allow_edit_form ?? true) ? 'checked' : '' }}>
+
+                    <div class="ev-setting-option-content">
+
+                        <div class="ev-setting-option-icon allow">
+                            <i class="fa-solid fa-pen"></i>
+                        </div>
+
+                        <div class="ev-setting-option-text">
+
+                            <strong>
+                                Allow edit after payment
+                            </strong>
+
+                            <span>
+                               Setelah registrasi selesai peserta bisa ubah data.
+                            </span>
+
+                        </div>
+
+                        <div class="ev-setting-check">
+                            <i class="fa-solid fa-circle-check"></i>
+                        </div>
+
+                    </div>
+
+                </label>
+
+
+                {{-- DON'T ALLOW EDIT --}}
+                <label class="ev-setting-option">
+
+                    <input
+                        type="radio"
+                        name="allow_edit_form"
+                        value="0"
+                        {{ isset($event->allow_edit_form)
+                            && !$event->allow_edit_form
+                            ? 'checked'
+                            : '' }}>
+
+                    <div class="ev-setting-option-content">
+
+                        <div class="ev-setting-option-icon lock">
+                            <i class="fa-solid fa-lock"></i>
+                        </div>
+
+                        <div class="ev-setting-option-text">
+
+                            <strong>
+                                Don't allow edit after payment
+                            </strong>
+
+                            <span>
+                                Setelah registrasi selesai peserta tidak bisa ubah data.
+                            </span>
+
+                        </div>
+
+                        <div class="ev-setting-check">
+                            <i class="fa-solid fa-circle-check"></i>
+                        </div>
+
+                    </div>
+
+                </label>
+
+            </div>
+
+        </div>
+
+    </form>
+
+
+    {{-- =========================================================
+        FORM FIELDS
+    ========================================================= --}}
+
     <div class="ev-field-grid" id="formList">
 
-    @foreach($forms as $form)
+        @foreach($forms as $form)
 
-        @include('event-studio.form-card')
+            @include('event-studio.form-card')
 
-    @endforeach
+        @endforeach
+
+    </div>
+
 
 </div>
 
@@ -356,6 +474,155 @@
     grid-template-columns: 1fr;
     gap: 12px;
 }
+
+    /* =========================================================
+    FORM SETTINGS
+    ========================================================= */
+
+    .ev-form-setting {
+        margin-bottom: 24px;
+        padding: 20px;
+        background: #fff;
+        border: 1px solid #E2E8F0;
+        border-radius: 16px;
+    }
+
+    .ev-form-setting-header {
+        display: flex;
+        align-items: flex-start;
+        gap: 14px;
+        margin-bottom: 18px;
+    }
+
+    .ev-form-setting-icon {
+        width: 42px;
+        height: 42px;
+        flex-shrink: 0;
+        border-radius: 11px;
+        background: #EEF5FF;
+        color: #4495F9;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 17px;
+    }
+
+    .ev-form-setting-header h3 {
+        margin: 0;
+        color: #0F172A;
+        font-size: 15px;
+        font-weight: 700;
+    }
+
+    .ev-form-setting-header p {
+        margin: 4px 0 0;
+        color: #64748B;
+        font-size: 12.5px;
+        line-height: 1.5;
+    }
+
+    .ev-form-setting-options {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+    }
+
+    .ev-setting-option {
+        display: block;
+        cursor: pointer;
+    }
+
+    .ev-setting-option > input {
+        display: none;
+    }
+
+    .ev-setting-option-content {
+        position: relative;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        min-height: 76px;
+        padding: 14px 42px 14px 14px;
+        border: 1px solid #E2E8F0;
+        border-radius: 12px;
+        background: #fff;
+        transition: .2s ease;
+    }
+
+    .ev-setting-option:hover .ev-setting-option-content {
+        border-color: #CBD5E1;
+    }
+
+    .ev-setting-option > input:checked
+    + .ev-setting-option-content {
+        border-color: #4495F9;
+        background: #F8FAFF;
+        box-shadow: 0 4px 14px rgba(68, 149, 249, .08);
+    }
+
+    .ev-setting-option-icon {
+        width: 38px;
+        height: 38px;
+        flex-shrink: 0;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 15px;
+    }
+
+    .ev-setting-option-icon.allow {
+        background: #EEF5FF;
+        color: #4495F9;
+    }
+
+    .ev-setting-option-icon.lock {
+        background: #F8FAFC;
+        color: #64748B;
+    }
+
+    .ev-setting-option-text {
+        min-width: 0;
+    }
+
+    .ev-setting-option-text strong {
+        display: block;
+        margin-bottom: 3px;
+        color: #0F172A;
+        font-size: 13px;
+        font-weight: 700;
+    }
+
+    .ev-setting-option-text span {
+        display: block;
+        color: #64748B;
+        font-size: 11.5px;
+        line-height: 1.45;
+    }
+
+    .ev-setting-check {
+        position: absolute;
+        top: 50%;
+        right: 14px;
+        transform: translateY(-50%);
+        color: #CBD5E1;
+        font-size: 18px;
+    }
+
+    .ev-setting-option > input:checked
+    + .ev-setting-option-content
+    .ev-setting-check {
+        color: #4495F9;
+    }
+
+    @media (max-width: 768px) {
+
+        .ev-form-setting-options {
+            grid-template-columns: 1fr;
+        }
+
+    }
+
 
 /* =========================================================
    FORM CARD (COMPACT & COMPACT FULL-WIDTH)
@@ -890,6 +1157,41 @@
 
 <script>
     document.addEventListener("DOMContentLoaded",function(){
+        /*
+        |--------------------------------------------------------------------------
+        | FORM SETTINGS AUTOSAVE
+        |--------------------------------------------------------------------------
+        */
+
+        const formSettings = document.getElementById("formSettings");
+
+        if (formSettings) {
+
+            formSettings
+                .querySelectorAll('input[name="allow_edit_form"]')
+                .forEach(input => {
+
+                    input.addEventListener("change", function () {
+
+                        Studio.markDirty();
+
+                    });
+
+                });
+
+
+            Studio.initAutoSave({
+
+                form: "#formSettings",
+
+                endpoint: "{{ route('event-studio.autosave', $event->event_id) }}",
+
+                section: "form_settings"
+
+            });
+
+        }
+
 
         const modal=document.getElementById("fieldModal");
         

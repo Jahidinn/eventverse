@@ -20,7 +20,7 @@
                     Jl. Mijen permai, mijen permai/BSB city, Kota Semarang, Pos 50219 Indonesia
                 </p>
                 <p class="text-sm text-[#64748b] max-w-sm leading-relaxed">
-                    support@eventverse.id
+                    contact@eventverse.id
                 </p>
             </div>
 
@@ -49,11 +49,11 @@
             <div class="space-y-3">
                 <h4 class="text-xs font-bold text-[#0f172a] uppercase tracking-wider">Explore</h4>
                 <ul class="space-y-2 text-sm text-[#64748b]">
-                    <li><a href="#events" class="hover:text-[#2282ff] transition-colors">Events</a></li>
-                    <li><a href="#categories" class="hover:text-[#2282ff] transition-colors">Event Studio</a></li>
+                    <li><a href="/search" class="hover:text-[#2282ff] transition-colors">Events</a></li>
+                    <li><a href="/dashboard/manajemen-event" class="hover:text-[#2282ff] transition-colors">Event Studio</a></li>
                     <li><a href="#popular" class="hover:text-[#2282ff] transition-colors">Partnership</a></li>
-                    <li><a href="#popular" class="hover:text-[#2282ff] transition-colors">Articles</a></li>
-                    <li><a href="#popular" class="hover:text-[#2282ff] transition-colors">Check registration</a></li>
+                    <li><a href="/blog" class="hover:text-[#2282ff] transition-colors">Articles</a></li>
+                    <li><a href="#popular" class="hover:text-[#2282ff] transition-colors">Check Registration</a></li>
                 </ul>
             </div>
 
@@ -63,9 +63,9 @@
                 <ul class="space-y-2 text-sm text-[#64748b]">
                     <li><a href="/faq" class="hover:text-[#2282ff] transition-colors">Faq</a></li>
                     <li><a href="/pricing" class="hover:text-[#2282ff] transition-colors">Pricing</a></li>
-                    <li><a href="/pricing" class="hover:text-[#2282ff] transition-colors">Terms and Conditions</a></li>
-                    <li><a href="/pricing" class="hover:text-[#2282ff] transition-colors">Privacy Policy</a></li>
-                    <li><a href="/pricing" class="hover:text-[#2282ff] transition-colors">Guidelines</a></li>
+                    <li><a href="/terms-and-condition" class="hover:text-[#2282ff] transition-colors">Terms and Conditions</a></li>
+                    <li><a href="/privacy-policy" class="hover:text-[#2282ff] transition-colors">Privacy Policy</a></li>
+                    <li><a href="/creator-guide" class="hover:text-[#2282ff] transition-colors">Guidelines</a></li>
                 </ul>
             </div>
 

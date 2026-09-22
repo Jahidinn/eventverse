@@ -92,7 +92,7 @@
                     </a>
                 @endauth
 
-                <a href="/create-event" class="inline-flex items-center gap-1.5 px-4 py-2 text-sm font-medium rounded-xl text-white bg-[#2282ff] hover:bg-[#1b6cd6] shadow-sm shadow-[#2282ff]/25 transition-all">
+                <a href="/dashboard/manajemen-event" class="inline-flex items-center gap-1.5 px-4 py-2 text-sm font-medium rounded-xl text-white bg-[#2282ff] hover:bg-[#1b6cd6] shadow-sm shadow-[#2282ff]/25 transition-all">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/>
                     </svg>

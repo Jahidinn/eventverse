@@ -129,9 +129,44 @@
 
                         <hr class="my-5 border-[#e2e8f0]">
 
-                        <div class="p-3 rounded-lg border border-[#fde68a] bg-[#fffbeb] text-xs text-[#92400e] leading-relaxed">
-                            Form dapat di ubah jika registrasi menggunakan akun!
-                        </div>
+                        {{-- ============ NOTICE: EDIT POLICY ============ --}}
+                            @if($event->allow_edit_form == 1)
+
+                                {{-- Event BOLEH edit setelah registrasi --}}
+                                <div class="mt-3 p-3.5 rounded-lg border border-[#a7f3d0] bg-[#ecfdf5] flex items-start gap-2.5">
+                                    <div class="w-5 h-5 rounded-full bg-[#dcfce7] text-[#16a34a] flex items-center justify-center text-[11px] shrink-0 mt-0.5">
+                                        <i class="ti ti-check"></i>
+                                    </div>
+                                    <div class="min-w-0">
+                                        <div class="text-xs font-bold text-[#065f46] mb-0.5">
+                                            Data peserta masih dapat diubah
+                                        </div>
+                                        <p class="text-[11px] text-[#065f46]/80 leading-relaxed m-0">
+                                            Setelah registrasi selesai, Anda masih bisa mengubah data peserta melalui
+                                            fitur <strong>Check Registration</strong> di halaman utama.
+                                        </p>
+                                    </div>
+                                </div>
+
+                            @else
+
+                                {{-- Event TIDAK BOLEH edit setelah registrasi --}}
+                                <div class="mt-3 p-3.5 rounded-lg border border-[#fecaca] bg-[#fef2f2] flex items-start gap-2.5">
+                                    <div class="w-5 h-5 rounded-full bg-[#fee2e2] text-[#dc2626] flex items-center justify-center text-[11px] shrink-0 mt-0.5">
+                                        <i class="ti ti-alert-triangle"></i>
+                                    </div>
+                                    <div class="min-w-0">
+                                        <div class="text-xs font-bold text-[#991b1b] mb-0.5">
+                                            Data peserta tidak dapat diubah
+                                        </div>
+                                        <p class="text-[11px] text-[#991b1b]/80 leading-relaxed m-0">
+                                            Penyelenggara tidak mengizinkan perubahan data peserta setelah registrasi selesai.
+                                            Pastikan semua data sudah benar sebelum melanjutkan.
+                                        </p>
+                                    </div>
+                                </div>
+
+                            @endif
 
                     </div>
                 </div>
