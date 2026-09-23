@@ -2076,7 +2076,37 @@ MOBILE DRAWER
 
             </a>
 
-            <!-- ON GOING DEVELOPMENT -->
+
+            <a href="{{ route('event-studio.ticket', $eventId) }}" class="menu-item {{ Request::is('event-studio/*/ticket*') ? 'active' : '' }}">
+
+                <div class="menu-left">
+                    
+                    <div class="menu-icon">
+
+                        <i class="ti ti-ticket"></i>
+
+                    </div>
+                </div>
+
+                <div class="menu-content">
+
+                    <span class="menu-title">
+
+                        Ticket
+
+                    </span>
+
+                    <small>
+
+                        Pricing & quota
+
+                    </small>
+
+                </div>
+
+            </a>
+
+                        <!-- ON GOING DEVELOPMENT -->
             <a href="{{ route('event-studio.facilities', $eventId) }}" class="menu-item {{ Request::is('event-studio/*/facilities*') ? 'active' : '' }}">
 
                 <div class="menu-left">
@@ -2108,7 +2138,7 @@ MOBILE DRAWER
             </a>
 
             <!-- ON GOING DEVELOPMENT -->
-            <a href="{{ route('event-studio.line-up', $eventId) }}" class="menu-item {{ Request::is('event-studio/*/line-up*') ? 'active' : '' }}">
+            {{-- <a href="{{ route('event-studio.line-up', $eventId) }}" class="menu-item {{ Request::is('event-studio/*/line-up*') ? 'active' : '' }}">
 
                 <div class="menu-left">
 
@@ -2136,37 +2166,7 @@ MOBILE DRAWER
 
                 </div>
 
-            </a>
-
-
-            <a href="{{ route('event-studio.ticket', $eventId) }}" class="menu-item {{ Request::is('event-studio/*/ticket*') ? 'active' : '' }}">
-
-                <div class="menu-left">
-                    
-                    <div class="menu-icon">
-
-                        <i class="ti ti-ticket"></i>
-
-                    </div>
-                </div>
-
-                <div class="menu-content">
-
-                    <span class="menu-title">
-
-                        Ticket
-
-                    </span>
-
-                    <small>
-
-                        Pricing & quota
-
-                    </small>
-
-                </div>
-
-            </a>
+            </a> --}}
 
             <a href="{{ route('event-studio.form', $eventId) }}" class="menu-item {{ Request::is('event-studio/*/form*') ? 'active' : '' }}">
 

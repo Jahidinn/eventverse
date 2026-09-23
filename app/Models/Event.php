@@ -58,6 +58,10 @@ class Event extends Model
 	{
 		return $this->hasMany(Ticket::class, 'event_id');
 	}
+	public function facilities()
+	{
+		return $this->hasMany(EventFacility::class, 'event_id');
+	}
 
 	public function getRouteKeyName()
 	{

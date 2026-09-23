@@ -91,6 +91,16 @@ Route::middleware(['auth'])->group(function () {
 		Route::put('/{event_id}/form/{form_id}', [EventStudioController::class, 'updateForm'])->name('form.update');
 		Route::delete('/{event_id}/form/{form_id}', [EventStudioController::class, 'deleteForm'])->name('form.delete');
 
+		// Facility
+		Route::post('/{event_id}/facility', [EventStudioController::class, 'storeFacility'])
+			->name('facility.store');
+
+		Route::put('/{event_id}/facility/{facility_id}', [EventStudioController::class, 'updateFacility'])
+			->name('facility.update');
+
+		Route::delete('/{event_id}/facility/{facility_id}', [EventStudioController::class, 'deleteFacility'])
+			->name('facility.delete');
+
 		Route::get('/{event_id}/basic', [EventStudioController::class, 'basic'])->name('basic');
 		Route::get('/{event_id}/detail', [EventStudioController::class, 'detail'])->name('detail');
 		Route::get('/{event_id}/facilities', [EventStudioController::class, 'facilites'])->name('facilities');

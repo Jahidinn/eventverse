@@ -199,36 +199,210 @@
                 {{-- ===================== TABS ===================== --}}
                 <div class="bg-white border border-[#e2e8f0] rounded-xl shadow-[0_2px_14px_-2px_rgba(15,23,42,0.05)] p-4 sm:p-5">
 
+                    {{-- TAB HEADER --}}
                     <div class="bg-[#f1f5f9] p-1.5 rounded-xl">
                         <div class="flex gap-1.5">
-                            <button id="description-tab" type="button"
-                                    class="nav-link active flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg text-sm font-bold border-0 transition-all bg-white text-[#2282ff] shadow-[0_2px_6px_rgba(0,0,0,0.05)]">
-                                <i class="ti ti-file-text text-lg"></i>
+
+                            {{-- DESCRIPTION --}}
+                            <button
+                                id="description-tab"
+                                type="button"
+                                class="nav-link active flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg text-sm font-bold border-0 transition-all bg-white text-[#2282ff] shadow-[0_2px_6px_rgba(0,0,0,0.05)]"
+                            >
+                                <i class="ti ti-list text-lg"></i>
                                 <span>Deskripsi</span>
                             </button>
-                            <button id="ticket-tab" type="button"
-                                    class="nav-link flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg text-sm font-bold border-0 bg-transparent text-[#64748b] hover:text-[#0f172a] transition-all">
-                                <i class="ti ti-ticket text-lg"></i>
-                                <span>Tiket</span>
+
+                            {{-- FACILITIES --}}
+                            <button
+                                id="facility-tab"
+                                type="button"
+                                class="nav-link flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg text-sm font-bold border-0 bg-transparent text-[#64748b] hover:text-[#0f172a] transition-all"
+                            >
+                                <i class="ti ti-stack text-lg"></i>
+                                <span>Fasilitas</span>
                             </button>
+
                         </div>
                     </div>
 
-                    <div class="mt-4">
-                        <div id="ticket-content" style="display:none;">
-                            @include('apps.event-list-ticket')
-                        </div>
 
+                    {{-- ===================== CONTENT ===================== --}}
+                    <div class="mt-5">
+
+                        {{-- ===================== DESCRIPTION ===================== --}}
                         <div id="description-content">
-                            <div class="mb-3">
-                                <h4 class="text-base font-bold text-[#0f172a] m-0">Tentang Event</h4>
-                                <p class="text-[13px] text-[#64748b] mt-0.5">Informasi lengkap mengenai acara ini.</p>
+
+                            <div class="mb-4">
+                                <h4 class="text-base font-bold text-[#0f172a] m-0">
+                                    Tentang Event
+                                </h4>
+
+                                <p class="text-[13px] text-[#64748b] mt-0.5">
+                                    Informasi lengkap mengenai acara ini.
+                                </p>
                             </div>
+
                             <div class="event-description text-sm text-[#0f172a] leading-relaxed">
                                 {!! $detailEvent->description !!}
                             </div>
+
                         </div>
+
+
+                        {{-- ===================== FACILITIES ===================== --}}
+                        <div id="facility-content" class="hidden">
+
+                            @php
+                                $facilities = $detailEvent->facilities
+                                    ?? collect();
+
+                                $generalFacilities = $facilities
+                                    ->where('scope', 'general');
+
+                                $ticketFacilities = $facilities
+                                    ->where('scope', 'ticket');
+                            @endphp
+
+
+                            {{-- ===================== GENERAL FACILITIES ===================== --}}
+                            @if($generalFacilities->isNotEmpty())
+
+                                <div class="mb-8">
+
+                                    <div class="mb-4">
+                                        <h4 class="text-base font-bold text-[#0f172a] m-0">
+                                            Fasilitas umum
+                                        </h4>
+
+                                        <p class="text-[13px] text-[#64748b] mt-0.5">
+                                            Fasilitas yang tersedia untuk seluruh peserta.
+                                        </p>
+                                    </div>
+
+
+                                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 ml-0 sm:ml-12">
+
+                                        @foreach($generalFacilities as $facility)
+
+                                            <div class="flex items-center gap-3 px-3.5 py-3 rounded-xl border border-[#e2e8f0] bg-white hover:border-[#bfdbfe] hover:bg-[#f8fbff] transition-all">
+
+                                                <div class="w-9 h-9 shrink-0 rounded-lg bg-[#eff6ff] text-[#2282ff] flex items-center justify-center">
+                                                    <i class="ti ti-{{ $facility->icon ?: 'building-store' }} text-lg"></i>
+                                                </div>
+
+                                                <span class="text-sm font-semibold text-[#0f172a] truncate">
+                                                    {{ $facility->name }}
+                                                </span>
+
+                                            </div>
+
+                                        @endforeach
+
+                                    </div>
+
+                                </div>
+
+                            @endif
+
+
+                            {{-- ===================== TICKET FACILITIES ===================== --}}
+                            @php
+                                $ticketGroups = $detailEvent->tickets
+                                    ->map(function ($ticket) use ($ticketFacilities) {
+
+                                        return [
+                                            'ticket' => $ticket,
+                                            'facilities' => $ticketFacilities
+                                                ->filter(function ($facility) use ($ticket) {
+                                                    return $facility->tickets
+                                                        ->contains('id', $ticket->id);
+                                                })
+                                                ->values(),
+                                        ];
+
+                                    })
+                                    ->filter(function ($group) {
+                                        return $group['facilities']->isNotEmpty();
+                                    });
+                            @endphp
+
+
+                            @foreach($ticketGroups as $group)
+
+                                <div class="mb-7">
+
+                                    {{-- TICKET HEADER --}}
+                                    <div class="flex items-center gap-3 mb-3">
+
+                                        <div class="w-9 h-9 rounded-lg bg-[#eff6ff] text-[#2282ff] flex items-center justify-center shrink-0">
+                                            <i class="ti ti-ticket text-lg"></i>
+                                        </div>
+
+                                        <div class="min-w-0">
+                                            <h4 class="text-sm font-bold text-[#0f172a] m-0">
+                                                {{ $group['ticket']->ticket_name }}
+                                            </h4>
+
+                                            <p class="text-xs text-[#64748b] mt-0.5 m-0">
+                                                Fasilitas yang termasuk dalam ticket ini.
+                                            </p>
+                                        </div>
+
+                                    </div>
+
+
+                                    {{-- FACILITY LIST --}}
+                                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 ml-0 sm:ml-12">
+
+                                        @foreach($group['facilities'] as $facility)
+
+                                            <div class="flex items-center gap-3 px-3.5 py-3 rounded-xl border border-[#e2e8f0] bg-[#f8fafc] hover:bg-white hover:border-[#bfdbfe] transition-all">
+
+                                                <div class="w-9 h-9 shrink-0 rounded-lg bg-white border border-[#e2e8f0] text-[#2282ff] flex items-center justify-center">
+                                                    <i class="ti ti-{{ $facility->icon ?: 'building-store' }} text-lg"></i>
+                                                </div>
+
+                                                <span class="text-sm font-semibold text-[#0f172a] truncate">
+                                                    {{ $facility->name }}
+                                                </span>
+
+                                            </div>
+
+                                        @endforeach
+
+                                    </div>
+
+                                </div>
+
+                            @endforeach
+
+
+                            {{-- ===================== EMPTY ===================== --}}
+                            @if($generalFacilities->isEmpty() && $ticketGroups->isEmpty())
+
+                                <div class="py-12 text-center">
+
+                                    <div class="w-14 h-14 mx-auto rounded-2xl bg-[#f1f5f9] text-[#94a3b8] flex items-center justify-center">
+                                        <i class="ti ti-stack-2 text-2xl"></i>
+                                    </div>
+
+                                    <h4 class="mt-4 text-sm font-bold text-[#0f172a]">
+                                        Belum ada fasilitas
+                                    </h4>
+
+                                    <p class="mt-1 text-xs text-[#64748b]">
+                                        Informasi fasilitas event akan ditampilkan di sini.
+                                    </p>
+
+                                </div>
+
+                            @endif
+
+                        </div>
+
                     </div>
+
                 </div>
 
             </div>
@@ -833,9 +1007,9 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     /* ============ TAB SWITCHER ============ */
-    const ticketTab = document.getElementById('ticket-tab');
+    const ticketTab = document.getElementById('facility-tab');
     const descriptionTab = document.getElementById('description-tab');
-    const ticketContent = document.getElementById('ticket-content');
+    const facilityContent = document.getElementById('facility-content');
     const descriptionContent = document.getElementById('description-content');
 
     const activeTabClass = ['bg-white', 'text-[#2282ff]', 'shadow-[0_2px_6px_rgba(0,0,0,0.05)]'];
@@ -847,14 +1021,14 @@ document.addEventListener('DOMContentLoaded', function () {
             ticketTab.classList.remove(...inactiveTabClass);
             descriptionTab.classList.remove(...activeTabClass);
             descriptionTab.classList.add(...inactiveTabClass);
-            ticketContent.style.display = 'block';
+            facilityContent.style.display = 'block';
             descriptionContent.style.display = 'none';
         } else {
             descriptionTab.classList.add(...activeTabClass);
             descriptionTab.classList.remove(...inactiveTabClass);
             ticketTab.classList.remove(...activeTabClass);
             ticketTab.classList.add(...inactiveTabClass);
-            ticketContent.style.display = 'none';
+            facilityContent.style.display = 'none';
             descriptionContent.style.display = 'block';
         }
     }

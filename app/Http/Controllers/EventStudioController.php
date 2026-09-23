@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\DB;
 use App\Models\CustomForm;
 use App\Models\EventCategory;
 use Illuminate\Support\Facades\Validator;
+use App\Models\EventFacility;
 
 class EventStudioController extends Controller
 {
@@ -56,17 +57,386 @@ class EventStudioController extends Controller
 			'theme' => Theme::all(),
 		]);
 	}
-    public function facilites($event_id)
-	{
 
-    $event = Event::with('images')->where('event_id', $event_id)->firstOrFail();
-    dd('On dev');
-		return view('event-studio.detail', [
-            'event'    => $event,
-			'categories' => EventCategory::all(),
-			'theme' => Theme::all(),
-		]);
-	}
+    public function facilites($event_id)
+    {
+        $event = Event::with([
+            'tickets',
+            'facilities.tickets',
+        ])
+        ->where('event_id', $event_id)
+        ->firstOrFail();
+
+        return view('event-studio.facility', [
+            'event'      => $event,
+            'facilities' => $event->facilities,
+            'tickets'    => $event->tickets,
+            'categories' => EventCategory::all(),
+            'theme'      => Theme::all(),
+        ]);
+    }
+
+
+    public function storeFacility(Request $request, $event_id)
+    {
+        $event = Event::where('event_id', $event_id)->firstOrFail();
+
+        $validated = $request->validate([
+            'facility_name' => [
+                'required',
+                'string',
+                'max:255',
+            ],
+
+            'facility_description' => [
+                'nullable',
+                'string',
+            ],
+
+            'icon' => [
+                'nullable',
+                'string',
+                'max:100',
+            ],
+
+            'scope' => [
+                'required',
+                'in:general,ticket',
+            ],
+
+            'tickets' => [
+                'nullable',
+                'array',
+            ],
+
+            'tickets.*' => [
+                'integer',
+                'exists:tickets,id',
+            ],
+        ]);
+
+        /*
+        |--------------------------------------------------------------------------
+        | Jika scope = ticket, minimal harus memilih ticket
+        |--------------------------------------------------------------------------
+        */
+
+        if (
+            $validated['scope'] === 'ticket' &&
+            empty($validated['tickets'])
+        ) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Please select at least one ticket.',
+                'errors' => [
+                    'tickets' => [
+                        'Please select at least one ticket.'
+                    ]
+                ],
+            ], 422);
+        }
+
+        DB::beginTransaction();
+
+        try {
+
+            /*
+            |--------------------------------------------------------------------------
+            | CREATE FACILITY
+            |--------------------------------------------------------------------------
+            */
+
+            $facility = EventFacility::create([
+                'event_id' => $event->id,
+                'name' => $validated['facility_name'],
+                'description' => $validated['facility_description'] ?? null,
+                'icon' => $validated['icon'] ?? null,
+                'scope' => $validated['scope'],
+                'sort_order' => 0,
+                'is_active' => true,
+            ]);
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | TICKET RELATION
+            |--------------------------------------------------------------------------
+            */
+
+            if ($validated['scope'] === 'ticket') {
+
+                $facility->tickets()->sync(
+                    $validated['tickets'] ?? []
+                );
+
+            }
+
+
+            DB::commit();
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | LOAD RELATION
+            |--------------------------------------------------------------------------
+            */
+
+            $facility->load('tickets');
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | CARD HTML
+            |--------------------------------------------------------------------------
+            */
+
+            $html = view(
+                'event-studio.facility-card',
+                [
+                    'facility' => $facility
+                ]
+            )->render();
+
+
+            return response()->json([
+
+                'success' => true,
+
+                'message' => 'Facility created successfully.',
+
+                'html' => $html,
+
+            ]);
+
+        } catch (\Throwable $e) {
+
+            DB::rollBack();
+
+            report($e);
+
+            return response()->json([
+
+                'success' => false,
+
+                'message' => 'Failed to create facility.',
+
+            ], 500);
+        }
+    }
+
+    public function updateFacility(Request $request, $event_id, $facility_id)
+    {
+        $event = Event::where('event_id', $event_id)->firstOrFail();
+
+        $facility = EventFacility::where('event_id', $event->id)
+            ->where('id', $facility_id)
+            ->firstOrFail();
+
+        $validated = $request->validate([
+            'facility_name' => [
+                'required',
+                'string',
+                'max:255',
+            ],
+
+            'facility_description' => [
+                'nullable',
+                'string',
+            ],
+
+            'icon' => [
+                'nullable',
+                'string',
+                'max:100',
+            ],
+
+            'scope' => [
+                'required',
+                'in:general,ticket',
+            ],
+
+            'tickets' => [
+                'nullable',
+                'array',
+            ],
+
+            'tickets.*' => [
+                'integer',
+                'exists:tickets,id',
+            ],
+        ]);
+
+        /*
+        |--------------------------------------------------------------------------
+        | Ticket-specific harus punya ticket
+        |--------------------------------------------------------------------------
+        */
+
+        if (
+            $validated['scope'] === 'ticket' &&
+            empty($validated['tickets'])
+        ) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Please select at least one ticket.',
+                'errors' => [
+                    'tickets' => [
+                        'Please select at least one ticket.'
+                    ]
+                ],
+            ], 422);
+        }
+
+        DB::beginTransaction();
+
+        try {
+
+            /*
+            |--------------------------------------------------------------------------
+            | UPDATE FACILITY
+            |--------------------------------------------------------------------------
+            */
+
+            $facility->update([
+                'name' => $validated['facility_name'],
+                'description' => $validated['facility_description'] ?? null,
+                'icon' => $validated['icon'] ?? null,
+                'scope' => $validated['scope'],
+            ]);
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | UPDATE TICKET RELATION
+            |--------------------------------------------------------------------------
+            |
+            | General = tidak punya ticket relation.
+            | Ticket   = hanya ticket yang dipilih.
+            |
+            */
+
+            if ($validated['scope'] === 'ticket') {
+
+                $facility->tickets()->sync(
+                    $validated['tickets'] ?? []
+                );
+
+            } else {
+
+                $facility->tickets()->detach();
+
+            }
+
+
+            DB::commit();
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | LOAD RELATION
+            |--------------------------------------------------------------------------
+            */
+
+            $facility->load('tickets');
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | CARD HTML
+            |--------------------------------------------------------------------------
+            */
+
+            $html = view(
+                'event-studio.facility-card',
+                [
+                    'facility' => $facility
+                ]
+            )->render();
+
+
+            return response()->json([
+
+                'success' => true,
+
+                'message' => 'Facility updated successfully.',
+
+                'html' => $html,
+
+            ]);
+
+        } catch (\Throwable $e) {
+
+            DB::rollBack();
+
+            report($e);
+
+            return response()->json([
+
+                'success' => false,
+
+                'message' => 'Failed to update facility.',
+
+            ], 500);
+        }
+    }
+
+
+    public function deleteFacility($event_id, $facility_id)
+    {
+        $event = Event::where('event_id', $event_id)->firstOrFail();
+
+        $facility = EventFacility::where('event_id', $event->id)
+            ->where('id', $facility_id)
+            ->firstOrFail();
+
+        DB::beginTransaction();
+
+        try {
+
+            /*
+            |--------------------------------------------------------------------------
+            | Hapus pivot terlebih dahulu
+            |--------------------------------------------------------------------------
+            */
+
+            $facility->tickets()->detach();
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | Hapus facility
+            |--------------------------------------------------------------------------
+            */
+
+            $facility->delete();
+
+
+            DB::commit();
+
+
+            return response()->json([
+
+                'success' => true,
+
+                'message' => 'Facility deleted successfully.',
+
+            ]);
+
+        } catch (\Throwable $e) {
+
+            DB::rollBack();
+
+            report($e);
+
+            return response()->json([
+
+                'success' => false,
+
+                'message' => 'Failed to delete facility.',
+
+            ], 500);
+        }
+    }
 
     public function ticket($event_id)
 	{

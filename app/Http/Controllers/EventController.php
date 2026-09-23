@@ -293,6 +293,7 @@ class EventController extends Controller
 			'individual',
 			'org',
 			'tickets',
+			'facilities.tickets',
 		]);
 
 		/*
