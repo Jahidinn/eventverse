@@ -50,7 +50,7 @@ class HomeController extends Controller
 		$promotions = collect([
 			(object) [
 				'id'          => 1,
-				'image'       => 'https://picsum.photos/seed/eventverse-promo-1/1200/750',
+				'image'       => 'assets/banners/promo-1.png',
 				'alt_text'    => 'Follow Instagram Eventverse',
 				'url'         => 'https://instagram.com/eventconnect.id',
 				'link_target' => '_blank',
@@ -58,7 +58,7 @@ class HomeController extends Controller
 			],
 			(object) [
 				'id'          => 2,
-				'image'       => 'https://picsum.photos/seed/eventverse-promo-2/1200/750',
+				'image'       => 'assets/banners/promo-2.png',
 				'alt_text'    => 'Cek Biaya Transaksi Eventverse',
 				'url'         => 'https://eventverse.id/pricing',
 				'link_target' => '_self',
@@ -66,7 +66,7 @@ class HomeController extends Controller
 			],
 			(object) [
 				'id'          => 3,
-				'image'       => 'https://picsum.photos/seed/eventverse-promo-3/1200/750',
+				'image'       => 'assets/banners/promo-3.png',
 				'alt_text'    => 'Hubungi Tim Eventverse via WhatsApp',
 				'url'         => 'https://wa.me/6282133553002',
 				'link_target' => '_blank',
@@ -74,9 +74,9 @@ class HomeController extends Controller
 			],
 			(object) [
 				'id'          => 4,
-				'image'       => 'https://picsum.photos/seed/eventverse-promo-4/1200/750',
+				'image'       => 'assets/banners/promo-4.png',
 				'alt_text'    => 'Promo khusus pengguna baru Eventverse',
-				'url'         => null, // ← banner tanpa link (tidak clickable)
+				'url'         => null,
 				'link_target' => '_self',
 				'sort_order'  => 4,
 			],
@@ -99,18 +99,25 @@ class HomeController extends Controller
 
 			if (!empty($promo->image)) {
 
+				// CASE 1: URL eksternal (http:// atau https://)
 				if (preg_match('/^https?:\/\//i', $promo->image)) {
-					// URL eksternal — langsung pakai
 					$promoImage = $promo->image;
+				}
 
-				} else {
-					// Path relatif — cek file di storage
+				// CASE 2: Asset di public/ (assets/...)
+				elseif (str_starts_with($promo->image, 'assets/')) {
+					$assetPath = public_path($promo->image);
+					if (file_exists($assetPath)) {
+						$promoImage = asset($promo->image);
+					}
+				}
+
+				// CASE 3: File di storage/ (promo-banners/...)
+				else {
 					$promoPath = 'storage/' . ltrim($promo->image, '/');
-
 					if (file_exists(public_path($promoPath))) {
 						$promoImage = asset($promoPath);
 					}
-					// kalau file tidak ada → tetap placeholder
 				}
 			}
 
