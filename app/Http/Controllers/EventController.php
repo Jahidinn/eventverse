@@ -294,6 +294,9 @@ class EventController extends Controller
 			'org',
 			'tickets',
 			'facilities.tickets',
+			// tambahkan ini
+			'lineups',
+			'category.features',
 		]);
 
 		/*

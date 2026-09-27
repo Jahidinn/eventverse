@@ -3,7 +3,7 @@
 @section('content')
     <div class="container pb-1">
         <div class="col-md-12 text-center mt-3 pt-2">
-            <small><strong>Eventconnect.id</strong></small>
+            <small><strong>eventverse.id</strong></small>
         </div>
         <div class="row m-1 style-form">
             <div class="col-lg-3 col-md-2"></div>
@@ -17,22 +17,43 @@
                 @endif
 
                 <div class="col-lg-12 reset-password-title">
-                    LUPA PASSWORD
+                    RESET PASSWORD
                 </div>
 
                 <div class="col-lg-12 login-form">
                     <div class="col-lg-12 login-form">
 
-                        <form action="/auth/forgot-password" method="post">
+                        <form action="/auth/send-reset-password" method="POST">
                             @csrf
+
+                            <input type="hidden" name="token" value="{{ $token }}">
 
                             <div class="form-group">
                                 <label class="form-control-label" for="email">Email</label>
-                                <input type="email" class="form-control  @error('email') is-invalid @enderror"
-                                    name="email" autofocus required value="{{ old('email') }}"
+                                <input type="email" class="form-control readonly @error('email') is-invalid @enderror"
+                                    name="email" autofocus readonly required value="{{ $email }}"
                                     placeholder="contoh@email.com" id="email">
 
                                 @error('email')
+                                    <small class="invalid-veedback text-danger mt-0 pt-0">{{ $message }}</small>
+                                @enderror
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-control-label" for="password">Password baru</label>
+                                <input type="password" class="form-control mb-2 @error('password') is-invalid @enderror"
+                                    name="password" required id="password">
+
+                                @error('password')
+                                    <small class="invalid-veedback text-danger mt-0 pt-0">{{ $message }}</small>
+                                @enderror
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-control-label" for="confirmPassword">Konfirmasi Password</label>
+                                <input type="password" class="form-control  @error('confirmPassword') is-invalid @enderror"
+                                    name="confirmPassword" required id="confirmPassword">
+                                @error('confirmPassword')
                                     <small class="invalid-veedback text-danger mt-0 pt-0">{{ $message }}</small>
                                 @enderror
                             </div>
@@ -51,18 +72,5 @@
                 </div>
                 <div class="col-lg-3 col-md-2"></div>
             </div>
-            <div class="col-md-12 text-center mt-3">
-                <small> Kembali <a href="/login"><strong>LOGIN</strong></a></small>
-            </div>
         </div>
-
-
-        {{-- notifikasi sukses reset --}}
-        @if (Session::has('status'))
-            <script type="text/javascript">
-                alertify.alert("Sukses!", "{{ session()->get('status') }}", function() {
-                    window.location.href = "/login"; // Ganti URL dengan URL tujuan pengalihan
-                });
-            </script>
-        @endif
     @endsection

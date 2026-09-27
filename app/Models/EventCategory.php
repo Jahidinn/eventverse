@@ -27,4 +27,12 @@ class EventCategory extends Model
     {
         return $this->hasMany(Event::class, 'category_id');
     }
+
+    public function features()
+    {
+        return $this->hasMany(
+            EventCategoryFeature::class,
+            'event_category_id'
+        )->orderBy('sort_order');
+    }
 }

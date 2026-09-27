@@ -17,12 +17,12 @@ class AuthController extends Controller
 
 	public function login()
 	{
-		return view('form.login');
+		return view('auth.login');
 	}
 
 	public function register()
 	{
-		return view('form.register');
+		return view('auth.register');
 	}
 
 	public function storeRegister(Request $request)
@@ -97,7 +97,7 @@ class AuthController extends Controller
 
 	public function forgotPasswordView()
 	{
-		return view('form.forgot-password');
+		return view('auth.password-forgot');
 	}
 
 	public function forgotPassword(Request $request)
@@ -115,7 +115,7 @@ class AuthController extends Controller
 
 	public function resetPasswordView(string $token, Request $request)
 	{
-		return view('form.reset-password', ['token' => $token, 'email' => $request->email]);
+		return view('auth.password-reset', ['token' => $token, 'email' => $request->email]);
 	}
 
 	public function resetPassword(Request $request)

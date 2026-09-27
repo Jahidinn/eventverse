@@ -173,181 +173,219 @@
 
 
             {{-- =====================================================
-                RIGHT FEATURED EVENT SLIDER
-            ====================================================== --}}
-            <div class="lg:col-span-5">
+    RIGHT FEATURED EVENT SLIDER
+====================================================== --}}
+<div class="lg:col-span-5">
 
-                <div id="featured-slider" class="relative group">
+    <div id="featured-slider" class="relative group">
 
-                    {{-- Soft blue glow --}}
-                    <div class="absolute -inset-2 rounded-[1.5rem] bg-[#2282ff]/[0.06] blur-xl"></div>
+        {{-- Soft blue glow --}}
+        <div class="absolute -inset-2 rounded-[1.5rem] bg-[#2282ff]/[0.06] blur-xl"></div>
 
-                    {{-- Slider --}}
-                    <div class="relative overflow-hidden rounded-2xl border border-[#e2e8f0] bg-white shadow-[0_10px_35px_rgba(34,130,255,0.10)]">
+        {{-- Slider --}}
+        <div class="relative overflow-hidden rounded-2xl border border-[#e2e8f0] bg-white shadow-[0_10px_35px_rgba(34,130,255,0.10)]">
 
-                        <div id="featured-track" class="flex transition-transform duration-700 ease-in-out">
+            <div id="featured-track" class="flex transition-transform duration-700 ease-in-out">
 
-                            @foreach($heroBanners as $index => $banner)
+                @foreach($heroBanners as $index => $banner)
 
-                                @php
-                                    if (empty($banner->image)) {
-                                        $banner_image = 'assets/default-img/event-images/def-img.png';
-                                    } else {
-                                        $imgPath = 'storage/event-images/' . $banner->image;
+                    <article class="featured-slide min-w-full">
 
-                                        $banner_image = file_exists(public_path($imgPath))
-                                            ? $imgPath
-                                            : 'assets/default-img/event-images/def-img.png';
+                        {{-- ============================================ --}}
+                        {{-- TYPE: PROMO — Image only, full height       --}}
+                        {{-- ============================================ --}}
+                        @if($banner->type === 'promo')
+
+                            @if($banner->url)
+                                {{-- Clickable banner --}}
+                                <a href="{{ $banner->url }}"
+                                   target="{{ $banner->link_target }}"
+                                   rel="{{ $banner->link_target === '_blank' ? 'noopener noreferrer' : '' }}"
+                                   class="group/banner block relative w-full h-[240px] sm:h-[300px] overflow-hidden bg-slate-100 cursor-pointer">
+
+                                    <img src="{{ $banner->image }}"
+                                         alt="{{ $banner->alt_text }}"
+                                         loading="lazy"
+                                         referrerpolicy="no-referrer"
+                                         class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover/banner:scale-105">
+
+                                </a>
+                            @else
+                                {{-- Non-clickable banner --}}
+                                <div class="relative w-full h-[240px] sm:h-[300px] overflow-hidden bg-slate-100">
+
+                                    <img src="{{ $banner->image }}"
+                                         alt="{{ $banner->alt_text }}"
+                                         loading="lazy"
+                                         referrerpolicy="no-referrer"
+                                         class="absolute inset-0 w-full h-full object-cover">
+
+                                </div>
+                            @endif
+
+                        {{-- ============================================ --}}
+                        {{-- TYPE: EVENT — seperti sebelumnya             --}}
+                        {{-- ============================================ --}}
+                        @else
+
+                            @php
+                                $event = $banner->event;
+
+                                // Fallback image event
+                                $eventImage = 'assets/default-img/event-images/def-img.png';
+                                if (!empty($event->image)) {
+                                    $imgPath = 'storage/event-images/' . $event->image;
+                                    if (file_exists(public_path($imgPath))) {
+                                        $eventImage = $imgPath;
                                     }
-                                @endphp
+                                }
 
-                                <article class="featured-slide min-w-full">
-                                    <a
-                                        href="/{{ $banner->slug }}"
-                                        class="group flex flex-col bg-white rounded-2xl border border-[#e2e8f0] shadow-xs hover:shadow-md hover:border-[#cbd5e1] hover:-translate-y-1 transition-all duration-200 overflow-hidden cursor-pointer"
-                                    >
+                                // Penyelenggara
+                                if ($event->organizer == 'org') {
+                                    $penyelenggara = $event->org->org_name ?? '';
+                                } elseif ($event->organizer == 'individual') {
+                                    $penyelenggara = $event->individual->name ?? '';
+                                } else {
+                                    $penyelenggara = '';
+                                }
+                            @endphp
 
-                                        {{-- Image --}}
-                                        <div class="relative aspect-[16/10] w-full overflow-hidden bg-slate-100">
+                            <a href="/{{ $event->slug }}"
+                               class="group/card flex flex-col bg-white rounded-2xl border border-[#e2e8f0] shadow-xs hover:shadow-md hover:border-[#cbd5e1] hover:-translate-y-1 transition-all duration-200 overflow-hidden cursor-pointer h-[240px] sm:h-[300px]">
 
-                                            <img src="{{ $banner_image }}"
-                                                 alt="{{ $banner->title }}"
-                                                 class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+                                {{-- Image --}}
+                                <div class="relative flex-1 w-full overflow-hidden bg-slate-100">
 
-                                            {{-- Overlay --}}
-                                            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+                                    <img src="{{ $eventImage }}"
+                                         alt="{{ $event->title }}"
+                                         class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover/card:scale-105">
 
-                                            {{-- Category --}}
-                                            <div class="absolute top-4 left-4">
-                                                <span class="inline-flex items-center px-3 py-1 rounded-md text-xs font-bold uppercase tracking-wider bg-[#2282ff] text-white shadow-sm">
-                                                    {{ $banner->category->name }}
-                                                </span>
-                                            </div>
+                                    {{-- Overlay --}}
+                                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
 
-                                            {{-- Event Info --}}
-                                            @php
-                                                if ($banner->organizer == 'org') {
-                                                    $penyelenggara = $banner->org->org_name ?? '';
-                                                } elseif ($banner->organizer == 'individual') {
-                                                    $penyelenggara = $banner->individual->name ?? '';
-                                                } else {
-                                                    $penyelenggara = '';
-                                                }
-                                            @endphp
+                                    {{-- Category --}}
+                                    <div class="absolute top-4 left-4">
+                                        <span class="inline-flex items-center px-3 py-1 rounded-md text-xs font-bold uppercase tracking-wider bg-[#2282ff] text-white shadow-sm">
+                                            {{ $event->category->name }}
+                                        </span>
+                                    </div>
 
-                                            <div class="absolute bottom-4 left-4 right-4 text-white">
+                                    {{-- Event Info --}}
+                                    <div class="absolute bottom-4 left-4 right-4 text-white">
 
-                                                <div class="text-xs uppercase tracking-wider text-sky-200">
-                                                    {{ $penyelenggara }}
-                                                </div>
-
-                                                <h3 class="text-lg sm:text-xl font-bold text-white mt-1">
-                                                    {{ $banner->title }}
-                                                </h3>
-
-                                            </div>
-
+                                        <div class="text-xs uppercase tracking-wider text-sky-200">
+                                            {{ $penyelenggara }}
                                         </div>
 
+                                        <h3 class="text-lg sm:text-xl font-bold text-white mt-1 line-clamp-2">
+                                            {{ $event->title }}
+                                        </h3>
 
-                                        {{-- Bottom Info --}}
-                                        <div class="p-4 bg-white flex items-center justify-between border-t border-[#e2e8f0]">
+                                    </div>
 
-                                            <div class="space-y-1 text-xs text-[#64748b]">
+                                </div>
 
-                                                <div class="flex items-center gap-1.5">
-                                                    <span>📅</span>
-                                                    <span>
-                                                        {{ $banner->start_date->format('d-m-Y') == $banner->end_date->format('d-m-Y')
-                                                            ? $banner->end_date->format('d M Y')
-                                                            : $banner->start_date->format('d M Y') . ' - ' . $banner->end_date->format('d M Y')
-                                                        }}
-                                                    </span>
-                                                </div>
+                                {{-- Bottom Info --}}
+                                <div class="shrink-0 p-4 bg-white flex items-center justify-between border-t border-[#e2e8f0]">
 
-                                                <div class="flex items-center gap-1.5">
-                                                    <span>📍</span>
-                                                    <span>
-                                                        {{ $banner->location_jenis == 'Offline'
-                                                            ? ucwords(strtolower($banner->location_city))
-                                                            : $banner->location_jenis
-                                                        }}
-                                                    </span>
-                                                </div>
+                                    <div class="space-y-1 text-xs text-[#64748b]">
 
-                                            </div>
-
-
-                                            <div class="text-right">
-
-                                                <span class="text-[11px] font-medium text-[#64748b] block">
-                                                    Starts from
-                                                </span>
-
-                                                <span class="text-base font-bold text-[#2282ff]">
-                                                    {{ $banner->ticket->first()->ticket_price == 0
-                                                        ? 'GRATIS!'
-                                                        : 'Rp ' . number_format($banner->ticket->first()->ticket_price, 0, ',', '.')
-                                                    }}
-                                                </span>
-
-                                            </div>
-
+                                        <div class="flex items-center gap-1.5">
+                                            <span>📅</span>
+                                            <span>
+                                                {{ $event->start_date->format('d-m-Y') == $event->end_date->format('d-m-Y')
+                                                    ? $event->end_date->format('d M Y')
+                                                    : $event->start_date->format('d M Y') . ' - ' . $event->end_date->format('d M Y')
+                                                }}
+                                            </span>
                                         </div>
 
-                                    </a>
-                                </article>
+                                        <div class="flex items-center gap-1.5">
+                                            <span>📍</span>
+                                            <span>
+                                                {{ $event->location_jenis == 'Offline'
+                                                    ? ucwords(strtolower($event->location_city))
+                                                    : $event->location_jenis
+                                                }}
+                                            </span>
+                                        </div>
 
-                            @endforeach
+                                    </div>
 
-                        </div>
+                                    <div class="text-right">
 
+                                        <span class="text-[11px] font-medium text-[#64748b] block">
+                                            Starts from
+                                        </span>
 
-                        {{-- Previous --}}
-                        <button type="button"
-                                id="featured-prev"
-                                aria-label="Previous event"
-                                class="absolute left-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-white/95 text-[#0f172a] shadow-md border border-[#e2e8f0] flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200 hover:bg-white">
+                                        <span class="text-base font-bold text-[#2282ff]">
+                                            {{ $event->ticket->first()->ticket_price == 0
+                                                ? 'GRATIS!'
+                                                : 'Rp ' . number_format($event->ticket->first()->ticket_price, 0, ',', '.')
+                                            }}
+                                        </span>
 
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/>
-                            </svg>
+                                    </div>
 
-                        </button>
+                                </div>
 
+                            </a>
 
-                        {{-- Next --}}
-                        <button type="button"
-                                id="featured-next"
-                                aria-label="Next event"
-                                class="absolute right-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-white/95 text-[#0f172a] shadow-md border border-[#e2e8f0] flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200 hover:bg-white">
+                        @endif
 
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
-                            </svg>
+                    </article>
 
-                        </button>
-
-                    </div>
-
-                    {{-- Dots --}}
-                    <div id="featured-dots" class="flex items-center justify-center gap-1.5 mt-4">
-
-                        @foreach($heroBanners as $index => $banner)
-
-                            <button type="button"
-                                    data-slide="{{ $index }}"
-                                    aria-label="Go to slide {{ $index + 1 }}"
-                                    class="featured-dot h-1.5 rounded-full transition-all duration-300 {{ $index === 0 ? 'w-7 bg-[#2282ff]' : 'w-1.5 bg-[#cbd5e1]' }}">
-                            </button>
-
-                        @endforeach
-
-                    </div>
-
-                </div>
+                @endforeach
 
             </div>
+
+
+            {{-- Previous --}}
+            @if($heroBanners->count() > 1)
+                <button type="button"
+                        id="featured-prev"
+                        aria-label="Previous"
+                        class="absolute left-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-white/95 text-[#0f172a] shadow-md border border-[#e2e8f0] flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200 hover:bg-white z-10">
+
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/>
+                    </svg>
+
+                </button>
+
+                {{-- Next --}}
+                <button type="button"
+                        id="featured-next"
+                        aria-label="Next"
+                        class="absolute right-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-white/95 text-[#0f172a] shadow-md border border-[#e2e8f0] flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200 hover:bg-white z-10">
+
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
+                    </svg>
+
+                </button>
+            @endif
+
+        </div>
+
+        {{-- Dots --}}
+        @if($heroBanners->count() > 1)
+            <div id="featured-dots" class="flex items-center justify-center gap-1.5 mt-4">
+
+                @foreach($heroBanners as $index => $banner)
+                    <button type="button"
+                            data-slide="{{ $index }}"
+                            aria-label="Go to slide {{ $index + 1 }}"
+                            class="featured-dot h-1.5 rounded-full transition-all duration-300 {{ $index === 0 ? 'w-7 bg-[#2282ff]' : 'w-1.5 bg-[#cbd5e1]' }}">
+                    </button>
+                @endforeach
+
+            </div>
+        @endif
+
+    </div>
+
+</div>
 
         </div>
 
@@ -370,7 +408,7 @@
                     Discover the latest events added to eventverse
                 </p>
             </div>
-            <a href="/events" class="inline-flex items-center gap-1.5 text-sm font-semibold text-[#2282ff] hover:text-[#1b6cd6] group">
+            <a href="/search?key=" class="inline-flex items-center gap-1.5 text-sm font-semibold text-[#2282ff] hover:text-[#1b6cd6] group">
                 <span>View All</span>
                 <span class="transition-transform group-hover:translate-x-1">→</span>
             </a>
@@ -570,7 +608,7 @@
                     Events people are interested in right now
                 </p>
             </div>
-            <a href="/popular-events" class="inline-flex items-center gap-1.5 text-sm font-semibold text-[#2282ff] hover:text-[#1b6cd6] group">
+            <a href="/search?key=" class="inline-flex items-center gap-1.5 text-sm font-semibold text-[#2282ff] hover:text-[#1b6cd6] group">
                 <span>View All</span>
                 <span class="transition-transform group-hover:translate-x-1">→</span>
             </a>
@@ -677,7 +715,7 @@
             Explore all events available on Eventverse.
         </p>
         <div class="mt-6">
-            <a href="/all-events" class="inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-xl text-sm sm:text-base font-semibold text-white bg-[#2282ff] hover:bg-[#1b6cd6] shadow-md shadow-[#2282ff]/20 transition-all hover:-translate-y-0.5">
+            <a href="/search?key=" class="inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-xl text-sm sm:text-base font-semibold text-white bg-[#2282ff] hover:bg-[#1b6cd6] shadow-md shadow-[#2282ff]/20 transition-all hover:-translate-y-0.5">
                 <span>View All Events</span>
                 <span>→</span>
             </a>

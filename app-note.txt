@@ -7,3 +7,15 @@ belum 1-06-2024
 - Uji coba midtrans kondisi real bkan sandbox
 - Buat youtube tutorial
 - Buat event untuk uji coba system
+
+
+26092026
+-- Update aut title
+-- Update lineup management
+-- Update event category feature management
+-- Update database
+
+27092026
+-- Update authentication page
+-- Add lineup management feature
+-- Update navbar style

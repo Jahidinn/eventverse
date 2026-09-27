@@ -18,111 +18,165 @@ class HomeController extends Controller
 	
 	public function index()
 	{
-		$heroBanners = collect();
-
 		/*
 		|--------------------------------------------------------------------------
-		| Banner dari Event
+		| 1. FEATURED EVENTS
 		|--------------------------------------------------------------------------
 		*/
 
 		$events = Event::query()
 			// ->where('selected_event', 1)
-			->with('penyelenggara', 'ticket')
+			->with(['penyelenggara', 'ticket', 'category', 'org', 'individual'])
 			->latest()
 			->take(5)
 			->get();
 
-		// foreach ($events as $event) {
-
-		// 	$image = asset('assets/default-img/event-images/def-img.png');
-
-		// 	if ($event->image) {
-
-		// 		$path = public_path("storage/event-images/{$event->image}");
-
-		// 		if (file_exists($path)) {
-
-		// 			$image = asset("storage/event-images/{$event->image}");
-
-		// 		}
-
-		// 	}
-
-		// 	$heroBanners->push([
-		// 		'title' => $event->title,
-		// 		'image' => $image,
-		// 		'link' => route('event.show', $event->slug),
-		// 		'button_text' => 'Lihat Event',
-		// 		'sort' => 2,
-
-		// 	]);
-
-		// }
-
 		/*
 		|--------------------------------------------------------------------------
-		| Banner Promosi
+		| 2. PROMOTED BANNERS (DUMMY)
+		|--------------------------------------------------------------------------
+		| Nanti tinggal ganti ke:
+		| $promotions = PromotedBanner::where('is_active', 1)
+		|     ->orderBy('sort_order')
+		|     ->get();
+		|
+		| Struktur kolom sesuai tabel `promoted_banners`:
+		|   - id, image, alt_text, url, link_target, is_active, sort_order, start_at, end_at
+		|
+		| Dummy pakai gambar gratis (picsum.photos) — bisa langsung jalan tanpa upload.
 		|--------------------------------------------------------------------------
 		*/
 
-		// nanti tinggal tambah
+		$promotions = collect([
+			(object) [
+				'id'          => 1,
+				'image'       => 'https://picsum.photos/seed/eventverse-promo-1/1200/750',
+				'alt_text'    => 'Follow Instagram Eventverse',
+				'url'         => 'https://instagram.com/eventconnect.id',
+				'link_target' => '_blank',
+				'sort_order'  => 1,
+			],
+			(object) [
+				'id'          => 2,
+				'image'       => 'https://picsum.photos/seed/eventverse-promo-2/1200/750',
+				'alt_text'    => 'Cek Biaya Transaksi Eventverse',
+				'url'         => 'https://eventverse.id/pricing',
+				'link_target' => '_self',
+				'sort_order'  => 2,
+			],
+			(object) [
+				'id'          => 3,
+				'image'       => 'https://picsum.photos/seed/eventverse-promo-3/1200/750',
+				'alt_text'    => 'Hubungi Tim Eventverse via WhatsApp',
+				'url'         => 'https://wa.me/6282133553002',
+				'link_target' => '_blank',
+				'sort_order'  => 3,
+			],
+			(object) [
+				'id'          => 4,
+				'image'       => 'https://picsum.photos/seed/eventverse-promo-4/1200/750',
+				'alt_text'    => 'Promo khusus pengguna baru Eventverse',
+				'url'         => null, // ← banner tanpa link (tidak clickable)
+				'link_target' => '_self',
+				'sort_order'  => 4,
+			],
+		]);
 
 		/*
-		$promotions = PromotedBanner::active()->get();
+		|--------------------------------------------------------------------------
+		| 3. MERGE HERO BANNERS
+		|--------------------------------------------------------------------------
+		| Urutan: PROMO DULU → EVENT KEMUDIAN
+		|--------------------------------------------------------------------------
+		*/
 
-		foreach ($promotions as $banner){
+		$heroBanners = collect();
 
-			$heroBanners->push([
+		// ─── 3a. Promo banners ───
+		foreach ($promotions->sortBy('sort_order') as $promo) {
 
-				'image' => asset('storage/'.$banner->image),
+			$promoImage = 'https://placehold.co/1200x750/e2e8f0/64748b?text=No+Image';
 
-				'link' => $banner->url,
+			if (!empty($promo->image)) {
 
-				'button_text' => $banner->button_text,
+				if (preg_match('/^https?:\/\//i', $promo->image)) {
+					// URL eksternal — langsung pakai
+					$promoImage = $promo->image;
 
-				'sort' => 1,
+				} else {
+					// Path relatif — cek file di storage
+					$promoPath = 'storage/' . ltrim($promo->image, '/');
 
+					if (file_exists(public_path($promoPath))) {
+						$promoImage = asset($promoPath);
+					}
+					// kalau file tidak ada → tetap placeholder
+				}
+			}
+
+			$heroBanners->push((object) [
+				'type'        => 'promo',
+				'image'       => $promoImage,
+				'alt_text'    => $promo->alt_text ?? '',
+				'url'         => $promo->url ?? null,
+				'link_target' => $promo->link_target ?? '_self',
 			]);
-
 		}
-		*/
+
+		// ─── 3b. Event banners ───
+		foreach ($events as $event) {
+
+			$eventImage = 'assets/default-img/event-images/def-img.png';
+
+			if (!empty($event->image)) {
+				$imgPath = 'storage/event-images/' . $event->image;
+
+				if (file_exists(public_path($imgPath))) {
+					$eventImage = asset($imgPath);
+				}
+			}
+
+			$heroBanners->push((object) [
+				'type'  => 'event',
+				'event' => $event,
+				'image' => $eventImage,
+			]);
+		}
 
 		/*
 		|--------------------------------------------------------------------------
-		| Sorting
+		| 4. CATEGORIES
 		|--------------------------------------------------------------------------
 		*/
 
-		$heroBanners = $events
-			->sortBy('sort')
-			->values();
+		$categories = EventCategory::orderBy('sort_order')->get();
 
-			// dd($heroBanners );
-
-			$categories = EventCategory::orderBy('sort_order')->get();
+		/*
+		|--------------------------------------------------------------------------
+		| 5. RETURN VIEW
+		|--------------------------------------------------------------------------
+		*/
 
 		return view('apps.home', [
 
 			'heroBanners' => $heroBanners,
-			'categories' => $categories,
+			'categories'  => $categories,
 
-			'eventTerbaru' => Event::with('penyelenggara', 'ticket')
+			'eventTerbaru' => Event::with(['penyelenggara', 'ticket'])
 				->latest()
 				->take(8)
 				->get(),
 
-			'eventPopuler' => Event::with('penyelenggara', 'ticket')
+			'eventPopuler' => Event::with(['penyelenggara', 'ticket'])
 				->orderByDesc('visitor')
 				->take(8)
 				->get(),
 
-			'eventPilihan' => Event::with('penyelenggara', 'ticket')
+			'eventPilihan' => Event::with(['penyelenggara', 'ticket'])
 				->where('selected_event', 1)
 				->latest()
 				->take(8)
 				->get(),
-
 		]);
 	}
 	

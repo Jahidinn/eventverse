@@ -199,41 +199,108 @@
                 {{-- ===================== TABS ===================== --}}
                 <div class="bg-white border border-[#e2e8f0] rounded-xl shadow-[0_2px_14px_-2px_rgba(15,23,42,0.05)] p-4 sm:p-5">
 
-                    {{-- TAB HEADER --}}
-                    <div class="bg-[#f1f5f9] p-1.5 rounded-xl">
-                        <div class="flex gap-1.5">
+                    @php
+                        $facilities = $detailEvent->facilities ?? collect();
+
+                        $generalFacilities = $facilities
+                            ->where('scope', 'general');
+
+                        $ticketFacilities = $facilities
+                            ->where('scope', 'ticket');
+
+                        $lineups = $detailEvent->lineups ?? collect();
+
+                        $categoryFeatures =
+                            $detailEvent->category?->features
+                            ?? collect();
+
+                        $lineupFeature =
+                            $categoryFeatures->first(function ($feature) {
+                                return $feature->feature === 'lineup'
+                                    && $feature->is_enabled;
+                            });
+
+                        $showLineupTab =
+                            $lineupFeature !== null;
+                    @endphp
+
+
+                    {{-- =========================================================
+                        TAB HEADER
+                    ========================================================== --}}
+
+                    <div class="bg-[#f1f5f9] p-1 rounded-xl">
+
+                        <div class="grid grid-cols-3 gap-1">
 
                             {{-- DESCRIPTION --}}
                             <button
                                 id="description-tab"
                                 type="button"
-                                class="nav-link active flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg text-sm font-bold border-0 transition-all bg-white text-[#2282ff] shadow-[0_2px_6px_rgba(0,0,0,0.05)]"
+                                class="nav-link active min-w-0 flex items-center justify-center gap-1.5 px-2.5 sm:px-4 py-2 sm:py-2.5 rounded-lg text-xs sm:text-sm font-bold border-0 transition-all bg-white text-[#2282ff] shadow-[0_2px_6px_rgba(0,0,0,0.05)]"
                             >
-                                <i class="ti ti-list text-lg"></i>
-                                <span>Deskripsi</span>
+                                <i class="ti ti-list text-base sm:text-lg shrink-0"></i>
+
+                                <span class="truncate">
+                                    Deskripsi
+                                </span>
                             </button>
+
 
                             {{-- FACILITIES --}}
                             <button
                                 id="facility-tab"
                                 type="button"
-                                class="nav-link flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg text-sm font-bold border-0 bg-transparent text-[#64748b] hover:text-[#0f172a] transition-all"
+                                class="nav-link min-w-0 flex items-center justify-center gap-1.5 px-2.5 sm:px-4 py-2 sm:py-2.5 rounded-lg text-xs sm:text-sm font-bold border-0 bg-transparent text-[#64748b] hover:text-[#0f172a] transition-all"
                             >
-                                <i class="ti ti-stack text-lg"></i>
-                                <span>Fasilitas</span>
+                                <i class="ti ti-stack text-base sm:text-lg shrink-0"></i>
+
+                                <span class="truncate">
+                                    Fasilitas
+                                </span>
                             </button>
 
+
+                            {{-- LINE-UP --}}
+                            @if($showLineupTab)
+
+                                <button
+                                    id="lineup-tab"
+                                    type="button"
+                                    class="nav-link min-w-0 flex items-center justify-center gap-1.5 px-2.5 sm:px-4 py-2 sm:py-2.5 rounded-lg text-xs sm:text-sm font-bold border-0 bg-transparent text-[#64748b] hover:text-[#0f172a] transition-all"
+                                >
+                                    <i class="ti ti-users text-base sm:text-lg shrink-0"></i>
+
+                                    <span class="truncate">
+                                        {{ $lineupFeature->label }}
+                                    </span>
+                                </button>
+
+                            @endif
+
                         </div>
+
                     </div>
 
 
-                    {{-- ===================== CONTENT ===================== --}}
+                    {{-- =========================================================
+                        CONTENT
+                    ========================================================== --}}
+
                     <div class="mt-5">
 
-                        {{-- ===================== DESCRIPTION ===================== --}}
-                        <div id="description-content">
+
+                        {{-- =====================================================
+                            DESCRIPTION
+                        ====================================================== --}}
+
+                        <div
+                            id="description-content"
+                            class="event-info-content"
+                        >
 
                             <div class="mb-4">
+
                                 <h4 class="text-base font-bold text-[#0f172a] m-0">
                                     Tentang Event
                                 </h4>
@@ -241,36 +308,39 @@
                                 <p class="text-[13px] text-[#64748b] mt-0.5">
                                     Informasi lengkap mengenai acara ini.
                                 </p>
+
                             </div>
 
+
                             <div class="event-description text-sm text-[#0f172a] leading-relaxed">
+
                                 {!! $detailEvent->description !!}
+
                             </div>
 
                         </div>
 
 
-                        {{-- ===================== FACILITIES ===================== --}}
-                        <div id="facility-content" class="hidden">
+                        {{-- =====================================================
+                            FACILITIES
+                        ====================================================== --}}
 
-                            @php
-                                $facilities = $detailEvent->facilities
-                                    ?? collect();
-
-                                $generalFacilities = $facilities
-                                    ->where('scope', 'general');
-
-                                $ticketFacilities = $facilities
-                                    ->where('scope', 'ticket');
-                            @endphp
+                        <div
+                            id="facility-content"
+                            class="event-info-content hidden"
+                        >
 
 
-                            {{-- ===================== GENERAL FACILITIES ===================== --}}
+                            {{-- =================================================
+                                GENERAL FACILITIES
+                            ================================================== --}}
+
                             @if($generalFacilities->isNotEmpty())
 
                                 <div class="mb-8">
 
                                     <div class="mb-4">
+
                                         <h4 class="text-base font-bold text-[#0f172a] m-0">
                                             Fasilitas umum
                                         </h4>
@@ -278,6 +348,7 @@
                                         <p class="text-[13px] text-[#64748b] mt-0.5">
                                             Fasilitas yang tersedia untuk seluruh peserta.
                                         </p>
+
                                     </div>
 
 
@@ -285,14 +356,21 @@
 
                                         @foreach($generalFacilities as $facility)
 
-                                            <div class="flex items-center gap-3 px-3.5 py-3 rounded-xl border border-[#e2e8f0] bg-white hover:border-[#bfdbfe] hover:bg-[#f8fbff] transition-all">
+                                            <div
+                                                class="flex items-center gap-3 px-3.5 py-3 rounded-xl border border-[#e2e8f0] bg-white hover:border-[#bfdbfe] hover:bg-[#f8fbff] transition-all"
+                                            >
 
                                                 <div class="w-9 h-9 shrink-0 rounded-lg bg-[#eff6ff] text-[#2282ff] flex items-center justify-center">
+
                                                     <i class="ti ti-{{ $facility->icon ?: 'building-store' }} text-lg"></i>
+
                                                 </div>
 
+
                                                 <span class="text-sm font-semibold text-[#0f172a] truncate">
+
                                                     {{ $facility->name }}
+
                                                 </span>
 
                                             </div>
@@ -306,24 +384,32 @@
                             @endif
 
 
-                            {{-- ===================== TICKET FACILITIES ===================== --}}
+                            {{-- =================================================
+                                TICKET FACILITIES
+                            ================================================== --}}
+
                             @php
                                 $ticketGroups = $detailEvent->tickets
                                     ->map(function ($ticket) use ($ticketFacilities) {
 
                                         return [
                                             'ticket' => $ticket,
+
                                             'facilities' => $ticketFacilities
                                                 ->filter(function ($facility) use ($ticket) {
+
                                                     return $facility->tickets
                                                         ->contains('id', $ticket->id);
+
                                                 })
                                                 ->values(),
                                         ];
 
                                     })
                                     ->filter(function ($group) {
+
                                         return $group['facilities']->isNotEmpty();
+
                                     });
                             @endphp
 
@@ -333,38 +419,56 @@
                                 <div class="mb-7">
 
                                     {{-- TICKET HEADER --}}
+
                                     <div class="flex items-center gap-3 mb-3">
 
                                         <div class="w-9 h-9 rounded-lg bg-[#eff6ff] text-[#2282ff] flex items-center justify-center shrink-0">
+
                                             <i class="ti ti-ticket text-lg"></i>
+
                                         </div>
 
+
                                         <div class="min-w-0">
+
                                             <h4 class="text-sm font-bold text-[#0f172a] m-0">
+
                                                 {{ $group['ticket']->ticket_name }}
+
                                             </h4>
 
                                             <p class="text-xs text-[#64748b] mt-0.5 m-0">
+
                                                 Fasilitas yang termasuk dalam ticket ini.
+
                                             </p>
+
                                         </div>
 
                                     </div>
 
 
                                     {{-- FACILITY LIST --}}
+
                                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 ml-0 sm:ml-12">
 
                                         @foreach($group['facilities'] as $facility)
 
-                                            <div class="flex items-center gap-3 px-3.5 py-3 rounded-xl border border-[#e2e8f0] bg-[#f8fafc] hover:bg-white hover:border-[#bfdbfe] transition-all">
+                                            <div
+                                                class="flex items-center gap-3 px-3.5 py-3 rounded-xl border border-[#e2e8f0] bg-[#f8fafc] hover:bg-white hover:border-[#bfdbfe] transition-all"
+                                            >
 
                                                 <div class="w-9 h-9 shrink-0 rounded-lg bg-white border border-[#e2e8f0] text-[#2282ff] flex items-center justify-center">
+
                                                     <i class="ti ti-{{ $facility->icon ?: 'building-store' }} text-lg"></i>
+
                                                 </div>
 
+
                                                 <span class="text-sm font-semibold text-[#0f172a] truncate">
+
                                                     {{ $facility->name }}
+
                                                 </span>
 
                                             </div>
@@ -378,21 +482,30 @@
                             @endforeach
 
 
-                            {{-- ===================== EMPTY ===================== --}}
+                            {{-- EMPTY FACILITY --}}
+
                             @if($generalFacilities->isEmpty() && $ticketGroups->isEmpty())
 
                                 <div class="py-12 text-center">
 
                                     <div class="w-14 h-14 mx-auto rounded-2xl bg-[#f1f5f9] text-[#94a3b8] flex items-center justify-center">
+
                                         <i class="ti ti-stack-2 text-2xl"></i>
+
                                     </div>
 
+
                                     <h4 class="mt-4 text-sm font-bold text-[#0f172a]">
+
                                         Belum ada fasilitas
+
                                     </h4>
 
+
                                     <p class="mt-1 text-xs text-[#64748b]">
+
                                         Informasi fasilitas event akan ditampilkan di sini.
+
                                     </p>
 
                                 </div>
@@ -400,6 +513,149 @@
                             @endif
 
                         </div>
+
+
+                        {{-- =====================================================
+                            LINE-UP
+                        ====================================================== --}}
+
+                        @if($showLineupTab)
+
+                            <div
+                                id="lineup-content"
+                                class="event-info-content hidden"
+                            >
+
+                                <div class="mb-5">
+
+                                    <h4 class="text-base font-bold text-[#0f172a] m-0">
+
+                                        {{ $lineupFeature->label }}
+
+                                    </h4>
+
+                                    <p class="text-[13px] text-[#64748b] mt-0.5">
+
+                                        Kenali
+                                        {{ strtolower($lineupFeature->label) }}
+                                        yang terlibat dalam event ini.
+
+                                    </p>
+
+                                </div>
+
+
+                                @if($lineups->isNotEmpty())
+
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+
+                                        @foreach($lineups as $lineup)
+
+                                            <div
+                                                class="group flex items-start gap-4 p-4 rounded-xl border border-[#e2e8f0] bg-white hover:border-[#bfdbfe] hover:bg-[#f8fbff] transition-all"
+                                            >
+
+                                                {{-- PHOTO --}}
+
+                                                <div class="w-16 h-16 shrink-0 rounded-xl overflow-hidden border border-[#e2e8f0] bg-[#eef5ff]">
+
+                                                    @if($lineup->photo)
+
+                                                        <img
+                                                            src="{{ asset('storage/' . $lineup->photo) }}"
+                                                            alt="{{ $lineup->name }}"
+                                                            class="w-full h-full object-cover"
+                                                        >
+
+                                                    @else
+
+                                                        <div class="w-full h-full flex items-center justify-center text-[#2282ff]">
+
+                                                            <i class="ti ti-user text-2xl"></i>
+
+                                                        </div>
+
+                                                    @endif
+
+                                                </div>
+
+
+                                                {{-- CONTENT --}}
+
+                                                <div class="min-w-0 flex-1">
+
+                                                    <h5 class="m-0 text-sm font-bold text-[#0f172a] leading-snug">
+
+                                                        {{ $lineup->name }}
+
+                                                    </h5>
+
+
+                                                    @if($lineup->role)
+
+                                                        <div class="inline-flex items-center gap-1.5 mt-1.5 px-2.5 py-1 rounded-full bg-[#eff6ff] text-[#2282ff] text-[11px] font-semibold">
+
+                                                            <i class="ti ti-user-tag text-xs"></i>
+
+                                                            {{ $lineup->role }}
+
+                                                        </div>
+
+                                                    @endif
+
+
+                                                    @if($lineup->description)
+
+                                                        <p class="mt-2 text-xs text-[#64748b] leading-relaxed">
+
+                                                            {{ $lineup->description }}
+
+                                                        </p>
+
+                                                    @endif
+
+                                                </div>
+
+                                            </div>
+
+                                        @endforeach
+
+                                    </div>
+
+
+                                @else
+
+                                    <div class="py-12 text-center">
+
+                                        <div class="w-14 h-14 mx-auto rounded-2xl bg-[#f1f5f9] text-[#94a3b8] flex items-center justify-center">
+
+                                            <i class="ti ti-users text-2xl"></i>
+
+                                        </div>
+
+
+                                        <h4 class="mt-4 text-sm font-bold text-[#0f172a]">
+
+                                            Belum ada {{ strtolower($lineupFeature->label) }}
+
+                                        </h4>
+
+
+                                        <p class="mt-1 text-xs text-[#64748b]">
+
+                                            Informasi
+                                            {{ strtolower($lineupFeature->label) }}
+                                            event akan ditampilkan di sini.
+
+                                        </p>
+
+                                    </div>
+
+                                @endif
+
+                            </div>
+
+                        @endif
 
                     </div>
 
@@ -1005,37 +1261,255 @@ document.addEventListener('DOMContentLoaded', function () {
             return false;
         }
     }
-
     /* ============ TAB SWITCHER ============ */
-    const ticketTab = document.getElementById('facility-tab');
-    const descriptionTab = document.getElementById('description-tab');
-    const facilityContent = document.getElementById('facility-content');
-    const descriptionContent = document.getElementById('description-content');
 
-    const activeTabClass = ['bg-white', 'text-[#2282ff]', 'shadow-[0_2px_6px_rgba(0,0,0,0.05)]'];
-    const inactiveTabClass = ['bg-transparent', 'text-[#64748b]', 'hover:text-[#0f172a]'];
+    const descriptionTab =
+        document.getElementById('description-tab');
+
+    const facilityTab =
+        document.getElementById('facility-tab');
+
+    const lineupTab =
+        document.getElementById('lineup-tab');
+
+
+    const descriptionContent =
+        document.getElementById('description-content');
+
+    const facilityContent =
+        document.getElementById('facility-content');
+
+    const lineupContent =
+        document.getElementById('lineup-content');
+
+
+    const activeTabClass = [
+        'bg-white',
+        'text-[#2282ff]',
+        'shadow-[0_2px_6px_rgba(0,0,0,0.05)]'
+    ];
+
+
+    const inactiveTabClass = [
+        'bg-transparent',
+        'text-[#64748b]',
+        'hover:text-[#0f172a]'
+    ];
+
 
     function activateTab(tab) {
-        if (tab === 'ticket') {
-            ticketTab.classList.add(...activeTabClass);
-            ticketTab.classList.remove(...inactiveTabClass);
-            descriptionTab.classList.remove(...activeTabClass);
-            descriptionTab.classList.add(...inactiveTabClass);
-            facilityContent.style.display = 'block';
-            descriptionContent.style.display = 'none';
-        } else {
-            descriptionTab.classList.add(...activeTabClass);
-            descriptionTab.classList.remove(...inactiveTabClass);
-            ticketTab.classList.remove(...activeTabClass);
-            ticketTab.classList.add(...inactiveTabClass);
-            facilityContent.style.display = 'none';
-            descriptionContent.style.display = 'block';
+
+        /* =====================================================
+        DESCRIPTION
+        ===================================================== */
+
+        if (tab === 'description') {
+
+            descriptionTab.classList.add(
+                ...activeTabClass
+            );
+
+            descriptionTab.classList.remove(
+                ...inactiveTabClass
+            );
+
+
+            facilityTab.classList.remove(
+                ...activeTabClass
+            );
+
+            facilityTab.classList.add(
+                ...inactiveTabClass
+            );
+
+
+            if (lineupTab) {
+
+                lineupTab.classList.remove(
+                    ...activeTabClass
+                );
+
+                lineupTab.classList.add(
+                    ...inactiveTabClass
+                );
+
+            }
+
+
+            descriptionContent.style.display =
+                'block';
+
+            facilityContent.style.display =
+                'none';
+
+
+            if (lineupContent) {
+
+                lineupContent.style.display =
+                    'none';
+
+            }
+
+            return;
         }
+
+
+        /* =====================================================
+        FACILITY
+        ===================================================== */
+
+        if (tab === 'facility') {
+
+            facilityTab.classList.add(
+                ...activeTabClass
+            );
+
+            facilityTab.classList.remove(
+                ...inactiveTabClass
+            );
+
+
+            descriptionTab.classList.remove(
+                ...activeTabClass
+            );
+
+            descriptionTab.classList.add(
+                ...inactiveTabClass
+            );
+
+
+            if (lineupTab) {
+
+                lineupTab.classList.remove(
+                    ...activeTabClass
+                );
+
+                lineupTab.classList.add(
+                    ...inactiveTabClass
+                );
+
+            }
+
+
+            descriptionContent.style.display =
+                'none';
+
+            facilityContent.style.display =
+                'block';
+
+
+            if (lineupContent) {
+
+                lineupContent.style.display =
+                    'none';
+
+            }
+
+            return;
+        }
+
+
+        /* =====================================================
+        LINE-UP
+        ===================================================== */
+
+        if (tab === 'lineup') {
+
+            if (!lineupTab || !lineupContent) {
+                return;
+            }
+
+
+            lineupTab.classList.add(
+                ...activeTabClass
+            );
+
+            lineupTab.classList.remove(
+                ...inactiveTabClass
+            );
+
+
+            descriptionTab.classList.remove(
+                ...activeTabClass
+            );
+
+            descriptionTab.classList.add(
+                ...inactiveTabClass
+            );
+
+
+            facilityTab.classList.remove(
+                ...activeTabClass
+            );
+
+            facilityTab.classList.add(
+                ...inactiveTabClass
+            );
+
+
+            descriptionContent.style.display =
+                'none';
+
+            facilityContent.style.display =
+                'none';
+
+            lineupContent.style.display =
+                'block';
+
+        }
+
     }
 
-    if (ticketTab && descriptionTab) {
-        ticketTab.addEventListener('click', function (e) { e.preventDefault(); activateTab('ticket'); });
-        descriptionTab.addEventListener('click', function (e) { e.preventDefault(); activateTab('description'); });
+
+    /* =========================================================
+    EVENTS
+    ========================================================= */
+
+    if (descriptionTab) {
+
+        descriptionTab.addEventListener(
+            'click',
+            function (e) {
+
+                e.preventDefault();
+
+                activateTab('description');
+
+            }
+        );
+
+    }
+
+
+    if (facilityTab) {
+
+        facilityTab.addEventListener(
+            'click',
+            function (e) {
+
+                e.preventDefault();
+
+                activateTab('facility');
+
+            }
+        );
+
+    }
+
+
+    if (lineupTab) {
+
+        lineupTab.addEventListener(
+            'click',
+            function (e) {
+
+                e.preventDefault();
+
+                activateTab('lineup');
+
+            }
+        );
+
     }
 
 

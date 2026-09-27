@@ -68,6 +68,12 @@ class Event extends Model
 		return 'slug';
 	}
 
+	public function lineups()
+	{
+		return $this->hasMany(EventLineup::class, 'event_id', 'id')
+			->orderBy('sort_order');
+	}
+
 	public function images()
 	{
 		return $this->hasMany(

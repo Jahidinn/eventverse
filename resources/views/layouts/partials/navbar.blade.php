@@ -10,47 +10,60 @@
                 <img src="/assets/img/eventverse-color.png" alt="Eventverse" class="h-9 w-auto">
             </a>
 
-            {{-- DESKTOP MENU --}}
-            <nav class="hidden md:flex items-center gap-5">
-                <a href="/" class="text-sm font-medium text-[#0f172a] hover:text-[#2282ff] transition-colors">Home</a>
-                <a href="/about-us" class="text-sm font-medium text-[#64748b] hover:text-[#2282ff] transition-colors">About us</a>
-                <a href="/pricing" class="text-sm font-medium text-[#64748b] hover:text-[#2282ff] transition-colors">Pricing</a>
-                <a href="/creator-guide" class="text-sm font-medium text-[#64748b] hover:text-[#2282ff] transition-colors">Guide</a>
-                <a href="/blog" class="text-sm font-medium text-[#64748b] hover:text-[#2282ff] transition-colors">Blog</a>
-                {{-- Search --}}
-                <button
-                    type="button"
-                    id="navbar-search-btn"
-                    class="inline-flex items-center gap-2 px-4 py-1 rounded-full text-sm font-medium
-                        text-[#2282ff] bg-[#ebf3ff]
-                        hover:bg-[#dbe9ff] hover:text-[#1b6cd6]
-                        transition-colors"
-                >
-                    <i class="ti ti-search text-lg"></i>
-                    <span>Search</span>
-                </button>
-
-                <button
-                    type="button"
-                    id="navbar-check-registration-btn"
-                    class="inline-flex items-center gap-2 px-4 py-1 rounded-full text-sm font-medium
-                        text-[#2282ff] bg-[#ebf3ff]
-                        hover:bg-[#dbe9ff] hover:text-[#1b6cd6]
-                        transition-colors"
-                >
-                    <i class="ti ti-user-search text-lg"></i>
-                    <span>Check registration</span>
-                </button>
+            {{-- DESKTOP MENU — hanya navigation links --}}
+            <nav class="hidden md:flex items-center gap-1">
+                <a href="/" class="px-3 py-2 text-sm font-medium text-[#0f172a] hover:text-[#2282ff] rounded-lg hover:bg-[#f8fafc] transition-colors">Home</a>
+                <a href="/about-us" class="px-3 py-2 text-sm font-medium text-[#64748b] hover:text-[#2282ff] rounded-lg hover:bg-[#f8fafc] transition-colors">About us</a>
+                <a href="/pricing" class="px-3 py-2 text-sm font-medium text-[#64748b] hover:text-[#2282ff] rounded-lg hover:bg-[#f8fafc] transition-colors">Pricing</a>
+                <a href="/creator-guide" class="px-3 py-2 text-sm font-medium text-[#64748b] hover:text-[#2282ff] rounded-lg hover:bg-[#f8fafc] transition-colors">Guide</a>
+                <a href="/blog" class="px-3 py-2 text-sm font-medium text-[#64748b] hover:text-[#2282ff] rounded-lg hover:bg-[#f8fafc] transition-colors">Blog</a>
             </nav>
 
-            {{-- DESKTOP ACTIONS --}}
+            {{-- DESKTOP ACTIONS — quick actions + user + CTA --}}
             <div class="hidden md:flex items-center gap-3">
+
+                {{-- Quick actions: icon-only --}}
+                <div class="flex items-center gap-1.5 pr-3 mr-1 border-r border-[#e2e8f0]">
+
+                    <button
+                        type="button"
+                        id="navbar-search-btn"
+                        title="Cari event"
+                        aria-label="Cari event"
+                        class="w-10 h-10 inline-flex items-center justify-center rounded-xl
+                            text-[#2282ff] bg-[#ebf3ff] border border-[#c2dcff]
+                            hover:bg-[#2282ff] hover:text-white hover:border-[#2282ff]
+                            hover:shadow-[0_4px_12px_rgba(34,130,255,0.25)]
+                            hover:-translate-y-0.5
+                            transition-all"
+                    >
+                        <i class="ti ti-search text-lg"></i>
+                    </button>
+
+                    <button
+                        type="button"
+                        id="navbar-check-registration-btn"
+                        title="Cek registrasi"
+                        aria-label="Cek registrasi"
+                        class="w-10 h-10 inline-flex items-center justify-center rounded-xl
+                            text-[#2282ff] bg-[#ebf3ff] border border-[#c2dcff]
+                            hover:bg-[#2282ff] hover:text-white hover:border-[#2282ff]
+                            hover:shadow-[0_4px_12px_rgba(34,130,255,0.25)]
+                            hover:-translate-y-0.5
+                            transition-all"
+                    >
+                        <i class="ti ti-user-search text-lg"></i>
+                    </button>
+
+                </div>
+
+                {{-- User section --}}
                 @auth
                     <div class="relative" id="user-dropdown-wrapper">
                         <button
                             type="button"
                             id="user-dropdown-btn"
-                            class="inline-flex items-center gap-2 px-3 py-2 rounded-xl text-sm font-medium text-[#0f172a] hover:bg-[#f8fafc] transition-colors"
+                            class="inline-flex items-center gap-2 px-2 py-1.5 rounded-xl text-sm font-medium text-[#0f172a] hover:bg-[#f8fafc] transition-colors"
                             aria-expanded="false"
                         >
                             <span class="w-8 h-8 rounded-full bg-[#ebf3ff] text-[#2282ff] flex items-center justify-center text-xs font-bold">
@@ -87,7 +100,7 @@
                         </div>
                     </div>
                 @else
-                    <a href="/login" class="px-4 py-2 text-sm font-medium text-[#0f172a] hover:text-[#2282ff] transition-colors">
+                    <a href="/login" class="px-3 py-2 text-sm font-medium text-[#0f172a] hover:text-[#2282ff] rounded-lg hover:bg-[#f8fafc] transition-colors">
                         Login
                     </a>
                 @endauth
@@ -98,6 +111,7 @@
                     </svg>
                     <span>Create Event</span>
                 </a>
+
             </div>
 
             {{-- MOBILE HAMBURGER --}}

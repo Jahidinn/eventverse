@@ -2138,35 +2138,40 @@ MOBILE DRAWER
             </a>
 
             <!-- ON GOING DEVELOPMENT -->
-            {{-- <a href="{{ route('event-studio.line-up', $eventId) }}" class="menu-item {{ Request::is('event-studio/*/line-up*') ? 'active' : '' }}">
 
-                <div class="menu-left">
+            @php
+                $lineupFeature = $event->category->features
+                    ->where('feature', 'lineup')
+                    ->where('is_enabled', true)
+                    ->first();
+            @endphp
 
-                    <div class="menu-icon">
+            @if($lineupFeature)
+                <a href="{{ route('event-studio.line-up', $eventId) }}"
+                class="menu-item {{ Request::is('event-studio/*/line-up*') ? 'active' : '' }}">
 
-                    <i class="ti ti-user-up"></i>
+                    <div class="menu-left">
+
+                        <div class="menu-icon">
+                            <i class="ti ti-user-up"></i>
+                        </div>
 
                     </div>
 
-                </div>
+                    <div class="menu-content">
 
-                <div class="menu-content">
+                        <span class="menu-title">
+                            {{ $lineupFeature->label }}
+                        </span>
 
-                    <span class="menu-title">
+                        <small>
+                            {{ $event->category->name }}
+                        </small>
 
-                        Line up
+                    </div>
 
-                    </span>
-
-                    <small>
-
-                        Stage line up
-
-                    </small>
-
-                </div>
-
-            </a> --}}
+                </a>
+            @endif
 
             <a href="{{ route('event-studio.form', $eventId) }}" class="menu-item {{ Request::is('event-studio/*/form*') ? 'active' : '' }}">
 

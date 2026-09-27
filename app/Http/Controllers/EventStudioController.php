@@ -16,12 +16,19 @@ use App\Models\CustomForm;
 use App\Models\EventCategory;
 use Illuminate\Support\Facades\Validator;
 use App\Models\EventFacility;
+use App\Models\EventLineup;
 
 class EventStudioController extends Controller
 {
     public function basic($event_id)
     {
-        $event = Event::with('images')->where('event_id', $event_id)->firstOrFail();
+        $event = Event::with([
+            'images',
+            'category.features',
+        ])
+        ->where('event_id', $event_id)
+        ->firstOrFail();
+
         $myOrg = OrganisationMember::with('org')
             ->where('user_id', auth()->id())
             ->whereIn('position', ['Owner', 'Member'])
@@ -47,16 +54,468 @@ class EventStudioController extends Controller
 		]);
 	}
     public function lineUp($event_id)
-	{
+    {
+        $event = Event::with([
+            'images',
+            'category.features',
+            'lineups',
+        ])
+        ->where('event_id', $event_id)
+        ->firstOrFail();
 
-    $event = Event::with('images')->where('event_id', $event_id)->firstOrFail();
-    dd('On dev');
-		return view('event-studio.detail', [
-            'event'    => $event,
-			'categories' => EventCategory::all(),
-			'theme' => Theme::all(),
-		]);
-	}
+        $lineupFeature = $event->category->features
+            ->where('feature', 'lineup')
+            ->where('is_enabled', true)
+            ->first();
+
+        abort_unless($lineupFeature, 404);
+
+        return view('event-studio.line-up', [
+            'event'         => $event,
+            'lineups'       => $event->lineups,
+            'lineupFeature' => $lineupFeature,
+            'categories'    => EventCategory::all(),
+            'theme'         => Theme::all(),
+        ]);
+    }
+
+    /**
+     * =========================================================
+     * LINE-UP / SPEAKER / JUDGE / INSTRUCTOR / ETC.
+     * =========================================================
+     */
+
+    /**
+     * Store Line-up
+     */
+    public function storeLineUp(Request $request, $event_id)
+    {
+        /*
+        |--------------------------------------------------------------------------
+        | Find Event + Feature
+        |--------------------------------------------------------------------------
+        */
+
+        $event = Event::with('category.features')
+            ->where('event_id', $event_id)
+            ->firstOrFail();
+
+
+        $feature = $event->category->features
+            ->where('feature', 'lineup')
+            ->where('is_enabled', true)
+            ->first();
+
+
+        abort_unless($feature, 404);
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Validation
+        |--------------------------------------------------------------------------
+        */
+
+        $validated = $request->validate([
+            'name' => [
+                'required',
+                'string',
+                'max:255',
+            ],
+
+            'role' => [
+                'nullable',
+                'string',
+                'max:255',
+            ],
+
+            'description' => [
+                'nullable',
+                'string',
+            ],
+
+            'photo' => [
+                'nullable',
+                'image',
+                'mimes:jpg,jpeg,png,webp',
+                'max:2048',
+            ],
+        ]);
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Event ID
+        |--------------------------------------------------------------------------
+        */
+
+        $validated['event_id'] = $event->id;
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Sort Order
+        |--------------------------------------------------------------------------
+        */
+
+        $validated['sort_order'] =
+            (
+                EventLineup::where(
+                    'event_id',
+                    $event->id
+                )->max('sort_order')
+                ?? 0
+            ) + 1;
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Active
+        |--------------------------------------------------------------------------
+        */
+
+        $validated['is_active'] = true;
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Upload Photo
+        |--------------------------------------------------------------------------
+        */
+
+        if ($request->hasFile('photo')) {
+
+            $validated['photo'] =
+                $request
+                    ->file('photo')
+                    ->store(
+                        'event-lineups',
+                        'public'
+                    );
+
+        }
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Create
+        |--------------------------------------------------------------------------
+        */
+
+        $lineup =
+            EventLineup::create(
+                $validated
+            );
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Return HTML Card
+        |--------------------------------------------------------------------------
+        */
+
+        return response()->json([
+            'success' => true,
+
+            'message' =>
+                $feature->label .
+                ' added successfully.',
+
+            'html' =>
+                view(
+                    'event-studio.line-up-card',
+                    [
+                        'lineup' => $lineup,
+                    ]
+                )->render(),
+        ]);
+    }
+
+
+    /**
+     * Update Line-up
+     */
+    public function updateLineUp(
+        Request $request,
+        $event_id,
+        $lineup_id
+    ) {
+        /*
+        |--------------------------------------------------------------------------
+        | Find Event
+        |--------------------------------------------------------------------------
+        */
+
+        $event = Event::with('category.features')
+            ->where('event_id', $event_id)
+            ->firstOrFail();
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Check Feature
+        |--------------------------------------------------------------------------
+        */
+
+        $feature = $event->category->features
+            ->where('feature', 'lineup')
+            ->where('is_enabled', true)
+            ->first();
+
+
+        abort_unless($feature, 404);
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Find Line-up
+        |--------------------------------------------------------------------------
+        */
+
+        $lineup = EventLineup::where(
+                'id',
+                $lineup_id
+            )
+            ->where(
+                'event_id',
+                $event->id
+            )
+            ->firstOrFail();
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Validation
+        |--------------------------------------------------------------------------
+        */
+
+        $validated = $request->validate([
+            'name' => [
+                'required',
+                'string',
+                'max:255',
+            ],
+
+            'role' => [
+                'nullable',
+                'string',
+                'max:255',
+            ],
+
+            'description' => [
+                'nullable',
+                'string',
+            ],
+
+            'photo' => [
+                'nullable',
+                'image',
+                'mimes:jpg,jpeg,png,webp',
+                'max:2048',
+            ],
+        ]);
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Upload New Photo
+        |--------------------------------------------------------------------------
+        |
+        | Upload dulu supaya foto lama tidak hilang apabila upload baru gagal.
+        |
+        */
+
+        $newPhoto = null;
+
+        if ($request->hasFile('photo')) {
+
+            $newPhoto =
+                $request
+                    ->file('photo')
+                    ->store(
+                        'event-lineups',
+                        'public'
+                    );
+
+            $validated['photo'] =
+                $newPhoto;
+
+        }
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Keep Existing Photo
+        |--------------------------------------------------------------------------
+        |
+        | Jika user tidak memilih foto baru,
+        | foto lama tetap digunakan.
+        |
+        */
+
+        if (!$request->hasFile('photo')) {
+
+            unset(
+                $validated['photo']
+            );
+
+        }
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Update
+        |--------------------------------------------------------------------------
+        */
+
+        $oldPhoto =
+            $lineup->photo;
+
+
+        $lineup->update(
+            $validated
+        );
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Delete Old Photo
+        |--------------------------------------------------------------------------
+        |
+        | Hanya hapus setelah database berhasil di-update.
+        |
+        */
+
+        if (
+            $newPhoto &&
+            $oldPhoto &&
+            $oldPhoto !== $newPhoto
+        ) {
+
+            Storage::disk('public')
+                ->delete(
+                    $oldPhoto
+                );
+
+        }
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Return Updated HTML
+        |--------------------------------------------------------------------------
+        */
+
+        $lineup->refresh();
+
+
+        return response()->json([
+            'success' => true,
+
+            'message' =>
+                $feature->label .
+                ' updated successfully.',
+
+            'html' =>
+                view(
+                    'event-studio.line-up-card',
+                    [
+                        'lineup' => $lineup,
+                    ]
+                )->render(),
+        ]);
+    }
+
+
+    /**
+     * Delete Line-up
+     */
+    public function deleteLineUp(
+        $event_id,
+        $lineup_id
+    ) {
+        /*
+        |--------------------------------------------------------------------------
+        | Find Event
+        |--------------------------------------------------------------------------
+        */
+
+        $event = Event::with('category.features')
+            ->where('event_id', $event_id)
+            ->firstOrFail();
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Check Feature
+        |--------------------------------------------------------------------------
+        */
+
+        $feature = $event->category->features
+            ->where('feature', 'lineup')
+            ->where('is_enabled', true)
+            ->first();
+
+
+        abort_unless($feature, 404);
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Find Line-up
+        |--------------------------------------------------------------------------
+        */
+
+        $lineup = EventLineup::where(
+                'id',
+                $lineup_id
+            )
+            ->where(
+                'event_id',
+                $event->id
+            )
+            ->firstOrFail();
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Delete Photo
+        |--------------------------------------------------------------------------
+        */
+
+        if ($lineup->photo) {
+
+            Storage::disk('public')
+                ->delete(
+                    $lineup->photo
+                );
+
+        }
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Delete Record
+        |--------------------------------------------------------------------------
+        */
+
+        $lineup->delete();
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Return Response
+        |--------------------------------------------------------------------------
+        */
+
+        return response()->json([
+            'success' => true,
+
+            'message' =>
+                $feature->label .
+                ' deleted successfully.',
+        ]);
+    }
 
     public function facilites($event_id)
     {

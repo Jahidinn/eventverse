@@ -402,6 +402,7 @@
 @include('event-studio.components.modal-confirm')
 
 
+
 <style>
 
 /* =========================================================
