@@ -266,7 +266,7 @@
                                                 {{-- Category --}}
                                                 <div class="absolute top-4 left-4">
                                                     <span class="inline-flex items-center px-3 py-1 rounded-md text-xs font-bold uppercase tracking-wider bg-[#2282ff] text-white shadow-sm">
-                                                        {{ $event->category->name }}
+                                                        {{ $event->category?->name ?? 'Uncategorized' }}
                                                     </span>
                                                 </div>
 

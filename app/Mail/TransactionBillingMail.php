@@ -4,14 +4,13 @@ namespace App\Mail;
 
 use App\Models\Transaction;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Mail\Mailable;
+use Illuminate\Mail\Mailables\Address;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
+use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Mail\Mailables\Address;
 
-class TransactionBillingMail extends Mailable implements ShouldQueue
+class TransactionBillingMail extends Mailable
 {
     use Queueable, SerializesModels;
 
@@ -38,4 +37,3 @@ class TransactionBillingMail extends Mailable implements ShouldQueue
         );
     }
 }
-

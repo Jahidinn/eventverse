@@ -28,7 +28,7 @@ class HomeController extends Controller
 			// ->where('selected_event', 1)
 			->with(['penyelenggara', 'ticket', 'category', 'org', 'individual'])
 			->latest()
-			->take(5)
+			->take(3)
 			->get();
 
 		/*
@@ -52,7 +52,7 @@ class HomeController extends Controller
 				'id'          => 1,
 				'image'       => 'assets/banners/promo-1.png',
 				'alt_text'    => 'Follow Instagram Eventverse',
-				'url'         => 'https://instagram.com/eventconnect.id',
+				'url'         => '/dashboard/manajemen-event',
 				'link_target' => '_blank',
 				'sort_order'  => 1,
 			],
@@ -60,7 +60,7 @@ class HomeController extends Controller
 				'id'          => 2,
 				'image'       => 'assets/banners/promo-2.png',
 				'alt_text'    => 'Cek Biaya Transaksi Eventverse',
-				'url'         => 'https://eventverse.id/pricing',
+				'url'         => '/dashboard/manajemen-event',
 				'link_target' => '_self',
 				'sort_order'  => 2,
 			],
@@ -68,7 +68,7 @@ class HomeController extends Controller
 				'id'          => 3,
 				'image'       => 'assets/banners/promo-3.png',
 				'alt_text'    => 'Hubungi Tim Eventverse via WhatsApp',
-				'url'         => 'https://wa.me/6282133553002',
+				'url'         => '/dashboard/manajemen-event',
 				'link_target' => '_blank',
 				'sort_order'  => 3,
 			],
@@ -76,7 +76,7 @@ class HomeController extends Controller
 				'id'          => 4,
 				'image'       => 'assets/banners/promo-4.png',
 				'alt_text'    => 'Promo khusus pengguna baru Eventverse',
-				'url'         => null,
+				'url'         => '/dashboard/manajemen-event',
 				'link_target' => '_self',
 				'sort_order'  => 4,
 			],

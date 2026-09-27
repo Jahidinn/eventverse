@@ -2,10 +2,10 @@
 
 namespace App\Services;
 
+use App\Jobs\SendEmailJob;
 use App\Mail\TransactionBillingMail;
 use App\Mail\TransactionPaidMail;
 use App\Models\Transaction;
-use Illuminate\Support\Facades\Mail;
 
 class EmailService
 {
@@ -20,8 +20,10 @@ class EmailService
             'participants',
         ]);
 
-        Mail::to($transaction->buyer_email)
-            ->send(new TransactionBillingMail($transaction));
+        SendEmailJob::dispatch(
+            $transaction->buyer_email,
+            new TransactionBillingMail($transaction)
+        );
     }
 
     /**
@@ -35,8 +37,10 @@ class EmailService
             'participants',
         ]);
 
-        Mail::to($transaction->buyer_email)
-            ->send(new TransactionPaidMail($transaction));
+        SendEmailJob::dispatch(
+            $transaction->buyer_email,
+            new TransactionPaidMail($transaction)
+        );
     }
 
     /**

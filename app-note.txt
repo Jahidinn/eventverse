@@ -19,3 +19,19 @@ belum 1-06-2024
 -- Update authentication page
 -- Add lineup management feature
 -- Update navbar style
+
+1. `git pull` kode terbaru.
+2. `composer install --no-dev --optimize-autoloader`.
+3. Pastikan `.env` production memiliki konfigurasi mail yang benar.
+4. Tambahkan `AWS_ACCESS_KEY_ID` ke `.env`.
+5. Tambahkan `AWS_SECRET_ACCESS_KEY` ke `.env`.
+6. Tambahkan `AWS_DEFAULT_REGION` ke `.env`.
+7. Jalankan `php artisan migrate --force`.
+8. Jalankan `php artisan db:seed --class=EmailProviderSeeder --force`.
+9. Pastikan provider `shared` aktif dengan limit `100`.
+10. Pastikan provider `ses` aktif setelah SES siap.
+11. Jalankan `php artisan optimize:clear`.
+12. Jalankan `php artisan config:cache`.
+13. Restart queue worker.
+14. Tes pengiriman email.
+JIKA BELUM JALAN QUEUENYA TAMBAHKAN
