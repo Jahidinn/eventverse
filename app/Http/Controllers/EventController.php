@@ -318,6 +318,7 @@ class EventController extends Controller
 				'tickets',
 			])
 			->where('status', 1)
+			->where('event_status', 'published')
 			->where('id', '!=', $event->id)
 			->limit(8)
 			->get();

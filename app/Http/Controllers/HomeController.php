@@ -27,6 +27,7 @@ class HomeController extends Controller
 		$events = Event::query()
 			// ->where('selected_event', 1)
 			->where('status', 1)
+			->where('event_status', 'published')
 			->with(['penyelenggara', 'ticket', 'category', 'org', 'individual'])
 			->latest()
 			->take(3)
@@ -171,16 +172,19 @@ class HomeController extends Controller
 			'categories'  => $categories,
 
 			'eventTerbaru' => Event::with(['penyelenggara', 'ticket'])
+				->where('event_status', 'published')
 				->latest()
 				->take(8)
 				->get(),
 
 			'eventPopuler' => Event::with(['penyelenggara', 'ticket'])
+				->where('event_status', 'published')
 				->orderByDesc('visitor')
 				->take(8)
 				->get(),
 
 			'eventPilihan' => Event::with(['penyelenggara', 'ticket'])
+				->where('event_status', 'published')
 				->where('selected_event', 1)
 				->latest()
 				->take(8)
@@ -213,6 +217,8 @@ class HomeController extends Controller
 					$query->where('start_date', '<=', $request->date)->where('end_date', '>=', $request->date);
 				}
 			})
+			->where('status', 1)
+			->where('event_status', 'published')
 			->orderBy('id', $sort)
 			->paginate(8)
 			->withQueryString();
