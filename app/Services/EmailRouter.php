@@ -48,6 +48,10 @@ class EmailRouter
 
             foreach ($providers as $provider) {
 
+                /*
+                 * Provider without hourly limit.
+                 * Example: SES.
+                 */
                 if ($provider->hourly_limit === null) {
                     return $provider;
                 }
@@ -70,17 +74,31 @@ class EmailRouter
                     continue;
                 }
 
+                /*
+                 * Quota provider sudah penuh.
+                 * Lanjut cek provider berikutnya.
+                 */
                 if ($usage->usage_count >= $provider->hourly_limit) {
                     continue;
                 }
 
+                /*
+                 * Reserve satu slot sebelum email dikirim.
+                 */
                 $usage->increment('usage_count');
 
                 return $provider;
             }
 
+            /*
+             * Semua provider aktif sedang penuh.
+             *
+             * Jangan anggap sebagai SMTP error.
+             * SendEmailJob akan menahan job sampai provider
+             * tersedia kembali.
+             */
             throw new \RuntimeException(
-                'No available email provider.'
+                'EMAIL_QUOTA_EXCEEDED'
             );
         });
     }

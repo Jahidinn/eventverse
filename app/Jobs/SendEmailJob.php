@@ -17,14 +17,6 @@ class SendEmailJob implements ShouldQueue
     use Queueable;
     use SerializesModels;
 
-    /**
-     * Maximum number of attempts.
-     */
-    public int $tries = 3;
-
-    /**
-     * Retry delay in seconds.
-     */
     public int $backoff = 60;
 
     public function __construct(
@@ -33,14 +25,28 @@ class SendEmailJob implements ShouldQueue
     ) {
     }
 
-    /**
-     * Execute the job.
-     */
     public function handle(EmailRouter $emailRouter): void
     {
-        $emailRouter->send(
-            $this->email,
-            $this->mailable
-        );
+        try {
+            $emailRouter->send(
+                $this->email,
+                $this->mailable
+            );
+        } catch (\RuntimeException $e) {
+
+            /*
+             * QUOTA FULL
+             * → jangan gagal
+             * → cukup lempar lagi supaya queue retry
+             */
+            if ($e->getMessage() === 'EMAIL_QUOTA_EXCEEDED') {
+                throw $e;
+            }
+
+            /*
+             * error lain tetap normal retry
+             */
+            throw $e;
+        }
     }
 }

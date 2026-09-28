@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Jobs\SendEmailJob;
 use App\Mail\TransactionBillingMail;
 use App\Mail\TransactionPaidMail;
+use App\Mail\WithdrawEmail;
 use App\Models\Transaction;
 
 class EmailService
@@ -40,6 +41,19 @@ class EmailService
         SendEmailJob::dispatch(
             $transaction->buyer_email,
             new TransactionPaidMail($transaction)
+        );
+    }
+
+    public function sendWithdraw($withdraw): void
+    {
+        $withdraw->loadMissing([
+            'event',
+            'user',
+        ]);
+
+        SendEmailJob::dispatch(
+            $withdraw->user->email,
+            new WithdrawEmail($withdraw)
         );
     }
 

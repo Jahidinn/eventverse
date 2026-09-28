@@ -16,10 +16,17 @@ use App\Models\WithdrawData;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use PhpParser\Node\Expr\FuncCall;
+use App\Services\EmailService;
 use Yajra\DataTables\Facades\DataTables;
 
 class AdminDashboardController extends Controller
 {
+	protected EmailService $emailService;
+	public function __construct(EmailService $emailService)
+	{
+		$this->emailService = $emailService;
+	}
+
 	public function index()
 	{
 		$totalEvent = Event::count();
@@ -166,16 +173,16 @@ class AdminDashboardController extends Controller
 			->make(true);
 	}
 
-	function sendEmail($id)
+	public function sendEmail($id)
 	{
-		#Fungsi kirim email ketika sukses ataupun gagal
-		$witdhdrawData = WithdrawData::with(['event', 'user'])->where('id', $id)->first();
+		$witdhdrawData = WithdrawData::with(['event', 'user'])
+			->where('id', $id)
+			->firstOrFail();
 
-		Mail::to($witdhdrawData->user->email)->send(new WithdrawEmail($witdhdrawData));
+		$this->emailService->sendWithdraw($witdhdrawData);
 
-		return response()->json('Sukses kirim email');
+		return response()->json('Email sedang diproses');
 	}
-
 
 	# Transaction Check
 	public function adminTransactionCheck()

@@ -20,6 +20,10 @@ belum 1-06-2024
 -- Add lineup management feature
 -- Update navbar style
 
+28092026
+-- Update mail job & router (waiting mail)
+-- Add email withdraw to job queue
+
 1. `git pull` kode terbaru.
 2. `composer install --no-dev --optimize-autoloader`.
 3. Pastikan `.env` production memiliki konfigurasi mail yang benar.

@@ -3,7 +3,6 @@
 namespace App\Mail;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
@@ -11,53 +10,38 @@ use Illuminate\Queue\SerializesModels;
 
 class WithdrawEmail extends Mailable
 {
-	use Queueable, SerializesModels;
-	public $witdhdrawData;
+    use Queueable, SerializesModels;
 
-	/**
-	 * Create a new message instance.
-	 */
-	public function __construct($witdhdrawData)
-	{
-		$this->witdhdrawData = $witdhdrawData;
-	}
+    public $witdhdrawData;
 
-	/**
-	 * Get the message envelope.
-	 */
-	public function envelope(): Envelope
-	{
-		if ($this->witdhdrawData->status == 'Sukses') {
-			$subject = 'Woohoo! Penarikan Dana Berhasil';
-		} else {
-			$subject = 'Yahh! Penarikan Dana GAGAL';
-		}
+    public function __construct($witdhdrawData)
+    {
+        $this->witdhdrawData = $witdhdrawData;
+    }
 
-		return new Envelope(
-			subject: $subject,
-		);
-	}
+    public function envelope(): Envelope
+    {
+        $subject = $this->witdhdrawData->status === 'Sukses'
+            ? 'Woohoo! Penarikan Dana Berhasil'
+            : 'Yahh! Penarikan Dana GAGAL';
 
-	/**
-	 * Get the message content definition.
-	 */
-	public function content(): Content
-	{
-		return new Content(
-			view: 'dashboard.admin-dashboard.components.wd-email-page',
-			with: [
-				'withdraw' => $this->witdhdrawData,
-			],
-		);
-	}
+        return new Envelope(
+            subject: $subject,
+        );
+    }
 
-	/**
-	 * Get the attachments for the message.
-	 *
-	 * @return array<int, \Illuminate\Mail\Mailables\Attachment>
-	 */
-	public function attachments(): array
-	{
-		return [];
-	}
+    public function content(): Content
+    {
+        return new Content(
+            view: 'emails.withdraw',
+            with: [
+                'withdraw' => $this->witdhdrawData,
+            ],
+        );
+    }
+
+    public function attachments(): array
+    {
+        return [];
+    }
 }
