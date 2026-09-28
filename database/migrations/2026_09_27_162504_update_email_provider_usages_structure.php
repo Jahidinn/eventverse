@@ -2,92 +2,110 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
     public function up(): void
     {
+        Schema::table('email_provider_usages', function (Blueprint $table) {
+            /*
+             * Tambahkan provider_id sebagai foreign key.
+             */
+            $table->foreignId('provider_id')
+                ->nullable()
+                ->after('id');
+
+            /*
+             * Ubah sent_count menjadi usage_count.
+             */
+            $table->unsignedInteger('usage_count')
+                ->default(0)
+                ->after('window_start');
+        });
+
         /*
-         * provider_id, usage_count, dan foreign key
-         * sudah berhasil dibuat pada percobaan migration sebelumnya.
-         *
-         * Yang tersisa:
-         * - memastikan unique provider_id + window_start
-         * - menghapus kolom legacy provider
-         * - menghapus kolom legacy sent_count
+         * Hapus unique/index lama yang menggunakan provider.
          */
+        Schema::table('email_provider_usages', function (Blueprint $table) {
+            $table->dropUnique(
+                'email_provider_usages_provider_window_unique'
+            );
 
-        // Cek apakah unique index sudah ada.
-        $indexes = DB::select('SHOW INDEX FROM email_provider_usages');
+            $table->dropIndex(
+                'email_provider_usages_window_provider_index'
+            );
+        });
 
-        $hasUniqueIndex = collect($indexes)
-            ->where('Key_name', 'email_provider_usages_provider_window_unique')
-            ->isNotEmpty();
+        /*
+         * Hapus kolom legacy.
+         */
+        Schema::table('email_provider_usages', function (Blueprint $table) {
+            $table->dropColumn([
+                'provider',
+                'sent_count',
+            ]);
+        });
 
-        if (! $hasUniqueIndex) {
-            Schema::table('email_provider_usages', function (Blueprint $table) {
-                $table->unique(
-                    ['provider_id', 'window_start'],
-                    'email_provider_usages_provider_window_unique'
-                );
-            });
-        }
+        /*
+         * Tambahkan unique index baru.
+         */
+        Schema::table('email_provider_usages', function (Blueprint $table) {
+            $table->unique(
+                ['provider_id', 'window_start'],
+                'email_provider_usages_provider_window_unique'
+            );
+        });
 
-        // Hapus struktur lama jika masih ada.
-        $columnsToDrop = [];
-
-        if (Schema::hasColumn('email_provider_usages', 'provider')) {
-            $columnsToDrop[] = 'provider';
-        }
-
-        if (Schema::hasColumn('email_provider_usages', 'sent_count')) {
-            $columnsToDrop[] = 'sent_count';
-        }
-
-        if (! empty($columnsToDrop)) {
-            Schema::table('email_provider_usages', function (Blueprint $table) use ($columnsToDrop) {
-                $table->dropColumn($columnsToDrop);
-            });
-        }
+        /*
+         * Jadikan provider_id foreign key setelah struktur
+         * selesai dibuat.
+         */
+        Schema::table('email_provider_usages', function (Blueprint $table) {
+            $table->foreign('provider_id')
+                ->references('id')
+                ->on('email_providers')
+                ->cascadeOnDelete();
+        });
     }
 
     public function down(): void
     {
-        /*
-         * Kembalikan kolom legacy.
-         *
-         * Data usage saat ini tidak dipulihkan karena migration
-         * awal memang sudah mengubah struktur tanpa data.
-         */
-
         Schema::table('email_provider_usages', function (Blueprint $table) {
-            if (! Schema::hasColumn('email_provider_usages', 'provider')) {
-                $table->string('provider', 30)
-                    ->nullable()
-                    ->after('id');
-            }
+            $table->dropForeign([
+                'provider_id',
+            ]);
 
-            if (! Schema::hasColumn('email_provider_usages', 'sent_count')) {
-                $table->unsignedInteger('sent_count')
-                    ->default(0)
-                    ->after('window_start');
-            }
+            $table->dropUnique(
+                'email_provider_usages_provider_window_unique'
+            );
+
+            $table->dropColumn([
+                'provider_id',
+                'usage_count',
+            ]);
         });
 
-        $indexes = DB::select('SHOW INDEX FROM email_provider_usages');
+        Schema::table('email_provider_usages', function (Blueprint $table) {
+            $table->string('provider', 30)
+                ->nullable()
+                ->after('id');
 
-        $hasUniqueIndex = collect($indexes)
-            ->where('Key_name', 'email_provider_usages_provider_window_unique')
-            ->isNotEmpty();
+            $table->unsignedInteger('sent_count')
+                ->default(0)
+                ->after('window_start');
+        });
 
-        if ($hasUniqueIndex) {
-            Schema::table('email_provider_usages', function (Blueprint $table) {
-                $table->dropUnique(
-                    'email_provider_usages_provider_window_unique'
-                );
-            });
-        }
+        Schema::table('email_provider_usages', function (Blueprint $table) {
+            $table->unique(
+                ['provider', 'window_start'],
+                'email_provider_usages_provider_window_unique'
+            );
+
+            $table->index(
+                ['window_start', 'provider'],
+                'email_provider_usages_window_provider_index'
+            );
+        });
     }
 };
