@@ -26,6 +26,7 @@ class HomeController extends Controller
 
 		$events = Event::query()
 			// ->where('selected_event', 1)
+			->where('status', 1)
 			->with(['penyelenggara', 'ticket', 'category', 'org', 'individual'])
 			->latest()
 			->take(3)
