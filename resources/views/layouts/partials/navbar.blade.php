@@ -114,21 +114,56 @@
 
             </div>
 
-            {{-- MOBILE HAMBURGER --}}
-            <button
-                id="mobile-menu-btn"
-                type="button"
-                class="md:hidden inline-flex items-center justify-center w-10 h-10 rounded-lg text-[#64748b] hover:text-[#0f172a] hover:bg-[#f1f5f9] transition-colors"
-                aria-label="Toggle navigation"
-                aria-expanded="false"
-            >
-                <svg id="mobile-menu-open-icon" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
-                </svg>
-                <svg id="mobile-menu-close-icon" class="hidden w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 6l12 12M6 18L18 6"/>
-                </svg>
-            </button>
+            {{-- MOBILE ACTIONS + HAMBURGER --}}
+            <div class="md:hidden flex items-center gap-1.5">
+
+                {{-- Mobile Search Icon --}}
+                <button
+                    type="button"
+                    id="mobile-header-search-btn"
+                    title="Cari event"
+                    aria-label="Cari event"
+                    class="w-9 h-9 inline-flex items-center justify-center rounded-lg
+                           text-[#2282ff] bg-[#ebf3ff] border border-[#c2dcff]
+                           hover:bg-[#2282ff] hover:text-white hover:border-[#2282ff]
+                           active:scale-95
+                           transition-all"
+                >
+                    <i class="ti ti-search text-base"></i>
+                </button>
+
+                {{-- Mobile Check Registration Icon --}}
+                <button
+                    type="button"
+                    id="mobile-header-check-btn"
+                    title="Cek registrasi"
+                    aria-label="Cek registrasi"
+                    class="w-9 h-9 inline-flex items-center justify-center rounded-lg
+                           text-[#2282ff] bg-[#ebf3ff] border border-[#c2dcff]
+                           hover:bg-[#2282ff] hover:text-white hover:border-[#2282ff]
+                           active:scale-95
+                           transition-all"
+                >
+                    <i class="ti ti-user-search text-base"></i>
+                </button>
+
+                {{-- Hamburger --}}
+                <button
+                    id="mobile-menu-btn"
+                    type="button"
+                    class="inline-flex items-center justify-center w-9 h-9 rounded-lg text-[#64748b] hover:text-[#0f172a] hover:bg-[#f1f5f9] transition-colors"
+                    aria-label="Toggle navigation"
+                    aria-expanded="false"
+                >
+                    <svg id="mobile-menu-open-icon" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                    </svg>
+                    <svg id="mobile-menu-close-icon" class="hidden w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 6l12 12M6 18L18 6"/>
+                    </svg>
+                </button>
+
+            </div>
 
         </div>
 
@@ -140,10 +175,10 @@
                 <a href="/pricing" class="mobile-menu-link block px-4 py-3 rounded-lg text-sm font-medium text-[#64748b] hover:bg-[#f8fafc] hover:text-[#2282ff] transition-colors">Pricing</a>
                 <a href="/creator-guide" class="mobile-menu-link block px-4 py-3 rounded-lg text-sm font-medium text-[#64748b] hover:bg-[#f8fafc] hover:text-[#2282ff] transition-colors">Guide</a>
                 <a href="/blog" class="mobile-menu-link block px-4 py-3 rounded-lg text-sm font-medium text-[#64748b] hover:bg-[#f8fafc] hover:text-[#2282ff] transition-colors">Blog</a>
-                {{-- Mobile Search --}}
+
+                {{-- Mobile Search & Check Registration (di dropdown) --}}
                 <div class="mt-3 mb-3 pt-3 border-t border-[#e2e8f0] space-y-2">
 
-                    {{-- Mobile Search --}}
                     <button
                         type="button"
                         id="mobile-navbar-search-btn"
@@ -158,7 +193,6 @@
                         <span>Search</span>
                     </button>
 
-                    {{-- Mobile Check Registration --}}
                     <button
                         type="button"
                         id="mobile-check-registration-btn"
@@ -176,7 +210,6 @@
                 </div>
 
                 {{-- Separator --}}
-
                 <div class="my-3 border-t border-[#e2e8f0]"></div>
 
                 @auth
@@ -788,6 +821,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     /* ---------- Navbar Search ---------- */
     const navbarSearchBtn = document.getElementById('navbar-search-btn');
+    const mobileHeaderSearchBtn = document.getElementById('mobile-header-search-btn');
     const mobileNavbarSearchBtn = document.getElementById('mobile-navbar-search-btn');
 
     const navbarSearchModal = document.getElementById('navbar-search-modal');
@@ -805,22 +839,11 @@ document.addEventListener('DOMContentLoaded', function () {
         document.body.classList.add('overflow-hidden');
 
         requestAnimationFrame(function () {
-
             navbarSearchBackdrop?.classList.remove('opacity-0');
             navbarSearchBackdrop?.classList.add('opacity-100');
 
-            navbarSearchPanel?.classList.remove(
-                'translate-y-[-12px]',
-                'scale-[0.98]',
-                'opacity-0'
-            );
-
-            navbarSearchPanel?.classList.add(
-                'translate-y-0',
-                'scale-100',
-                'opacity-100'
-            );
-
+            navbarSearchPanel?.classList.remove('translate-y-[-12px]', 'scale-[0.98]', 'opacity-0');
+            navbarSearchPanel?.classList.add('translate-y-0', 'scale-100', 'opacity-100');
         });
 
         setTimeout(function () {
@@ -834,17 +857,8 @@ document.addEventListener('DOMContentLoaded', function () {
         navbarSearchBackdrop?.classList.remove('opacity-100');
         navbarSearchBackdrop?.classList.add('opacity-0');
 
-        navbarSearchPanel?.classList.remove(
-            'translate-y-0',
-            'scale-100',
-            'opacity-100'
-        );
-
-        navbarSearchPanel?.classList.add(
-            'translate-y-[-12px]',
-            'scale-[0.98]',
-            'opacity-0'
-        );
+        navbarSearchPanel?.classList.remove('translate-y-0', 'scale-100', 'opacity-100');
+        navbarSearchPanel?.classList.add('translate-y-[-12px]', 'scale-[0.98]', 'opacity-0');
 
         navbarSearchModal.setAttribute('aria-hidden', 'true');
 
@@ -855,15 +869,13 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     navbarSearchBtn?.addEventListener('click', openNavbarSearch);
+    mobileHeaderSearchBtn?.addEventListener('click', openNavbarSearch);
 
     mobileNavbarSearchBtn?.addEventListener('click', function () {
-
-        // Tutup mobile menu
+        // Tutup mobile menu dulu
         mobileMenu?.classList.add('hidden');
-
         openIcon?.classList.remove('hidden');
         closeIcon?.classList.add('hidden');
-
         mobileMenuBtn?.setAttribute('aria-expanded', 'false');
 
         // Buka search
@@ -871,11 +883,9 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     navbarSearchClose?.addEventListener('click', closeNavbarSearch);
-
     navbarSearchBackdrop?.addEventListener('click', closeNavbarSearch);
 
     document.addEventListener('keydown', function (event) {
-
         if (
             event.key === 'Escape' &&
             navbarSearchModal &&
@@ -883,79 +893,22 @@ document.addEventListener('DOMContentLoaded', function () {
         ) {
             closeNavbarSearch();
         }
-
     });
 
 
     /* ---------- Check Registration Modal ---------- */
-const checkRegBtn = document.getElementById('navbar-check-registration-btn');
-const mobileCheckRegBtn = document.getElementById('mobile-check-registration-btn');
+    const checkRegBtn = document.getElementById('navbar-check-registration-btn');
+    const mobileHeaderCheckBtn = document.getElementById('mobile-header-check-btn');
+    const mobileCheckRegBtn = document.getElementById('mobile-check-registration-btn');
 
-const checkRegModal = document.getElementById('check-registration-modal');
-const checkRegBackdrop = document.getElementById('check-registration-backdrop');
-const checkRegPanel = document.getElementById('check-registration-panel');
-const checkRegClose = document.getElementById('check-registration-close');
-const checkRegForm = document.getElementById('check-registration-form');
-const checkRegSubmit = document.getElementById('check-registration-submit');
-const checkRegCodeInput = document.getElementById('check-code');
+    const checkRegModal = document.getElementById('check-registration-modal');
+    const checkRegBackdrop = document.getElementById('check-registration-backdrop');
+    const checkRegPanel = document.getElementById('check-registration-panel');
+    const checkRegClose = document.getElementById('check-registration-close');
+    const checkRegForm = document.getElementById('check-registration-form');
+    const checkRegSubmit = document.getElementById('check-registration-submit');
+    const checkRegCodeInput = document.getElementById('check-code');
 
-function openCheckReg() {
-    if (!checkRegModal) return;
-
-    checkRegModal.classList.remove('hidden');
-    checkRegModal.setAttribute('aria-hidden', 'false');
-    document.body.classList.add('overflow-hidden');
-
-    requestAnimationFrame(function () {
-        checkRegBackdrop?.classList.remove('opacity-0');
-        checkRegBackdrop?.classList.add('opacity-100');
-
-        checkRegPanel?.classList.remove('translate-y-[-12px]', 'scale-[0.98]', 'opacity-0');
-        checkRegPanel?.classList.add('translate-y-0', 'scale-100', 'opacity-100');
-    });
-
-    setTimeout(() => checkRegCodeInput?.focus(), 150);
-}
-
-function closeCheckReg() {
-    if (!checkRegModal) return;
-
-    checkRegBackdrop?.classList.remove('opacity-100');
-    checkRegBackdrop?.classList.add('opacity-0');
-
-    checkRegPanel?.classList.remove('translate-y-0', 'scale-100', 'opacity-100');
-    checkRegPanel?.classList.add('translate-y-[-12px]', 'scale-[0.98]', 'opacity-0');
-
-    checkRegModal.setAttribute('aria-hidden', 'true');
-
-    setTimeout(function () {
-        checkRegModal.classList.add('hidden');
-        document.body.classList.remove('overflow-hidden');
-    }, 200);
-}
-
-checkRegBtn?.addEventListener('click', openCheckReg);
-mobileCheckRegBtn?.addEventListener('click', function () {
-    // Tutup mobile menu dulu
-    mobileMenu?.classList.add('hidden');
-    openIcon?.classList.remove('hidden');
-    closeIcon?.classList.add('hidden');
-    mobileMenuBtn?.setAttribute('aria-expanded', 'false');
-
-    openCheckReg();
-});
-
-checkRegClose?.addEventListener('click', closeCheckReg);
-checkRegBackdrop?.addEventListener('click', closeCheckReg);
-
-document.addEventListener('keydown', function (event) {
-    if (event.key === 'Escape' && checkRegModal && !checkRegModal.classList.contains('hidden')) {
-        closeCheckReg();
-    }
-});
-
-
-    /* ---------- Submit AJAX ---------- */
     const checkRegFormState = document.getElementById('check-registration-form-state');
     const checkRegResultState = document.getElementById('check-registration-result-state');
 
@@ -964,8 +917,69 @@ document.addEventListener('keydown', function (event) {
         checkRegResultState?.classList.add('hidden');
     }
 
+    function openCheckReg() {
+        if (!checkRegModal) return;
+
+        checkRegForm?.reset();
+        showFormState();
+
+        checkRegModal.classList.remove('hidden');
+        checkRegModal.setAttribute('aria-hidden', 'false');
+        document.body.classList.add('overflow-hidden');
+
+        requestAnimationFrame(function () {
+            checkRegBackdrop?.classList.remove('opacity-0');
+            checkRegBackdrop?.classList.add('opacity-100');
+
+            checkRegPanel?.classList.remove('translate-y-[-12px]', 'scale-[0.98]', 'opacity-0');
+            checkRegPanel?.classList.add('translate-y-0', 'scale-100', 'opacity-100');
+        });
+
+        setTimeout(() => checkRegCodeInput?.focus(), 150);
+    }
+
+    function closeCheckReg() {
+        if (!checkRegModal) return;
+
+        checkRegBackdrop?.classList.remove('opacity-100');
+        checkRegBackdrop?.classList.add('opacity-0');
+
+        checkRegPanel?.classList.remove('translate-y-0', 'scale-100', 'opacity-100');
+        checkRegPanel?.classList.add('translate-y-[-12px]', 'scale-[0.98]', 'opacity-0');
+
+        checkRegModal.setAttribute('aria-hidden', 'true');
+
+        setTimeout(function () {
+            checkRegModal.classList.add('hidden');
+            document.body.classList.remove('overflow-hidden');
+        }, 200);
+    }
+
+    checkRegBtn?.addEventListener('click', openCheckReg);
+    mobileHeaderCheckBtn?.addEventListener('click', openCheckReg);
+
+    mobileCheckRegBtn?.addEventListener('click', function () {
+        // Tutup mobile menu dulu
+        mobileMenu?.classList.add('hidden');
+        openIcon?.classList.remove('hidden');
+        closeIcon?.classList.add('hidden');
+        mobileMenuBtn?.setAttribute('aria-expanded', 'false');
+
+        openCheckReg();
+    });
+
+    checkRegClose?.addEventListener('click', closeCheckReg);
+    checkRegBackdrop?.addEventListener('click', closeCheckReg);
+
+    document.addEventListener('keydown', function (event) {
+        if (event.key === 'Escape' && checkRegModal && !checkRegModal.classList.contains('hidden')) {
+            closeCheckReg();
+        }
+    });
+
+
+    /* ---------- Submit AJAX ---------- */
     function showResultState(data) {
-        // ── Status badge ──
         const badge = document.getElementById('check-status-badge');
         const iconBox = document.getElementById('check-status-icon');
         const title = document.getElementById('check-status-title');
@@ -987,7 +1001,6 @@ document.addEventListener('keydown', function (event) {
         }
         pill.textContent = data.status || '—';
 
-        // ── Detail card ──
         document.getElementById('check-type-label').textContent =
             data.type === 'ticket' ? 'Ticket Code' : 'Transaction Code';
 
@@ -999,7 +1012,6 @@ document.addEventListener('keydown', function (event) {
         document.getElementById('check-ticket').textContent = data.ticket_name || '—';
         document.getElementById('check-quantity').textContent = `${data.quantity || 1} Tiket`;
 
-        // Hide phone row kalau kosong (misal transaction type)
         const phoneRow = document.getElementById('check-phone-row');
         if (data.phone) {
             phoneRow.classList.remove('hidden');
@@ -1007,7 +1019,6 @@ document.addEventListener('keydown', function (event) {
             phoneRow.classList.add('hidden');
         }
 
-        // ── Edit button ──
         const editBtn = document.getElementById('check-edit-btn');
         if (data.edit_url) {
             editBtn.href = data.edit_url;
@@ -1016,12 +1027,10 @@ document.addEventListener('keydown', function (event) {
             editBtn.classList.add('hidden');
         }
 
-        // ── Toggle state ──
         checkRegFormState?.classList.add('hidden');
         checkRegResultState?.classList.remove('hidden');
     }
 
-    // "Cek Kode Lain" button
     document.getElementById('check-back-btn')?.addEventListener('click', function () {
         checkRegForm?.reset();
         showFormState();
@@ -1064,7 +1073,6 @@ document.addEventListener('keydown', function (event) {
                 throw new Error(data.message || 'Data tidak ditemukan.');
             }
 
-            // Tampilkan hasil di modal
             showResultState(data.data);
 
         } catch (err) {
@@ -1082,30 +1090,5 @@ document.addEventListener('keydown', function (event) {
         }
     });
 });
-
-function openCheckReg() {
-    if (!checkRegModal) return;
-
-    // Reset ke form state setiap kali dibuka
-    checkRegForm?.reset();
-    showFormState();
-
-    checkRegModal.classList.remove('hidden');
-    checkRegModal.setAttribute('aria-hidden', 'false');
-    document.body.classList.add('overflow-hidden');
-
-    requestAnimationFrame(function () {
-        checkRegBackdrop?.classList.remove('opacity-0');
-        checkRegBackdrop?.classList.add('opacity-100');
-
-        checkRegPanel?.classList.remove('translate-y-[-12px]', 'scale-[0.98]', 'opacity-0');
-        checkRegPanel?.classList.add('translate-y-0', 'scale-100', 'opacity-100');
-    });
-
-    setTimeout(() => checkRegCodeInput?.focus(), 150);
-}
-
-
-
 </script>
 @endpush
