@@ -6,7 +6,67 @@
 
 <div class="min-h-screen flex">
 
-    {{-- ==================== LEFT: FORM ==================== --}}
+    {{-- ==================== LEFT: BRANDING (desktop only) ==================== --}}
+    <div class="hidden lg:flex lg:w-[45%] relative overflow-hidden bg-gradient-to-br from-[#2282ff] to-[#02559b] items-center justify-center p-12">
+
+        {{-- Decorative blobs --}}
+        <div class="pointer-events-none absolute inset-0 overflow-hidden">
+            <div class="absolute -top-40 -right-40 w-[560px] h-[560px] rounded-full bg-white/5 blur-3xl"></div>
+            <div class="absolute -bottom-40 -left-40 w-[480px] h-[480px] rounded-full bg-white/5 blur-3xl"></div>
+            <div class="absolute top-[20%] left-[15%] w-32 h-32 rounded-[2rem] border-2 border-white/10 rotate-12"></div>
+            <div class="absolute bottom-[25%] right-[12%] w-24 h-24 rounded-full border-2 border-white/10"></div>
+        </div>
+
+        <div class="relative max-w-md">
+
+            {{-- Badge --}}
+            <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/15 backdrop-blur border border-white/25 mb-6">
+                <i class="ti ti-rocket text-white text-sm"></i>
+                <span class="text-xs font-bold text-white">Mulai GRATIS</span>
+            </div>
+
+            <h2 class="text-3xl font-extrabold text-white leading-[1.2] m-0 tracking-tight">
+                Buat event pertamamu hari ini
+            </h2>
+
+            <p class="mt-4 text-sm text-white/80 leading-relaxed">
+                Bergabung dengan banyak penyelenggara yang sudah mempercayai
+                eventverse untuk mengelola event mereka.
+            </p>
+
+            {{-- Benefit list --}}
+            <div class="mt-8 space-y-3">
+                @php
+                    $benefits = [
+                        'Gratis tanpa biaya pendaftaran',
+                        'Tanpa potongan dari penjualan tiket',
+                        'Dashboard lengkap & real-time',
+                        // 'Support 24/7 dari tim kami',
+                    ];
+                @endphp
+
+                @foreach($benefits as $benefit)
+                    <div class="flex items-center gap-3 text-white">
+                        <div class="w-7 h-7 rounded-lg bg-white/15 backdrop-blur border border-white/20 flex items-center justify-center shrink-0">
+                            <i class="ti ti-check text-xs"></i>
+                        </div>
+                        <span class="text-sm font-medium">{{ $benefit }}</span>
+                    </div>
+                @endforeach
+            </div>
+
+            {{-- Footer note --}}
+            <div class="mt-10 pt-6 border-t border-white/15">
+                <p class="text-xs text-white/60 m-0">
+                    &copy; {{ date('Y') }} Eventverse.id — Dikelola oleh PT Satu Karya Teknologi
+                </p>
+            </div>
+
+        </div>
+
+    </div>
+
+    {{-- ==================== RIGHT: FORM ==================== --}}
     <div class="flex-1 flex items-center justify-center p-5 sm:p-8 lg:p-10">
 
         <div class="w-full max-w-md">
@@ -152,67 +212,6 @@
             </div>
 
         </div>
-    </div>
-
-
-    {{-- ==================== RIGHT: BRANDING (desktop only) ==================== --}}
-    <div class="hidden lg:flex lg:w-[45%] relative overflow-hidden bg-gradient-to-br from-[#2282ff] to-[#02559b] items-center justify-center p-12">
-
-        {{-- Decorative blobs --}}
-        <div class="pointer-events-none absolute inset-0 overflow-hidden">
-            <div class="absolute -top-40 -right-40 w-[560px] h-[560px] rounded-full bg-white/5 blur-3xl"></div>
-            <div class="absolute -bottom-40 -left-40 w-[480px] h-[480px] rounded-full bg-white/5 blur-3xl"></div>
-            <div class="absolute top-[20%] left-[15%] w-32 h-32 rounded-[2rem] border-2 border-white/10 rotate-12"></div>
-            <div class="absolute bottom-[25%] right-[12%] w-24 h-24 rounded-full border-2 border-white/10"></div>
-        </div>
-
-        <div class="relative max-w-md">
-
-            {{-- Badge --}}
-            <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/15 backdrop-blur border border-white/25 mb-6">
-                <i class="ti ti-rocket text-white text-sm"></i>
-                <span class="text-xs font-bold text-white">Mulai GRATIS</span>
-            </div>
-
-            <h2 class="text-3xl font-extrabold text-white leading-[1.2] m-0 tracking-tight">
-                Buat event pertamamu hari ini
-            </h2>
-
-            <p class="mt-4 text-sm text-white/80 leading-relaxed">
-                Bergabung dengan banyak penyelenggara yang sudah mempercayai
-                eventverse untuk mengelola event mereka.
-            </p>
-
-            {{-- Benefit list --}}
-            <div class="mt-8 space-y-3">
-                @php
-                    $benefits = [
-                        'Gratis tanpa biaya pendaftaran',
-                        'Tanpa potongan dari penjualan tiket',
-                        'Dashboard lengkap & real-time',
-                        // 'Support 24/7 dari tim kami',
-                    ];
-                @endphp
-
-                @foreach($benefits as $benefit)
-                    <div class="flex items-center gap-3 text-white">
-                        <div class="w-7 h-7 rounded-lg bg-white/15 backdrop-blur border border-white/20 flex items-center justify-center shrink-0">
-                            <i class="ti ti-check text-xs"></i>
-                        </div>
-                        <span class="text-sm font-medium">{{ $benefit }}</span>
-                    </div>
-                @endforeach
-            </div>
-
-            {{-- Footer note --}}
-            <div class="mt-10 pt-6 border-t border-white/15">
-                <p class="text-xs text-white/60 m-0">
-                    &copy; {{ date('Y') }} Eventverse.id — Dikelola oleh PT Satu Karya Teknologi
-                </p>
-            </div>
-
-        </div>
-
     </div>
 
 </div>

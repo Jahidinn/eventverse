@@ -24,6 +24,10 @@ belum 1-06-2024
 -- Update mail job & router (waiting mail)
 -- Add email withdraw to job queue
 
+
+04102026
+-- Update register and login page
+
 1. `git pull` kode terbaru.
 2. `composer install --no-dev --optimize-autoloader`.
 3. Pastikan `.env` production memiliki konfigurasi mail yang benar.
