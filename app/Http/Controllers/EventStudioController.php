@@ -956,15 +956,14 @@ class EventStudioController extends Controller
         $event = DB::transaction(function () use ($request) {
 
             $event = Event::create([
-
                 'event_id'      => 'evt_' . Str::ulid(),
                 'user_id'       => auth()->id(),
+                'organizer_id'  => auth()->id(),
                 'organizer'     => 'individual',
                 'title'         => $request->name,
                 'slug'          => $request->slug,
-                'category_id'      => $request->category_id,
+                'category_id'   => $request->category_id,
                 'event_status'  => 'draft',
-
             ]);
 
             CustomForm::insert([
@@ -2061,7 +2060,7 @@ class EventStudioController extends Controller
         return response()->json([
             'success'  => true,
             'message'  => 'Event published successfully.',
-            'redirect' => route('events.show', $event->slug),
+            'redirect' => route('event.show', $event->slug),
         ]);
     }
 }
