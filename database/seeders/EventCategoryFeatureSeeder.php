@@ -11,64 +11,35 @@ class EventCategoryFeatureSeeder extends Seeder
     public function run(): void
     {
         $features = [
-            'competition' => [
-                'label' => 'Judges',
-            ],
+            'competition' => 'Judges',
+            'seminar' => 'Speakers',
+            'workshop' => 'Instructors',
+            'conference' => 'Speakers',
+            'webinar' => 'Speakers',
+            'training' => 'Instructors',
+            'bootcamp' => 'Instructors',
+            'expo' => 'Exhibitors',
+            'festival' => 'Line-up',
+            'concert' => 'Line-up',
 
-            'seminar' => [
-                'label' => 'Speakers',
-            ],
-
-            'workshop' => [
-                'label' => 'Instructors',
-            ],
-
-            'conference' => [
-                'label' => 'Speakers',
-            ],
-
-            'webinar' => [
-                'label' => 'Speakers',
-            ],
-
-            'training' => [
-                'label' => 'Instructors',
-            ],
-
-            'bootcamp' => [
-                'label' => 'Instructors',
-            ],
-
-            'expo' => [
-                'label' => 'Exhibitors',
-            ],
-
-            'festival' => [
-                'label' => 'Line-up',
-            ],
-
-            'concert' => [
-                'label' => 'Line-up',
-            ],
-
-            'art-culture' => [
-                'label' => 'Line-up',
-            ],
-
-            'religious' => [
-                'label' => 'Speakers',
-            ],
-
-            'career-fair' => [
-                'label' => 'Speakers',
-            ],
+            'technology' => 'Speakers',
+            'business' => 'Speakers',
+            'education' => 'Speakers',
+            'community' => 'Speakers',
+            'sport' => 'Coaches',
+            'art-culture' => 'Line-up',
+            'food-beverage' => 'Exhibitors',
+            'charity' => 'Speakers',
+            'religious' => 'Speakers',
+            'career-fair' => 'Speakers',
+            'others' => 'Speakers',
         ];
 
-        foreach ($features as $slug => $feature) {
+        foreach ($features as $slug => $label) {
             $category = EventCategory::where('slug', $slug)->first();
 
             if (!$category) {
-                $this->command->warn(
+                $this->command?->warn(
                     "Category '{$slug}' tidak ditemukan."
                 );
 
@@ -81,14 +52,14 @@ class EventCategoryFeatureSeeder extends Seeder
                     'feature' => 'lineup',
                 ],
                 [
-                    'label' => $feature['label'],
+                    'label' => $label,
                     'is_enabled' => true,
                     'sort_order' => 10,
                 ]
             );
 
-            $this->command->info(
-                "Enabled lineup: {$category->name} → {$feature['label']}"
+            $this->command?->info(
+                "Enabled lineup: {$category->name} -> {$label}"
             );
         }
     }

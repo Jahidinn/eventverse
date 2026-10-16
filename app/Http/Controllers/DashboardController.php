@@ -13,6 +13,7 @@ use App\Models\Transaction;
 use App\Models\WithdrawData;
 use Illuminate\Http\Request;
 use App\Models\ArticleCategory;
+use App\Models\EventCategory;
 use App\Models\TransactionForm;
 use App\Models\TransactionParticipant;
 use Illuminate\Support\Facades\Redirect;
@@ -176,7 +177,8 @@ class DashboardController extends Controller
 		// }
 
 		return view('dashboard.manajemen-event', [
-			'listEvent' => $listEvent
+			'listEvent' => $listEvent,
+			'categories' => EventCategory::all(),
 		]);
 	}
 

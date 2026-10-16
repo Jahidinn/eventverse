@@ -641,9 +641,14 @@
                     name="category_id">
 
                     <option value="">Pilih kategori event</option>
+                        
+                    @foreach ($categories as $category)
+                        <option value="{{ $category->id }}">{{ $category->name }}</option>
+                    @endforeach
 
-                    <option value="seminar">Seminar</option>
-                    <option value="workshop">Workshop</option>
+
+                    {{-- <option value="seminar">Seminar</option> --}}
+                    {{-- <option value="workshop">Workshop</option>
                     <option value="conference">Conference</option>
                     <option value="concert">Concert</option>
                     <option value="festival">Festival</option>
@@ -658,7 +663,7 @@
                     <option value="community">Community</option>
                     <option value="charity">Charity</option>
                     <option value="religious">Religious</option>
-                    <option value="others">Lainnya</option>
+                    <option value="others">Lainnysa</option> --}}
 
                 </select>
 
