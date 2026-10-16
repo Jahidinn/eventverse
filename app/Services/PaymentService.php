@@ -2,11 +2,11 @@
 
 namespace App\Services;
 
-use App\Services\TicketService;
-use App\Services\EmailService;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Services\TicketService;
+use App\Services\EmailService;
 
 class PaymentService
 {
@@ -22,16 +22,21 @@ class PaymentService
         |--------------------------------------------------------------------------
         | Verifikasi webhook Xendit
         |--------------------------------------------------------------------------
+        |
+        | Xendit mengirim Webhook Verification Token melalui header
+        | x-callback-token. Token harus sesuai dengan konfigurasi aplikasi.
+        |
         */
 
         $callbackToken = $request->header('x-callback-token');
+        $webhookToken = config('xendit.webhook_token');
 
         if (
-            ! $callbackToken ||
-            ! hash_equals(
-                config('xendit.webhook_token'),
-                $callbackToken
-            )
+            ! is_string($callbackToken) ||
+            ! is_string($webhookToken) ||
+            $callbackToken === '' ||
+            $webhookToken === '' ||
+            ! hash_equals($webhookToken, $callbackToken)
         ) {
             return response()->json([
                 'success' => false,
@@ -43,9 +48,21 @@ class PaymentService
         |--------------------------------------------------------------------------
         | Ambil payload webhook dari Xendit
         |--------------------------------------------------------------------------
+        |
+        | Webhook Payment Requests V3 memiliki struktur:
+        | - event
+        | - api_version
+        | - data.payment_request_id
+        | - data.status
+        |
+        | Data pembayaran berada di dalam objek "data", bukan di root JSON.
+        |
         */
 
-        $payment = $request->all();
+        $payload = $request->all();
+
+        $event = $payload['event'] ?? null;
+        $payment = $payload['data'] ?? [];
 
         /*
         |--------------------------------------------------------------------------
@@ -54,8 +71,12 @@ class PaymentService
         */
 
         if (
+            ! is_array($payment) ||
             empty($payment['payment_request_id']) ||
-            empty($payment['status'])
+            ! is_string($payment['payment_request_id']) ||
+            empty($payment['status']) ||
+            ! is_string($payment['status']) ||
+            ! is_string($event)
         ) {
             return response()->json([
                 'success' => false,
@@ -68,105 +89,127 @@ class PaymentService
         | Cari transaksi berdasarkan payment reference
         |--------------------------------------------------------------------------
         |
-        | payment_reference menyimpan payment_request_id dari Xendit.
+        | Kolom payment_reference menyimpan payment_request_id dari Xendit.
         |
         */
 
-        $transaction = Transaction::where(
-            'payment_reference',
-            $payment['payment_request_id']
-        )->first();
+        $result = DB::transaction(function () use (
+            $payload,
+            $event,
+            $payment
+        ) {
+            /*
+            |--------------------------------------------------------------------------
+            | Kunci baris transaksi
+            |--------------------------------------------------------------------------
+            |
+            | lockForUpdate mencegah dua webhook memproses transaksi yang sama
+            | secara bersamaan selama transaksi database berlangsung.
+            |
+            */
 
-        if (! $transaction) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Transaction not found.',
-            ], 404);
-        }
+            $transaction = Transaction::where(
+                'payment_reference',
+                $payment['payment_request_id']
+            )->lockForUpdate()->first();
 
-        /*
-        |--------------------------------------------------------------------------
-        | Periksa status transaksi
-        |--------------------------------------------------------------------------
-        */
+            if (! $transaction) {
+                return [
+                    'success' => false,
+                    'message' => 'Transaction not found.',
+                    'http_code' => 404,
+                ];
+            }
 
-        if (
-            $transaction->status !== 'Paid' &&
-            (
+            /*
+            |--------------------------------------------------------------------------
+            | Simpan payload webhook lengkap
+            |--------------------------------------------------------------------------
+            |
+            | Simpan event, api_version, dan seluruh data yang dikirim Xendit
+            | agar status callback terbaru dapat ditelusuri.
+            |
+            */
+
+            $transaction->payment_payload = $payload;
+
+            /*
+            |--------------------------------------------------------------------------
+            | Cegah transaksi diproses lebih dari satu kali
+            |--------------------------------------------------------------------------
+            |
+            | Webhook dapat dikirim ulang oleh Xendit.
+            | Transaksi Paid tidak boleh menjual tiket kembali.
+            |
+            */
+
+            if ($transaction->status === 'Paid') {
+                $transaction->save();
+
+                return [
+                    'success' => true,
+                    'message' => 'Transaction already paid.',
+                    'http_code' => 200,
+                ];
+            }
+
+            /*
+            |--------------------------------------------------------------------------
+            | Periksa masa berlaku transaksi
+            |--------------------------------------------------------------------------
+            |
+            | Transaksi yang sudah Expired atau melewati expired_at tidak
+            | diproses menjadi Paid secara otomatis.
+            |
+            */
+
+            if (
                 $transaction->status === 'Expired' ||
                 (
                     $transaction->expired_at &&
                     $transaction->expired_at->isPast()
                 )
-            )
-        ) {
-            return response()->json([
-                'success' => true,
-                'message' => 'Transaction already expired.',
-            ]);
-        }
+            ) {
+                $transaction->save();
 
-        /*
-        |--------------------------------------------------------------------------
-        | Simpan payload webhook terbaru
-        |--------------------------------------------------------------------------
-        |
-        | payment_payload menyimpan payload/status terbaru
-        | yang diterima dari Xendit.
-        |
-        */
+                return [
+                    'success' => true,
+                    'message' => 'Transaction already expired.',
+                    'http_code' => 200,
+                ];
+            }
 
-        $transaction->update([
-            'payment_payload' => $payment,
-        ]);
+            /*
+            |--------------------------------------------------------------------------
+            | Simpan payload untuk setiap event yang valid
+            |--------------------------------------------------------------------------
+            |
+            | Event selain payment.capture dengan status SUCCEEDED tidak
+            | memicu penjualan tiket atau perubahan status menjadi Paid.
+            |
+            */
 
-        /*
-        |--------------------------------------------------------------------------
-        | Proses hanya jika pembayaran berhasil
-        |--------------------------------------------------------------------------
-        */
+            if (
+                $event !== 'payment.capture' ||
+                $payment['status'] !== 'SUCCEEDED'
+            ) {
+                $transaction->save();
 
-        if ($payment['status'] !== 'SUCCEEDED') {
-            return response()->json([
-                'success' => true,
-                'message' => 'Webhook received.',
-            ]);
-        }
-
-        /*
-        |--------------------------------------------------------------------------
-        | Cegah transaksi diproses lebih dari satu kali
-        |--------------------------------------------------------------------------
-        |
-        | Xendit dapat mengirim webhook lebih dari satu kali.
-        | Jika transaksi sudah Paid, jangan menjual tiket
-        | atau mengirim email e-ticket lagi.
-        |
-        */
-
-        if ($transaction->status === 'Paid') {
-            return response()->json([
-                'success' => true,
-                'message' => 'Transaction already paid.',
-            ]);
-        }
-
-        /*
-        |--------------------------------------------------------------------------
-        | Proses pembayaran
-        |--------------------------------------------------------------------------
-        |
-        | Sell ticket dan update status transaksi dilakukan
-        | dalam satu database transaction.
-        |
-        */
-
-        DB::transaction(function () use ($transaction) {
+                return [
+                    'success' => true,
+                    'message' => 'Webhook received. No payment action taken.',
+                    'http_code' => 200,
+                ];
+            }
 
             /*
             |--------------------------------------------------------------------------
             | Jual tiket
             |--------------------------------------------------------------------------
+            |
+            | Penjualan tiket dan perubahan status transaksi dijalankan
+            | dalam database transaction yang sama.
+            |
             */
 
             $this->ticketService->sell(
@@ -180,28 +223,53 @@ class PaymentService
             |--------------------------------------------------------------------------
             */
 
-            $transaction->update([
-                'status'  => 'Paid',
-                'paid_at' => now(),
-            ]);
+            $transaction->status = 'Paid';
+            $transaction->paid_at = now();
+            $transaction->save();
+
+            return [
+                'success' => true,
+                'message' => 'Payment processed successfully.',
+                'http_code' => 200,
+                'transaction_id' => $transaction->id,
+            ];
         });
 
         /*
         |--------------------------------------------------------------------------
-        | Kirim email e-ticket
+        | Kirim email e-ticket setelah pembayaran berhasil
         |--------------------------------------------------------------------------
+        |
+        | Email dikirim setelah database transaction selesai agar email
+        | tidak terkirim jika proses penjualan tiket gagal.
+        |
         */
 
-        $this->emailService->sendPaid($transaction);
+        if (
+            ! empty($result['success']) &&
+            isset($result['transaction_id'])
+        ) {
+            $transaction = Transaction::find($result['transaction_id']);
+
+            if ($transaction) {
+                $this->emailService->sendPaid($transaction);
+            }
+        }
 
         /*
         |--------------------------------------------------------------------------
         | Response ke Xendit
         |--------------------------------------------------------------------------
+        |
+        | Kembalikan HTTP 200 untuk webhook yang berhasil diterima atau
+        | sudah diproses. Gunakan HTTP error untuk payload tidak valid
+        | atau transaksi yang tidak ditemukan.
+        |
         */
 
         return response()->json([
-            'success' => true,
-        ]);
+            'success' => $result['success'],
+            'message' => $result['message'],
+        ], $result['http_code']);
     }
 }
