@@ -824,16 +824,16 @@
 
                     </button> --}}
                     <button
-    type="button"
-    id="openPublishModal"
-    class="ev-btn ev-btn-primary ev-btn-full"
-    {{ $progress < 100 ? 'disabled' : '' }}>
+                        type="button"
+                        id="openPublishModal"
+                        class="ev-btn ev-btn-primary ev-btn-full"
+                        {{ $progress < 100 ? 'disabled' : '' }}>
 
-    <i class="fa-solid fa-paper-plane"></i>
+                        <i class="fa-solid fa-paper-plane"></i>
 
-    Publish Event
+                        Publish Event
 
-</button>
+                    </button>
 
                     @if($progress < 100)
 
@@ -1189,6 +1189,7 @@
     font-size:14px;
 
     cursor:pointer;
+    margin-top: 10px;
 
 }
 
@@ -1251,6 +1252,7 @@
     position:sticky;
 
     top:95px;
+    margin-top: 20px;
 
 }
 
@@ -1270,6 +1272,8 @@
     overflow:hidden;
 
     transition:.25s;
+
+    margin-top: 20px;
 
 }
 
