@@ -4,39 +4,29 @@
 
 <section id="form_step">
 
-    <div class="ev-page-header">
-
-       
-
-        <div class="ev-section">
-            <div class="ev-section-header">
-                <div>
-                    <span class="ev-badge">
-                        FORM REGISTRATION
-                    </span>
-                    <!-- <h2 class="ev-title">
-                        Basic Information
-                    </h2>
-                    <p class="ev-subtitle">
-                        Start by introducing your event. Add a banner, event title and basic details that attendees will see first.
-                    </p> -->
-                </div>
+    <p class="ev-event-badge is-blue">{{ $event->title ?: 'Untitled event' }}</p>
+    <div class="ev-page-header is-blue">
+        <div class="ev-page-title-row">
+            <div class="ev-page-icon">
+                <i class="fa-solid fa-clipboard-list"></i>
+            </div>
+            <div class="ev-page-title-copy">
+                <h2 class="ev-title">Registration <span class="accent">flow</span></h2>
+                <p class="ev-subtitle">Fields and settings for attendees.</p>
             </div>
         </div>
+        <div class="ev-page-header-actions">
+            <button
+                type="button"
+                class="ev-btn ev-btn-primary"
+                id="btnAddField">
 
+                <i class="fa-solid fa-plus"></i>
 
+                Add Field
 
-        <button
-            type="button"
-            class="btn btn-primary btn-add-field"
-            id="btnAddField">
-
-            <i class="fa-solid fa-plus"></i>
-
-            Add Field
-
-        </button>
-
+            </button>
+        </div>
     </div>
 
     {{-- =========================================================
@@ -56,7 +46,7 @@
                 </div>
 
                 <div>
-                    <h3>Registration form settings</h3>
+                    <h3>Registration settings</h3>
 
                     {{-- <p>
                         Control whether attendees can update their registration
@@ -86,13 +76,9 @@
 
                         <div class="ev-setting-option-text">
 
-                            <strong>
-                                Allow edit after payment
-                            </strong>
+                            <strong>Editable after payment</strong>
 
-                            <span>
-                               Setelah registrasi selesai peserta bisa ubah data.
-                            </span>
+                            <span>Attendees can update their data.</span>
 
                         </div>
 
@@ -125,13 +111,9 @@
 
                         <div class="ev-setting-option-text">
 
-                            <strong>
-                                Don't allow edit after payment
-                            </strong>
+                            <strong>Locked after payment</strong>
 
-                            <span>
-                                Setelah registrasi selesai peserta tidak bisa ubah data.
-                            </span>
+                            <span>Data becomes read-only.</span>
 
                         </div>
 
@@ -164,15 +146,17 @@
 
     </div>
 
-
-</div>
-
 </section>
 {{-- =========================================================
     MODAL FIELD
 ========================================================= --}}
 
-<div class="ev-modal-backdrop" id="fieldModal">
+<div
+    class="ev-modal-backdrop"
+    id="fieldModal"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="fieldModalTitle">
 
     <div class="ev-modal">
 
@@ -400,7 +384,7 @@
 
                 <button
                     type="button"
-                    class="btn btn-light"
+                    class="ev-btn ev-btn-secondary"
                     id="cancelField">
 
                     Cancel
@@ -409,7 +393,7 @@
 
                 <button
                     type="submit"
-                    class="btn btn-primary"
+                    class="ev-btn ev-btn-primary"
                     id="btnSaveField">
 
                     <i class="fa-solid fa-floppy-disk"></i>
@@ -428,732 +412,6 @@
 
 @include('event-studio.components.modal-confirm')
 
-<style>
-/* =========================================================
-   PAGE HEADER & GENERAL
-========================================================= */
-
-.ev-section {
-    margin-bottom: 5px;
-}
-
-.ev-badge {
-    display: inline-flex;
-    align-items: center;
-    padding: 8px 16px;
-    border-radius: 999px;
-    background: #EEF5FF;
-    color: #4495f9;
-    font-size: .78rem;
-    font-weight: 700;
-    margin-bottom: 18px;
-}
-
-.ev-page-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    gap: 24px;
-    margin-bottom: 24px;
-}
-
-.btn-add-field {
-    height: 46px;
-    padding: 0 20px;
-    font-size: 14px;
-    font-weight: 600;
-    border-radius: 12px;
-}
-
-/* =========================================================
-   FIELD GRID (FULL WIDTH 1 COLUMN)
-========================================================= */
-
-.ev-field-grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 12px;
-}
-
-    /* =========================================================
-    FORM SETTINGS
-    ========================================================= */
-
-    .ev-form-setting {
-        margin-bottom: 24px;
-        padding: 20px;
-        background: #fff;
-        border: 1px solid #E2E8F0;
-        border-radius: 16px;
-    }
-
-    .ev-form-setting-header {
-        display: flex;
-        align-items: flex-start;
-        gap: 14px;
-        margin-bottom: 18px;
-    }
-
-    .ev-form-setting-icon {
-        width: 42px;
-        height: 42px;
-        flex-shrink: 0;
-        border-radius: 11px;
-        background: #EEF5FF;
-        color: #4495F9;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 17px;
-    }
-
-    .ev-form-setting-header h3 {
-        margin: 0;
-        color: #0F172A;
-        font-size: 15px;
-        font-weight: 700;
-    }
-
-    .ev-form-setting-header p {
-        margin: 4px 0 0;
-        color: #64748B;
-        font-size: 12.5px;
-        line-height: 1.5;
-    }
-
-    .ev-form-setting-options {
-        display: grid;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 12px;
-    }
-
-    .ev-setting-option {
-        display: block;
-        cursor: pointer;
-    }
-
-    .ev-setting-option > input {
-        display: none;
-    }
-
-    .ev-setting-option-content {
-        position: relative;
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        min-height: 76px;
-        padding: 14px 42px 14px 14px;
-        border: 1px solid #E2E8F0;
-        border-radius: 12px;
-        background: #fff;
-        transition: .2s ease;
-    }
-
-    .ev-setting-option:hover .ev-setting-option-content {
-        border-color: #CBD5E1;
-    }
-
-    .ev-setting-option > input:checked
-    + .ev-setting-option-content {
-        border-color: #4495F9;
-        background: #F8FAFF;
-        box-shadow: 0 4px 14px rgba(68, 149, 249, .08);
-    }
-
-    .ev-setting-option-icon {
-        width: 38px;
-        height: 38px;
-        flex-shrink: 0;
-        border-radius: 10px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 15px;
-    }
-
-    .ev-setting-option-icon.allow {
-        background: #EEF5FF;
-        color: #4495F9;
-    }
-
-    .ev-setting-option-icon.lock {
-        background: #F8FAFC;
-        color: #64748B;
-    }
-
-    .ev-setting-option-text {
-        min-width: 0;
-    }
-
-    .ev-setting-option-text strong {
-        display: block;
-        margin-bottom: 3px;
-        color: #0F172A;
-        font-size: 13px;
-        font-weight: 700;
-    }
-
-    .ev-setting-option-text span {
-        display: block;
-        color: #64748B;
-        font-size: 11.5px;
-        line-height: 1.45;
-    }
-
-    .ev-setting-check {
-        position: absolute;
-        top: 50%;
-        right: 14px;
-        transform: translateY(-50%);
-        color: #CBD5E1;
-        font-size: 18px;
-    }
-
-    .ev-setting-option > input:checked
-    + .ev-setting-option-content
-    .ev-setting-check {
-        color: #4495F9;
-    }
-
-    @media (max-width: 768px) {
-
-        .ev-form-setting-options {
-            grid-template-columns: 1fr;
-        }
-
-    }
-
-
-/* =========================================================
-   FORM CARD (COMPACT & COMPACT FULL-WIDTH)
-========================================================= */
-
-.ev-form-card {
-    position: relative;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-    gap: 16px;
-    padding: 14px 20px;
-    background: #ffffff;
-    border: 1px solid #E2E8F0;
-    border-radius: 14px;
-    transition: all .2s ease;
-}
-
-.ev-form-card:hover {
-    border-color: #CBD5E1;
-    box-shadow: 0 6px 18px rgba(15, 23, 42, .04);
-}
-
-.ev-form-head {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    flex: 1;
-    min-width: 0;
-}
-
-.ev-form-info {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    min-width: 0;
-    flex: 1;
-}
-
-.ev-form-icon {
-    width: 40px;
-    height: 40px;
-    border-radius: 10px;
-    background: #EEF5FF;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #4495f9;
-    font-size: 16px;
-    flex-shrink: 0;
-}
-
-.ev-form-content {
-    min-width: 0;
-}
-
-.ev-form-content h4 {
-    margin: 0;
-    font-size: 15px;
-    font-weight: 700;
-    line-height: 1.3;
-    color: #0F172A;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-.ev-form-content p {
-    margin: 2px 0 0;
-    color: #64748B;
-    font-size: 12.5px;
-    font-weight: 500;
-}
-
-/* CARD DIVIDER (HIDE ON HORIZONTAL CARD) */
-.ev-form-card .ev-divider {
-    display: none;
-}
-
-/* FOOTER & TAGS INSIDE COMPACT CARD */
-.ev-form-footer {
-    display: flex;
-    align-items: center;
-    margin-left: auto;
-    padding-right: 12px;
-}
-
-.ev-tags {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-}
-
-.tag {
-    display: inline-flex;
-    align-items: center;
-    height: 26px;
-    padding: 0 10px;
-    border-radius: 999px;
-    font-size: 11.5px;
-    font-weight: 600;
-    white-space: nowrap;
-}
-
-.tag.system { background: #EEF4FF; color: #3B82F6; }
-.tag.custom { background: #F3E8FF; color: #7C3AED; }
-.tag.required { background: #ECFDF5; color: #059669; }
-.tag.optional { background: #F8FAFC; color: #64748B; }
-
-/* MENU DROPDOWN */
-.ev-card-menu-wrapper {
-    position: relative;
-    flex-shrink: 0;
-}
-
-.ev-card-menu {
-    width: 34px;
-    height: 34px;
-    border: none;
-    border-radius: 8px;
-    background: #F8FAFC;
-    cursor: pointer;
-    color: #64748B;
-    transition: .2s;
-}
-
-.ev-card-menu:hover {
-    background: #F1F5F9;
-    color: #0F172A;
-}
-
-.ev-card-dropdown {
-    position: absolute;
-    top: 40px;
-    right: 0;
-    width: 160px;
-    background: #fff;
-    border: 1px solid #E2E8F0;
-    border-radius: 12px;
-    padding: 6px;
-    display: none;
-    z-index: 100;
-    box-shadow: 0 10px 25px rgba(15, 23, 42, .08);
-}
-
-.ev-card-dropdown.show {
-    display: block;
-}
-
-.ev-card-dropdown button {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    border: none;
-    background: none;
-    padding: 8px 10px;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 13px;
-    color: #334155;
-    transition: .2s;
-}
-
-.ev-card-dropdown button:hover {
-    background: #F8FAFC;
-}
-
-.ev-card-dropdown .danger {
-    color: #EF4444;
-}
-
-/* =========================================================
-   MODAL DIALOG (CLEAN & WIDE)
-========================================================= */
-
-.ev-modal-backdrop {
-    position: fixed;
-    inset: 0;
-    background: rgba(15, 23, 42, 0.45);
-    backdrop-filter: blur(4px);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 1000;
-    opacity: 0;
-    visibility: hidden;
-    transition: all .2s ease;
-}
-
-.ev-modal-backdrop.show {
-    opacity: 1;
-    visibility: visible;
-}
-
-.ev-modal {
-    background: #ffffff;
-    width: 100%;
-    max-width: 700px;
-    max-height: 90vh;
-    border-radius: 20px;
-    box-shadow: 0 20px 50px rgba(15, 23, 42, 0.15);
-    overflow-y: auto;
-}
-
-.ev-modal-header {
-    padding: 20px 24px;
-    border-bottom: 1px solid #F1F5F9;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-}
-
-.ev-modal-header h3 {
-    margin: 0;
-    font-size: 18px;
-    font-weight: 700;
-    color: #0F172A;
-}
-
-.ev-modal-header p {
-    margin: 2px 0 0;
-    font-size: 13px;
-    color: #64748B;
-}
-
-.ev-modal-close {
-    width: 34px;
-    height: 34px;
-    border: none;
-    border-radius: 8px;
-    background: #F8FAFC;
-    color: #64748B;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.ev-modal-close:hover {
-    background: #F1F5F9;
-    color: #0F172A;
-}
-
-/* FORM INSIDE MODAL */
-#fieldForm {
-    padding: 20px 24px;
-}
-
-.ev-field {
-    margin-bottom: 16px;
-}
-
-.ev-label {
-    display: block;
-    font-size: 13px;
-    font-weight: 600;
-    color: #334155;
-    margin-bottom: 6px;
-}
-
-.ev-label span {
-    color: #EF4444;
-}
-
-/* FIX FONT PLACEHOLDER & TEXTAREA UNIFORMITY */
-.ev-input,
-.ev-textarea {
-    width: 100%;
-    padding: 10px 14px;
-    border-radius: 10px;
-    border: 1px solid #CBD5E1;
-    background: #FFFFFF;
-    font-family: inherit;
-    font-size: 13.5px;
-    letter-spacing: normal;
-    color: #0F172A;
-    outline: none;
-    transition: border-color .2s, box-shadow .2s;
-}
-
-.ev-textarea {
-    resize: vertical;
-    min-height: 80px;
-    line-height: 1.5;
-}
-
-.ev-input::placeholder,
-.ev-textarea::placeholder {
-    font-family: inherit;
-    font-size: 13.5px;
-    letter-spacing: normal;
-    color: #94A3B8;
-    opacity: 1;
-}
-
-.ev-input:focus,
-.ev-textarea:focus {
-    border-color: #4495f9;
-    box-shadow: 0 0 0 3px rgba(68, 149, 249, 0.15);
-}
-
-.ev-grid-2 {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 14px;
-}
-
-/* SWITCH FIELD */
-.ev-switch-field {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 14px 16px;
-    border: 1px solid #E2E8F0;
-    border-radius: 12px;
-    background: #F8FAFC;
-    margin-top: 16px;
-}
-
-.ev-switch-field strong {
-    display: block;
-    font-size: 13.5px;
-    color: #0F172A;
-}
-
-.ev-switch-field small {
-    display: block;
-    font-size: 12px;
-    color: #64748B;
-}
-
-.ev-switch {
-    position: relative;
-    width: 46px;
-    height: 26px;
-    flex-shrink: 0;
-}
-
-.ev-switch input { display: none; }
-
-.ev-switch span {
-    position: absolute;
-    inset: 0;
-    background: #CBD5E1;
-    border-radius: 999px;
-    transition: .2s;
-    cursor: pointer;
-}
-
-.ev-switch span::before {
-    content: "";
-    position: absolute;
-    left: 3px;
-    top: 3px;
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-    background: #FFF;
-    transition: .2s;
-}
-
-.ev-switch input:checked + span {
-    background: #4495f9;
-}
-
-.ev-switch input:checked + span::before {
-    transform: translateX(20px);
-}
-
-/* DYNAMIC AREA CARD */
-.ev-dynamic-card {
-    margin-top: 16px;
-    padding: 16px;
-    border: 1px solid #E2E8F0;
-    border-radius: 12px;
-    background: #F8FAFC;
-}
-
-.ev-dynamic-card h4 {
-    margin: 0 0 4px;
-    font-size: 15px;
-    font-weight: 700;
-}
-
-.ev-dynamic-card p {
-    margin: 0 0 14px;
-    color: #64748B;
-    font-size: 12.5px;
-}
-
-.ev-option-list {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-
-.ev-option-item {
-    display: flex;
-    gap: 10px;
-    align-items: center;
-}
-
-.ev-option-remove {
-    width: 38px;
-    height: 38px;
-    border: none;
-    border-radius: 10px;
-    background: #FEF2F2;
-    color: #EF4444;
-    cursor: pointer;
-    flex-shrink: 0;
-}
-
-.ev-option-add {
-    margin-top: 12px;
-    padding: 8px 14px;
-    font-size: 13px;
-}
-
-/* FILE FORMAT GRID */
-.ev-format-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-    gap: 8px;
-    margin-top: 12px;
-}
-
-.ev-format-item {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 8px 10px;
-    border: 1px solid #E2E8F0;
-    border-radius: 8px;
-    background: #fff;
-    cursor: pointer;
-    font-size: 12px;
-}
-
-.ev-format-item input {
-    accent-color: #4495f9;
-}
-
-.ev-system-info {
-    margin-top: 14px;
-    padding: 10px 12px;
-    border-radius: 8px;
-    background: #EEF5FF;
-    color: #475569;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 12.5px;
-}
-
-.ev-system-info i {
-    color: #4495f9;
-}
-
-/* FOOTER MODAL */
-.ev-modal-footer {
-    display: flex;
-    justify-content: flex-end;
-    gap: 10px;
-    margin-top: 20px;
-    padding-top: 16px;
-    border-top: 1px solid #F1F5F9;
-}
-
-.ev-modal-footer .btn {
-    padding: 9px 18px;
-    font-size: 13px;
-    font-weight: 600;
-    border-radius: 10px;
-    cursor: pointer;
-}
-
-.ev-modal-footer .btn-light {
-    background: #F1F5F9;
-    color: #475569;
-    border: none;
-}
-
-.ev-modal-footer .btn-primary {
-    background: #4495f9;
-    color: #FFF;
-    border: none;
-}
-
-/* VALIDATION & ANIMATION */
-.is-invalid {
-    border-color: #EF4444 !important;
-}
-
-.ev-error {
-    margin-top: 4px;
-    color: #EF4444;
-    font-size: 12px;
-    font-weight: 500;
-}
-
-.ev-new-card {
-    opacity: 0;
-    transform: translateY(8px);
-}
-
-.ev-field-card {
-    transition: .25s ease;
-}
-
-.ev-field-card:not(.ev-new-card) {
-    opacity: 1;
-    transform: translateY(0);
-}
-
-@media (max-width: 640px) {
-    .ev-form-card {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 12px;
-    }
-
-    .ev-form-footer {
-        margin-left: 0;
-        width: 100%;
-        justify-content: space-between;
-    }
-}
-</style>
 
 <script>
     document.addEventListener("DOMContentLoaded",function(){
@@ -1603,7 +861,7 @@ function renderDynamicArea(){
 
                         <button
                             type="button"
-                            class="btn btn-light ev-option-add"
+                            class="ev-btn ev-btn-secondary ev-option-add"
                             id="addOption">
 
                             <i class="fa-solid fa-plus"></i>
