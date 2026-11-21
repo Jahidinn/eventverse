@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminDashboardController;
+use App\Http\Controllers\AdminUserController;
 use App\Http\Controllers\ArticleController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -69,7 +70,7 @@ Route::get('/search', [HomeController::class, 'searchEvent']);
 Route::middleware(['auth'])->group(function () {
 
 	Route::get('/url-check', [EventStudioController::class, 'urlCheck']);
-	Route::prefix('event-studio')->name('event-studio.')->group(function () {
+	Route::prefix('event-studio')->name('event-studio.')->middleware(['event-studio.owner', 'permission:event-studio.access'])->group(function () {
 		Route::post('/store', [EventStudioController::class, 'store'])->name('store');
 		Route::post('/{event_id}/autosave', [EventStudioController::class, 'autosave'])->name('autosave');
 
@@ -149,105 +150,118 @@ Route::middleware(['auth'])->group(function () {
 
 	# Dashboard
 	Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-	Route::get('/dashboard/myevent', [DashboardController::class, 'myEvent']);
+	Route::get('/dashboard/myevent', [DashboardController::class, 'myEvent'])->middleware('permission:my-event.view');
 	Route::get('/dashboard/get-myevent', [DashboardController::class, 'getMyEvent']);
-	Route::get('/dashboard/manajemen-event', [DashboardController::class, 'manajemenEvent']);
-	Route::get('/dashboard/get-customform', [DashboardController::class, 'getCustomformParticipant']);
+	Route::get('/dashboard/manajemen-event', [DashboardController::class, 'manajemenEvent'])->middleware(['role:organizer', 'permission:event-studio.access']);
+	Route::get('/dashboard/get-customform', [DashboardController::class, 'getCustomformParticipant'])->middleware('role:organizer');
 	Route::post('/dashboard/delete-myevent', [DashboardController::class, 'deleteMyevent']);
 
 	# Detail mytransaction
 	Route::get('/dashboard/get-detail-transaction', [DashboardController::class, 'detailTransaction']);
 	Route::post('/dashboard/edit-form-transaction', [DashboardController::class, 'editFormTransaction']);
 
-	Route::get('/dashboard/participant-data', [DashboardController::class, 'participant']);
-	Route::get('/dashboard/get-participant', [DashboardController::class, 'getParticipant']);
-	Route::get('/dashboard/participant-download-excel/{id}', [DashboardController::class, 'downloadExcel']);
+	Route::get('/dashboard/participant-data', [DashboardController::class, 'participant'])->middleware(['role:organizer', 'permission:participants.manage']);
+	Route::get('/dashboard/participant-data/{event_id}', [DashboardController::class, 'participantEvent'])->middleware(['role:organizer', 'permission:participants.manage']);
+	Route::get('/dashboard/get-participant', [DashboardController::class, 'getParticipant'])->middleware(['role:organizer', 'permission:participants.manage']);
+	Route::get('/dashboard/participant-detail', [DashboardController::class, 'participantDetail'])->middleware(['role:organizer', 'permission:participants.manage']);
+	Route::get('/dashboard/participant-download-excel/{id}', [DashboardController::class, 'downloadExcel'])->middleware(['role:organizer', 'permission:participants.manage']);
 
-	Route::get('/dashboard/event-checkin', [DashboardController::class, 'eventCheckin']);
-	Route::get('/dashboard/get-participan-checkin', [DashboardController::class, 'getParticipantCheckin']);
-	Route::post('/dashboard/participant-checkin', [DashboardController::class, 'checkinProcess']);
+	Route::get('/dashboard/event-checkin', [DashboardController::class, 'eventCheckin'])->middleware(['role:organizer', 'permission:checkin.manage']);
+	Route::get('/dashboard/event-checkin/{event_id}', [DashboardController::class, 'eventCheckinEvent'])->middleware(['role:organizer', 'permission:checkin.manage']);
+	Route::get('/dashboard/get-participan-checkin', [DashboardController::class, 'getParticipantCheckin'])->middleware(['role:organizer', 'permission:checkin.manage']);
+	Route::post('/dashboard/participant-checkin', [DashboardController::class, 'checkinProcess'])->middleware(['role:organizer', 'permission:checkin.manage']);
 
-	Route::get('/dashboard/transaction-report', [DashboardController::class, 'transactionReport']);
-	Route::get('/dashboard/get-transaction-report', [DashboardController::class, 'getTransactionReport']);
-	Route::get('/dashboard/check-event-date', [DashboardController::class, 'checkEventDate']);
-	Route::post('/dashboard/withdraw-process', [DashboardController::class, 'withdraw']);
-	Route::get('/dashboard/withdraw-history', [DashboardController::class, 'withdrawHistory']);
+	Route::get('/dashboard/transaction-report', [DashboardController::class, 'transactionReport'])->middleware(['role:organizer', 'permission:finance.view']);
+	Route::get('/dashboard/get-transaction-report', [DashboardController::class, 'getTransactionReport'])->middleware(['role:organizer', 'permission:finance.view']);
+	Route::get('/dashboard/check-event-date', [DashboardController::class, 'checkEventDate'])->middleware(['role:organizer', 'permission:finance.view']);
+	Route::post('/dashboard/withdraw-process', [DashboardController::class, 'withdraw'])->middleware(['role:organizer', 'permission:finance.view']);
+	Route::get('/dashboard/withdraw-history', [DashboardController::class, 'withdrawHistory'])->middleware(['role:organizer', 'permission:finance.view']);
 
-	Route::get('/dashboard/article', [DashboardController::class, 'article']);
-	Route::get('/dashboard/article/get', [DashboardController::class, 'getArticle']);
+	Route::get('/dashboard/article', [DashboardController::class, 'article'])->middleware('permission:articles.create');
+	Route::get('/dashboard/article/get', [DashboardController::class, 'getArticle'])->middleware('permission:articles.create');
 
-	Route::get('/dashboard/my-profile', [UserProfileController::class, 'index']);
-	Route::post('/dashboard/edit-profile-image', [UserProfileController::class, 'editImage']);
-	Route::post('/dashboard/edit-password', [UserProfileController::class, 'editPassword']);
-	Route::get('/dashboard/get-data-profile', [UserProfileController::class, 'getMyProfile']);
-	Route::post('/dashboard/edit-profile-process', [UserProfileController::class, 'editProfile']);
+	Route::get('/dashboard/my-profile', [UserProfileController::class, 'index'])->middleware('permission:profile.manage');
+	Route::post('/dashboard/edit-profile-image', [UserProfileController::class, 'editImage'])->middleware('permission:profile.manage');
+	Route::post('/dashboard/edit-password', [UserProfileController::class, 'editPassword'])->middleware('permission:profile.manage');
+	Route::get('/dashboard/get-data-profile', [UserProfileController::class, 'getMyProfile'])->middleware('permission:profile.manage');
+	Route::post('/dashboard/edit-profile-process', [UserProfileController::class, 'editProfile'])->middleware('permission:profile.manage');
+	Route::post('/dashboard/account-mode', [UserProfileController::class, 'updateMode'])->middleware('permission:profile.manage');
 
-	Route::get('/dashboard/organization', [OrganizationController::class, 'index']);
-	Route::post('/dashboard/add-organization', [OrganizationController::class, 'createOrg']);
-	Route::post('/dashboard/edit-organization', [OrganizationController::class, 'editOrg']);
-	Route::get('/dashboard/get-myorganization', [OrganizationController::class, 'getMyOrg']);
-	Route::get('/dashboard/detail-organization', [OrganizationController::class, 'detailOrg']);
-	Route::post('/dashboard/delete-organization', [OrganizationController::class, 'deleteOrg']);
-	Route::get('/dashboard/get-organization', [OrganizationController::class, 'getOrg']);
+	Route::get('/dashboard/organization', [OrganizationController::class, 'index'])->middleware('permission:organization.manage');
+	Route::post('/dashboard/add-organization', [OrganizationController::class, 'createOrg'])->middleware('permission:organization.manage');
+	Route::post('/dashboard/edit-organization', [OrganizationController::class, 'editOrg'])->middleware('permission:organization.manage');
+	Route::get('/dashboard/get-myorganization', [OrganizationController::class, 'getMyOrg'])->middleware('permission:organization.manage');
+	Route::get('/dashboard/detail-organization', [OrganizationController::class, 'detailOrg'])->middleware('permission:organization.manage');
+	Route::post('/dashboard/delete-organization', [OrganizationController::class, 'deleteOrg'])->middleware('permission:organization.manage');
+	Route::get('/dashboard/get-organization', [OrganizationController::class, 'getOrg'])->middleware('permission:organization.manage');
 
-	Route::post('/dashboard/follow-organization', [OrganizationController::class, 'followOrg']);
-	Route::post('/dashboard/unfollow-organization', [OrganizationController::class, 'unfollowOrg']);
-	Route::post('/dashboard/accept-follow', [OrganizationController::class, 'AcceptFollow']);
-	Route::post('/dashboard/remove-member', [OrganizationController::class, 'removeMember']);
-	Route::get('/dashboard/get-foll-organization', [OrganizationController::class, 'myFollowingOrg']);
+	Route::post('/dashboard/follow-organization', [OrganizationController::class, 'followOrg'])->middleware('permission:organization.manage');
+	Route::post('/dashboard/unfollow-organization', [OrganizationController::class, 'unfollowOrg'])->middleware('permission:organization.manage');
+	Route::post('/dashboard/accept-follow', [OrganizationController::class, 'AcceptFollow'])->middleware('permission:organization.manage');
+	Route::post('/dashboard/remove-member', [OrganizationController::class, 'removeMember'])->middleware('permission:organization.manage');
+	Route::get('/dashboard/get-foll-organization', [OrganizationController::class, 'myFollowingOrg'])->middleware('permission:organization.manage');
 
-	Route::get('/dashboard/get-organization-member', [OrganizationController::class, 'getOrgMember']);
-	Route::get('/dashboard/get-organization-request', [OrganizationController::class, 'getOrgMemberReequest']);
+	Route::get('/dashboard/get-organization-member', [OrganizationController::class, 'getOrgMember'])->middleware('permission:organization.manage');
+	Route::get('/dashboard/get-organization-request', [OrganizationController::class, 'getOrgMemberReequest'])->middleware('permission:organization.manage');
 
 	# Artikel
-	Route::post('/administrator/article/post', [ArticleController::class, 'create']);
-	Route::get('/administrator/article/get', [ArticleController::class, 'getArticle']);
+	Route::post('/administrator/article/post', [ArticleController::class, 'create'])->middleware('permission:articles.create');
+	Route::get('/administrator/article/get', [ArticleController::class, 'getArticle'])->middleware(['admin', 'permission:articles.manage']);
 	Route::post('/administrator/article/edit', [ArticleController::class, 'editArticle']);
 	Route::post('/administrator/article/delete', [ArticleController::class, 'deleteArticle']);
 
 	Route::middleware(['admin'])->group(function () {
 		// Rute-rute yang akan terkena middleware administrator
-		Route::get('/administrator', [AdminDashboardController::class, 'index']);
-		Route::get('/dashboard/admin', [AdminDashboardController::class, 'index']);
+		Route::get('/administrator', [AdminDashboardController::class, 'index'])->middleware('permission:platform.view');
+		Route::get('/dashboard/admin', [AdminDashboardController::class, 'index'])->middleware('permission:platform.view');
 
-		Route::get('/administrator/wd-request', [AdminDashboardController::class, 'withdrawRequest']);
-		Route::get('/administrator/wd-request/get-data', [AdminDashboardController::class, 'withdrawRequestData']);
-		Route::get('/administrator/wd-history/get-data', [AdminDashboardController::class, 'withdrawHistoryData']);
-		Route::post('/administrator/wd-request/tolak', [AdminDashboardController::class, 'tolakWithdraw']);
-		Route::post('/administrator/wd-request/accept', [AdminDashboardController::class, 'accepWithdraw']);
+		Route::get('/administrator/payments', [AdminDashboardController::class, 'payments'])->middleware('permission:payments.view');
+		Route::get('/administrator/users', [AdminUserController::class, 'index'])->middleware('permission:users.manage')->name('administrator.users');
+		Route::get('/administrator/users/{user}/edit', [AdminUserController::class, 'edit'])->middleware('permission:users.manage')->name('administrator.users.edit');
+		Route::put('/administrator/users/{user}', [AdminUserController::class, 'update'])->middleware('permission:users.manage')->name('administrator.users.update');
+		Route::get('/administrator/roles', [AdminUserController::class, 'roles'])->middleware('permission:roles.manage')->name('administrator.roles');
+		Route::get('/administrator/audit-logs', [AdminUserController::class, 'auditLogs'])->middleware('permission:audit.view')->name('administrator.audit-logs');
+		Route::get('/administrator/roles/{role}/permissions', [AdminUserController::class, 'editPermissions'])->middleware('permission:roles.manage')->name('administrator.roles.permissions');
+		Route::put('/administrator/roles/{role}/permissions', [AdminUserController::class, 'updatePermissions'])->middleware('permission:roles.manage')->name('administrator.roles.permissions.update');
 
-		Route::get('/administrator/transaction-check', [AdminDashboardController::class, 'adminTransactionCheck']);
-		Route::get('/administrator/transaction-check/get-event', [AdminDashboardController::class, 'adminGetEvent']);
-		Route::get('/administrator/transaction-check/get-transaction', [AdminDashboardController::class, 'adminGetTransaction']);
-		Route::post('/administrator/transaction-check/check', [AdminDashboardController::class, 'checktTransaction']);
+		Route::get('/administrator/wd-request', [AdminDashboardController::class, 'withdrawRequest'])->middleware('permission:withdrawals.manage');
+		Route::get('/administrator/wd-request/get-data', [AdminDashboardController::class, 'withdrawRequestData'])->middleware('permission:withdrawals.manage');
+		Route::get('/administrator/wd-history/get-data', [AdminDashboardController::class, 'withdrawHistoryData'])->middleware('permission:withdrawals.manage');
+		Route::post('/administrator/wd-request/tolak', [AdminDashboardController::class, 'tolakWithdraw'])->middleware('permission:withdrawals.manage');
+		Route::post('/administrator/wd-request/accept', [AdminDashboardController::class, 'accepWithdraw'])->middleware('permission:withdrawals.manage');
 
-		Route::get('/administrator/article', [AdminDashboardController::class, 'article']);
-		Route::get('/administrator/blog-category', [AdminDashboardController::class, 'articleCategories']);
-		Route::get('/administrator/event-management/selected', [AdminDashboardController::class, 'selectedEventManagement']);
-		Route::get('/administrator/event-management/promotion', [AdminDashboardController::class, 'promotionEventManagement']);
+		Route::get('/administrator/transaction-check', [AdminDashboardController::class, 'adminTransactionCheck'])->middleware('permission:payments.view');
+		Route::get('/administrator/transaction-check/get-event', [AdminDashboardController::class, 'adminGetEvent'])->middleware('permission:payments.view');
+		Route::get('/administrator/transaction-check/get-transaction', [AdminDashboardController::class, 'adminGetTransaction'])->middleware('permission:payments.view');
+		Route::post('/administrator/transaction-check/check', [AdminDashboardController::class, 'checktTransaction'])->middleware('permission:payments.view');
+
+		Route::get('/administrator/article', [AdminDashboardController::class, 'article'])->middleware('permission:articles.manage');
+		Route::get('/administrator/blog-category', [AdminDashboardController::class, 'articleCategories'])->middleware('permission:articles.manage');
+		Route::get('/administrator/event-management/selected', [AdminDashboardController::class, 'selectedEventManagement'])->middleware('permission:events.manage');
+		Route::get('/administrator/event-management/promotion', [AdminDashboardController::class, 'promotionEventManagement'])->middleware('permission:events.manage');
 
 		# Management event
-		Route::get('/administrator/event-management/get-selected', [AdminDashboardController::class, 'getSelectedEvent']);
-		Route::get('/administrator/event-management/get-event', [AdminDashboardController::class, 'getDataEvent']);
-		Route::post('/administrator/event-management/select-event', [AdminDashboardController::class, 'selectEvent']);
-		Route::post('/administrator/event-management/unselect-event', [AdminDashboardController::class, 'unselectEvent']);
+		Route::get('/administrator/event-management/get-selected', [AdminDashboardController::class, 'getSelectedEvent'])->middleware('permission:events.manage');
+		Route::get('/administrator/event-management/get-event', [AdminDashboardController::class, 'getDataEvent'])->middleware('permission:events.manage');
+		Route::post('/administrator/event-management/select-event', [AdminDashboardController::class, 'selectEvent'])->middleware('permission:events.manage');
+		Route::post('/administrator/event-management/unselect-event', [AdminDashboardController::class, 'unselectEvent'])->middleware('permission:events.manage');
 
-		Route::get('/administrator/event-management/get-promotion', [AdminDashboardController::class, 'getPromotionEvent']);
-		Route::get('/administrator/event-management/get-event-for-promotion', [AdminDashboardController::class, 'getEventForPromotion']);
-		Route::post('/administrator/event-management/promote-event', [AdminDashboardController::class, 'promoteEvent']);
-		Route::post('/administrator/event-management/unpromote-event', [AdminDashboardController::class, 'unpromoteEvent']);
+		Route::get('/administrator/event-management/get-promotion', [AdminDashboardController::class, 'getPromotionEvent'])->middleware('permission:events.manage');
+		Route::get('/administrator/event-management/get-event-for-promotion', [AdminDashboardController::class, 'getEventForPromotion'])->middleware('permission:events.manage');
+		Route::post('/administrator/event-management/promote-event', [AdminDashboardController::class, 'promoteEvent'])->middleware('permission:events.manage');
+		Route::post('/administrator/event-management/unpromote-event', [AdminDashboardController::class, 'unpromoteEvent'])->middleware('permission:events.manage');
 
 		# Kategori artikel/blog
-		Route::get('/administrator/blog-category/get', [ArticleController::class, 'getCategory']);
-		Route::post('/administrator/blog-category/submit', [ArticleController::class, 'submitCategory']);
-		Route::post('/administrator/blog-category/edit', [ArticleController::class, 'editCategory']);
-		Route::post('/administrator/blog-category/delete', [ArticleController::class, 'deleteCategory']);
+		Route::get('/administrator/blog-category/get', [ArticleController::class, 'getCategory'])->middleware('permission:articles.manage');
+		Route::post('/administrator/blog-category/submit', [ArticleController::class, 'submitCategory'])->middleware('permission:articles.manage');
+		Route::post('/administrator/blog-category/edit', [ArticleController::class, 'editCategory'])->middleware('permission:articles.manage');
+		Route::post('/administrator/blog-category/delete', [ArticleController::class, 'deleteCategory'])->middleware('permission:articles.manage');
 
 		# Jenis artikel
-		Route::get('/administrator/blog-type/get', [ArticleController::class, 'getType']);
-		Route::post('/administrator/blog-type/submit', [ArticleController::class, 'submitType']);
-		Route::post('/administrator/blog-type/edit', [ArticleController::class, 'editType']);
-		Route::post('/administrator/blog-type/delete', [ArticleController::class, 'deleteType']);
+		Route::get('/administrator/blog-type/get', [ArticleController::class, 'getType'])->middleware('permission:articles.manage');
+		Route::post('/administrator/blog-type/submit', [ArticleController::class, 'submitType'])->middleware('permission:articles.manage');
+		Route::post('/administrator/blog-type/edit', [ArticleController::class, 'editType'])->middleware('permission:articles.manage');
+		Route::post('/administrator/blog-type/delete', [ArticleController::class, 'deleteType'])->middleware('permission:articles.manage');
 	});
 });
 
