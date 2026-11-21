@@ -65,3 +65,148 @@ BUILD CATATAN:
 -- npm run build:studio
 -- php artisan view:clear
 -- File CSS hasil build: public/assets/css/studio.css
+
+19112026
+-- Dashboard Phase 3A: Tailwind shell + organizer overview + admin overview
+-- Menambahkan build CSS dashboard terpisah: resources/css/dashboard-app.css -> public/assets/css/dashboard-app.css
+-- Menambahkan layout dashboard modern dengan sidebar/topbar responsif dan mobile drawer
+-- Overview organizer & admin memakai data terverifikasi; data legacy/sandbox dipisahkan dan diberi banner
+-- Memperbaiki query admin dashboard yang memakai kolom total_price/email yang sudah tidak ada
+-- Memperbaiki harga My Tickets yang masih membaca total_price
+-- Halaman dashboard lain masih memakai layout lama; migrasi berikutnya di Phase 3B
+
+BUILD DASHBOARD:
+-- npm run build:dashboard
+-- php artisan view:clear
+-- php artisan view:cache
+-- File CSS: public/assets/css/dashboard-app.css
+
+
+19112026 — Phase 3B (partial)
+-- Menambahkan EventPolicy, TransactionPolicy, ParticipantPolicy, WithdrawalPolicy
+-- Endpoint dashboard participant, report, form, delete, check-in, withdraw, export sekarang memakai ownership policy
+-- Withdrawal request memakai user login, rekening dari profil, validasi amount/minimum, lock event, dan cek saldo
+-- My Tickets dimigrasikan ke Tailwind shell (kartu tiket, search, pagination, aksi bayar/detail/invoice/ticket)
+-- Check-in dimigrasikan ke Tailwind shell (event picker, statistik, scan kode, tabel, check-in ganda ditolak)
+-- Sisa: Events, Participants, Finance/Transactions, admin payment monitor, dan policy hardening di modul lain
+
+-- Phase 3B lanjutan: Participants, Finance/Withdrawals, Events, admin Payments
+-- Participant detail memakai endpoint JSON baru /dashboard/participant-detail
+-- Finance page memakai event finance service + drawer detail/history/withdraw
+-- Events page memakai Event Studio links; delete event dilindungi EventPolicy
+-- Admin payments page baru /administrator/payments (read-only) menggantikan link transaction-check lama
+-- Catatan: halaman Events tidak lagi memakai modal ticket/form lama; pengelolaan diarahkan ke Event Studio
+
+-- Phase 3C: admin withdrawal UI modern + approval guard
+-- Admin withdrawals memakai Tailwind shell, tab Pending/History, approve/reject
+-- Approve/reject memakai lock, guard status Proses, cek saldo, email setelah commit
+-- Route /administrator/transaction-check lama sekarang redirect ke /administrator/payments
+-- Article edit/delete memakai ArticlePolicy (owner/admin)
+-- Catatan: audit trail/proof transfer tetap membutuhkan schema (belum diubah)
+
+-- Phase 3C lanjutan: Profile modern + perbaikan bank profile
+-- Admin withdrawals UI modern + approval/rejection guard + lock + saldo check
+-- Admin payments page tetap read-only; transaction-check lama redirect ke payments
+-- Article edit/delete memakai ArticlePolicy
+-- Sisa halaman lama: Organization, admin Articles/Event selection, Event Studio endpoint hardening
+
+-- Event Studio: middleware event-studio.owner melindungi seluruh route /event-studio/{event_id}
+-- Admin tetap boleh akses Event Studio; owner event boleh; user lain 403
+
+-- Admin Featured events + Promoted events pages modernized (Tailwind, fetch, drawer)
+-- Sisa halaman lama: Organization, admin Articles/Blog Categories
+
+
+19112026 — Spatie roles (3 role)
+-- Package: spatie/laravel-permission 6.25.0
+-- Role: admin, organizer, participant
+-- User boleh multi-role; admin+organizer bisa switch /administrator <-> /dashboard
+-- Login redirect: admin -> /administrator, organizer -> /dashboard, participant -> /dashboard/myevent
+-- Organizer routes memakai middleware role:organizer
+-- Event Studio memakai ownership policy; admin+organizer sebagai organizer biasa saat di /dashboard
+-- Admin bypass policy hanya saat request berada di /administrator
+-- category_id lama tetap disimpan untuk kompatibilitas
+-- Event/organization creation otomatis memberi role organizer
+
+DEPLOY ROLES:
+-- composer install --no-dev --optimize-autoloader
+-- php artisan migrate --force
+-- php artisan db:seed --class=RoleSeeder --force (untuk instalasi baru / user yang belum punya role)
+-- php artisan permission:cache-reset
+-- php artisan optimize:clear
+
+-- Koreksi alur dashboard: Event Studio memakai event_id, detail publik memakai slug
+-- Backfill event_id untuk 27 event lama (migration 2026_11_19_173000)
+-- Semua link dashboard ke Event Studio memakai event_id
+-- /event/create dialihkan ke modal Buat Event; submit ke /event-studio/store lalu redirect ke /event-studio/{event_id}/basic
+-- Menu tiket tidak ada di dashboard; pengelolaan tiket/form ada di Event Studio
+-- Event Studio form endpoints diperbaiki memakai event_id, bukan id
+
+-- Fix modal create event: custom .dash-modal fixed overlay, tidak lagi muncul di bawah halaman
+-- Semua view dashboard tidak lagi memakai extends layout AdminLTE lama
+-- Organization dibangun ulang dengan Tailwind + fetch
+-- Article/Admin Article memakai modern shell dengan legacy content bridge; redesign konten menyusul
+-- Link Event Studio memakai event_id; detail publik memakai slug; event_id lama di-backfill
+
+-- Events page: card modern, hanya 2 aksi (Event Studio + Delete), title/cover ke detail slug
+-- Pagination component modern (numbered, active, prev/next) dipakai di Events
+-- Button Peserta dihapus dari card; peserta punya menu sendiri
+
+-- Participants: list event -> halaman /dashboard/participant-data/{event_id}; tidak ada hide/show panel
+-- Check-in: list event -> halaman /dashboard/event-checkin/{event_id}; tidak ada hide/show panel
+-- Detail peserta/check-in menjadi halaman sendiri dan memakai event_id
+-- Pagination list memakai komponen modern
+
+-- Peserta legacy tidak muncul karena 27 transaksi Paid belum punya transaction_participants
+-- Migration 2026_11_19_180000 membackfill participant rows dari buyer data (quantity=1, Paid)
+-- Participants & Check-in sekarang memakai halaman terpisah per event_id
+
+-- Menu organizer: Events -> Event Management, My tickets -> My Event
+-- Mobile bottom sticky quick nav: Event Management + My Event (organizer only)
+-- Konten diberi padding bawah saat quick nav aktif agar tidak tertutup
+
+-- My Event cards redesigned: status-colored accent, ticket-style divider, date/status badge, ticket pill, price, code
+
+-- My Event card + buttons rewritten with Tailwind utilities only (no dash-my-event custom CSS)
+-- Pagination component converted to Tailwind utilities
+
+-- Color refresh: white sidebar retained; soft blue/violet canvas and modern content accents
+-- Added violet/cyan/pink KPI accents + color washes, gradient primary buttons, colored page titles/eyebrows
+
+-- Admin Users: list, search, role filter, pagination, edit profile + sync Spatie roles
+-- Admin Roles & permissions: role counts, granular permission state, actual role capability matrix
+-- Safety: admin tidak bisa melepas role admin dari akun sendiri; minimal satu admin
+-- Email diubah -> verifikasi direset
+
+-- Invoice number: kolom sudah ada, sekarang diisi otomatis lewat Transaction::created
+-- Format INV-YYYYMMDD-000123; 33 transaksi lama sudah dibackfill
+-- Admin payments search juga mencari invoice_number
+-- Sidebar logo: hapus teks Eventverse/role, hanya logo
+
+-- Admin Users table diberi padding horizontal/vertikal di wrapper
+-- Edit user dari list sekarang memakai modal + AJAX JSON; validasi dan role sync tetap di controller
+-- Modal edit user memuat payload user dari server; success reload menampilkan flash
+
+-- Security hardening: organization ownership checks, admin article list restriction, draft event 404, atomic check-in
+-- Granular permissions (16) seeded; admin/organizer/participant assigned; permission middleware on admin/organizer/account routes
+-- Role permission editor at /administrator/roles/{role}/permissions
+-- Audit log table/page; logs role user changes, role permissions, withdrawal decisions, check-in
+-- Legacy Paid transactions normalized (grand_total from subtotal, paid_at from created_at); alert cleared
+-- Articles/Admin Articles/Blog Categories rebuilt with Tailwind; legacy-assets bridge removed
+-- Tests added: SecurityRegressionTest (6 tests)
+-- Refund/cancel gateway flow intentionally not automated (requires business/gateway rules)
+
+-- Finance & withdrawals redesigned: global balance hero, KPI, progress, modern event finance cards, server-side withdrawal stats
+-- Legacy dashboard layouts/js/adminLTE/bootstrap plugins moved to trash/dashboard-legacy (chart.js + fontawesome retained)
+-- Registration now assigns organizer + participant (hybrid); profile mode selector participant/organizer/hybrid
+-- Admin role preserved when changing profile mode; organizer role no longer has my-event.view
+-- Profile photo action placed under photo; profile redesign
+-- Registration alert explains personal vs organizer/hybrid account; form layout unchanged
+
+-- Overview: gradient workspace hero with quick stats/actions, colored KPI, trend badge
+-- My Event: KPI summary, status filter pills, modern cards
+-- Event Management: KPI summary and accent event cards (draft/published)
+-- Participants & Check-in: KPI summaries, accent cards, modern scanner panel on check-in detail
+-- Finance/withdrawals: modern hero, KPI, progress cards and admin request queue
+-- Legacy dashboard files moved to trash/dashboard-legacy (layouts, JS, unused AdminLTE/Bootstrap assets)
+-- Register default hybrid; profile account mode selector; photo action below photo
