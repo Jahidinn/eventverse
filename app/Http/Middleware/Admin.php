@@ -16,13 +16,10 @@ class Admin
 
 	public function handle(Request $request, Closure $next): Response
 	{
-		//Buat mmidleware
-		$userClass = auth()->user()->category_id;
-
-		if ($userClass == 2) {
+		if (auth()->check() && auth()->user()->hasRole('admin')) {
 			return $next($request);
-		} else {
-			return redirect()->intended('/dashboard');
 		}
+
+		abort(403, 'Akses admin diperlukan.');
 	}
 }

@@ -335,6 +335,7 @@ class DatabaseSeeder extends Seeder
             PaymentCategorySeeder::class,
             PaymentMethodSeeder::class,
             PaymentGatewayMethodSeeder::class,
+            RoleSeeder::class,
         ]);
 	}
 }

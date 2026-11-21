@@ -54,6 +54,10 @@ class Kernel extends HttpKernel
 	 */
 	protected $middlewareAliases = [
 		'admin' => \App\Http\Middleware\Admin::class,
+		'role' => \Spatie\Permission\Middleware\RoleMiddleware::class,
+		'permission' => \Spatie\Permission\Middleware\PermissionMiddleware::class,
+		'role_or_permission' => \Spatie\Permission\Middleware\RoleOrPermissionMiddleware::class,
+		'event-studio.owner' => \App\Http\Middleware\EnsureEventStudioOwner::class,
 		'auth' => \App\Http\Middleware\Authenticate::class,
 		'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
 		'auth.session' => \Illuminate\Session\Middleware\AuthenticateSession::class,
