@@ -241,7 +241,7 @@
                     <a href="/login" class="mobile-menu-link block px-4 py-3 rounded-lg text-sm font-medium text-[#0f172a] hover:bg-[#f8fafc] hover:text-[#2282ff] transition-colors">Login</a>
                 @endauth
 
-                <a href="/create-event" class="mobile-menu-link flex items-center justify-center gap-2 mt-2 px-4 py-3 rounded-xl text-sm font-semibold text-white bg-[#2282ff] hover:bg-[#1b6cd6] transition-colors">
+                <a href="/dashboard" class="mobile-menu-link flex items-center justify-center gap-2 mt-2 px-4 py-3 rounded-xl text-sm font-semibold text-white bg-[#2282ff] hover:bg-[#1b6cd6] transition-colors">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/>
                     </svg>
