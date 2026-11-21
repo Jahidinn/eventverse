@@ -11,7 +11,7 @@
                 <i class="fa-solid fa-clipboard-list"></i>
             </div>
             <div class="ev-page-title-copy">
-                <h2 class="ev-title">Registration <span class="accent">flow</span></h2>
+                <h2 class="ev-title">Registration <span class="accent">form</span></h2>
                 <p class="ev-subtitle">Fields and settings for attendees.</p>
             </div>
         </div>
@@ -580,10 +580,10 @@
 
         const url = fieldId
 
-            ? "{{ route('event-studio.form.update', [$event->id, ':id']) }}"
+            ? "{{ route('event-studio.form.update', [$event->event_id, ':id']) }}"
                 .replace(":id", fieldId)
 
-            : "{{ route('event-studio.form.store', $event->id) }}";
+            : "{{ route('event-studio.form.store', $event->event_id) }}";
 
         const formData = new FormData(form);
 
@@ -1351,7 +1351,7 @@ document.addEventListener("click", function (e) {
 
             const { ok, data } = await Studio.request(
 
-                "{{ route('event-studio.form.delete', [$event->id, ':id']) }}"
+                "{{ route('event-studio.form.delete', [$event->event_id, ':id']) }}"
                     .replace(":id", fieldId),
 
                 {

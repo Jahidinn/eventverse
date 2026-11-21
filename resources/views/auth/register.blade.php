@@ -90,6 +90,17 @@
                 </p>
             </div>
 
+            <div class="mb-5 flex items-start gap-3 rounded-2xl border border-[#bfdbfe] bg-gradient-to-br from-[#eff6ff] to-[#f5f3ff] p-3.5">
+                <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-white text-[#1d4ed8] shadow-sm"><i class="ti ti-info-circle text-lg"></i></span>
+                <div>
+                    <p class="text-[12px] font-bold text-[#1e3a8a]">Akun untuk pribadi atau organizer</p>
+                    <p class="mt-1 text-[11px] leading-relaxed text-[#475569]">
+                        Registrasi otomatis mengaktifkan mode <strong>hybrid</strong> (peserta + organizer).
+                        Kamu bisa mengubahnya menjadi organizer only atau participant di halaman Profile.
+                    </p>
+                </div>
+            </div>
+
             {{-- Form --}}
             <form action="/register" method="POST" class="space-y-4">
                 @csrf

@@ -12,7 +12,7 @@
                 <i class="fa-solid fa-gift"></i>
             </div>
             <div class="ev-page-title-copy">
-                <h2 class="ev-title">Participant <span class="accent">perks</span></h2>
+                <h2 class="ev-title">Participant <span class="accent">facilities</span></h2>
                 <p class="ev-subtitle">Benefits included with each ticket.</p>
             </div>
         </div>

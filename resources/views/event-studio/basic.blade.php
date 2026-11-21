@@ -11,7 +11,7 @@
                 <i class="fa-solid fa-wand-magic-sparkles"></i>
             </div>
             <div class="ev-page-title-copy">
-                <h2 class="ev-title">Event <span class="accent">essentials</span></h2>
+                <h2 class="ev-title">Basic <span class="accent">information</span></h2>
                 <p class="ev-subtitle">Identity, cover and organizer.</p>
             </div>
         </div>

@@ -13,8 +13,8 @@
                 <i class="fa-solid fa-location-dot"></i>
             </div>
             <div class="ev-page-title-copy">
-                <h2 class="ev-title">Time, place &amp; <span class="accent">story</span></h2>
-                <p class="ev-subtitle">Schedule, location and description.</p>
+                <h2 class="ev-title">Detail <span class="accent">information</span></h2>
+                <p class="ev-subtitle">Schedule, time, location and description.</p>
             </div>
         </div>
     </div>
