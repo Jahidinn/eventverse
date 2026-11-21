@@ -5,7 +5,9 @@
         "dev": "vite",
         "build": "vite build",
         "build:studio": "tailwindcss -c tailwind.config.cjs -i ./resources/css/studio.css -o ./public/assets/css/studio.css --minify",
-        "watch:studio": "tailwindcss -c tailwind.config.cjs -i ./resources/css/studio.css -o ./public/assets/css/studio.css --watch"
+        "watch:studio": "tailwindcss -c tailwind.config.cjs -i ./resources/css/studio.css -o ./public/assets/css/studio.css --watch",
+        "build:dashboard": "tailwindcss -c tailwind.dashboard.cjs -i ./resources/css/dashboard-app.css -o ./public/assets/css/dashboard-app.css --minify",
+        "watch:dashboard": "tailwindcss -c tailwind.dashboard.cjs -i ./resources/css/dashboard-app.css -o ./public/assets/css/dashboard-app.css --watch"
     },
     "devDependencies": {
         "@prettier/plugin-php": "0.14.3",
