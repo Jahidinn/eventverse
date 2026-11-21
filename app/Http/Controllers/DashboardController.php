@@ -16,6 +16,8 @@ use App\Models\ArticleCategory;
 use App\Models\EventCategory;
 use App\Models\TransactionForm;
 use App\Models\TransactionParticipant;
+use App\Services\Dashboard\OverviewService;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 use PhpOffice\PhpSpreadsheet\Style\Fill;
 use Yajra\DataTables\Facades\DataTables;
@@ -28,33 +30,20 @@ use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 
 class DashboardController extends Controller
 {
-	public function index()
+	public function index(OverviewService $overview)
 	{
-		//Tambahkan data myevent, event, peserta, transaksi
-		$user_id = auth()->user()->id;
-		$totalPeserta = 0;
-		$biayaAdmin = config('app.biaya_admin');
-		$totalTransaksi = 0;
+		$user = auth()->user();
 
-		$eventDiikuti = Transaction::where('user_id', $user_id)->count();
-		$eventDibuat = Event::where('user_id', $user_id)->get();
+		if ($user->hasRole('admin') && !$user->hasRole('organizer')) {
+			return redirect('/administrator');
+		}
 
-		foreach ($eventDibuat as $event) {
-			$jumlahPeserta = Transaction::where('event_id', $event->id)->where('status', 'Paid')->count();
-			$transaksi = Transaction::where('event_id', $event->id)->where('status', 'Paid')->sum('grand_total');
-
-			// Tambahkan jumlah peserta ke totalPeserta
-			$totalPeserta += $jumlahPeserta;
-
-			// Tambahkan jumlah transaksi ke totalTransaksi
-			$totalTransaksi += $transaksi;
+		if (!$user->hasRole('organizer')) {
+			return redirect('/dashboard/myevent');
 		}
 
 		return view('dashboard.page-dashboard', [
-			'eventDiikuti' => $eventDiikuti,
-			'eventDibuat' => count($eventDibuat),
-			'totalPeserta' => $totalPeserta,
-			'totalTransaksi' => $totalTransaksi,
+			'overview' => $overview->forOrganizer($user),
 		]);
 	}
 
@@ -62,26 +51,32 @@ class DashboardController extends Controller
 	public function myEvent(Request $request)
 	{
 		$search = $request->key;
+		$status = $request->status;
 
 		if (!auth()->user()) {
 			return response()->json(['error' => 'Gagal!']);
 		}
 		$user_id = auth()->user()->id;
-		
+
 		$transaction = Transaction::with(['event', 'ticket', 'participants.forms'])
 			->where('user_id', $user_id)
 			->orderByRaw('id DESC');
-
 
 		if (!empty($search)) {
 			$transaction = $transaction->whereHas('event', function ($query) use ($search) {
 				$query->where('title', 'like', '%' . $search . '%');
 			});
 		}
+
+		if (in_array($status, ['Paid', 'Pending', 'Unpaid', 'Expired', 'Cancelled', 'Refunded'], true)) {
+			$transaction = $transaction->where('status', $status);
+		}
+
 		$transaction = $transaction->paginate(10)->withQueryString()->onEachSide(2);
 
 		return view('dashboard.myevent', [
 			'myevents' => $transaction,
+			'activeStatus' => $status,
 		]);
 	}
 
@@ -93,6 +88,9 @@ class DashboardController extends Controller
 
 		$detail_event = Event::where('id', $event_id)->first();
 		$detail_transaksi = Transaction::where('id', $transaction_id)->first();
+
+		abort_if(!$detail_event || !$detail_transaksi, 404);
+		$this->authorize('view', $detail_transaksi);
 
 		$data_form = CustomForm::where('event_id', $event_id)->get();
 		$data = [];
@@ -123,6 +121,7 @@ class DashboardController extends Controller
 		$form = TransactionForm::find($value_id);
 
 		if ($form) {
+			$this->authorize('update', $form->transaction);
 
 			$data = [
 				'form_value' => $value
@@ -132,6 +131,9 @@ class DashboardController extends Controller
 			$result = $form;
 			# code...
 		} else {
+			$transaction = Transaction::findOrFail($trx_id);
+			$this->authorize('update', $transaction);
+
 			$data = [
 				'form_id' => $form_id,
 				'transaction_id' => $trx_id,
@@ -149,6 +151,9 @@ class DashboardController extends Controller
 
 	public function deleteMyevent(Request $request)
 	{
+		$transaction = Transaction::findOrFail($request->id);
+		$this->authorize('delete', $transaction);
+
 		//Proses delete
 		$deleteTransaction = Transaction::where('id', $request->id)->whereIn('status', ['Unpaid', 'Pending'])->delete();
 		//Delete snap token dan data custom form
@@ -160,7 +165,7 @@ class DashboardController extends Controller
 	}
 
 	//Manajemen event
-	public function manajemenEvent(Request $request)
+	public function manajemenEvent(Request $request, OverviewService $overview)
 	{
 		$user_id = auth()->user()->id;
 		$search = $request->key;
@@ -176,9 +181,15 @@ class DashboardController extends Controller
 		// 	return Redirect::to('/dashboard/manajemen-event');
 		// }
 
+		$finance = $listEvent->getCollection()
+			->mapWithKeys(function (Event $event) use ($overview) {
+				return [$event->id => $overview->financeForEvent($event)];
+			});
+
 		return view('dashboard.manajemen-event', [
 			'listEvent' => $listEvent,
 			'categories' => EventCategory::all(),
+			'finance' => $finance,
 		]);
 	}
 
@@ -191,7 +202,7 @@ class DashboardController extends Controller
 
 		$transaction = Transaction::with(['event', 'ticket'])
 			->where('is_login', 1)
-			->where('user_login_id', $request->user_id)
+			->where('user_login_id', auth()->id())
 			->orderByRaw('id DESC')
 			->get();
 
@@ -222,6 +233,8 @@ class DashboardController extends Controller
 			->orderByRaw('id DESC')
 			->paginate(5)
 			->withQueryString();
+
+
 
 		return view('dashboard.page-participant', [
 			'dataEvent' => $dataEvent,
@@ -277,6 +290,8 @@ class DashboardController extends Controller
 				'error' => 'Event tidak ditemukan!'
 			], 404);
 		}
+
+		$this->authorize('viewParticipants', $event);
 
 
 		/*
@@ -518,6 +533,21 @@ class DashboardController extends Controller
 		);
 
 
+		$dataTable->addColumn(
+			'participant_id',
+			function ($participant) {
+				return $participant->id;
+			}
+		);
+
+		$dataTable->addColumn(
+			'checked_in_at',
+			function ($participant) {
+				return $participant->checked_in_at?->toIso8601String();
+			}
+		);
+
+
 		/*
 		|--------------------------------------------------------------------------
 		| RESPONSE
@@ -535,8 +565,61 @@ class DashboardController extends Controller
 			->make(true);
 	}
 
+	public function participantDetail(Request $request)
+	{
+		$participant = TransactionParticipant::with([
+			'transaction.event',
+			'transaction.ticket',
+			'transaction.paymentGatewayMethod.method',
+			'forms.form',
+		])->findOrFail($request->id);
+
+		$this->authorize('view', $participant);
+
+		$transaction = $participant->transaction;
+
+		return response()->json([
+			'participant' => [
+				'id' => $participant->id,
+				'name' => $participant->name,
+				'email' => $participant->email,
+				'phone' => $participant->phone,
+				'ticket_code' => $participant->ticket_code,
+				'checked_in_at' => $participant->checked_in_at?->toIso8601String(),
+			],
+			'transaction' => [
+				'code' => $transaction?->transaction_code,
+				'status' => $transaction?->status,
+				'date' => $transaction?->created_at?->format('d M Y H:i'),
+				'buyer_name' => $transaction?->buyer_name,
+				'buyer_email' => $transaction?->buyer_email,
+				'subtotal' => (float) ($transaction?->subtotal ?? 0),
+				'grand_total' => (float) ($transaction?->grand_total ?? 0),
+				'payment_method' => $transaction?->paymentGatewayMethod?->method?->name,
+			],
+			'event' => [
+				'title' => $transaction?->event?->title,
+				'slug' => $transaction?->event?->slug,
+				'start_date' => $transaction?->event?->start_date?->format('d M Y'),
+			],
+			'ticket' => [
+				'name' => $transaction?->ticket?->ticket_name,
+			],
+			'forms' => $participant->forms->map(function ($form) {
+				return [
+					'label' => $form->form?->field_label ?? 'Field',
+					'type' => $form->form?->field_type,
+					'value' => $form->form_value,
+				];
+			})->values(),
+		]);
+	}
+
 	public function getCustomformParticipant(Request $request)
 	{
+		$event = Event::where('event_id', $request->event_id)->firstOrFail();
+		$this->authorize('viewParticipants', $event);
+
 		$customForm = CustomForm::where('event_id', $request->event_id)->get();
 
 		foreach ($customForm as $form) {
@@ -558,7 +641,9 @@ class DashboardController extends Controller
 	public function checkEventDate(Request $request)
 	{
 		$event_id = $request->event_id;
-		$cekEvent = Event::find($event_id);
+		$cekEvent = Event::findOrFail($event_id);
+		$this->authorize('viewFinance', $cekEvent);
+
 		$today = Carbon::now()->format('Y-m-d');
 
 		if ($cekEvent->end_date >= $today) {
@@ -568,7 +653,7 @@ class DashboardController extends Controller
 		}
 	}
 
-	public function transactionReport(Request $request)
+	public function transactionReport(Request $request, OverviewService $overview)
 	{
 		$user_id = auth()->user()->id;
 		$search = $request->key;
@@ -580,8 +665,17 @@ class DashboardController extends Controller
 			->withQueryString();
 
 
+		$finance = $listEvent->getCollection()
+			->mapWithKeys(function (Event $event) use ($overview) {
+				return [$event->id => $overview->financeForEvent($event)];
+			});
+
+		$totals = $overview->forOrganizer(auth()->user());
+
 		return view('dashboard.page-transaction', [
 			'listEvent' => $listEvent,
+			'finance' => $finance,
+			'totals' => $totals,
 		]);
 	}
 
@@ -694,6 +788,8 @@ class DashboardController extends Controller
 	public function getTransactionReport(Request $request)
 	{
 		$eventId = $request->event_id;
+		$event = Event::findOrFail($eventId);
+		$this->authorize('viewFinance', $event);
 
 		/*
 		|--------------------------------------------------------------------------
@@ -870,8 +966,30 @@ class DashboardController extends Controller
 			->paginate(5)
 			->withQueryString();
 
+
+
 		return view('dashboard.page-checkin-event', [
 			'dataEvent' => $dataEvent,
+		]);
+	}
+
+	public function participantEvent(string $event_id)
+	{
+		$event = Event::where('event_id', $event_id)->firstOrFail();
+		$this->authorize('viewParticipants', $event);
+
+		return view('dashboard.participant-event', [
+			'event' => $event,
+		]);
+	}
+
+	public function eventCheckinEvent(string $event_id)
+	{
+		$event = Event::where('event_id', $event_id)->firstOrFail();
+		$this->authorize('checkIn', $event);
+
+		return view('dashboard.checkin-event', [
+			'event' => $event,
 		]);
 	}
 
@@ -897,77 +1015,108 @@ class DashboardController extends Controller
 
 	public function checkinProcess(Request $request)
 	{
+		$checkinTransaction = TransactionParticipant::find($request->id);
 
-		$timestamp = Carbon::now()->timestamp;
-		$tanggalCheckin = Carbon::createFromTimestamp($timestamp)->format('Y-m-d H:i:s');
-
-		$checkinTransaction = TransactionParticipant::where('id', $request->id)->first();
-
-		//Jika Tidak ada ID
 		if (!$checkinTransaction) {
-			return response()->json(['error' => 'ID transaksi tidak ditemukan!']);
+			return response()->json(['error' => 'ID transaksi tidak ditemukan!'], 404);
 		}
 
-		if (!empty($checkinTransaction->checked_in_at)) {
-			return response()->json(['error' => 'Sudah di check in!']);
+		$this->authorize('checkIn', $checkinTransaction);
+
+		$result = DB::transaction(function () use ($request) {
+			$participant = TransactionParticipant::whereKey($request->id)
+				->lockForUpdate()
+				->first();
+
+			if (!$participant) {
+				return ['success' => false, 'error' => 'ID transaksi tidak ditemukan!', 'status' => 404];
+			}
+
+			if (!empty($participant->checked_in_at)) {
+				return ['success' => false, 'error' => 'Peserta sudah check-in!', 'status' => 422];
+			}
+
+			$participant->update([
+				'checked_in_at' => Carbon::now()->format('Y-m-d H:i:s'),
+				'checked_in_by' => auth()->id(),
+			]);
+
+			app(\App\Services\AuditLogger::class)->log(
+				'participant.checked_in',
+				'Check-in peserta ' . ($participant->name ?: ('#' . $participant->id)) . '.',
+				$participant,
+				[
+					'event_id' => $participant->transaction?->event_id,
+					'transaction_id' => $participant->transaction_id,
+				]
+			);
+
+			return ['success' => true, 'message' => 'Successfully checked in!!', 'status' => 200];
+		});
+
+		if (!$result['success']) {
+			return response()->json(['error' => $result['error']], $result['status']);
 		}
 
-		//Jika ID ada
-		$checkinTransaction->update(['checked_in_at' => $tanggalCheckin, 'checked_in_by' => auth()->user()->id]);
-		return response()->json(['success' => 'Successfully checked in!!']);
+		return response()->json(['success' => $result['message']]);
 	}
 
 	public function withdraw(Request $request)
 	{
-		//Proteksi siapa yang mencairkan
-		$user_id = auth()->user()->id;
-		$dataEvent = Event::where('id', $request->event_id)->where('user_id', $user_id)->first();
+		$request->validate([
+			'event_id' => ['required', 'integer', 'exists:events,id'],
+			'wdAmount' => ['required', 'integer', 'min:10000'],
+		]);
 
-		if (empty($dataEvent) || !$user_id) {
-			return response()->json(['error' => 'Pelanggaran!']);
+		$user = auth()->user();
+
+		if (!$user->bank || !$user->no_rekening) {
+			return response()->json(['error' => 'Lengkapi data rekening bank terlebih dahulu!']);
 		}
 
-		//Proteksi ke 2 menghindari proses penarikan sebelum event selesai
-		$today = Carbon::now()->format('Y-m-d');
+		$request->merge(['from_request' => 'withdraw']);
 
-		if ($dataEvent->end_date >= $today) {
-			return response()->json(['error' => 'Belum bisa melakukan penarikan!']);
-		}
+		return DB::transaction(function () use ($request, $user) {
+			$dataEvent = Event::whereKey($request->event_id)
+				->lockForUpdate()
+				->firstOrFail();
 
-		//Memanggil data report
-		$checkHistory = $this->getTransactionReport($request);
+			$this->authorize('withdraw', $dataEvent);
 
+			if (!$dataEvent->end_date || $dataEvent->end_date >= today()) {
+				return response()->json(['error' => 'Belum bisa melakukan penarikan!']);
+			}
 
-		if ($request->wdAmount > $checkHistory['danaBersih']) {
-			return response()->json(['error' => 'Pelanggaran!']);
-		}
+			$checkHistory = $this->getTransactionReport($request);
 
-		//cek rekening bank dan bank
-		if (!$request->wdRekening || !$request->wdBank) {
-			return response()->json(['error' => 'Belum ada data rekening bank!']);
-		}
+			if ((int) $request->wdAmount > (float) $checkHistory['danaBersih']) {
+				return response()->json(['error' => 'Jumlah penarikan melebihi saldo tersedia!']);
+			}
 
-		$data = [
-			'event_id' => $request->event_id,
-			'user_id' => $request->wdUserId,
-			'rekening' => $request->wdRekening,
-			'bank' => $request->wdBank,
-			'amount' => $request->wdAmount,
-			'status' => 'Proses',
-		];
+			WithdrawData::create([
+				'event_id' => $dataEvent->id,
+				'user_id' => $user->id,
+				'rekening' => $user->no_rekening,
+				'bank' => $user->bank,
+				'amount' => (int) $request->wdAmount,
+				'status' => 'Proses',
+			]);
 
-		$submitWithdraw = WithdrawData::create($data);
-
-		if (!$submitWithdraw) {
-			return response()->json(['error' => 'Gagal request withdraw!']);
-		} else {
 			$updateHistory = $this->getTransactionReport($request);
-			return response()->json(['success' => 'Berhasil request penarikan dana!', 'event_id' => $request->event_id, 'saldo' => $updateHistory['danaBersih']]);
-		}
+
+			return response()->json([
+				'success' => 'Berhasil request penarikan dana!',
+				'event_id' => $dataEvent->id,
+				'saldo' => $updateHistory['danaBersih'],
+			]);
+		});
 	}
 
 	public function withdrawHistory(Request $request)
 	{
+		$event = Event::findOrFail($request->id);
+		$this->authorize('viewFinance', $event);
+
 		$user_id = auth()->user()->id;
 		$dataWD = WithdrawData::where('event_id', $request->id)->where('user_id', $user_id)->get();
 
@@ -987,17 +1136,11 @@ class DashboardController extends Controller
 
 	public function downloadExcel($id)
 	{
-		$user_id = auth()->user()->id;
-
 		//Cek yang download pembuat event atau bukan
-		$event = Event::where('event_id', $id)->first();
+		$event = Event::where('event_id', $id)->firstOrFail();
 		$event_id = $event->id;
 
-		if ($event->user_id != $user_id) {
-
-			//Jika bukan jangan lanjutkan download
-			abort(404, 'Resource not found.');
-		}
+		$this->authorize('viewParticipants', $event);
 
 		// ==========================================================================
 		// DATA PARTICIPANT
@@ -1771,15 +1914,20 @@ class DashboardController extends Controller
 	}
 
 	# ARTICLE
-	public function article()
+	public function article(Request $request)
 	{
-		# Query mengambil data kategori dan jenis artikel 
-		$kategori = ArticleCategory::all();
-		$type = ArticleType::all();
+		$search = trim((string) $request->get('key', ''));
+		$articles = Article::with(['category', 'type'])
+			->where('user_id', auth()->id())
+			->when($search !== '', fn ($query) => $query->where('title', 'like', '%' . $search . '%'))
+			->latest('created_at')
+			->paginate(12)
+			->withQueryString();
 
 		return view('dashboard.page-article', [
-			'categories' => $kategori,
-			'type' => $type,
+			'categories' => ArticleCategory::orderBy('category')->get(),
+			'types' => ArticleType::orderBy('type_name')->get(),
+			'articles' => $articles,
 		]);
 	}
 

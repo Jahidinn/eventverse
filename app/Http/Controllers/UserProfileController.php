@@ -12,6 +12,35 @@ use Illuminate\Support\Facades\Validator;
 
 class UserProfileController extends Controller
 {
+	public function updateMode(Request $request)
+	{
+		$data = $request->validate([
+			'mode' => ['required', 'in:participant,organizer,hybrid'],
+		]);
+
+		$user = auth()->user();
+		$roles = match ($data['mode']) {
+			'organizer' => ['organizer'],
+			'hybrid' => ['organizer', 'participant'],
+			default => ['participant'],
+		};
+
+		if ($user->hasRole('admin')) {
+			$roles[] = 'admin';
+		}
+
+		$user->syncRoles(array_values(array_unique($roles)));
+
+		app(\App\Services\AuditLogger::class)->log(
+			'profile.mode.updated',
+			'Memperbarui mode akun menjadi ' . $data['mode'] . '.',
+			$user,
+			['roles' => $user->getRoleNames()->values()->all()]
+		);
+
+		return back()->with('success', 'Mode akun berhasil diubah menjadi ' . $data['mode'] . '.');
+	}
+
 	public function index()
 	{
 		$org = OrganisationMember::with(['org'])->where('user_id', auth()->user()->id)->get();
@@ -102,26 +131,27 @@ class UserProfileController extends Controller
 
 	public function editProfile(Request $request)
 	{
+		$user_id = auth()->user()->id;
+
 		$validasi = Validator::make($request->all(), [
 			'p_username' => 'required',
 			'p_name' => 'required',
-			'p_email' => 'required|email:dns',
-			'p_no_tlp' => 'required|min:9',
-			// 'p_no_rekening' => '',
-			// 'p_bank' => '',
+			'p_email' => ['required', 'email:dns', 'unique:users,email,' . $user_id],
+			'p_no_tlp' => ['required', 'min:9', 'unique:users,no_tlp,' . $user_id],
+			'p_no_rekening' => ['nullable', 'numeric'],
+			'p_bank' => ['nullable', 'string', 'max:255'],
 		]);
 
 		if ($validasi->fails()) {
 			$error = $validasi->errors()->first();
 			return response()->json(['error' => $error]);
 		} else {
-			$user_id = auth()->user()->id;
 			$data = [
 				'name' => $request->p_name,
 				'email' => $request->p_email,
 				'no_tlp' => $request->p_no_tlp,
 				'no_rekening' => $request->p_no_rekening,
-				'no_bank' => $request->p_bank,
+				'bank' => $request->p_bank,
 			];
 
 			$userData = User::find($user_id);

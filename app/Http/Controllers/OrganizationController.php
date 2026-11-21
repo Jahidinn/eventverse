@@ -69,6 +69,10 @@ class OrganizationController extends Controller
 			];
 			OrganisationMember::create($dataMember);
 
+			if (auth()->check() && !auth()->user()->hasRole('organizer')) {
+				auth()->user()->assignRole('organizer');
+			}
+
 			if ($suksesInsrtOrg) {
 				$request->file('org_logo_input')->storeAs('/public/organization-images', $imageName);
 				//insert org member juga //
@@ -106,11 +110,15 @@ class OrganizationController extends Controller
 			->orderByRaw('id DESC')
 			->first();
 
-		if ($detailOrganization) {
-			return response()->json(['data' => $detailOrganization]);
-		} else {
-			return response()->json(['error' => 'Tidak ada data!']);
+		if (!$detailOrganization) {
+			return response()->json(['error' => 'Tidak ada data!'], 404);
 		}
+
+		if ((int) $detailOrganization->user_created !== (int) auth()->id()) {
+			return response()->json(['error' => 'Kamu tidak memiliki akses ke organisasi ini.'], 403);
+		}
+
+		return response()->json(['data' => $detailOrganization]);
 	}
 
 	public function editOrg(Request $request)
@@ -132,6 +140,14 @@ class OrganizationController extends Controller
 			//cek jika ada ada perubahan id / nama
 			$slug = Str::slug($request->org_name_edit);
 			$dataOrg = Organisation::where('id', $request->org_id_edit)->first();
+
+			if (!$dataOrg) {
+				return response()->json(['error' => 'Organisasi tidak ditemukan.'], 404);
+			}
+
+			if ((int) $dataOrg->user_created !== (int) auth()->id()) {
+				return response()->json(['error' => 'Kamu tidak memiliki akses untuk mengubah organisasi ini.'], 403);
+			}
 
 			if ($slug != $dataOrg->org_id) {
 				//cek apabila organisasi sudah dibuat
@@ -178,6 +194,14 @@ class OrganizationController extends Controller
 	public function deleteOrg(Request $request)
 	{
 		$dataOrg = Organisation::find($request->org_id);
+
+		if (!$dataOrg) {
+			return response()->json(['error' => 'Organisasi tidak ditemukan.'], 404);
+		}
+
+		if ((int) $dataOrg->user_created !== (int) auth()->id()) {
+			return response()->json(['error' => 'Kamu tidak memiliki akses untuk menghapus organisasi ini.'], 403);
+		}
 
 		//Cek apakah sudah ada event dengan id organisasi tesb
 		$cekOrg = Event::where('organizer', 'org')->where('organizer_id', $request->org_id);
@@ -229,6 +253,11 @@ class OrganizationController extends Controller
 
 		//cek siapa pembuat organisasi
 		$cekOwner = Organisation::where('id', $org_id)->first();
+
+		if (!$cekOwner) {
+			return response()->json(['error' => 'Organisasi tidak ditemukan.'], 404);
+		}
+
 		$owner = $cekOwner->user_created == $user_id ? 'Owner' : 'Request join';
 
 		$data = [
@@ -291,6 +320,11 @@ class OrganizationController extends Controller
 
 	public function getOrgMember(Request $request)
 	{
+		$org = Organisation::find($request->org_id);
+		if (!$org || (int) $org->user_created !== (int) auth()->id()) {
+			return response()->json(['error' => 'Kamu tidak memiliki akses ke anggota organisasi ini.'], 403);
+		}
+
 		$dataMember = OrganisationMember::with(['user', 'org'])->where('org_id', $request->org_id)
 			->whereIn('position', ['Owner', 'Member'])
 			->orderByRaw('id ASC')
@@ -308,6 +342,11 @@ class OrganizationController extends Controller
 
 	public function getOrgMemberReequest(Request $request)
 	{
+		$org = Organisation::find($request->org_id);
+		if (!$org || (int) $org->user_created !== (int) auth()->id()) {
+			return response()->json(['error' => 'Kamu tidak memiliki akses ke request organisasi ini.'], 403);
+		}
+
 		$dataMember = OrganisationMember::with(['user', 'org'])->where('org_id', $request->org_id)
 			->whereIn('position', ['Request join'])
 			->orderByRaw('id ASC')
@@ -326,7 +365,24 @@ class OrganizationController extends Controller
 	public function AcceptFollow(Request $request)
 	{
 		$dataMember = OrganisationMember::find($request->org_member_id);
+
+		if (!$dataMember) {
+			return response()->json(['error' => 'Request anggota tidak ditemukan.'], 404);
+		}
+
+		$org = Organisation::find($dataMember->org_id);
+
+		if (!$org || (int) $org->user_created !== (int) auth()->id()) {
+			return response()->json(['error' => 'Hanya owner organisasi yang dapat menerima anggota.'], 403);
+		}
+
 		$update = $dataMember->update(['position' => 'Member']);
+
+		if ($update && $dataMember->user) {
+			if (!$dataMember->user->hasRole('organizer')) {
+				$dataMember->user->assignRole('organizer');
+			}
+		}
 
 		if ($update) {
 			return response()->json(['success' => 'Anggota organisasi ditambahkan!']);
@@ -338,16 +394,24 @@ class OrganizationController extends Controller
 
 	public function removeMember(Request $request)
 	{
-		$user_id = auth()->user()->id;
 		$member_id = $request->org_member_id;
+		$dataMember = OrganisationMember::find($member_id);
 
-		//cek orwner atau bukan
-		$cekMember = OrganisationMember::where('user_id', $user_id)->where('position', 'Owner')->first();
-		if (!$cekMember || empty($cekMember)) {
-			return response()->json(['error' => 'Erorrr!']);
+		if (!$dataMember) {
+			return response()->json(['error' => 'Anggota tidak ditemukan.'], 404);
 		}
 
-		$delete = OrganisationMember::where('id', $member_id)->delete();
+		$org = Organisation::find($dataMember->org_id);
+
+		if (!$org || (int) $org->user_created !== (int) auth()->id()) {
+			return response()->json(['error' => 'Hanya owner organisasi yang dapat mengeluarkan anggota.'], 403);
+		}
+
+		if ($dataMember->position === 'Owner') {
+			return response()->json(['error' => 'Owner organisasi tidak dapat dikeluarkan.'], 403);
+		}
+
+		$delete = $dataMember->delete();
 
 		if ($delete) {
 			return response()->json(['success' => 'Berhasil dikeluarkan!']);

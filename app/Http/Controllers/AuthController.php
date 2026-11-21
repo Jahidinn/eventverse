@@ -47,6 +47,12 @@ class AuthController extends Controller
 		// Insert Data
 		$user = User::create($data);
 
+		foreach (['organizer', 'participant'] as $roleName) {
+			if (\Spatie\Permission\Models\Role::where('name', $roleName)->where('guard_name', 'web')->exists()) {
+				$user->assignRole($roleName);
+			}
+		}
+
 		event(new Registered($user));
 
 		session()->flash('success', 'Registrasi berhasil! Login dan verifikasi email!');
@@ -63,11 +69,17 @@ class AuthController extends Controller
 		if (Auth::attempt($credentials)) {
 			$request->session()->regenerate();
 
-			if (auth()->user()->category_id == 2) {
+			$user = auth()->user();
+
+			if ($user->hasRole('admin')) {
 				return redirect()->intended('/administrator');
-			} else {
-				return redirect()->intended('/dashboard/myevent');
 			}
+
+			if ($user->hasRole('organizer')) {
+				return redirect()->intended('/dashboard');
+			}
+
+			return redirect()->intended('/dashboard/myevent');
 		}
 
 		return back()->withInput()->with('loginError', 'Login failed! Check email or password');

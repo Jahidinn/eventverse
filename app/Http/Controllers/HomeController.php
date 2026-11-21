@@ -52,7 +52,7 @@ class HomeController extends Controller
 		$promotions = collect([
 			(object) [
 				'id'          => 1,
-				'image'       => 'assets/banners/promo-1.png',
+				'image'       => 'assets/banners/eventverse-kompetisi.webp',
 				'alt_text'    => 'Follow Instagram Eventverse',
 				'url'         => '/dashboard/manajemen-event',
 				'link_target' => '_blank',
@@ -60,7 +60,7 @@ class HomeController extends Controller
 			],
 			(object) [
 				'id'          => 2,
-				'image'       => 'assets/banners/promo-2.png',
+				'image'       => 'assets/banners/eventverse-lari.webp',
 				'alt_text'    => 'Cek Biaya Transaksi Eventverse',
 				'url'         => '/dashboard/manajemen-event',
 				'link_target' => '_self',
@@ -68,7 +68,7 @@ class HomeController extends Controller
 			],
 			(object) [
 				'id'          => 3,
-				'image'       => 'assets/banners/promo-3.png',
+				'image'       => 'assets/banners/eventverse-musik.webp',
 				'alt_text'    => 'Hubungi Tim Eventverse via WhatsApp',
 				'url'         => '/dashboard/manajemen-event',
 				'link_target' => '_blank',
@@ -76,7 +76,7 @@ class HomeController extends Controller
 			],
 			(object) [
 				'id'          => 4,
-				'image'       => 'assets/banners/promo-4.png',
+				'image'       => 'assets/banners/eventverse-konferensi.webp',
 				'alt_text'    => 'Promo khusus pengguna baru Eventverse',
 				'url'         => '/dashboard/manajemen-event',
 				'link_target' => '_self',

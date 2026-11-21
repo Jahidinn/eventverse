@@ -34,11 +34,11 @@ class EventController extends Controller
 	 */
 	public function create()
 	{
-		return view('events.create', [
-			'data_provinces' => Provinces::all(),
-			'category' => Category::all(),
-			'theme' => Theme::all(),
-		]);
+		if (auth()->check() && auth()->user()->hasRole('organizer')) {
+			return redirect('/dashboard/manajemen-event?create=1');
+		}
+
+		return redirect('/dashboard/myevent?create=1');
 	}
 
 	public function getCities($code)
@@ -195,6 +195,10 @@ class EventController extends Controller
 
 			//dd($data, $finalValues, $customForm);
 
+			if (auth()->check() && !auth()->user()->hasRole('organizer')) {
+				auth()->user()->assignRole('organizer');
+			}
+
 			return response()->json(['success' => 'Berhasil posting event', 'url' => $request->linkEvent]);
 		}
 	}
@@ -264,6 +268,10 @@ class EventController extends Controller
 
 	public function show(Event $event, Request $request)
 	{
+		if ($event->event_status !== 'published') {
+			abort(404, 'Event belum dipublikasikan.');
+		}
+
 		/*
 		|--------------------------------------------------------------------------
 		| Visitor
@@ -528,7 +536,9 @@ class EventController extends Controller
 	 */
 	public function destroy($id)
 	{
-		$event = Event::where('id', $id)->first();
+		$event = Event::findOrFail($id);
+		$this->authorize('delete', $event);
+
 		$transaction = Transaction::where('event_id', $event->id)->exists();
 
 		if ($transaction) {

@@ -1016,6 +1016,10 @@ class EventStudioController extends Controller
 
         });
 
+        if (auth()->check() && !auth()->user()->hasRole('organizer')) {
+            auth()->user()->assignRole('organizer');
+        }
+
         return response()->json([
 
             'success'  => true,

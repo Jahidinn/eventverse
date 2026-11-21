@@ -171,7 +171,9 @@ class ArticleController extends Controller
 		}
 
 		$blog_id = $request->blog_id_edit;
-		$blog_detail = Article::find($blog_id);
+		$blog_detail = Article::findOrFail($blog_id);
+
+		$this->authorize('update', $blog_detail);
 
 		# Jika title / slug ada perubahan, maka cek slug
 		if ($blog_detail->slug != $request->slug_edit) {
@@ -219,7 +221,9 @@ class ArticleController extends Controller
 	public function deleteArticle(Request $request)
 	{
 		$id_article = $request->id;
-		$data_article = Article::find($id_article);
+		$data_article = Article::findOrFail($id_article);
+
+		$this->authorize('delete', $data_article);
 
 		// Hapus file gambarnya juga
 		if ($data_article->input_image) {
