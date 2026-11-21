@@ -1,798 +1,178 @@
-@extends('dashboard.layouts.main')
+@extends('dashboard.layouts.app')
+
+@section('title', 'Participants')
 
 @section('content')
-    <!-- Content Header (Page header) -->
-    <section class="content-header pb-0">
-        <div class="page-header-modern mb-3">
-            <div class="page-header-left">
+    <div class="mx-auto max-w-7xl space-y-5 pb-8 text-slate-900">
+        <header class="relative isolate flex flex-wrap items-end justify-between gap-5 overflow-hidden rounded-3xl bg-gradient-to-br from-[#102040] via-[#183970] to-[#1857a6] px-5 py-7 text-white sm:px-8 sm:py-9">
+            <div aria-hidden="true"
+                 class="pointer-events-none absolute inset-y-0 right-0 -z-10 w-1/2 bg-[repeating-linear-gradient(135deg,transparent_0_19px,rgba(147,197,253,0.23)_19px_20px)] [mask-image:linear-gradient(to_left,black,transparent)]"></div>
 
-                <div class="page-header-icon">
-                    <i class="ti ti-users"></i>
+            <div>
+                <h1 class="font-['Sora','Plus_Jakarta_Sans','Inter',sans-serif] text-3xl font-bold tracking-tight sm:text-4xl">
+                    Peserta Event
+                </h1>
+                <p class="mt-2 max-w-lg text-sm leading-6 text-blue-100">
+                    Pilih event untuk melihat daftar peserta dan mengelola check-in.
+                </p>
+            </div>
+
+            <i class="ti ti-users hidden text-5xl text-blue-200/80 sm:block" aria-hidden="true"></i>
+        </header>
+
+        <div class="grid grid-cols-[minmax(0,1fr)_auto] items-start gap-2 rounded-2xl border border-slate-200 bg-white p-3 shadow-sm sm:items-center sm:gap-3">
+            <form method="GET" class="flex min-w-0 flex-wrap items-center gap-2">
+                <div class="flex min-h-11 min-w-[8rem] flex-[1_1_8rem] items-center gap-2 rounded-xl border border-slate-200 px-3 focus-within:border-blue-400 focus-within:ring-2 focus-within:ring-blue-100">
+                    <i class="ti ti-search shrink-0 text-lg text-slate-500" aria-hidden="true"></i>
+                    <input type="search" name="key" value="{{ request('key') }}"
+                           aria-label="Cari event" placeholder="Cari event…"
+                           class="w-full min-w-0 bg-transparent text-sm text-slate-900 outline-none placeholder:text-slate-500">
                 </div>
 
-                <h2 class="page-header-title">
-                    DATA PESERTA
-                </h2>
+                <button type="submit"
+                        class="inline-flex min-h-11 items-center rounded-xl border border-slate-200 px-3 text-sm font-semibold text-slate-700 hover:bg-slate-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-blue-600">
+                    Cari
+                </button>
 
-            </div>
-        </div>
-    </section>
-
-    <!-- Main content -->
-    <section class="content">
-        <!-- Default box -->
-        {{-- <div class="card bg-secondar"> --}}
-            {{-- <div class="card-header">
-                <h3 class="card-title">Kelola data peserta dengan mudah! </h3>
-
-            </div> --}}
-
-            <style>
-                .search-modern{
-                    height:50px;
-                    border:none;
-                    border-radius:16px;
-                    background:#fff;
-                    box-shadow:0 4px 16px rgba(0,0,0,.05);
-                    padding-left:18px;
-                }
-
-                .search-modern:focus{
-                    box-shadow:0 0 0 4px rgba(13,110,253,.08);
-                }
-
-                .my-event-card{
-                    border:none;
-                    border-radius:18px;
-                    overflow:hidden;
-
-                    background:#fff;
-
-                    box-shadow:
-                        0 4px 20px rgba(0,0,0,.05);
-
-                    transition:.25s;
-                }
-
-                .my-event-card:hover{
-                    transform:translateY(-2px);
-
-                    box-shadow:
-                        0 12px 32px rgba(0,0,0,.08);
-                }
-
-                .my-event-image{
-                    width:100%;
-                    height:120px;
-
-                    object-fit:cover;
-
-                    border-radius:14px;
-                }
-
-                .event-title-modern{
-                    font-size:16px;
-                    font-weight:700;
-                    line-height:1.5;
-
-                    color:#1e293b;
-                }
-
-                .participant-pill{
-                    display:inline-flex;
-                    align-items:center;
-
-                    gap:6px;
-
-                    padding:7px 12px;
-
-                    border-radius:999px;
-
-                    background:#ecfdf5;
-
-                    color:#059669;
-
-                    font-size:13px;
-                    font-weight:600;
-                }
-
-                .event-action{
-                    margin-top:12px;
-                }
-
-                .empty-event{
-                    border:none;
-                    border-radius:16px;
-
-                    background:#fff8e1;
-
-                    color:#8a6d3b;
-
-                    padding:18px;
-
-                    box-shadow:0 4px 16px rgba(0,0,0,.04);
-                }
-            </style>
-
-            <div class="px-1 daftar-event text-dark">
-
-                <form action="" method="GET" {{ $dataEvent->isEmpty() ? 'hidden' : '' }}>
-
-                    <div class="mb-4">
-
-                        <input
-                            class="form-control search-modern shadow-none"
-                            id="search-myevent"
-                            name="key"
-                            type="search"
-                            placeholder="🔍 Cari event..."
-                            value="{{ request('key') }}">
-
-                    </div>
-
-                </form>
-
-                @if ($dataEvent->isEmpty())
-
-                    <div class="empty-event">
-
-                        Wah kamu belum <b>punya event</b> sob!
-
-                        <a
-                            href="/event/create"
-                            class="text-primary text-decoration-none font-weight-bold">
-
-                            Buat event
-                            <i class="fas fa-paper-plane"></i>
-
-                        </a>
-
-                    </div>
-
+                @if (request('key'))
+                    <a href="{{ url('/dashboard/participant-data') }}"
+                       class="inline-flex min-h-11 items-center rounded-xl px-2 text-sm font-semibold text-blue-700 hover:bg-blue-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-blue-600">
+                        Reset
+                    </a>
                 @endif
+            </form>
 
+            <span class="mt-2 inline-flex items-center gap-1.5 whitespace-nowrap rounded-lg bg-slate-100 px-2.5 py-1.5 text-xs font-semibold tabular-nums text-slate-600 sm:mt-0">
+                <i class="ti ti-layout-grid hidden sm:inline" aria-hidden="true"></i>
+                {{ number_format($dataEvent->total(), 0, ',', '.') }} event
+            </span>
+        </div>
+
+        @if ($dataEvent->isEmpty())
+            <section class="flex flex-col items-center gap-2 rounded-2xl border border-dashed border-slate-300 bg-white px-5 py-12 text-center">
+                <span class="mb-1 grid h-12 w-12 place-items-center rounded-xl bg-blue-50 text-2xl text-blue-700" aria-hidden="true">
+                    <i class="ti ti-calendar-off"></i>
+                </span>
+
+                @if (request('key'))
+                    <h2 class="text-lg font-semibold">Event tidak ditemukan</h2>
+                    <p class="text-sm text-slate-600">Coba kata kunci lain atau tampilkan semua event.</p>
+                    <a href="{{ url('/dashboard/participant-data') }}"
+                       class="mt-2 rounded-xl border border-slate-200 px-4 py-2.5 text-sm font-semibold text-blue-800 hover:bg-blue-50">
+                        Tampilkan semua event
+                    </a>
+                @else
+                    <h2 class="text-lg font-semibold">Belum ada event</h2>
+                    <p class="text-sm text-slate-600">Buat event terlebih dahulu untuk mengelola peserta.</p>
+                    <button type="button" data-create-event
+                            class="mt-2 inline-flex min-h-11 items-center gap-2 rounded-xl bg-[#1765c4] px-4 text-sm font-semibold text-white hover:bg-[#174f9e] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
+                        <i class="ti ti-plus" aria-hidden="true"></i>
+                        Buat event
+                    </button>
+                @endif
+            </section>
+        @else
+            <div class="grid gap-3 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
                 @foreach ($dataEvent as $event)
-
                     @php
-                        $transactions = \App\Models\Transaction::where('event_id', $event->id)
-                            ->with('participants')
-                            ->whereNotIn('status', ['Expired', 'Unpaid', 'Pending'])
-                            ->get();
-
-                        $totalPeserta = $transactions->sum(function ($transaction) {
-                            return $transaction->participants->count();
-                        });
-
-                        $title = $event->title;
-
-                        if(strlen($title) > 60){
-                            $title = substr($title,0,60).'...';
-                        }
+                        $participantsUrl = url('/dashboard/participant-data/' . $event->event_id);
+                        $imagePath = $event->image ? 'storage/event-images/' . $event->image : null;
+                        $imageExists = $imagePath && file_exists(public_path($imagePath));
                     @endphp
 
-                    <div class="card my-event-card mt-3">
+                    <article class="group grid min-w-0 grid-cols-[5.25rem_minmax(0,1fr)] overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition-colors hover:border-blue-200 md:flex md:flex-col">
+                        <a href="{{ $participantsUrl }}" aria-label="Lihat peserta {{ $event->title }}"
+                           class="relative isolate block min-h-24 overflow-hidden bg-gradient-to-br from-blue-100 via-slate-100 to-indigo-100 focus-visible:z-10 focus-visible:outline focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-blue-600 md:aspect-[16/7] md:min-h-0">
+                            <span class="absolute inset-0 grid place-items-center text-2xl text-blue-500" aria-hidden="true">
+                                <i class="ti ti-photo-off"></i>
+                            </span>
 
-                        <div class="card-body p-3">
+                            @if ($imageExists)
+                                <img src="{{ asset($imagePath) }}" alt="" loading="lazy"
+                                     class="absolute inset-0 h-full w-full object-cover motion-safe:transition-transform motion-safe:duration-300 motion-safe:group-hover:scale-[1.03]"
+                                     onerror="this.hidden = true; this.classList.add('hidden')">
+                            @endif
+                        </a>
 
-                            <div class="row align-items-center">
+                        <div class="flex min-w-0 flex-1 flex-col p-3.5">
+                            <h2 class="break-words font-['Sora','Plus_Jakarta_Sans','Inter',sans-serif] text-sm font-semibold leading-snug tracking-tight md:text-base">
+                                <a href="{{ $participantsUrl }}"
+                                   class="hover:text-blue-700 hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-blue-600">
+                                    {{ $event->title }}
+                                </a>
+                            </h2>
 
-                                <div class="col-md-3 col-4">
+                            <p class="mt-2 flex items-start gap-1.5 text-xs leading-5 text-slate-600">
+                                <i class="ti ti-calendar-event shrink-0 text-base text-blue-700" aria-hidden="true"></i>
+                                <span>
+                                    {{ $event->start_date?->format('d M Y') ?? 'Tanggal belum diisi' }}
+                                    @if ($event->end_date)
+                                        · s.d. {{ $event->end_date->format('d M Y') }}
+                                    @endif
+                                </span>
+                            </p>
 
-                                    <img
-                                        src="{{ asset('storage/event-images/' . $event->image) }}"
-                                        class="my-event-image"
-                                        alt="{{ $event->title }}">
-
-                                </div>
-
-                                <div class="col-md-9 col-8">
-
-                                    <div class="event-title-modern mb-3">
-
-                                        {{ $title }}
-
-                                    </div>
-
-                                    <div class="participant-pill">
-
-                                        <i class="ti ti-users"></i>
-
-                                        {{ $totalPeserta }} Peserta
-
-                                    </div>
-
-                                    <div class="event-action">
-
-                                        <button
-                                            type="button"
-                                            class="button-40 detail-peserta"
-                                            data-event_id="{{ $event->event_id }}"
-                                            data-participant="{{ $totalPeserta }}"
-                                            data-title="{{ $event->title }}">
-
-                                            <i class="ti ti-user-share"></i>
-
-                                            Detail Peserta
-
-                                        </button>
-
-                                    </div>
-
-                                </div>
-
+                            <div class="mt-auto pt-3">
+                                <a href="{{ $participantsUrl }}"
+                                   class="inline-flex min-h-10 w-full items-center gap-2 rounded-xl border border-blue-100 bg-blue-50 px-3 py-2 text-xs font-semibold text-blue-800 transition-colors hover:bg-blue-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 md:text-sm">
+                                    <i class="ti ti-users shrink-0 text-base" aria-hidden="true"></i>
+                                    <span class="flex-1">Kelola peserta</span>
+                                    <i class="ti ti-arrow-right shrink-0 text-base" aria-hidden="true"></i>
+                                </a>
                             </div>
-
                         </div>
-
-                    </div>
-
+                    </article>
                 @endforeach
-
-                <div class="d-flex justify-content-center mt-4">
-
-                    {{ $dataEvent->links() }}
-
-                </div>
-
             </div>
 
-            {{--  --}}
+            @if ($dataEvent->hasPages())
+                @php
+                    $pagination = $dataEvent->withQueryString();
+                    $pageLinks = $pagination->linkCollection()->slice(1, -1);
+                    $pageButton = 'inline-flex h-9 min-w-9 items-center justify-center rounded-lg px-2 text-sm font-semibold tabular-nums focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600';
+                    $pageLink = $pageButton . ' border border-slate-200 bg-white text-slate-700 hover:bg-blue-50 hover:text-blue-800';
+                @endphp
 
-            <style>
-                .participant-wrapper{
-                    background:#fff;
-                    border-radius:18px;
-                    padding:20px;
-                    box-shadow:0 8px 30px rgba(0,0,0,.06);
-                }
+                <nav aria-label="Halaman peserta per event"
+                     class="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-slate-200 bg-white px-4 py-3 text-slate-700">
+                    <p class="text-xs tabular-nums">
+                        {{ $pagination->firstItem() }}–{{ $pagination->lastItem() }}
+                        dari {{ number_format($pagination->total(), 0, ',', '.') }} event
+                    </p>
 
-                .participant-toolbar{
-                    display:flex;
-                    justify-content:space-between;
-                    align-items:center;
-                    flex-wrap:wrap;
-                    gap:10px;
-                    margin-bottom:20px;
-                }
+                    <div class="flex flex-wrap items-center gap-1.5">
+                        @if ($pagination->previousPageUrl())
+                            <a href="{{ $pagination->previousPageUrl() }}" rel="prev"
+                               aria-label="Halaman sebelumnya" class="{{ $pageLink }}">
+                                <i class="ti ti-chevron-left" aria-hidden="true"></i>
+                            </a>
+                        @endif
 
-                .participant-summary{
-                    display:flex;
-                    justify-content:space-between;
-                    align-items:center;
-
-                    background:linear-gradient(
-                        135deg,
-                        #ffffff,
-                        #f8fbff
-                    );
-
-                    border:1px solid #edf2f7;
-                    border-radius:16px;
-
-                    padding:18px 22px;
-                    margin-bottom:20px;
-                }
-
-                .participant-summary .event-title{
-                    font-size:18px;
-                    font-weight:700;
-                    color:#1e293b;
-                }
-
-                .participant-summary .total{
-                    text-align:right;
-                }
-
-                .participant-summary .total small{
-                    display:block;
-                    color:#64748b;
-                }
-
-                .participant-summary .total h4{
-                    margin:0;
-                    font-weight:700;
-                    color:#10b981;
-                }
-
-                .search-card{
-                    background:#fff;
-                    border:1px solid #e5e7eb;
-                    border-radius:14px;
-                    padding:6px;
-                    margin-bottom:15px;
-                    box-shadow:0 2px 10px rgba(0,0,0,.03);
-                }
-
-                .search-card .input-group-text{
-                    background:#fff;
-                    border:none;
-                    color:#64748b;
-                }
-
-                .search-card .form-control{
-                    border:none;
-                    box-shadow:none !important;
-                    height:48px;
-                }
-
-                .search-card .btn{
-                    border-radius:10px;
-                }
-
-                .participant-note{
-                    background:#fff8e1;
-                    color:#92400e;
-                    border-radius:10px;
-                    padding:10px 14px;
-                    font-size:13px;
-                    margin-bottom:15px;
-                }
-
-                .table-card{
-                    background:#fff;
-                    border-radius:16px;
-                    overflow:hidden;
-                    box-shadow:0 4px 20px rgba(0,0,0,.05);
-                }
-
-                #data-peserta{
-                    margin-bottom:0 !important;
-                }
-
-                #data-peserta thead th{
-                    background:#f8fafc !important;
-                    color:#475569;
-                    border:none !important;
-
-                    font-size:12px;
-                    font-weight:700;
-
-                    text-transform:uppercase;
-                    letter-spacing:.5px;
-
-                    padding:15px;
-                }
-
-                #data-peserta tbody td{
-                    padding:15px;
-                    vertical-align:middle;
-                    border-color:#eef2f7;
-                }
-
-                #data-peserta tbody tr{
-                    transition:.2s;
-                }
-
-                #data-peserta tbody tr:hover{
-                    background:#f8fafc;
-                }
-
-                @media(max-width:768px){
-
-                    .participant-summary{
-                        flex-direction:column;
-                        align-items:flex-start;
-                        gap:12px;
-                    }
-
-                    .participant-summary .total{
-                        text-align:left;
-                    }
-                }
-            </style>
-
-            <div class="card-body p-0 daftar-peserta" hidden>
-
-                <div class="participant-wrapper">
-
-                    <div class="participant-toolbar">
-                        <div>
-                            <button class="button-39 kembali">
-                                <i class="fas fa-chevron-circle-left"></i>
-                                Kembali
-                            </button>
-
-                            <button class="button-39 text-success download-participant-data">
-                                <i class="fas fa-file-excel"></i>
-                                Download Participant
-                            </button>
-                        </div>
-                    </div>
-
-                    <div class="participant-summary">
-
-                        <div>
-                            <div class="event-title title-daftar-peserta">
-                                Nama Event
-                            </div>
-                        </div>
-
-                        <div class="total">
-                            <small>Total Peserta</small>
-                            <h4 class="jumlah-peserta">000</h4>
-                        </div>
-
-                    </div>
-
-                    <div class="search-card">
-
-                        <div class="input-group">
-
-                            <div class="input-group-prepend">
-                                <span class="input-group-text">
-                                    <i class="fas fa-search"></i>
+                        @foreach ($pageLinks as $link)
+                            @if ($link['active'])
+                                <span aria-current="page"
+                                      class="{{ $pageButton }} bg-blue-50 text-blue-800 ring-1 ring-inset ring-blue-200">
+                                    {{ $link['label'] }}
                                 </span>
-                            </div>
+                            @elseif ($link['url'])
+                                <a href="{{ $link['url'] }}" aria-label="Halaman {{ $link['label'] }}"
+                                   class="{{ $pageLink }}">
+                                    {{ $link['label'] }}
+                                </a>
+                            @else
+                                <span class="px-1 text-sm text-slate-500">…</span>
+                            @endif
+                        @endforeach
 
-                            <input
-                                type="text"
-                                class="form-control mr-2"
-                                placeholder="Cari nama, email, ID peserta..."
-                                id="search-participant">
-
-                            <div class="input-group-append">
-                                <button
-                                    class="button-39 mt-1"
-                                    type="button"
-                                    data-toggle="modal"
-                                    data-target="#filterModal">
-
-                                    <i class="fas fa-filter"></i>
-                                    Filter
-                                </button>
-                            </div>
-
-                        </div>
-
+                        @if ($pagination->nextPageUrl())
+                            <a href="{{ $pagination->nextPageUrl() }}" rel="next"
+                               aria-label="Halaman berikutnya" class="{{ $pageLink }}">
+                                <i class="ti ti-chevron-right" aria-hidden="true"></i>
+                            </a>
+                        @endif
                     </div>
-
-                    <div class="participant-note">
-                        <i class="fas fa-info-circle mr-1"></i>
-                        Klik header tabel untuk mengelompokkan data berdasarkan kolom yang dipilih.
-                    </div>
-
-                    <div class="table-responsive pb-3">
-
-                        <table class="table table-hover w-100 mb-3" id="data-peserta">
-
-                            <thead>
-                                <tr>
-                                    <th style="min-width:30px">No</th>
-
-                                    <th style="min-width:150px">
-                                        Name
-                                    </th>
-
-                                    <th style="min-width:180px">
-                                        Email
-                                    </th>
-
-                                    <th style="min-width:150px">
-                                        Ticket
-                                    </th>
-
-                                    <th style="min-width:150px">
-                                        Transaction
-                                    </th>
-
-                                    <th style="min-width:150px">
-                                        Regist Date
-                                    </th>
-
-                                    <th style="min-width:90px">
-                                        Status
-                                    </th>
-
-                                    <th style="min-width:110px">
-                                        Detail
-                                    </th>
-                                </tr>
-                            </thead>
-
-                        </table>
-
-                    </div>
-
-                </div>
-
-            </div>
-        {{-- </div> --}}
-    </section>
-
-    <!-- Detail peserta transaksi -->
-    <!-- Detail peserta transaksi -->
-    <div
-        class="modal fade"
-        id="detailTransaksiModal"
-        tabindex="-1"
-        aria-labelledby="detailTransaksiModalLabel"
-        aria-hidden="true"
-    >
-        <div class="modal-dialog modal-lg">
-
-            <div class="modal-content">
-
-                {{-- =========================================================
-                    HEADER
-                ========================================================== --}}
-                <div class="modal-header">
-
-                    <div>
-
-                        <h5
-                            class="modal-title mb-1"
-                            id="detailTransaksiModalLabel"
-                        >
-                            Detail Peserta
-                        </h5>
-
-                        <div class="text-muted small">
-                            <i class="ti ti-calendar-event"></i>
-                            <span class="p-event"></span>
-                        </div>
-
-                    </div>
-
-                    <button
-                        type="button"
-                        class="close"
-                        data-dismiss="modal"
-                        aria-label="Close"
-                    >
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-
-                </div>
-
-
-                {{-- =========================================================
-                    BODY
-                ========================================================== --}}
-                <div class="modal-body data-pendaftar">
-
-                    {{-- =====================================================
-                        EVENT
-                    ====================================================== --}}
-                    <div class="mb-4">
-
-                        <div class="p-3 bg-light rounded">
-
-                            <div
-                                class="small text-muted mb-1"
-                            >
-                                EVENT
-                            </div>
-
-                            <div
-                                class="font-weight-bold"
-                                style="font-size:16px;"
-                            >
-                                <span class="p-event">
-                                    -
-                                </span>
-                            </div>
-
-                        </div>
-
-                    </div>
-
-
-                    {{-- =====================================================
-                        DATA PESERTA
-                    ====================================================== --}}
-                    <h6 class="font-weight-bold mb-3">
-                        Data Peserta
-                    </h6>
-
-
-                    {{-- Nama --}}
-                    <div class="row">
-
-                        <div class="col-4">
-                            Nama
-                            <span class="float-right">:</span>
-                        </div>
-
-                        <div class="col-8 pl-0">
-                            <b class="p-name"></b>
-                        </div>
-
-                    </div>
-
-
-                    {{-- Email --}}
-                    <div class="row mt-2">
-
-                        <div class="col-4">
-                            Email
-                            <span class="float-right">:</span>
-                        </div>
-
-                        <div class="col-8 pl-0">
-                            <b class="p-email"></b>
-                        </div>
-
-                    </div>
-
-
-                    {{-- Phone --}}
-                    <div class="row mt-2">
-
-                        <div class="col-4">
-                            No HP
-                            <span class="float-right">:</span>
-                        </div>
-
-                        <div class="col-8 pl-0">
-                            <b class="p-phone"></b>
-                        </div>
-
-                    </div>
-
-
-                    {{-- Ticket --}}
-                    <div class="row mt-2">
-
-                        <div class="col-4">
-                            Tiket
-                            <span class="float-right">:</span>
-                        </div>
-
-                        <div class="col-8 pl-0">
-                            <b class="p-ticket"></b>
-                        </div>
-
-                    </div>
-
-
-                    <hr class="my-4">
-
-
-                    {{-- =====================================================
-                        INFORMASI TRANSAKSI
-                    ====================================================== --}}
-                    <h6 class="font-weight-bold mb-3">
-                        Informasi Transaksi
-                    </h6>
-
-
-                    {{-- ID --}}
-                    <div class="row">
-
-                        <div class="col-4">
-                            ID Transaksi
-                            <span class="float-right">:</span>
-                        </div>
-
-                        <div class="col-8 pl-0">
-                            <b class="p-id text-info"></b>
-                        </div>
-
-                    </div>
-
-
-                    {{-- Biaya --}}
-                    <div class="row mt-2">
-
-                        <div class="col-4">
-                            Biaya
-                            <span class="float-right">:</span>
-                        </div>
-
-                        <div class="col-8 pl-0">
-                            <b class="p-biaya"></b>
-                        </div>
-
-                    </div>
-
-
-                    {{-- Status --}}
-                    <div class="row mt-2">
-
-                        <div class="col-4">
-                            Status
-                            <span class="float-right">:</span>
-                        </div>
-
-                        <div class="col-8 pl-0">
-                            <b class="p-status"></b>
-                        </div>
-
-                    </div>
-
-
-                    {{-- Pembayaran --}}
-                    <div class="row mt-2">
-
-                        <div class="col-4">
-                            Pembayaran
-                            <span class="float-right">:</span>
-                        </div>
-
-                        <div class="col-8 pl-0">
-                            <b class="p-pembayaran"></b>
-                        </div>
-
-                    </div>
-
-
-                    <hr class="my-4">
-
-
-                    {{-- =====================================================
-                        CUSTOM FORM
-                    ====================================================== --}}
-                    <h6 class="font-weight-bold mb-3">
-                        Data Tambahan Peserta
-                    </h6>
-
-
-                    <div id="data-custom-form">
-
-                        {{-- Diisi oleh JavaScript --}}
-
-                    </div>
-
-                </div>
-
-
-                {{-- =========================================================
-                    FOOTER
-                ========================================================== --}}
-                <div class="modal-footer">
-
-                    <button
-                        type="button"
-                        class="btn btn-secondary"
-                        data-dismiss="modal"
-                    >
-                        Close
-                    </button>
-
-                </div>
-
-            </div>
-
-        </div>
+                </nav>
+            @endif
+        @endif
     </div>
-
-    <!-- Modal Filter-->
-    <div class="modal fade" id="filterModal" tabindex="-1" aria-labelledby="filterModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="filterModalLabel">Filter status</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <div class="form-group">
-                        <select class="form-control" id="filter-value">
-                            <option value="">Semua status</option>
-                            <option value="Sukses">Sukses</option>
-                            <option value="Pending">Pending</option>
-                            <option value="Expired">Expired</option>
-                            <option value="Unpaid">Unpaid</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-info" id="get-filter"><i class="fas fa-filter"></i>
-                        Filter</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    {{-- Push javascript --}}
-    @push('js-participant')
-        @include('dashboard.js.js-participant')
-    @endpush
-
-    {{-- Push javascript --}}
-    @push('js-myevent')
-        @include('dashboard.js.js-myevent')
-    @endpush
 @endsection

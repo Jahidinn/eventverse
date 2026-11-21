@@ -1,1476 +1,255 @@
-@extends('dashboard.layouts.main')
+@extends('dashboard.layouts.app')
+
+@section('title', 'Event Management')
 
 @section('content')
-    <!-- Content Header (Page header) -->
-    <section class="content-header pb-0">
-        <div class="page-header-modern mb-3">
-            <div class="page-header-left">
-
-                <div class="page-header-icon">
-                    <i class="ti ti-calendar-clock"></i>
-                </div>
-
-                <h2 class="page-header-title">
-                    MANAJEMEN EVENT
-                </h2>
-
+    @php
+        $money = static fn ($value) => 'Rp ' . number_format((float) $value, 0, ',', '.');
+    @endphp
+    <div class="mx-auto max-w-7xl space-y-5 pb-8 text-slate-900">
+        {{-- Header --}}
+        <header class="relative isolate flex flex-wrap items-end justify-between gap-5 overflow-hidden rounded-3xl bg-gradient-to-br from-[#102040] via-[#183970] to-[#1857a6] px-5 py-7 text-white shadow-sm sm:px-8 sm:py-9">
+            <div aria-hidden="true" class="pointer-events-none absolute inset-y-0 right-0 -z-10 w-1/2 bg-[repeating-linear-gradient(135deg,transparent_0_19px,rgba(147,197,253,0.23)_19px_20px)] [mask-image:linear-gradient(to_left,black,transparent)]"></div>
+            <div>
+                <h1 class="font-['Sora','Plus_Jakarta_Sans','Inter',sans-serif] text-3xl font-bold tracking-tight sm:text-4xl">Event Management</h1>
+                <p class="mt-2 max-w-xl text-sm leading-6 text-blue-100">Kelola publikasi, penjualan tiket, dan dana dari setiap event.</p>
             </div>
+            <div class="flex flex-wrap gap-2 [&>button]:bg-white [&>button]:text-blue-900 [&>button:hover]:bg-blue-50">
+                <button type="button" class="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl px-3.5 py-2 text-sm font-semibold transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 disabled:opacity-60 bg-[#1765c4] text-white hover:bg-[#174f9e]" data-create-event>
+                    <i class="ti ti-plus"></i>
+                    Buat event
+                </button>
+            </div>
+        </header>
+        {{-- Toolbar --}}
+        <div class="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2 rounded-2xl border border-slate-200 bg-white p-3 shadow-sm sm:gap-3">
+            <form method="GET" action="" class="flex min-w-0 flex-wrap items-center gap-2">
+                <div class="flex min-h-11 min-w-[8rem] flex-[1_1_8rem] items-center gap-2 rounded-xl border border-slate-200 px-3 focus-within:border-blue-400 focus-within:ring-2 focus-within:ring-blue-100 sm:w-64">
+                    <i class="ti ti-search shrink-0 text-lg text-slate-500" aria-hidden="true"></i>
+                    <input type="search" name="key" aria-label="Cari event" class="min-w-0 flex-1 bg-transparent text-sm text-slate-900 outline-none placeholder:text-slate-500" value="{{ request('key') }}" placeholder="Cari event...">
+                </div>
+                <button type="submit" class="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl px-3.5 py-2 text-sm font-semibold transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 disabled:opacity-60 border border-slate-200 bg-white text-slate-700 hover:bg-slate-100">Cari</button>
+                @if (request('key'))
+                    <a href="/dashboard/manajemen-event" class="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl px-3.5 py-2 text-sm font-semibold transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 disabled:opacity-60 border border-slate-200 bg-white text-slate-700 hover:bg-slate-100">Reset</a>
+                @endif
+            </form>
+            <span class="inline-flex self-start items-center gap-1.5 whitespace-nowrap rounded-lg bg-slate-100 sm:self-center px-2.5 py-1.5 text-xs font-semibold text-slate-600 tabular-nums">
+                <i class="ti ti-layout-grid"></i>
+                {{ number_format($listEvent->total(), 0, ',', '.') }} event
+            </span>
         </div>
-    </section>
-
-    <!-- Main content -->
-    <section class="content">
-
-        <!-- Default box -->
-        {{-- <div class="card"> --}}
-            {{-- <div class="card-header card-header-custom ">
-                <h3 class="card-title manajemen-event-title">Buat event sesukamu! <i class="fas fa-paper-plane"></i></h3>
-            </div> --}}
-
-            {{-- <div class="card-body px-2 pt-3 bg-card-blue"> --}}
-                <style>
-                    .toolbar-modern{
-                        display:flex;
-                        gap:12px;
-                        align-items:center;
-                        justify-content:space-between;
-                        flex-wrap:wrap;
-                        margin-bottom:20px;
-                    }
-
-                    .search-modern{
-                        height:50px;
-                        border:none;
-                        border-radius:16px;
-                        background:#fff;
-                        box-shadow:0 4px 20px rgba(0,0,0,.06);
-                        padding-left:18px;
-                    }
-
-                    .search-modern:focus{
-                        box-shadow:0 0 0 4px rgba(59,130,246,.1);
-                    }
-
-                    .event-card-modern{
-                        border:none;
-                        overflow:hidden;
-                        border-radius:22px;
-                        background:#fff;
-                        box-shadow:0 4px 20px rgba(0,0,0,.06);
-                        transition:.25s;
-                        margin-bottom:18px;
-                    }
-
-                    .event-card-modern:hover{
-                        transform:translateY(-3px);
-                        box-shadow:0 14px 40px rgba(0,0,0,.10);
-                    }
-
-                    .event-cover{
-                        width:100%;
-                        height:180px;
-                        object-fit:cover;
-                        display:block;
-                    }
-
-                    .event-body{
-                        padding:20px;
-                    }
-
-                    .event-title{
-                        font-size:18px;
-                        font-weight:700;
-                        color:#0f172a;
-                        line-height:1.5;
-                    }
-
-                    .event-meta{
-                        color:#64748b;
-                        font-size:13px;
-                    }
-
-                    .event-stats{
-                        display:flex;
-                        gap:10px;
-                        flex-wrap:wrap;
-                        margin-top:15px;
-                        margin-bottom:18px;
-                    }
-
-                    .stat-chip{
-                        display:inline-flex;
-                        align-items:center;
-                        gap:6px;
-
-                        padding:5px 14px;
-
-                        border-radius:999px;
-
-                        font-size:13px;
-                        font-weight:600;
-                    }
-
-                    .stat-chip-success{
-                        background:rgba(16,185,129,.08);
-                        border:1px solid rgba(16,185,129,.15);
-                        color:#059669;
-                    }
-
-                    .stat-chip-active{
-                    background:rgba(59,130,246,.08);
-                    border:1px solid rgba(59,130,246,.15);
-                    color:#2563eb;
-                    }
-
-                    .stat-chip-inactive{
-                        background:rgba(239,68,68,.08);
-                        border:1px solid rgba(239,68,68,.15);
-                        color:#dc2626;
-                    }
-
-                    .event-actions{
-                        display:flex;
-                        gap:8px;
-                        flex-wrap:wrap;
-                    }
-
-                    .action-text{
-                        margin-left:4px;
-                    }
-
-                    .empty-state{
-                        background:#fff;
-                        border-radius:20px;
-                        padding:30px;
-                        text-align:center;
-                        box-shadow:0 4px 20px rgba(0,0,0,.05);
-                    }
-
-                    @media(max-width:768px){
-
-                        .event-cover{
-                            height:140px;
-                        }
-
-                        .event-title{
-                            font-size:16px;
-                        }
-
-                        .event-actions{
-                            display:grid;
-                            grid-template-columns:repeat(4,1fr);
-                            gap:8px;
-                        }
-
-                        .event-actions .button-39,
-                        .event-actions .button-40{
-                            width:100%;
-                            display:flex;
-                            justify-content:center;
-                            align-items:center;
-                            padding:10px;
-                        }
-
-                        .action-text{
-                            display:none;
-                        }
-
-                        .event-actions i{
-                            margin:0 !important;
-                            font-size:18px;
-                        }
-                    }
-                </style>
-
-                <div class="py-0 manajemen-event-box">
-
-                    <div class="toolbar-modern">
-
-                        {{-- <a href="/event/create" class="button-40">
-                            <i class="ti ti-pencil-plus"></i>
-                            Buat Event
-                        </a> --}}
-
-                        {{-- OPEN MODAL --}}
-                        <button
-    type="button"
-    class="button-40"
-    data-toggle="modal"
-    data-target="#createEventModal">
-
-    <i class="ti ti-pencil-plus"></i>
-    Buat Event
-
-</button>
-
-                        <form action="" method="GET" class="flex-grow-1">
-
-                            <input
-                                class="form-control search-modern shadow-none"
-                                name="key"
-                                type="text"
-                                placeholder="Cari event..."
-                                value="{{ request('key') }}"
-                                {{ $listEvent->isEmpty() ? 'hidden' : '' }}>
-
-                        </form>
-
-                    </div>
-
-                    @if($listEvent->isEmpty())
-
-                        <div class="empty-state">
-
-                            <h5>Belum ada event 🎉</h5>
-
-                            <p class="text-muted mb-3">
-                                Buat event pertamamu sekarang.
-                            </p>
-
-                            <a href="/event/create" class="button-40">
-                                Buat Event
+        {{-- Empty state --}}
+        @if ($listEvent->isEmpty())
+            <div class="flex flex-col items-center gap-2 rounded-3xl border border-dashed border-slate-300 bg-white px-5 py-12 text-center text-sm text-slate-600 sm:py-16">
+                <span class="mb-1 grid h-14 w-14 place-items-center rounded-2xl bg-blue-50 text-2xl text-blue-700"><i class="ti ti-calendar-plus"></i></span>
+                @if (request('key'))
+                    <h2 class="text-lg font-bold text-slate-950">Event tidak ditemukan</h2>
+                    <p>Coba kata kunci yang berbeda atau tampilkan semua event.</p>
+                    <a href="/dashboard/manajemen-event" class="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl px-3.5 py-2 text-sm font-semibold transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 disabled:opacity-60 border border-slate-200 bg-white text-slate-700 hover:bg-slate-100">Tampilkan semua event</a>
+                @else
+                    <h2 class="text-lg font-bold text-slate-950">Belum ada event</h2>
+                    <p>Buat event pertama, lalu kelola ticketing dan publikasinya di Event Studio.</p>
+                    <button type="button" class="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl px-3.5 py-2 text-sm font-semibold transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 disabled:opacity-60 bg-[#1765c4] text-white hover:bg-[#174f9e] mt-4" data-create-event>
+                        <i class="ti ti-plus"></i> Buat event
+                    </button>
+                @endif
+            </div>
+        @else
+            {{-- Grid cards --}}
+            <div class="grid gap-3 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 2xl:gap-4">
+                @foreach ($listEvent as $event)
+                    @php
+                        $summary = $finance[$event->id];
+                        $imageExists = $event->image && file_exists(public_path('storage/event-images/' . $event->image));
+                        $isDraft = $event->event_status === 'draft';
+                        $statusClass = $isDraft ? 'bg-amber-50 text-amber-950 ring-amber-200' : 'bg-emerald-50 text-emerald-900 ring-emerald-200';
+                    @endphp
+                    <article class="flex min-w-0 flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition-colors hover:border-blue-200">
+                        {{-- Cover --}}
+                        @if ($isDraft)
+                            <a
+                                href="#"
+                                class="group relative isolate block aspect-[16/7] overflow-hidden bg-gradient-to-br from-blue-100 via-slate-100 to-indigo-100 focus-visible:outline focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-blue-600"
+                                aria-label="Event masih draft"
+                                data-draft-detail
+                                data-draft-title="{{ $event->title }}"
+                                data-draft-studio="/event-studio/{{ $event->event_id }}/basic">
+                                <span class="absolute inset-0 grid place-items-center text-3xl text-blue-400"><i class="ti ti-lock"></i></span>
+                                @if ($imageExists)
+                                    <img src="{{ asset('storage/event-images/' . $event->image) }}" alt="" loading="lazy" class="absolute inset-0 h-full w-full object-cover motion-safe:transition-transform motion-safe:duration-300 motion-safe:group-hover:scale-[1.03]" onerror="this.hidden=true; this.classList.add('hidden')">
+                                @endif
+                                <span class="absolute left-3 top-3 rounded-full px-2.5 py-1 text-xs font-semibold ring-1 ring-inset {{ $statusClass }}">{{ match ($event->event_status) { 'draft' => 'Draf', 'published' => 'Terbit', default => $event->event_status } }}</span>
                             </a>
-
-                        </div>
-
-                    @endif
-
-                    @foreach($listEvent as $event)
-
-                        @php
-
-                            $participant = \App\Models\Transaction::where('event_id',$event->id)
-                                ->whereNotIn('status',['Expired','Unpaid','Pending'])
-                                ->count();
-
-                            $title = strlen($event->title) > 70
-                                ? substr($event->title,0,70).'...'
-                                : $event->title;
-
-                        @endphp
-
-                        <div class="card event-card-modern">
-
-                            <img
-                                src="{{ asset('storage/event-images/'.$event->image) }}"
-                                class="event-cover"
-                                alt="{{ $event->title }}">
-
-                            <div class="event-body">
-
+                        @else
+                            <a href="/{{ $event->slug }}" class="group relative isolate block aspect-[16/7] overflow-hidden bg-gradient-to-br from-blue-100 via-slate-100 to-indigo-100 focus-visible:outline focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-blue-600" aria-label="Lihat detail {{ $event->title }}">
+                                <span class="absolute inset-0 grid place-items-center text-3xl text-blue-400"><i class="ti ti-photo-off"></i></span>
+                                @if ($imageExists)
+                                    <img src="{{ asset('storage/event-images/' . $event->image) }}" alt="" loading="lazy" class="absolute inset-0 h-full w-full object-cover motion-safe:transition-transform motion-safe:duration-300 motion-safe:group-hover:scale-[1.03]" onerror="this.hidden=true; this.classList.add('hidden')">
+                                @endif
+                                <span class="absolute left-3 top-3 rounded-full px-2.5 py-1 text-xs font-semibold ring-1 ring-inset {{ $statusClass }}">{{ match ($event->event_status) { 'draft' => 'Draf', 'published' => 'Terbit', default => $event->event_status } }}</span>
+                            </a>
+                        @endif
+                        {{-- Body --}}
+                        <div class="flex min-w-0 flex-1 flex-col p-3.5">
+                            @if ($isDraft)
                                 <a
-                                    href="/event/{{ $event->slug }}"
-                                    class="event-title text-decoration-none">
-
-                                    {{ $title }}
-
+                                    href="#"
+                                    class="break-words font-['Sora','Plus_Jakarta_Sans','Inter',sans-serif] text-base font-bold leading-snug tracking-tight text-slate-950 hover:text-blue-700 hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-blue-600"
+                                    data-draft-detail
+                                    data-draft-title="{{ $event->title }}"
+                                    data-draft-studio="/event-studio/{{ $event->event_id }}/basic">
+                                    {{ $event->title }} <span class="ml-1 inline-block text-sm text-amber-700"><i class="ti ti-lock"></i></span>
                                 </a>
-
-                                <div class="event-meta mt-2">
-
-                                    <i class="ti ti-calendar"></i>
-
-                                    Dibuat
-                                    {{ $event->created_at->format('d M Y') }}
-
-                                </div>
-
-                                <div class="event-stats">
-
-                                    <div class="stat-chip stat-chip-success">
-                                        <i class="ti ti-users"></i>
-                                        {{ $participant }} Peserta
-                                    </div>
-
-                                    <div class="stat-chip {{ $event->status == 1 ? 'stat-chip-active' : 'stat-chip-inactive' }}">
-                                        <i class="ti {{ $event->status == 1 ? 'ti-circle-check' : 'ti-circle-x' }}"></i>
-                                        {{ $event->status == 1 ? 'Aktif' : 'Tidak Aktif' }}
-                                    </div>
-
-                                </div>
-
-                                <div class="event-actions">
-
-                                    <a
-                                        href="/event-studio/{{ $event->event_id }}/basic"
-                                        class="button-39"
-                                        title="Edit Event">
-
-                                        <i class="ti ti-edit ti-sm"></i>
-
-                                        <span class="action-text">
-                                            Edit Event
-                                        </span>
-
-                                    </a>
-
-                                    <!-- <button
-                                        type="button"
-                                        class="button-39 edit-ticket-button"
-                                        data-id="{{ $event->id }}"
-                                        data-event="{{ $event->title }}"
-                                        title="Edit Tiket">
-
-                                        <i class="ti ti-ticket ti-sm"></i>
-
-                                        <span class="action-text">
-                                            Edit Tiket
-                                        </span>
-
-                                    </button>
-
-                                    <button
-                                        type="button"
-                                        class="button-39 edit-formulir-button"
-                                        data-id="{{ $event->id }}"
-                                        data-event="{{ $event->title }}"
-                                        title="Edit Formulir">
-
-                                        <i class="ti ti-file-description ti-sm"></i>
-
-                                        <span class="action-text">
-                                            Edit Formulir
-                                        </span>
-
-                                    </button> -->
-
-                                    <button
-                                        type="button"
-                                        class="button-39 text-danger delete-event"
-                                        data-id="{{ $event->id }}"
-                                        title="Hapus Event">
-
-                                        <i class="ti ti-trash ti-sm"></i> Delete
-
-                                    </button>
-
-                                </div>
-
+                            @else
+                                <a href="/{{ $event->slug }}" class="break-words font-['Sora','Plus_Jakarta_Sans','Inter',sans-serif] text-base font-bold leading-snug tracking-tight text-slate-950 hover:text-blue-700 hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-blue-600">{{ $event->title }}</a>
+                            @endif
+                            <div class="mt-2 flex items-start gap-2 text-xs leading-5 text-slate-600 [&>i]:shrink-0 [&>i]:text-base [&>i]:text-blue-700">
+                                <i class="ti ti-calendar-event"></i>
+                                {{ $event->start_date?->format('d M Y') ?? 'Tanggal belum diisi' }}
+                                @if ($event->end_date) · s.d. {{ $event->end_date->format('d M Y') }} @endif
                             </div>
-
-                        </div>
-
-                    @endforeach
-
-                    <div class="d-flex justify-content-center mt-4">
-                        {{ $listEvent->links() }}
-                    </div>
-
-                </div>
-
-                {{-- Manajemen ticket  --}}
-                <div class="manajemen-ticket-box" hidden>
-                    {{-- Title event --}}
-                    <div class="text-left mb-2">
-                        <strong class="event-title-for-ticket"></strong>
-                    </div>
-                    <hr>
-
-                    {{-- Button --}}
-                    <button class="button-39 rounded" id="back-from-ticket"><i
-                            class="fas fa-arrow-left"></i>
-                        Kembali</button>
-                    <button class="button-39 text-info rounded" id="add-ticket-button"><i class="fas fa-plus"></i>
-                        Tambah tiket</button>
-
-                    {{-- Search ticket field --}}
-                    <div class="my-2 form-inline mt-3">
-                        <input class="form-control col shadow-none" id="search-ticket" type="text"
-                            placeholder="Cari tiket ..">
-                    </div>
-
-                    <div class="table-responsive">
-                        {{-- Tabel ticket --}}
-                        <table id="ticket-table" class="table table-striped table-bordered w-100">
-                            <thead class="thead-dark">
-                                <tr>
-                                    <th style="min-width: 120px">Tiket</th>
-                                    <th>Harga</th>
-                                    <th>Kuota</th>
-                                    <th style="min-width: 100px">#</th>
-                                </tr>
-                            </thead>
-                        </table>
-                    </div>
-                </div>
-
-                {{-- Manajemen formulir --}}
-                <div class="manajemen-formulir-box" hidden>
-
-                    <div class="text-left mb-2"><strong class="event-title-for-formulir"></strong></div>
-                    <hr>
-                    {{-- Button --}}
-                    <button class="button-39 rounded" id="back-from-formulir"><i
-                            class="fas fa-arrow-left"></i>
-                        Kembali</button>
-                    <button class="button-39 text-info rounded" id="add-formulir-button"><i class="fas fa-plus"></i>
-                        Tambah formulir</button>
-
-                    {{-- FORM search --}}
-                    <div class="my-2 mt-3 form-inline">
-                        <input class="form-control col shadow-none" id="search-form" type="text"
-                            placeholder="Cari formulir ..">
-                    </div>
-
-                    {{-- Tabel data formulir --}}
-                    <div class="table-responsive">
-                        <table id="form-table" class="table table-striped table-bordered" style="width:100%">
-                            <thead class="thead-dark">
-                                <tr>
-                                    <th>Tiket</th>
-                                    <th>#</th>
-                                </tr>
-                            </thead>
-                        </table>
-                    </div>
-
-                </div>
-            {{-- </div>
-        </div> --}}
-
-        {{-- Modal --}}
-
-        <!-- Modal edit ticket-->
-        <div class="modal fade" id="addEditTicketModal" tabindex="-1" aria-labelledby="addEditTicketModalLabel"
-            aria-hidden="true">
-            <div class="modal-dialog modal-lg">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="addEditTicketModalLabel">Edit ticket</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <form action="javascript:void(0)" class="addEditTicket" id="">
-                        @csrf
-
-                        <div class="modal-body">
-                            <input type="hidden" name="id_ticket" id="id_ticket">
-                            <input type="hidden" class="event_id" name="event_id" id="event_id">
-                            <div class="form-group mb-2">
-                                <label for="ticket_name" class="form-control-label">NAMA TIKET</label>
-                                <input type="text" class="form-control shadow-none rounded-0" id="ticket_name"
-                                    name="ticket_name" placeholder="Nama tiket pendaftaran" required>
-                            </div>
-                            <div class="row">
-                                <div class="col-6">
-                                    <div class="form-group mb-2">
-                                        <label for="ticket_price" class="form-control-label">HARGA</label>
-                                        <input type="text" class="form-control shadow-none rounded-0 mb-0"
-                                            id="ticket_price" name="ticket_price" placeholder="Rp 100.000" required>
-                                        <div class="form-text text-danger mt-1 pt-0">
-                                            <small id="price_notification">isi angka 0 jika gratis.</small>
-                                        </div>
-                                    </div>
+                            <div class="mb-3 mt-3 grid grid-cols-2 gap-px overflow-hidden rounded-xl border border-slate-200 bg-slate-200">
+                                <div class="min-w-0 bg-slate-50 px-2.5 py-1.5 [&>span]:block [&>span]:text-xs [&>span]:text-slate-600 [&>strong]:mt-0.5 [&>strong]:block [&>strong]:break-words [&>strong]:text-sm [&>strong]:tabular-nums">
+                                    <span>Peserta</span>
+                                    <strong>{{ number_format($summary['participants'], 0, ',', '.') }}</strong>
                                 </div>
-                                <div class="col-6">
-                                    <div class="form-group mb-2">
-                                        <label for="ticket_quota" class="form-control-label">KUOTA PENDAFTAR</label>
-                                        <input type="number" class="form-control shadow-none rounded-0"
-                                            id="ticket_quota" name="ticket_quota" placeholder="100" required>
-                                    </div>
+                                <div class="min-w-0 bg-slate-50 px-2.5 py-1.5 [&>span]:block [&>span]:text-xs [&>span]:text-slate-600 [&>strong]:mt-0.5 [&>strong]:block [&>strong]:break-words [&>strong]:text-sm [&>strong]:tabular-nums">
+                                    <span>Tiket</span>
+                                    <strong>{{ number_format($summary['tickets'], 0, ',', '.') }}</strong>
+                                </div>
+                                <div class="min-w-0 bg-slate-50 px-2.5 py-1.5 [&>span]:block [&>span]:text-xs [&>span]:text-slate-600 [&>strong]:mt-0.5 [&>strong]:block [&>strong]:break-words [&>strong]:text-sm [&>strong]:tabular-nums col-span-2 flex flex-wrap items-baseline justify-between gap-x-2 !bg-blue-50/90 text-blue-950">
+                                    <span>Dana</span>
+                                    <strong>{{ $money($summary['available']) }}</strong>
                                 </div>
                             </div>
-
-                            <div class="row">
-                                <div class="col-6">
-                                    <div class="form-group mb-2">
-                                        <label for="ticket_start" class="form-control-label">BERLAKU DARI</label>
-                                        <div id="datepicker" class="input-group date mt-1 mb-3"
-                                            data-date-format="yyyy-mm-dd">
-                                            <input class="form-control shadow-none rounded-0" id="ticket_start"
-                                                name="ticket_start" type="text" required>
-                                            <span class="input-group-addon"></span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-6">
-                                    <div class="form-group mb-2">
-                                        <label for="ticket_deadline" class="form-control-label">BERLAKU SAMPAI</label>
-                                        <div id="datepicker" class="input-group date mt-1 mb-3"
-                                            data-date-format="yyyy-mm-dd">
-                                            <input class="form-control shadow-none rounded-0" id="ticket_deadline"
-                                                name="ticket_deadline" type="text" required>
-                                            <span class="input-group-addon"></span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="col-6">
-                                    <div class="form-group mb-2">
-                                        <label for="ticket_deadline" class="form-control-label">LABEL</label>
-                                        <select class="form-control" id="ticket_button" name="ticket_button">
-                                            <option value="DAFTAR">DAFTAR</option>
-                                            <option value="BELI TIKET">BELI TIKET</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-6">
-                                    <div class="form-check mt-4">
-                                        <input class="form-check-input" type="checkbox" id="ticket_more_qty"
-                                            name="ticket_more_qty" value="1">
-
-                                        <label class="form-check-label" for="ticket_more_qty">
-                                            Bisa registrasi <b>lebih dari 1X</b>
-                                        </label>
-                                    </div>
-                                </div>
+                            <div class="mt-auto flex flex-wrap items-center justify-between gap-2 border-t border-dashed border-slate-200 pt-3">
+                                <a href="/event-studio/{{ $event->event_id }}/basic" class="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl px-3.5 py-2 text-sm font-semibold transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 disabled:opacity-60 bg-[#1765c4] text-white hover:bg-[#174f9e]">
+                                    <i class="ti ti-edit"></i>
+                                    Event Studio
+                                </a>
+                                <button
+                                    type="button"
+                                    class="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl px-3.5 py-2 text-sm font-semibold transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 disabled:opacity-60 text-slate-600 hover:bg-slate-100 hover:text-slate-900"
+                                    data-delete-event="{{ $event->id }}"
+                                    aria-label="Hapus {{ $event->title }}">
+                                    <i class="ti ti-trash"></i>
+                                    Hapus
+                                </button>
                             </div>
                         </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-primary btn-ticket-submit"><i class="fas fa-check"></i>
-                                Simpan</button>
-                        </div>
-                    </form>
-                </div>
+                    </article>
+                @endforeach
             </div>
-        </div>
+            @if ($listEvent->hasPages())
+                @php
+                    $pagination = $listEvent->withQueryString();
+                    $pageLinks = $pagination->linkCollection()->slice(1, -1);
+                    $pageButton = 'inline-flex h-9 min-w-9 items-center justify-center rounded-lg px-2 text-sm font-semibold tabular-nums focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600';
+                    $pageLink = $pageButton . ' border border-slate-200 bg-white text-slate-700 hover:bg-blue-50 hover:text-blue-800';
+                @endphp
 
-        <!-- Modal edit formulir-->
-        <div class="modal fade" id="addEditFormModal" tabindex="-1" aria-labelledby="addEditFormModalLabel"
-            aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="addEditFormModalLabel">Edit formulir</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
+                <nav aria-label="Halaman event" class="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-slate-200 bg-white px-4 py-3 text-slate-700">
+                    <p class="text-xs tabular-nums">
+                        {{ $pagination->firstItem() }}–{{ $pagination->lastItem() }} dari {{ number_format($pagination->total(), 0, ',', '.') }} event
+                    </p>
+                    <div class="flex flex-wrap items-center gap-1.5">
+                        @if ($pagination->previousPageUrl())
+                            <a href="{{ $pagination->previousPageUrl() }}" rel="prev" aria-label="Halaman sebelumnya" class="{{ $pageLink }}">
+                                <i class="ti ti-chevron-left" aria-hidden="true"></i>
+                            </a>
+                        @endif
+
+                        @foreach ($pageLinks as $link)
+                            @if ($link['active'])
+                                <span aria-current="page" class="{{ $pageButton }} bg-blue-50 text-blue-800 ring-1 ring-inset ring-blue-200">{{ $link['label'] }}</span>
+                            @elseif ($link['url'])
+                                <a href="{{ $link['url'] }}" aria-label="Halaman {{ $link['label'] }}" class="{{ $pageLink }}">{{ $link['label'] }}</a>
+                            @else
+                                <span class="px-1 text-sm text-slate-500">…</span>
+                            @endif
+                        @endforeach
+
+                        @if ($pagination->nextPageUrl())
+                            <a href="{{ $pagination->nextPageUrl() }}" rel="next" aria-label="Halaman berikutnya" class="{{ $pageLink }}">
+                                <i class="ti ti-chevron-right" aria-hidden="true"></i>
+                            </a>
+                        @endif
                     </div>
-                    <div class="text-center mb-0">
-                        <small class="text-success">Tambahkan <b>*</b> di akhir jika
-                            form wajib diisi</small>
-                    </div>
-                    <form action="javascript:void(0)" class="addEditForm" id="">
-                        @csrf
-                        <div class="modal-body">
-
-                            <input type="hidden" name="id_form" id="id_form">
-                            <input type="hidden" class="event_id" name="event_id" id="event_id">
-
-                            <div class="form-group mb-2">
-                                <label for="form_name" class="font-weight-normal">Nama formulir</label>
-                                <input type="text" class="form-control shadow-none rounded-0" id="form_name"
-                                    name="form_name" placeholder="Nama formulir *">
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-primary btn-form-submit"><i class="fas fa-check"></i>
-                                Simpan</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-
-
-       <div class="modal fade" id="createEventModal" tabindex="-1">
-
-    <div class="modal-dialog modal-lg modal-dialog-centered">
-
-        <form
-             id="createEventForm"
-    class="modal-content ev-card"
-    method="POST" onsubmit="return false;">
-
-            @csrf
-
-            
-
-            <div class="">
-
-                <div class="ev-card-header">
-
-                    <div class="ev-card-icon">
-
-                        <i class="ti ti-edit"></i>
-
-                    </div>
-
-                    <div>
-
-                        <h5>Event Information</h5>
-
-                        <p>
-                            Give your event a memorable name and unique public URL.
-                        </p>
-
-                    </div>
-
-                </div>
-
-                <!-- Event Name -->
-
-                <div class="ev-form-group">
-
-                    <label>
-
-                        Event Name
-
-                        <span>*</span>
-
-                    </label>
-
-                    <input
-                        type="text"
-                        id="name"
-                        name="name"
-                        class="ev-input"
-                        placeholder="Example: Tech Innovation Summit 2026">
-
-                </div>
-
-
-            <!-- =========================================
-                EVENT CATEGORY
-            ========================================= -->
-            <div class="ev-form-group">
-
-                <label class="ev-label">
-
-                    Kategori Event <span>*</span>
-
-                </label>
-
-                <select
-                    id="category_id"
-                    name="category_id">
-
-                    <option value="">Pilih kategori event</option>
-                        
-                    @foreach ($categories as $category)
-                        <option value="{{ $category->id }}">{{ $category->name }}</option>
-                    @endforeach
-
-
-                    {{-- <option value="seminar">Seminar</option> --}}
-                    {{-- <option value="workshop">Workshop</option>
-                    <option value="conference">Conference</option>
-                    <option value="concert">Concert</option>
-                    <option value="festival">Festival</option>
-                    <option value="sport">Sport</option>
-                    <option value="technology">Technology</option>
-                    <option value="business">Business</option>
-                    <option value="education">Education</option>
-                    <option value="startup">Startup</option>
-                    <option value="gaming">Gaming & Esports</option>
-                    <option value="food">Food & Beverage</option>
-                    <option value="art">Art & Culture</option>
-                    <option value="community">Community</option>
-                    <option value="charity">Charity</option>
-                    <option value="religious">Religious</option>
-                    <option value="others">Lainnysa</option> --}}
-
-                </select>
-
-            </div>
-
-                <!-- URL -->
-
-                <div class="ev-form-group">
-
-                    <label>
-
-                        Event URL
-
-                        <span>*</span>
-
-                    </label>
-
-                    <div class="ev-url-input">
-
-                        <div class="ev-url-prefix">
-
-                            eventverse.id/
-
-                        </div>
-
-                        <input
-                            type="text"
-                            id="slug"
-                            name="slug"
-                            class="ev-input-url"
-                            placeholder="tech-innovation-summit">
-
-                    </div>
-
-                </div>
-
-                <div class="ev-url-preview">
-
-                    <div id="slugAlert" class="ev-url-status info">
-
-                <span id="slugStatus">
-                    <i class="ti ti-info-circle"></i> URL akan dibuat otomatis
-                </span>
-
-            </div>
-
-                    <div id="urlPreview">
-
-                        eventverse.id/
-
-                    </div>
-
-                </div>
-
-            </div>
-
-            {{-- <div class="modal-footer border-0">
-
-                <button
-                    type="button"
-                    class="btn btn-light"
-                    data-dismiss="modal">
-
-                    Cancel
-
-                </button>
-
-                <button
-                    type="submit"
-                    class="btn btn-primary">
-
-                    <i class="ti ti-check mr-1"></i>
-
-                    Create Event
-
-                </button>
-
-            </div> --}}
-
-            <!-- ACTION -->
-
-<div class="ev-card-footer">
-
-    <button
-        type="button"
-        class="btn btn-light"
-        data-dismiss="modal">
-
-        Cancel
-
-    </button>
-
-    <button
-        type="submit"
-        id="btnCreateEvent"
-        class="btn btn-primary">
-
-        <i class="ti ti-arrow-right mr-1"></i>
-
-        Create Event
-
-    </button>
-
-</div>
-
-        </form>
-
+                </nav>
+            @endif
+        @endif
     </div>
-
-</div>
-
-    </section>
-
-
-    <style>
-
-
-/* =====================================================
-    CARD
-===================================================== */
-
-.ev-card{
-
-    background:#fff;
-
-    border:1px solid #E7EDF5;
-
-    border-radius:24px;
-
-    padding:28px;
-
-    box-shadow:0 10px 30px rgba(15,23,42,.04);
-
-    margin-bottom:28px;
-
-}
-
-.ev-card-header{
-
-    display:flex;
-
-    align-items:center;
-
-    gap:18px;
-
-    margin-bottom:28px;
-
-}
-
-.ev-card-header h5{
-
-    margin:0;
-
-    font-size:1.15rem;
-
-    font-weight:700;
-
-    color:#0F172A;
-
-}
-
-.ev-card-header p{
-
-    margin:6px 0 0;
-
-    color:#64748B;
-
-    font-size:.92rem;
-
-}
-
-.ev-card-icon{
-
-    width:58px;
-
-    height:58px;
-
-    border-radius:18px;
-
-    background:linear-gradient(135deg,#EEF5FF,#DDEAFF);
-
-    display:flex;
-
-    justify-content:center;
-
-    align-items:center;
-
-    color:#4F8CFF;
-
-    font-size:22px;
-
-}
-
-
-/* =====================================================
-    MOBILE
-===================================================== */
-
-@media(max-width:767px){
-
-.ev-card{
-
-    padding:20px;
-
-}
-
-.ev-title{
-
-    font-size:1.8rem;
-
-}
-}
-
-.ev-form-group{
-
-    margin-bottom:24px;
-    margin-top: 20px;
-
-}
-
-.ev-form-group label{
-
-    display:block;
-
-    font-weight:700;
-
-    margin-bottom:10px;
-
-    color:#0F172A;
-
-}
-
-.ev-form-group span{
-
-    color:#EF4444;
-
-}
-
-.ev-input{
-
-    width:100%;
-
-    height:58px;
-
-    border:1px solid #E2E8F0;
-
-    border-radius:16px;
-
-    padding:0 18px;
-
-    font-size:15px;
-
-    transition:.25s;
-
-}
-
-.ev-input:focus{
-
-    border-color:#4F8CFF;
-
-    box-shadow:0 0 0 4px rgba(79,140,255,.08);
-
-    outline:none;
-
-}
-
-.ev-url-input{
-
-    display:flex;
-
-    border:1px solid #E2E8F0;
-
-    border-radius:16px;
-
-    overflow:hidden;
-
-    transition:.25s;
-
-}
-
-.ev-url-input:focus-within{
-
-    border-color:#4F8CFF;
-
-    box-shadow:0 0 0 4px rgba(79,140,255,.08);
-
-}
-
-.ev-url-prefix{
-
-    background:#F8FAFC;
-
-    border-right:1px solid #E2E8F0;
-
-    padding:0 18px;
-
-    display:flex;
-
-    align-items:center;
-
-    color:#64748B;
-
-    font-weight:600;
-
-}
-
-.ev-input-url{
-
-    flex:1;
-
-    border:none;
-
-    height:58px;
-
-    padding:0 18px;
-
-    outline:none;
-
-}
-
-.ev-url-preview{
-
-    margin-top:20px;
-
-    padding:18px;
-
-    border-radius:16px;
-
-    background:#F8FAFC;
-
-    border:1px solid #E2E8F0;
-
-}
-
-.ev-url-status{
-
-    display:flex;
-
-    align-items:center;
-
-    gap:10px;
-
-    margin-bottom:10px;
-
-    font-size:.92rem;
-
-    font-weight:600;
-
-}
-
-.ev-url-status.success{
-
-    color:#10B981;
-
-}
-
-.ev-url-status.error{
-
-    color:#EF4444;
-
-}
-
-.ev-url-status.checking{
-
-    color:#F59E0B;
-
-}
-
-.ev-url-status.info{
-
-    color:#64748B;
-
-}
-
-#urlPreview{
-
-    color:#334155;
-
-    word-break:break-all;
-
-}
-
-.ev-card-footer{
-
-    display:flex;
-
-    justify-content:flex-end;
-
-    align-items:center;
-
-    gap:12px;
-
-    margin-top:28px;
-
-    padding-top:24px;
-
-    border-top:1px solid #EEF2F7;
-
-}
-
-.ev-card-footer .btn{
-
-    min-width:140px;
-
-    height:46px;
-
-    border-radius:12px;
-
-    font-weight:600;
-
-}
-
-
-/* =========================================
-   CHOICES.JS - EVENTVERSE
-========================================= */
-
-.choices{
-    margin:0;
-}
-
-.choices__inner{
-
-    display:flex;
-    align-items:center;
-
-    min-height:58px;
-
-    padding:0 16px !important;
-
-    border:1px solid #E2E8F0;
-    border-radius:16px;
-
-    background:#FFF;
-
-    font-size:15px;
-
-    transition:.25s;
-
-}
-
-.choices.is-focused .choices__inner{
-
-    border-color:var(--primary);
-
-    box-shadow:0 0 0 4px rgba(79,110,247,.08);
-
-}
-
-/* text yang dipilih */
-
-.choices__list--single{
-
-    display:flex;
-    align-items:center;
-
-    height:56px;
-
-    padding:0 !important;
-
-}
-
-.choices__list--single .choices__item{
-
-    display:flex;
-    align-items:center;
-
-    font-weight:500;
-
-}
-
-/* search */
-
-.choices__input{
-
-    background:transparent !important;
-
-    margin:0 !important;
-
-    padding:0 !important;
-
-    font-size:15px;
-
-}
-
-/* dropdown */
-
-.choices__list--dropdown,
-.choices__list[aria-expanded]{
-
-    margin-top:8px;
-
-    border:1px solid #E2E8F0;
-
-    border-radius:16px;
-
-    overflow:hidden;
-
-    box-shadow:0 18px 40px rgba(15,23,42,.08);
-
-}
-
-/* item */
-
-.choices__list--dropdown .choices__item{
-
-    padding:13px 16px;
-
-    font-size:14px;
-
-    transition:.2s;
-
-}
-
-.choices__list--dropdown .choices__item--selectable.is-highlighted{
-
-    background:#EEF2FF;
-
-    color:var(--primary);
-
-}
-
-/* placeholder */
-
-.choices__placeholder{
-
-    opacity:.55;
-
-}
-
-/* Input search dalam dropdown */
-
-.choices__list--dropdown .choices__input,
-.choices__list[aria-expanded] .choices__input{
-
-    font-size:15px;
-
-    padding:10px 14px !important;
-
-    min-height:42px;
-
-    border:1px solid #E2E8F0;
-
-    border-radius:12px;
-
-    margin:10px !important;
-
-    width:calc(100% - 20px);
-
-    box-sizing:border-box;
-
-}
-
-/* Focus */
-
-.choices__list--dropdown .choices__input:focus,
-.choices__list[aria-expanded] .choices__input:focus{
-
-    border-color:var(--primary);
-
-    box-shadow:0 0 0 3px rgba(79,110,247,.08);
-
-}
-
-/* Placeholder */
-
-.choices__list--dropdown .choices__input::placeholder{
-
-    color:#94A3B8;
-
-}
-
-/* arrow */
-/* 
-.choices[data-type*="select-one"]::after{
-
-    border:none;
-
-    content:"\f078";
-
-    font-family:"Font Awesome 6 Free";
-
-    font-weight:900;
-
-    color:#94A3B8;
-
-    top:50%;
-
-    right:18px;
-
-    transform:translateY(-50%);
-
-    margin:0;
-
-}
-
-.choices[data-type*="select-one"].is-open::after{
-
-    transform:translateY(-50%) rotate(180deg);
-
-} */
-
-/* hilangkan garis atas dropdown */
-
-.choices[data-type*="select-one"] .choices__inner{
-
-    padding-bottom:0;
-
-}
-
-/* hilangkan border default */
-
-.choices.is-open .choices__inner{
-
-    border-radius:16px;
-
-}
-
-/* disabled */
-
-.choices.is-disabled .choices__inner{
-
-    background:#F8FAFC;
-
-}
-    </style>
-
-    @if (Session::has('popup'))
-        <script type="text/javascript">
-            alertify.alert("Sukses!", "{{ session()->get('popup') }}");
+    {{-- Draft toast --}}
+    <div id="draftNotice" class="fixed bottom-20 right-4 z-40 hidden w-[calc(100%_-_2rem)] max-w-sm rounded-2xl border border-amber-200 bg-white p-4 text-sm shadow-lg lg:bottom-5" role="status" aria-live="polite">
+        <div class="flex items-start gap-3">
+            <span class="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-amber-100 text-lg text-amber-800"><i class="ti ti-alert-triangle"></i></span>
+            <div class="min-w-0 flex-1 [&>p]:mt-1 [&>p]:text-slate-600">
+                <strong>Event masih draft</strong>
+                <p>Selesaikan detail event di Event Studio terlebih dahulu.</p>
+                <a id="draftNoticeLink" href="/dashboard/manajemen-event" class="mt-2 inline-flex items-center gap-1 font-semibold text-blue-700 hover:underline">
+                    Buka Event Studio
+                    <i class="ti ti-arrow-right"></i>
+                </a>
+            </div>
+            <button type="button" id="closeDraftNotice" class="grid h-8 w-8 shrink-0 place-items-center rounded-lg text-slate-600 hover:bg-slate-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-blue-600" aria-label="Tutup notifikasi">
+                <i class="ti ti-x"></i>
+            </button>
+        </div>
+    </div>
+    @push('scripts')
+        <script>
+            (function () {
+                const token = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';
+                const draftNotice = document.getElementById('draftNotice');
+                const draftNoticeLink = document.getElementById('draftNoticeLink');
+                let draftTimer = null;
+                const hideDraftNotice = function () {
+                    clearTimeout(draftTimer);
+                    draftNotice.classList.add('hidden');
+                };
+                const showDraftNotice = function (studioUrl) {
+                    draftNoticeLink.href = studioUrl || '/dashboard/manajemen-event';
+                    draftNotice.classList.remove('hidden');
+                    clearTimeout(draftTimer);
+                    draftTimer = setTimeout(hideDraftNotice, 6000);
+                };
+                document.querySelectorAll('[data-draft-detail]').forEach(function (trigger) {
+                    trigger.addEventListener('click', function (event) {
+                        event.preventDefault();
+                        showDraftNotice(trigger.dataset.draftStudio);
+                    });
+                });
+                document.getElementById('closeDraftNotice').addEventListener('click', hideDraftNotice);
+                document.addEventListener('keydown', function (event) {
+                    if (event.key === 'Escape') hideDraftNotice();
+                });
+                document.querySelectorAll('[data-delete-event]').forEach(function (button) {
+                    button.addEventListener('click', async function () {
+                        if (!window.confirm('Hapus event ini? Event yang sudah memiliki peserta tidak dapat dihapus.')) {
+                            return;
+                        }
+                        button.disabled = true;
+                        try {
+                            const response = await fetch('/event/' + encodeURIComponent(button.dataset.deleteEvent), {
+                                method: 'DELETE',
+                                headers: {
+                                    'Accept': 'application/json',
+                                    'X-CSRF-TOKEN': token,
+                                },
+                            });
+                            const payload = await response.json();
+                            if (payload.success) {
+                                window.location.reload();
+                                return;
+                            }
+                            window.alert(payload.error || 'Gagal menghapus event.');
+                        } catch (error) {
+                            window.alert('Gagal menghapus event. Coba lagi.');
+                        }
+                        button.disabled = false;
+                    });
+                });
+            })();
         </script>
-    @endif
-
-    <script>
-
-document.addEventListener("DOMContentLoaded", function(){
-
-    const element = document.getElementById("category_id");
-
-    if(element && window.Choices){
-
-        new Choices(element,{
-            searchEnabled:true,
-            itemSelectText:"",
-            shouldSort:false
-        });
-
-    }
-
-});
-
-let timer = null;
-
-const eventName=document.getElementById("name");
-
-const slug=document.getElementById("slug");
-
-const urlPreview=document.getElementById("urlPreview");
-
-const slugStatus=document.getElementById("slugStatus");
-
-eventName.addEventListener("keyup",()=>{
-
-    if(slug.value.trim()===""){
-
-        slug.value=eventName.value
-            .toLowerCase()
-            .replace(/[^\w ]+/g,"")
-            .replace(/\s+/g,"-");
-
-        updateSlug();
-
-    }
-
-});
-
-slug.addEventListener("keyup",updateSlug);
-
-function updateSlug(){
-
-    // Ganti spasi menjadi -
-    slug.value = slug.value.replace(/\s+/g, "-");
-
-    const value = slug.value;
-
-    urlPreview.textContent = "eventverse.id/" + value;
-
-    clearTimeout(timer);
-
-    if(value === ""){
-
-        slugStatus.innerHTML =
-            '<i class="ti ti-info-circle"></i> URL akan dibuat otomatis';
-
-        slugStatus.className = "ev-url-status info";
-
-        return;
-
-    }
-
-    slugStatus.innerHTML =
-        '<i class="ti ti-loader fa-spin"></i> Memeriksa URL...';
-
-    slugStatus.className = "ev-url-status checking";
-
-    timer = setTimeout(() => {
-
-        checkSlug(value);
-
-    }, 500);
-
-}
-function checkSlug(slug){
-
-    fetch("/url-check?url=" + encodeURIComponent(slug))
-        .then(response => response.json())
-        .then(res => {
-
-            if(res.result == 0){
-
-                slugStatus.innerHTML =
-                    '<i class="ti ti-circle-check"></i> URL tersedia';
-
-                slugStatus.className = "ev-url-status success";
-
-            }else if(res.result == 'N'){
-
-                slugStatus.innerHTML =
-                    '<i class="ti ti-info-circle"></i> Masukkan URL event';
-
-                slugStatus.className = "ev-url-status info";
-
-            }else{
-
-                slugStatus.innerHTML =
-                    '<i class="ti ti-circle-x"></i> URL sudah digunakan';
-
-                slugStatus.className = "ev-url-status error";
-
-            }
-
-        })
-        .catch((error) => {
-
-            console.error(error);
-
-            slugStatus.innerHTML =
-                '<i class="fa-solid fa-triangle-exclamation"></i> Gagal memeriksa URL';
-
-            slugStatus.className = "ev-url-status error";
-
-        });
-
-}
-
-
-
-// STORE
-document.getElementById('createEventForm').addEventListener('submit', async function(e){
-
-    e.preventDefault();
-
-    const btn = document.getElementById('btnCreateEvent');
-
-    btn.disabled = true;
-    btn.innerHTML = '<i class="ti ti-loader-2 ti-spin mr-1"></i> Creating...';
-
-    const formData = new FormData(this);
-
-    try{
-
-        const response = await fetch('/event-studio/store',{
-
-            method:'POST',
-
-            headers:{
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
-            },
-
-            body: formData
-
-        });
-
-        const result = await response.json();
-
-        if(result.success){
-
-            window.location.href = '/event-studio/' + result.event_id + '/basic';
-
-        }else{
-
-            alert(result.message ?? 'Failed to create event.');
-
-        }
-
-    }catch(err){
-
-        console.error(err);
-
-        alert('Terjadi kesalahan.');
-
-    }
-
-    btn.disabled = false;
-    btn.innerHTML = '<i class="ti ti-arrow-right mr-1"></i> Create Event';
-
-});
-
-    </script>
+    @endpush
 @endsection

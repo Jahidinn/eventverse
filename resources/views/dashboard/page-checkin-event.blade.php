@@ -1,370 +1,181 @@
-@extends('dashboard.layouts.main')
+@extends('dashboard.layouts.app')
+
+@section('title', 'Check-in')
 
 @section('content')
-    <!-- Content Header (Page header) -->
-    <section class="content-header pb-0">
-        <div class="page-header-modern mb-3">
-            <div class="page-header-left">
+    <div class="mx-auto max-w-7xl space-y-5 pb-8 text-slate-900">
+        <header class="relative isolate flex flex-wrap items-center justify-between gap-4 overflow-hidden rounded-3xl bg-gradient-to-br from-[#102040] via-[#183970] to-[#1857a6] px-5 py-7 text-white sm:px-8 sm:py-9">
+            <div aria-hidden="true"
+                 class="pointer-events-none absolute inset-y-0 right-0 -z-10 w-1/2 bg-[repeating-linear-gradient(135deg,transparent_0_19px,rgba(147,197,253,0.23)_19px_20px)] [mask-image:linear-gradient(to_left,black,transparent)]"></div>
 
-                <div class="page-header-icon">
-                    <i class="ti ti-user-check"></i>
-                </div>
-
-                <h2 class="page-header-title">
-                    CHECK IN PESERTA
-                </h2>
-
+            <div>
+                <h1 class="font-['Sora','Plus_Jakarta_Sans','Inter',sans-serif] text-3xl font-bold tracking-tight sm:text-4xl">
+                    Check-in
+                </h1>
+                <p class="mt-2 max-w-lg text-sm leading-6 text-blue-100">
+                    Pilih event untuk memindai QR atau mencari kode tiket peserta.
+                </p>
             </div>
-        </div>
-    </section>
 
-    <!-- Main content -->
-    <section class="content">
+            <span aria-hidden="true"
+                  class="hidden h-14 w-14 place-items-center rounded-2xl border border-white/20 bg-white/10 text-3xl text-blue-100 sm:grid">
+                <i class="ti ti-qrcode"></i>
+            </span>
+        </header>
 
-        <style>
-
-        .search-modern{
-            height:50px;
-            border:none;
-            border-radius:16px;
-            background:#fff;
-            box-shadow:0 4px 20px rgba(0,0,0,.06);
-            padding-left:18px;
-        }
-
-        .search-modern:focus{
-            box-shadow:0 0 0 4px rgba(59,130,246,.08);
-        }
-
-        .checkin-card{
-            border:none;
-            border-radius:22px;
-            overflow:hidden;
-            background:#fff;
-            box-shadow:0 4px 20px rgba(0,0,0,.06);
-            transition:.25s;
-            margin-bottom:18px;
-        }
-
-        .checkin-card:hover{
-            transform:translateY(-3px);
-            box-shadow:0 14px 40px rgba(0,0,0,.10);
-        }
-
-        .checkin-cover{
-            width:100%;
-            height:180px;
-            object-fit:cover;
-            display:block;
-        }
-
-        .checkin-body{
-            padding:20px;
-        }
-
-        .checkin-title{
-            font-size:18px;
-            font-weight:700;
-            color:#0f172a;
-            line-height:1.5;
-        }
-
-        .checkin-chip{
-            display:inline-flex;
-            align-items:center;
-            gap:6px;
-
-            margin-top:12px;
-
-            padding:8px 14px;
-
-            border-radius:999px;
-
-            background:rgba(16,185,129,.08);
-
-            color:#059669;
-
-            border:1px solid rgba(16,185,129,.12);
-
-            font-size:13px;
-            font-weight:600;
-        }
-
-        .checkin-action{
-            margin-top:18px;
-        }
-
-        .empty-state{
-            background:#fff;
-            border-radius:20px;
-            padding:30px;
-            text-align:center;
-            box-shadow:0 4px 20px rgba(0,0,0,.05);
-        }
-
-        .scanner-card{
-            background:#fff;
-            border-radius:22px;
-            padding:20px;
-            box-shadow:0 4px 20px rgba(0,0,0,.06);
-            margin-bottom:20px;
-        }
-
-        .scanner-title{
-            font-size:18px;
-            font-weight:700;
-            color:#0f172a;
-            margin-bottom:15px;
-        }
-
-        .scanner-subtitle{
-            color:#64748b;
-            font-size:14px;
-            margin-bottom:18px;
-        }
-
-        .scanner-input{
-            height:60px;
-            border:none;
-            border-radius:18px;
-            background:#f8fafc;
-            font-size:18px;
-        }
-
-        .table-card{
-            background:#fff;
-            border-radius:22px;
-            overflow:hidden;
-            box-shadow:0 4px 20px rgba(0,0,0,.06);
-        }
-
-        #data-peserta{
-            margin-bottom:0 !important;
-        }
-
-        #data-peserta thead th{
-            background:#f8fafc !important;
-            border:none !important;
-            color:#475569;
-
-            text-transform:uppercase;
-
-            font-size:12px;
-            letter-spacing:.5px;
-            font-weight:700;
-
-            padding:16px;
-        }
-
-        #data-peserta tbody td{
-            padding:15px;
-            vertical-align:middle;
-        }
-
-        #data-peserta tbody tr:hover{
-            background:#f8fafc;
-        }
-
-        @media(max-width:768px){
-
-            .checkin-cover{
-                height:140px;
-            }
-
-            .checkin-title{
-                font-size:16px;
-            }
-
-            .scanner-input{
-                font-size:16px;
-                height:55px;
-            }
-        }
-
-        </style>
-
-        <div class="card-body p-0 daftar-event text-dark bg-card-blue">
-
-            <form action="" method="GET" {{ $dataEvent->isEmpty() ? 'hidden' : '' }}>
-
-                <div class="mb-4">
-
-                    <input
-                        class="form-control search-modern shadow-none"
-                        id="search-myevent"
-                        name="key"
-                        type="search"
-                        placeholder="🔍 Cari event..."
-                        value="{{ request('key') }}">
-
+        <div class="grid grid-cols-[minmax(0,1fr)_auto] items-start gap-2 rounded-2xl border border-slate-200 bg-white p-3 shadow-sm sm:items-center sm:gap-3">
+            <form method="GET" action="{{ url('/dashboard/event-checkin') }}"
+                  class="flex min-w-0 flex-wrap items-center gap-2">
+                <div class="flex min-h-11 min-w-[8rem] flex-[1_1_8rem] items-center gap-2 rounded-xl border border-slate-200 px-3 focus-within:border-blue-400 focus-within:ring-2 focus-within:ring-blue-100">
+                    <i class="ti ti-search shrink-0 text-lg text-slate-500" aria-hidden="true"></i>
+                    <input type="search" name="key" value="{{ request('key') }}"
+                           aria-label="Cari event" placeholder="Cari event…"
+                           class="w-full min-w-0 bg-transparent text-sm outline-none placeholder:text-slate-500">
                 </div>
 
+                <button type="submit"
+                        class="inline-flex min-h-11 items-center rounded-xl border border-slate-200 px-3 text-sm font-semibold text-slate-700 hover:bg-slate-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-blue-600">
+                    Cari
+                </button>
+
+                @if (request('key'))
+                    <a href="{{ url('/dashboard/event-checkin') }}"
+                       class="inline-flex min-h-11 items-center rounded-xl px-2 text-sm font-semibold text-blue-700 hover:bg-blue-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-blue-600">
+                        Reset
+                    </a>
+                @endif
             </form>
 
-            @if ($dataEvent->isEmpty())
+            <span class="mt-2 inline-flex whitespace-nowrap rounded-lg bg-slate-100 px-2.5 py-1.5 text-xs font-semibold tabular-nums text-slate-600 sm:mt-0">
+                {{ number_format($dataEvent->total(), 0, ',', '.') }} event
+            </span>
+        </div>
 
-                <div class="empty-state">
+        @if ($dataEvent->isEmpty())
+            <section class="flex flex-col items-center gap-2 rounded-2xl border border-dashed border-slate-300 bg-white px-5 py-12 text-center">
+                <span class="mb-1 grid h-12 w-12 place-items-center rounded-xl bg-blue-50 text-2xl text-blue-700" aria-hidden="true">
+                    <i class="ti ti-calendar-off"></i>
+                </span>
 
-                    <h5>Belum ada event 🎉</h5>
-
-                    <p class="text-muted mb-3">
-                        Kamu belum mempunyai event.
-                    </p>
-
-                    <a href="/event/create" class="button-40">
-
-                        <i class="ti ti-plus"></i>
-
-                        Buat Event
-
+                @if (request('key'))
+                    <h2 class="text-lg font-semibold">Event tidak ditemukan</h2>
+                    <p class="text-sm text-slate-600">Coba kata kunci lain atau tampilkan semua event.</p>
+                    <a href="{{ url('/dashboard/event-checkin') }}"
+                       class="mt-2 inline-flex min-h-11 items-center rounded-xl border border-slate-200 px-4 text-sm font-semibold text-blue-800 hover:bg-blue-50">
+                        Tampilkan semua event
                     </a>
+                @else
+                    <h2 class="text-lg font-semibold">Belum ada event</h2>
+                    <p class="text-sm text-slate-600">Buat event terlebih dahulu untuk membuka check-in.</p>
+                    <button type="button" data-create-event
+                            class="mt-2 inline-flex min-h-11 items-center gap-2 rounded-xl bg-[#1765c4] px-4 text-sm font-semibold text-white hover:bg-[#174f9e] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
+                        <i class="ti ti-plus" aria-hidden="true"></i>
+                        Buat event
+                    </button>
+                @endif
+            </section>
+        @else
+            <div class="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                @foreach ($dataEvent as $event)
+                    @php
+                        $checkinUrl = url('/dashboard/event-checkin/' . $event->event_id);
+                        $imagePath = $event->image ? 'storage/event-images/' . $event->image : null;
+                        $imageExists = $imagePath && file_exists(public_path($imagePath));
+                    @endphp
 
-                </div>
+                    <article class="group grid min-w-0 grid-cols-[5.25rem_minmax(0,1fr)] overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition-colors hover:border-blue-200 md:flex md:flex-col">
+                        <a href="{{ $checkinUrl }}" aria-label="Buka check-in {{ $event->title }}"
+                           class="relative isolate block min-h-24 overflow-hidden bg-gradient-to-br from-blue-100 via-slate-100 to-indigo-100 focus-visible:z-10 focus-visible:outline focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-blue-600 md:aspect-[16/7] md:min-h-0">
+                            <span class="absolute inset-0 grid place-items-center text-2xl text-blue-500" aria-hidden="true">
+                                <i class="ti ti-photo-off"></i>
+                            </span>
 
-            @endif
+                            @if ($imageExists)
+                                <img src="{{ asset($imagePath) }}" alt="" loading="lazy"
+                                     class="absolute inset-0 h-full w-full object-cover motion-safe:transition-transform motion-safe:duration-300 motion-safe:group-hover:scale-[1.03]"
+                                     onerror="this.hidden = true; this.classList.add('hidden')">
+                            @endif
+                        </a>
 
-            @foreach ($dataEvent as $event)
+                        <div class="flex min-w-0 flex-1 flex-col p-3.5">
+                            <h2 class="break-words font-['Sora','Plus_Jakarta_Sans','Inter',sans-serif] text-sm font-semibold leading-snug tracking-tight md:text-base">
+                                <a href="{{ $checkinUrl }}"
+                                   class="hover:text-blue-700 hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-blue-600">
+                                    {{ $event->title }}
+                                </a>
+                            </h2>
 
+                            <p class="mt-2 flex items-start gap-1.5 text-xs leading-5 text-slate-600">
+                                <i class="ti ti-calendar-event shrink-0 text-base text-blue-700" aria-hidden="true"></i>
+                                <span>
+                                    {{ $event->start_date?->format('d M Y') ?? 'Tanggal belum diisi' }}
+                                    @if ($event->end_date)
+                                        · s.d. {{ $event->end_date->format('d M Y') }}
+                                    @endif
+                                </span>
+                            </p>
+
+                            <div class="mt-auto pt-3">
+                                <a href="{{ $checkinUrl }}"
+                                   class="inline-flex min-h-10 w-full items-center gap-2 rounded-xl border border-blue-100 bg-blue-50 px-3 py-2 text-xs font-semibold text-blue-800 transition-colors hover:bg-blue-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 md:text-sm">
+                                    <i class="ti ti-qrcode shrink-0 text-base" aria-hidden="true"></i>
+                                    <span class="flex-1">Buka check-in</span>
+                                    <i class="ti ti-arrow-right shrink-0 text-base" aria-hidden="true"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </article>
+                @endforeach
+            </div>
+
+            @if ($dataEvent->hasPages())
                 @php
-                    $transactions = \App\Models\Transaction::where('event_id', $event->id)
-                        ->with('participants')
-                        ->whereNotIn('status', ['Expired', 'Unpaid', 'Pending'])
-                        ->get();
-
-                    $totalPeserta = $transactions->sum(function ($transaction) {
-                        return $transaction->participants->count();
-                    });
-
-                    $title = $event->title;
-
-                    if(strlen($title) > 60){
-                        $title = substr($title,0,60).'...';
-                    }
+                    $pagination = $dataEvent->withQueryString();
+                    $pageLinks = $pagination->linkCollection()->slice(1, -1);
+                    $pageButton = 'inline-flex h-9 min-w-9 items-center justify-center rounded-lg px-2 text-sm font-semibold tabular-nums focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600';
+                    $pageLink = $pageButton . ' border border-slate-200 bg-white text-slate-700 hover:bg-blue-50 hover:text-blue-800';
                 @endphp
 
-                <div class="card checkin-card">
+                <nav aria-label="Halaman event check-in"
+                     class="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-slate-200 bg-white px-4 py-3 text-slate-700">
+                    <p class="text-xs tabular-nums">
+                        {{ $pagination->firstItem() }}–{{ $pagination->lastItem() }}
+                        dari {{ number_format($pagination->total(), 0, ',', '.') }} event
+                    </p>
 
-                    <img
-                        src="{{ asset('storage/event-images/' . $event->image) }}"
-                        class="checkin-cover"
-                        alt="{{ $event->title }}">
+                    <div class="flex flex-wrap items-center gap-1.5">
+                        @if ($pagination->previousPageUrl())
+                            <a href="{{ $pagination->previousPageUrl() }}" rel="prev"
+                               aria-label="Halaman sebelumnya" class="{{ $pageLink }}">
+                                <i class="ti ti-chevron-left" aria-hidden="true"></i>
+                            </a>
+                        @endif
 
-                    <div class="checkin-body">
+                        @foreach ($pageLinks as $link)
+                            @if ($link['active'])
+                                <span aria-current="page"
+                                      class="{{ $pageButton }} bg-blue-50 text-blue-800 ring-1 ring-inset ring-blue-200">
+                                    {{ $link['label'] }}
+                                </span>
+                            @elseif ($link['url'])
+                                <a href="{{ $link['url'] }}" aria-label="Halaman {{ $link['label'] }}"
+                                   class="{{ $pageLink }}">
+                                    {{ $link['label'] }}
+                                </a>
+                            @else
+                                <span class="px-1 text-sm text-slate-500">…</span>
+                            @endif
+                        @endforeach
 
-                        <div class="checkin-title">
-
-                            {{ $title }}
-
-                        </div>
-
-                        <div class="checkin-chip">
-
-                            <i class="ti ti-users"></i>
-
-                            {{ $totalPeserta }}
-                            Peserta
-
-                        </div>
-
-                        <div class="checkin-action">
-
-                            <button
-                                type="button"
-                                class="button-40 detail-peserta"
-                                data-event_id="{{ $event->event_id }}"
-                                data-title="{{ $event->title }}">
-
-                                <i class="fas fa-check-circle"></i>
-
-                                Check-In Peserta
-
-                            </button>
-
-                        </div>
-
+                        @if ($pagination->nextPageUrl())
+                            <a href="{{ $pagination->nextPageUrl() }}" rel="next"
+                               aria-label="Halaman berikutnya" class="{{ $pageLink }}">
+                                <i class="ti ti-chevron-right" aria-hidden="true"></i>
+                            </a>
+                        @endif
                     </div>
-
-                </div>
-
-            @endforeach
-
-            <div class="d-flex justify-content-center mt-4">
-
-                {{ $dataEvent->links() }}
-
-            </div>
-
-        </div>
-
-        <div class="card-body p-0 daftar-peserta" hidden>
-
-            <button class="button-39 kembali mb-2">
-                <i class="fas fa-chevron-circle-left"></i>
-                Kembali
-            </button>
-
-            <div class="scanner-card">
-
-                <div class="scanner-title">
-
-                    <i class="fas fa-qrcode text-primary"></i>
-
-                    Check-In Peserta
-
-                </div>
-
-                <div class="scanner-subtitle">
-
-                    Scan QR Code atau input ID peserta untuk melakukan check-in.
-
-                </div>
-
-                <form action="javascript:void(0)" id="checkin-form">
-
-                    <input
-                        type="text"
-                        class="form-control scanner-input shadow-none"
-                        placeholder="Scan QR atau input ID peserta..."
-                        id="search-transaction">
-
-                </form>
-
-            </div>
-
-            <div class="table-card">
-
-                <div class="table-responsive">
-
-                    <table class="table w-100" id="data-peserta">
-
-                        <thead>
-
-                            <tr>
-                                <th style="min-width:150px">Nama Peserta</th>
-                                <th style="min-width:150px">Email</th>
-                                <th style="min-width:150px">ID</th>
-                                <th style="min-width:100px">Check In</th>
-                            </tr>
-
-                        </thead>
-
-                    </table>
-
-                </div>
-
-            </div>
-
-        </div>
-
-    </section>
-
-    {{-- Push javascript --}}
-    @push('js-checkin')
-        @include('dashboard.js.js-page-checkin')
-    @endpush
-
-    {{-- Push javascript --}}
-    @push('js-myevent')
-        @include('dashboard.js.js-myevent')
-    @endpush
+                </nav>
+            @endif
+        @endif
+    </div>
 @endsection
