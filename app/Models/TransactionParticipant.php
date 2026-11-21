@@ -10,6 +10,10 @@ class TransactionParticipant extends Model
     use HasFactory;
     protected $guarded = ['id'];
 
+    protected $casts = [
+        'checked_in_at' => 'datetime',
+    ];
+
 	public function transaction()
 	{
 		return $this->belongsTo(Transaction::class, 'transaction_id');
