@@ -9,7 +9,7 @@
         <ul>
             <li class="{{ Request::is('/') ? 'active' : '' }}"><a href="/">Home</a></li>
             <li class="{{ Request::is('about-us') ? 'active' : '' }}"><a href="/about-us">About us</a></li>
-            <li class="{{ Request::is('event*') ? 'active' : '' }}"><a href="/event/create">Create event</a></li>
+            <li class="{{ Request::is('event*') ? 'active' : '' }}"><a href="/dashboard">Create event</a></li>
             <li class="{{ Request::is('creator-guide') ? 'active' : '' }}"><a href="/creator-guide">Guide</a></li>
             <li class="{{ Request::is('blog*') ? 'active' : '' }}"><a href="/blog">Blog</a></li>
             <li class="{{ Request::is('pricing') ? 'active' : '' }}"><a href="/pricing">Pricing</a></li>
